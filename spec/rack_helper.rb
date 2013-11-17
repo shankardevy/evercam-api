@@ -7,10 +7,6 @@ RSpec.configure do |c|
   c.include Rack::Test::Methods
 end
 
-def response
-  last_response
-end
-
 def env_for(params)
   { 'rack.session' => params[:session] }
 end
