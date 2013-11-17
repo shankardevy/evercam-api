@@ -7,24 +7,31 @@ describe 'WebApp routes/login' do
 
   let(:user) { create(:user, password: 'aaaa') }
 
+  let(:env) { env_for({ session: { user: user.id } }) }
+
   describe 'GET /login' do
 
     context 'when the user is not logged in' do
-      it { renders_with_ok get('/login') }
+      it 'renders with an OK status' do
+        expect(get('/login').status).to eq(200)
+      end
     end
 
     context 'when the user is already logged in' do
 
-      let(:env) do
-        env_for({ session: { user: user.id } })
-      end
-
       context 'when no :rt param is provided' do
-        it { renders_with_ok get('/login', {}, env) }
+        it 'renders with an OK status' do
+          get('/login', {}, env)
+          expect(last_response.status).to eq(200)
+        end
       end
 
       context 'when an :rt param is provided' do
-        it { temp_redirects_to 'xxxx', get('/login?rt=xxxx', {}, env) }
+        it 'does a REDIRECT to the :rt param' do
+          get('/login?rt=xxxx', {}, env)
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to eq('http://example.org/xxxx')
+        end
       end
 
     end
@@ -35,10 +42,18 @@ describe 'WebApp routes/login' do
 
     context 'when the credentials are incorrect' do
 
-      subject { post('/login', { username: '', password: '' }) }
+      before(:each) do
+        post('/login', { username: 'abcd', password: 'efgh' })
+      end
 
-      it { shows_an_error }
-      it { renders_with_ok }
+      it 'shows an error message' do
+        errors = last_response.alerts.css('.alert-error')
+        expect(errors).to_not be_empty
+      end
+
+      it 'renders with an OK status' do
+        expect(last_response.status).to eq(200)
+      end
 
     end
 
@@ -48,14 +63,25 @@ describe 'WebApp routes/login' do
         { username: user.username, password: 'aaaa' }
       end
 
-      it { sets_session_key :user, user.id, post('/login', params) }
+      it 'sets the :user key in session' do
+        post('/login', params)
+        expect(session[:user]).to eq(user.id)
+      end
 
       context 'when no :rt param is provided' do
-        it { temp_redirects_to "/users/#{user.username}", post('/login', params) }
+        it 'does a REDIRECT to the users home page' do
+          post('/login', params)
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to eq("http://example.org/users/#{user.username}")
+        end
       end
 
       context 'when an :rt param is provided' do
-        it { temp_redirects_to 'xxxx', post('/login?rt=xxxx', params) }
+        it 'does a REDIRECT to the :rt param' do
+          post('/login?rt=xxxx', params)
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to eq('http://example.org/xxxx')
+        end
       end
 
     end
@@ -64,14 +90,18 @@ describe 'WebApp routes/login' do
 
   describe 'GET /logout' do
 
-    let(:env) do
-      env_for({ session: { user: user.id } })
+    before(:each) do
+      get('/logout', {}, env)
     end
 
-    subject { get('/logout', {}, env) }
+    it 'clears the :user key in session' do
+      expect(session[:user]).to be_nil
+    end
 
-    it { clears_session_key :user }
-    it { temp_redirects_to '/login' }
+    it 'does a REDIRECT to the login page' do
+      expect(last_response.status).to eq(302)
+      expect(last_response.location).to eq('http://example.org/login')
+    end
 
   end
 

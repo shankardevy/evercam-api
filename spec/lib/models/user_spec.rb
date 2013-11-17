@@ -6,12 +6,14 @@ describe User do
 
     let(:user) { create(:user) }
 
-    it 'finds a user by username' do
-      assert_equal user, User.by_login(user.username)
+    it 'finds the user by username' do
+      found = User.by_login(user.username)
+      expect(found).to eq(user)
     end
 
-    it 'finds a user by email' do
-      assert_equal user, User.by_login(user.email)
+    it 'finds the user by email' do
+      found = User.by_login(user.email)
+      expect(found).to eq(user)
     end
 
   end
@@ -21,13 +23,13 @@ describe User do
     it 'stores the password using bcrypt with cost 10' do
       user0 = User.new(password: 'garrett')
       hash0 = BCrypt::Password.new(user0.values[:password])
-      assert_equal 10, hash0.cost
+      expect(hash0.cost).to eq(10)
     end
 
     it 'returns a bcrypt password object for equality checking' do
       hash0 = BCrypt::Password.create('garrett')
       user0 = User.load(password: hash0.to_s)
-      assert_equal user0.password, 'garrett'
+      expect(user0.password).to eq('garrett')
     end
 
   end
