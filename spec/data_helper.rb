@@ -1,7 +1,4 @@
 require 'spec_helper'
-
-# default to test database
-ENV['DATABASE_URL'] ||= 'postgres://localhost/evercam_tst'
 require_relative '../lib/models'
 
 # undo test data

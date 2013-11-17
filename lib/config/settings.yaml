@@ -1,0 +1,6 @@
+development:
+  database: postgres://localhost/evercam_dev
+
+test:
+  database: postgres://localhost/evercam_tst
+

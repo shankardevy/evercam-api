@@ -1,8 +1,6 @@
 require 'data_helper'
 require 'rack/test'
 
-ENV['RACK_ENV'] ||= ENV['SPEC_ENV']
-
 RSpec.configure do |c|
   c.include Rack::Test::Methods
 end

@@ -1,6 +1,5 @@
 require 'sequel'
-conx = ENV['DATABASE_URL'] ||= 'postgres://localhost/evercam_dev'
-Sequel.connect(conx)
+Sequel.connect(Evercam::Config.database)
 
 require 'bcrypt'
 require_relative './models/user'

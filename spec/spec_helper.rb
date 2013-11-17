@@ -1,4 +1,5 @@
-ENV['SPEC_ENV'] ||= 'test'
+ENV['EVERCAM_ENV'] ||= 'test'
+require_relative '../lib/config'
 
 def require_app(name)
   require_relative "../apps/#{name}"
