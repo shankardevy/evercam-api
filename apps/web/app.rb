@@ -5,3 +5,5 @@ module Evercam
   end
 end
 
+require_relative './routes/login'
+

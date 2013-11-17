@@ -1,0 +1,8 @@
+#!/bin/sh
+db=$1
+shift
+
+for p; do
+  psql $db < $p
+done
+
