@@ -1,8 +1,12 @@
 require 'yaml'
+require 'dotenv'
 
 module Evercam
   class Config
     class << self
+
+      # local .env
+      Dotenv.load
 
       def [](key)
         settings[env][key]

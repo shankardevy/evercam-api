@@ -1,5 +1,6 @@
 .DS_Store
 .session
+.env
 
 spec/cassettes
 tmp/

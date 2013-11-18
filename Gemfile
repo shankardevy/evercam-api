@@ -4,6 +4,7 @@ gem 'sinatra'
 gem 'sinatra-flash'
 gem 'bcrypt-ruby'
 gem 'aws-sdk'
+gem 'dotenv'
 gem 'sequel'
 gem 'pg'
 
