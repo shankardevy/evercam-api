@@ -1,6 +1,3 @@
-require 'sinatra'
-require 'sinatra/flash'
-
 module Evercam
   class WebApp < Sinatra::Base
 

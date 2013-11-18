@@ -2,11 +2,14 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-flash'
+gem 'grape'
+
+gem 'sequel'
 gem 'bcrypt-ruby'
+gem 'pg'
+
 gem 'aws-sdk'
 gem 'dotenv'
-gem 'sequel'
-gem 'pg'
 
 group :development do
   gem 'shotgun'

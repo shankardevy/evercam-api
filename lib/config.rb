@@ -1,6 +1,3 @@
-require 'yaml'
-require 'dotenv'
-
 module Evercam
   class Config
     class << self
