@@ -34,7 +34,9 @@ CREATE TABLE devices
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   external_uri text NOT NULL,
-  internal_uri text NOT NULL
+  internal_uri text NOT NULL,
+  username text NOT NULL,
+  password text NOT NULL
 );
 
 --
