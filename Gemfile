@@ -5,7 +5,7 @@ gem 'sinatra-flash'
 gem 'grape'
 
 gem 'sequel'
-gem 'bcrypt-ruby'
+gem 'bcrypt-ruby', require: 'bcrypt'
 gem 'pg'
 
 gem 'aws-sdk'
