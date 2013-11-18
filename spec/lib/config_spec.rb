@@ -12,44 +12,29 @@ module Evercam
 
     describe '::env' do
 
-      it 'defaults to development' do
-        expect(subject.env).to eq(:development)
-      end
-
       it 'honors the EVERCAM_ENV variable' do
         ENV['EVERCAM_ENV'] = 'xxxx'
         expect(subject.env).to eq(:xxxx)
       end
 
+      it 'defaults to development' do
+        ENV['EVERCAM_ENV'] = nil
+        expect(subject.env).to eq(:development)
+      end
+
     end
 
     describe '::settings' do
-
-      it 'returns the settings from the yaml file' do
+      it 'returns all settings from the yaml file' do
         expect(subject.settings).to_not be(nil)
       end
-
     end
 
-    describe '::database' do
-
-      it 'returns the connection settings from yaml' do
-        expect(subject.database).to_not be_nil
+    describe '::[]' do
+      it 'returns the settings for the current env' do
+        development = subject.settings[:development]
+        expect(subject[:database]).to eq(development[:database])
       end
-
-      it 'honors the DATABASE_URL variable' do
-        ENV['DATABASE_URL'] = 'xxxx'
-        expect(subject.database).to eq('xxxx')
-      end
-
-    end
-
-    describe '::cookies' do
-
-      it 'returns the cookie settings from yaml' do
-        expect(subject.cookies).to_not be_nil
-      end
-
     end
 
   end

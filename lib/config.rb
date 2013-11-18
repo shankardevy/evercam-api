@@ -4,17 +4,15 @@ module Evercam
   class Config
     class << self
 
-      def database
-        ENV['DATABASE_URL'] || settings[env][:database]
-      end
-
-      def cookies
-        settings[env][:cookies]
+      def [](key)
+        settings[env][key]
       end
 
       def settings
-        @settings ||= (YAML.load(File.read(File.join(
-          File.dirname(__FILE__), 'config', 'settings.yaml'))))
+        @settings ||= (YAML.load(
+          ERB.new(File.read(File.join(
+            File.dirname(__FILE__), 'config', 'settings.yaml'))).
+          result))
       end
 
       def env
