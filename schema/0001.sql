@@ -33,8 +33,8 @@ CREATE TABLE devices
   CONSTRAINT pk_devices PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  external_ip text NOT NULL,
-  internal_ip text NOT NULL
+  external_uri text NOT NULL,
+  internal_uri text NOT NULL
 );
 
 --
@@ -48,9 +48,10 @@ CREATE TABLE streams
   CONSTRAINT pk_streams PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  owner_id int NOT NULL,
+  name text NOT NULL,
   device_id int NOT NULL,
-  name text NOT NULL
+  owner_id int NOT NULL,
+  snapshot_path text NOT NULL
 );
 
 CREATE INDEX ix_streams_owner_id
