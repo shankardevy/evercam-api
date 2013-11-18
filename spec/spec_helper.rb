@@ -1,5 +1,5 @@
 require 'bundler'
-Bundler.require(:default)
+Bundler.require(:default, :test)
 
 ENV['EVERCAM_ENV'] ||= 'test'
 require_relative '../lib/config'

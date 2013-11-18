@@ -1,7 +1,7 @@
 require 'spec_helper'
 require_relative '../lib/models'
 
-# undo test data
+# auto undo tests
 RSpec.configure do |c|
   c.around(:each) do |e|
     db = Sequel::Model.db
@@ -11,7 +11,7 @@ RSpec.configure do |c|
   end
 end
 
-require 'factory_girl'
+# load up factories
 FactoryGirl.find_definitions
 
 RSpec.configure do |c|

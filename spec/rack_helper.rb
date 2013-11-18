@@ -13,6 +13,5 @@ def env_for(params)
   { 'rack.session' => params[:session] }
 end
 
-require 'nokogiri'
 require_relative './rack/mock_response'
 
