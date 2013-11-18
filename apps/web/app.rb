@@ -5,7 +5,7 @@ module Evercam
   class WebApp < Sinatra::Base
 
     use Rack::Session::Cookie,
-      Evercam::Config.cookies
+      Evercam::Config[:cookies]
 
     register Sinatra::Flash
 

@@ -1,10 +1,23 @@
-:development:
-  :database: postgres://localhost/evercam_dev
+:defaults: &defaults
   :cookies:
     :secret: qwertyuiop
+  :amazon:
+    :access_key_id: <%= ENV['AWS_ACCESS_KEY'] %>
+    :secret_access_key: <%= ENV['AWS_SECRET_KEY'] %>
+    :route53:
+      :evr.cm: Z15MY0AN5PFWCW
+
+:development:
+  <<: *defaults
+  :database: postgres://localhost/evercam_dev
 
 :test:
+  <<: *defaults
   :database: postgres://localhost/evercam_tst
+
+:production:
+  <<: *defaults
+  :database: <%= ENV['DATABASE_URL'] %>
   :cookies:
-    :secret: qwertyuiop
+    :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
 
