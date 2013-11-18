@@ -5,7 +5,11 @@ module Evercam
     class << self
 
       def database
-        ENV['DATABASE_URL'] || settings[env]['database']
+        ENV['DATABASE_URL'] || settings[env][:database]
+      end
+
+      def cookies
+        settings[env][:cookies]
       end
 
       def settings
@@ -14,7 +18,7 @@ module Evercam
       end
 
       def env
-        ENV['EVERCAM_ENV'] || 'development'
+        (ENV['EVERCAM_ENV'] || 'development').to_sym
       end
 
     end

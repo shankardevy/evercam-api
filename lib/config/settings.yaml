@@ -1,6 +1,10 @@
-development:
-  database: postgres://localhost/evercam_dev
+:development:
+  :database: postgres://localhost/evercam_dev
+  :cookies:
+    :secret: qwertyuiop
 
-test:
-  database: postgres://localhost/evercam_tst
+:test:
+  :database: postgres://localhost/evercam_tst
+  :cookies:
+    :secret: qwertyuiop
 
