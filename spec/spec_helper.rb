@@ -5,7 +5,7 @@ ENV['EVERCAM_ENV'] ||= 'test'
 require_relative '../lib/config'
 
 def require_app(name)
-  require_relative "../apps/#{name}"
+  require_relative "../app/#{name}"
 end
 
 def require_lib(name)
