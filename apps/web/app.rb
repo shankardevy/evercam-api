@@ -4,12 +4,10 @@ require 'sinatra/flash'
 module Evercam
   class WebApp < Sinatra::Base
 
-    enable :sessions
-    register Sinatra::Flash
+    use Rack::Session::Cookie,
+      Evercam::Config.cookies
 
-    configure(:development) do
-      set :session_secret, 'swordfish'
-    end
+    register Sinatra::Flash
 
   end
 end
