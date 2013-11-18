@@ -1,9 +1,10 @@
 FactoryGirl.define do
   factory :stream do
-    association :owner, factory: :user
-    association :device, factory: :device
     sequence(:name) { |n| "stream#{n}" }
+    association :device, factory: :device
+    association :owner, factory: :user
     snapshot_path '/Streaming/channels/1/picture'
+    is_public true
   end
 end
 

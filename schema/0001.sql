@@ -53,7 +53,8 @@ CREATE TABLE streams
   name text NOT NULL,
   device_id int NOT NULL,
   owner_id int NOT NULL,
-  snapshot_path text NOT NULL
+  snapshot_path text NOT NULL,
+  is_public boolean NOT NULL
 );
 
 CREATE INDEX ix_streams_owner_id
