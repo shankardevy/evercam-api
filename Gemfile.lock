@@ -102,6 +102,7 @@ DEPENDENCIES
   dotenv
   factory_girl
   grape
+  json
   nokogiri
   pg
   rack-test

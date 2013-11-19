@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'sinatra-flash'
 gem 'grape'
+gem 'json'
 
 gem 'sequel'
 gem 'bcrypt-ruby', require: 'bcrypt'
