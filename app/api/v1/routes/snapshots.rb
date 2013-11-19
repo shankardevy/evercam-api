@@ -3,9 +3,10 @@ module Evercam
 
     get '/streams/:name/snapshots' do
       stream = ::Stream.by_name(params[:name])
-      error! 'requested stream was not found', 404 unless stream
 
-      error! 'not authorized to access this stream', 403 unless stream.is_public?
+      raise NotFoundError, 'stream was not found' unless stream
+      raise ForbiddenError, 'not authorized to access this stream' unless stream.is_public?
+
       device = stream.device
 
       {
