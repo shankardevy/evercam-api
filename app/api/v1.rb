@@ -8,6 +8,9 @@ module Evercam
 
     include WebErrors
 
+    use Rack::Session::Cookie,
+      Evercam::Config[:cookies]
+
     default_format :json
 
     error_formatter :json, Formatters::JSONError

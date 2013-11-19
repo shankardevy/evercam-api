@@ -5,6 +5,8 @@ require_relative '../../lib/errors'
 module Evercam
   class WebApp < Sinatra::Base
 
+    include WebErrors
+
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 

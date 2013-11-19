@@ -17,6 +17,15 @@ module Evercam
           end
 
           resource.has_right?(name, user)
+        when :session
+          user = User[session[:user]]
+
+          unless user
+            raise AuthenticationError,
+              'invalid or corrupt user session'
+          end
+
+          resource.has_right?(name, user)
         else
           raise AuthenticationError,
             'no Authorization header was supplied'
@@ -29,10 +38,15 @@ module Evercam
         @env['HTTP_AUTHORIZATION'] || ''
       end
 
+      def session
+        @env['rack.session']
+      end
+
       def auth_type
         case header.split[0]
         when /basic/i then :basic
-        else nil
+        else
+          session ? :session : nil
         end
       end
 
