@@ -7,28 +7,18 @@ module Evercam
       end
 
       def has_right?(name, resource)
+        resource.has_right?(name, client)
+      end
+
+      def client
         case auth_type
         when :basic
-          user = User.by_login(basic[0])
-
-          unless user && user.password == basic[1]
-            raise AuthenticationError,
-              'invalid username / email and password combination'
-          end
-
-          resource.has_right?(name, user)
+          authenticate_with_http_basic
         when :session
-          user = User[session[:user]]
-
-          unless user
-            raise AuthenticationError,
-              'invalid or corrupt user session'
-          end
-
-          resource.has_right?(name, user)
+          authenticate_with_rack_session
         else
           raise AuthenticationError,
-            'no Authorization header was supplied'
+            'no Authentication mechanism was supplied'
         end
       end
 
@@ -50,9 +40,23 @@ module Evercam
         end
       end
 
-      def basic
+      def authenticate_with_http_basic
         base64 = header.split[1]
-        Base64.decode64(base64).split(':')
+        un, ps = Base64.decode64(base64).split(':')
+
+        user = User.by_login(un)
+        return user if user && user.password == ps
+
+        raise AuthenticationError,
+          'invalid username / email and password combination'
+      end
+
+      def authenticate_with_rack_session
+        user = User[session[:user]]
+        return user if user
+
+        raise AuthenticationError,
+          'invalid or corrupt user session'
       end
 
     end
