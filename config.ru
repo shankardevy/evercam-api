@@ -1,12 +1,12 @@
-require 'bundler'
-Bundler.require(:default)
-
 base = File.dirname(__FILE__)
-require File.join(base, 'lib', 'config')
-require File.join(base, 'lib', 'models')
 
-require File.join(base, 'app', 'api', 'v1')
-require File.join(base, 'app', 'web', 'app')
+['config', 'models'].each do |lib|
+  require File.join(base, 'lib', lib)
+end
+
+['api/v1', 'web/app'].each do |app|
+  require File.join(base, 'app', app)
+end
 
 map '/v1' do
   run Evercam::APIv1

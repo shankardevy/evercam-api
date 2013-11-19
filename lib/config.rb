@@ -1,3 +1,6 @@
+require 'bundler'
+Bundler.require(:default)
+
 module Evercam
   class Config
     class << self
