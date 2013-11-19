@@ -17,8 +17,14 @@ module Evercam
       error_response({ status: 404, message: e.message })
     end
 
-    rescue_from ForbiddenError do |e|
+    rescue_from AuthenticationError, ForbiddenError do |e|
       error_response({ status: 403, message: e.message })
+    end
+
+    helpers do
+      def auth
+        Withnail::WithAuth.new(env)
+      end
     end
 
   end

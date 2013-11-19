@@ -47,12 +47,27 @@ describe 'APIv1 routes/snapshots' do
 
       context 'when the request comes with authentication' do
 
+        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
+
         context 'when the client is not authorized' do
-          it 'returns a FORBIDDEN status'
+          it 'returns a FORBIDDEN status' do
+            auth = { username: user.username, password: 'xxxx' }
+            get("/streams/#{stream.name}/snapshots", auth)
+            expect(last_response.status).to eq(403)
+          end
         end
 
         context 'when the client is authorized' do
-          it 'returns the stream snapshot data'
+          it 'returns the stream snapshot data' do
+            stream.update(owner: user)
+
+            env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
+            get("/streams/#{stream.name}/snapshots", {}, env)
+
+            expect(last_response.status).to eq(200)
+            expect(last_response.json.keys).
+              to eq(['uris', 'formats', 'auth'])
+          end
         end
 
       end
