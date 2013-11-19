@@ -7,5 +7,9 @@ class Stream < Sequel::Model
     first(name: name)
   end
 
+  def has_right?(name, client)
+    client == owner
+  end
+
 end
 
