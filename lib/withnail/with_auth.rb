@@ -37,7 +37,7 @@ module Evercam
       def auth_type
         case header.split[0]
         when /basic/i then :basic
-        when /token/i then :token
+        when /bearer/i then :token
         else
           session ? :session : nil
         end
@@ -47,7 +47,7 @@ module Evercam
         base64 = header.split[1]
         un, ps = Base64.decode64(base64).split(':')
 
-        user = User.by_login(un)
+        user = User.by_login(un) if un && ps
         return user if user && user.password == ps
 
         raise AuthenticationError,

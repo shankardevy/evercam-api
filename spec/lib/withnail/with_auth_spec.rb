@@ -22,10 +22,9 @@ module Evercam
 
         context 'when basic authentication is provided' do
 
-          let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' } }
-
           context 'when the user credentials are not valid' do
             it 'raises an AuthenticationError' do
+              env = { 'HTTP_AUTHORIZATION' => 'Basic zzzz' }
               expect { subject.new(env).has_right?('xxxx', nil) }.
                 to raise_error(AuthenticationError)
             end
@@ -39,6 +38,7 @@ module Evercam
 
             context 'when the user does not have the right' do
               it 'return false' do
+                env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
                 resource = double(:resource, :has_right? => false)
                 expect(subject.new(env).has_right?('xxxx', resource)).
                   to eq(false)
@@ -47,6 +47,7 @@ module Evercam
 
             context 'when the user does have the right' do
               it 'return true' do
+                env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
                 resource = double(:resource, :has_right? => true)
                 expect(subject.new(env).has_right?('xxxx', resource)).
                   to eq(true)
@@ -95,7 +96,7 @@ module Evercam
 
         context 'when an access token is provided' do
 
-          let(:env) { { 'HTTP_AUTHORIZATION' => "Token #{token.request}" } }
+          let(:env) { { 'HTTP_AUTHORIZATION' => "Bearer #{token.request}" } }
 
           let(:token) { create(:access_token) }
 
