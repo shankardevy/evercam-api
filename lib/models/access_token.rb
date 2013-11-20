@@ -5,10 +5,14 @@ class AccessToken < Sequel::Model
   many_to_one :grantor, class: 'User'
   many_to_one :grantee, class: 'Client'
 
+  def self.by_request(val)
+    first(request: val)
+  end
+
   def after_initialize
     self.request ||= SecureRandom.hex(16)
     self.expires_at ||= Time.now + 3600
-    self.is_revoked = false
+    self.is_revoked ||= false
     super
   end
 

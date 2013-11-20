@@ -6,14 +6,16 @@ module Evercam
         @env = env
       end
 
-      def has_right?(name, resource)
-        resource.has_right?(name, client)
+      def has_right?(right, resource)
+        resource.has_right?(right, seeker)
       end
 
-      def client
+      def seeker
         case auth_type
         when :basic
           authenticate_with_http_basic
+        when :token
+          authenticate_with_access_token
         when :session
           authenticate_with_rack_session
         else
@@ -35,6 +37,7 @@ module Evercam
       def auth_type
         case header.split[0]
         when /basic/i then :basic
+        when /token/i then :token
         else
           session ? :session : nil
         end
@@ -57,6 +60,15 @@ module Evercam
 
         raise AuthenticationError,
           'invalid or corrupt user session'
+      end
+
+      def authenticate_with_access_token
+        request = header.split[1]
+        token = AccessToken.by_request(request)
+        return token if token && token.is_valid?
+
+        raise AuthenticationError,
+          'unknown or invalid access token'
       end
 
     end

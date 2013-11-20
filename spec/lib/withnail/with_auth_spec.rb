@@ -41,7 +41,7 @@ module Evercam
               it 'return false' do
                 resource = double(:resource, :has_right? => false)
                 expect(subject.new(env).has_right?('xxxx', resource)).
-                  to be_false
+                  to eq(false)
               end
             end
 
@@ -49,7 +49,7 @@ module Evercam
               it 'return true' do
                 resource = double(:resource, :has_right? => true)
                 expect(subject.new(env).has_right?('xxxx', resource)).
-                  to be_true
+                  to eq(true)
               end
             end
 
@@ -76,7 +76,7 @@ module Evercam
                 env = env_for(session: { user: user.id })
                 resource = double(:resource, :has_right? => false)
                 expect(subject.new(env).has_right?('xxxx', resource) ).
-                  to be_false
+                  to eq(false)
               end
             end
 
@@ -85,10 +85,50 @@ module Evercam
                 env = env_for(session: { user: user.id })
                 resource = double(:resource, :has_right? => true)
                 expect(subject.new(env).has_right?('xxxx', resource) ).
-                  to be_true
+                  to eq(true)
               end
             end
 
+          end
+
+        end
+
+        context 'when an access token is provided' do
+
+          let(:env) { { 'HTTP_AUTHORIZATION' => "Token #{token.request}" } }
+
+          let(:token) { create(:access_token) }
+
+          context 'when the token does not exist' do
+            it 'raises an AuthenticationError' do
+              token.delete
+              expect { subject.new(env).has_right?('xxxx', nil) }.
+                to raise_error(AuthenticationError)
+            end
+          end
+
+          context 'when the token is invalid' do
+            it 'raises an AuthenticationError' do
+              token.update(is_revoked: true).save
+              expect { subject.new(env).has_right?('xxxx', nil) }.
+                to raise_error(AuthenticationError)
+            end
+          end
+
+          context 'when the token is valid but does not provide the right' do
+            it 'returns false' do
+              resource = double(:resource, :has_right? => false)
+              expect(subject.new(env).has_right?('xxxx', resource)).
+                to eq(false)
+            end
+          end
+
+          context 'when the token is valid and does provide the right' do
+            it 'returns false' do
+              resource = double(:resource, :has_right? => true)
+              expect(subject.new(env).has_right?('xxxx', resource)).
+                to eq(true)
+            end
           end
 
         end
