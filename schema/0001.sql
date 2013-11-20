@@ -97,6 +97,7 @@ CREATE TABLE access_tokens
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   expires_at timestamptz NOT NULL,
+  is_revoked boolean NOT NULL,
   grantor_id int NOT NULL,
   grantee_id int NOT NULL,
   request text NOT NULL,
