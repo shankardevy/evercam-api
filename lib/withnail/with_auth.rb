@@ -18,7 +18,7 @@ module Evercam
           authenticate_with_rack_session
         else
           raise AuthenticationError,
-            'no Authentication mechanism was supplied'
+            'no supported authentication was supplied'
         end
       end
 
