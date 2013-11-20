@@ -14,5 +14,15 @@ class Client < Sequel::Model
     super
   end
 
+  def default_callback_uri
+    callback_uris.first
+  end
+
+  def allow_callback_uri?(val)
+    callback_uris.any? do |uri|
+      val[0, uri.length] == uri
+    end
+  end
+
 end
 
