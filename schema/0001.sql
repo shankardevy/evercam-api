@@ -114,6 +114,25 @@ CREATE UNIQUE INDEX ux_access_tokens_request
 ON access_tokens (request);
 
 --
+-- access_tokens_streams_rights
+--
+CREATE SEQUENCE sq_access_tokens_streams_rights;
+
+CREATE TABLE access_tokens_streams_rights
+(
+  id int NOT NULL DEFAULT nextval('sq_access_tokens_streams_rights'),
+  CONSTRAINT pk_access_tokens_streams_rights PRIMARY KEY (id),
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  token_id int NOT NULL,
+  stream_id int NOT NULL,
+  name text NOT NULL
+);
+
+CREATE UNIQUE INDEX ux_access_tokens_streams_rights_m_n
+ON access_tokens_streams_rights (token_id, stream_id, name);
+
+--
 -- constraints
 --
 ALTER TABLE streams
@@ -134,5 +153,15 @@ ON DELETE CASCADE;
 ALTER TABLE access_tokens
 ADD CONSTRAINT fk_access_tokens_grantee_id
 FOREIGN KEY (grantee_id) REFERENCES clients (id)
+ON DELETE CASCADE;
+
+ALTER TABLE access_tokens_streams_rights
+ADD CONSTRAINT fk_access_tokens_streams_rights_token_id
+FOREIGN KEY (token_id) REFERENCES access_tokens (id)
+ON DELETE CASCADE;
+
+ALTER TABLE access_tokens_streams_rights
+ADD CONSTRAINT fk_access_tokens_streams_rights_stream_id
+FOREIGN KEY (stream_id) REFERENCES streams (id)
 ON DELETE CASCADE;
 

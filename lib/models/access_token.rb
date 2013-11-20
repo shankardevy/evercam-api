@@ -2,8 +2,8 @@ class AccessToken < Sequel::Model
 
   plugin :after_initialize
 
-  many_to_one :user, key: :grantor_id
-  many_to_one :client, key: :grantee_id
+  many_to_one :grantor, class: 'User'
+  many_to_one :grantee, class: 'Client'
 
   def after_initialize
     self.request ||= SecureRandom.hex(16)
