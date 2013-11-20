@@ -4,6 +4,10 @@ class Client < Sequel::Model
 
   one_to_many :tokens, class: 'AccessToken', key: :grantee_id
 
+  def self.by_exid(val)
+    first(exid: val)
+  end
+
   def after_initialize
     self.secret ||= SecureRandom.hex(16)
     self.exid ||= SecureRandom.hex(10)

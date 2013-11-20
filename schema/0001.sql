@@ -78,6 +78,7 @@ CREATE TABLE clients
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   exid text NOT NULL,
+  callback_uris text[] NOT NULL,
   secret text NOT NULL,
   name text NOT NULL
 );
