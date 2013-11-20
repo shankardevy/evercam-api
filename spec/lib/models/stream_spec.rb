@@ -6,6 +6,13 @@ describe Stream do
 
   describe '#has_right?' do
 
+    context 'when the seeker is unknown' do
+      it 'raises an AuthenticationError' do
+        expect { stream.has_right?('xxxx', double(:yyyy)) }.
+          to raise_error(Evercam::AuthenticationError)
+      end
+    end
+
     context 'when the seeker is a user' do
 
       context 'when the user is the owner' do

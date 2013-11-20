@@ -6,7 +6,7 @@ module Evercam
       raise NotFoundError, 'stream was not found' unless stream
 
       unless stream.is_public? || auth.has_right?('view', stream)
-        raise ForbiddenError, 'not authorized to access this stream'
+        raise ForbiddenError, 'not authorized to view this stream'
       end
 
       device = stream.device

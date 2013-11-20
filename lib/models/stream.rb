@@ -8,13 +8,16 @@ class Stream < Sequel::Model
     first(name: name)
   end
 
-  def has_right?(name, seeker)
+  def has_right?(right, seeker)
     case seeker
     when User
       seeker == self.owner
     when AccessToken
       nil != permissions_dataset.
-        first(token: seeker, name: name)
+        first(token: seeker, name: right)
+    else
+      raise Evercam::AuthenticationError,
+        'unknown permission seeker type'
     end
   end
 
