@@ -3,6 +3,7 @@ class User < Sequel::Model
   include BCrypt
 
   one_to_many :streams, key: :owner_id
+  one_to_many :tokens, class: 'AccessToken', key: :grantor_id
 
   def self.by_login(val)
     where(username: val).or(email: val).first

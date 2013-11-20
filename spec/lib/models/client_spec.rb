@@ -2,16 +2,16 @@ require 'data_helper'
 
 describe Client do
 
-  describe 'before_create' do
+  describe 'after_initialize' do
 
-    it 'assigns a random #exid string' do
-      client = create(:client)
-      expect(client.exid).to_not be_nil
+    it 'generates a 20 char random #exid' do
+      client = build(:client)
+      expect(client.exid.length).to be(20)
     end
 
-    it 'assigns a random #secret string' do
-      client = create(:client)
-      expect(client.secret).to_not be_nil
+    it 'generates a 32 char random #secret' do
+      client = build(:client)
+      expect(client.secret.length).to be(32)
     end
 
   end

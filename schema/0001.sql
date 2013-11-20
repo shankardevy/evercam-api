@@ -86,6 +86,33 @@ CREATE UNIQUE INDEX ux_clients_exid
 ON clients (exid);
 
 --
+-- access_tokens
+--
+CREATE SEQUENCE sq_access_tokens;
+
+CREATE TABLE access_tokens
+(
+  id int NOT NULL DEFAULT nextval('sq_access_tokens'),
+  CONSTRAINT pk_access_tokens PRIMARY KEY (id),
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expires_at timestamptz NOT NULL,
+  grantor_id int NOT NULL,
+  grantee_id int NOT NULL,
+  request text NOT NULL,
+  refresh text
+);
+
+CREATE INDEX ix_access_tokens_grantor_id
+ON access_tokens (grantor_id);
+
+CREATE INDEX ix_access_tokens_grantee_id
+ON access_tokens (grantee_id);
+
+CREATE UNIQUE INDEX ux_access_tokens_request
+ON access_tokens (request);
+
+--
 -- constraints
 --
 ALTER TABLE streams
@@ -97,4 +124,14 @@ ALTER TABLE streams
 ADD CONSTRAINT fk_streams_device_id
 FOREIGN KEY (device_id) REFERENCES devices (id)
 ON DELETE RESTRICT;
+
+ALTER TABLE access_tokens
+ADD CONSTRAINT fk_access_tokens_grantor_id
+FOREIGN KEY (grantor_id) REFERENCES users (id)
+ON DELETE CASCADE;
+
+ALTER TABLE access_tokens
+ADD CONSTRAINT fk_access_tokens_grantee_id
+FOREIGN KEY (grantee_id) REFERENCES clients (id)
+ON DELETE CASCADE;
 
