@@ -5,4 +5,5 @@ Sequel::Model.plugin :boolean_readers
 require_relative './models/user'
 require_relative './models/device'
 require_relative './models/stream'
+require_relative './models/client'
 

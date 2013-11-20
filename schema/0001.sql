@@ -67,6 +67,25 @@ CREATE UNIQUE INDEX ux_streams_name
 ON streams (name);
 
 --
+-- clients
+--
+CREATE SEQUENCE sq_clients;
+
+CREATE TABLE clients
+(
+  id int NOT NULL DEFAULT nextval('sq_clients'),
+  CONSTRAINT pk_clients PRIMARY KEY (id),
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  exid text NOT NULL,
+  secret text NOT NULL,
+  name text NOT NULL
+);
+
+CREATE UNIQUE INDEX ux_clients_exid
+ON clients (exid);
+
+--
 -- constraints
 --
 ALTER TABLE streams
