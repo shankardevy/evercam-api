@@ -12,13 +12,17 @@ class Rack::MockResponse
   end
 
   def alerts
-    markup = Nokogiri::HTML(body)
-    markup.css('div.alert')
+    html.css('div.alert')
   end
 
   def json
     mime == 'application/json' ? JSON.parse(body) :
       (raise Exception, 'response is not json')
+  end
+
+  def html
+    mime == 'text/html' ? Nokogiri.HTML(body) :
+      (raise Exception, 'response is not html')
   end
 
 end
