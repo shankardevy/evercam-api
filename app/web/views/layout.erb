@@ -1,26 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 <head>
   <title><%= [@title, 'evercam.io'].compact.join(' · ') %></title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+
+  <link rel='icon' href='img/favicon.ico' type='image/x-icon'>
+  <link rel='shortcut icon' href='img/favicon.ico' type='image/x-icon'>
+
+  <meta name='description' content='Your description'>
+  <meta name='keywords' content='Your keywords'>
+  <meta name='author' content='Your name'>
 
   <link rel='stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
-  <link rel='stylesheet' href='/css/evercam.bootstrap.css'>
+  <link rel='stylesheet' href='/css/template.bootstrap.css'>
 
   <script src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
   <script src='//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js'></script>
 </head>
 <body>
-  <div id='main' class='container'>
+<div class='main'>
 
-    <% flash.each do |key,msg| %>
-      <div class='alert alert-dismissable alert-<%= key %>'>
-        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-        <%= msg %>
+  <header id='header'>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-sm-12 col-md-12 col-lg-12 '>
+          <div class='header-block clearfix'>
+            <h1>
+              <a class='navbar-brand' href='index.html'>
+                <img id='logo' src='img/logo.svg'>
+              </a>
+            </h1>
+            <ul class='nav tm-navbar navbar-nav sf-menu'>
+              <li><a href='index.html'>Home</a></li>
+              <li><a href='#'>Connect</a></li>
+              <li><a href='docs.html'>Develop</a></li>
+              <li><a href='#'>Marketplace</a></li>
+              <li><a href='/login'>Sign In</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-    <% end %>
+    </div>
+  </header>
 
-    <%= yield %>
+  <div id='content'>
+    <div class='container'>
 
+      <% flash.each do |key,msg| %>
+        <div class='alert alert-dismissable alert-<%= key %>'>
+          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+          <%= msg %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+
+    </div>
   </div>
+
+  <footer>
+    <div class='container'>
+      <div class='row'>
+        <div class='col-sm-12 col-md-12 col-lg-12'>
+          <ul class='social-icons'>
+            <li>
+              <a href='#' class='icon-twitter'></a>
+            </li>
+            <li>
+              <a href='#' class='icon-facebook'></a>
+            </li>
+            <li>
+              <a href='#' class='icon-google-plus'></a>
+            </li>
+            <li>
+              <a href='#' class='icon-rss'></a>
+            </li>
+          </ul>
+          <span>&copy; 2013 Evercam, 12 Parnell Square East, Dublin 1, Ireland <strong>|</strong> Telephone +353 (1) 538 3333 <strong>|</strong> Email <a mailto='info@evercam.com'>info@evercam.com</a></span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
 </body>
+</html>
 
