@@ -1,6 +1,7 @@
 require_relative '../../lib/config'
 require_relative '../../lib/models'
 require_relative '../../lib/errors'
+require_relative '../../lib/oauth2'
 
 module Evercam
   class WebApp < Sinatra::Base
