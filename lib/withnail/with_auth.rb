@@ -14,7 +14,7 @@ module Evercam
         case auth_type
         when :basic
           authenticate_with_http_basic
-        when :token
+        when :bearer
           authenticate_with_access_token
         when :session
           authenticate_with_rack_session
@@ -37,7 +37,7 @@ module Evercam
       def auth_type
         case header.split[0]
         when /basic/i then :basic
-        when /bearer/i then :token
+        when /bearer/i then :bearer
         else
           session ? :session : nil
         end
