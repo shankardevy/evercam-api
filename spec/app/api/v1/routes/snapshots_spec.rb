@@ -17,19 +17,14 @@ describe 'APIv1 routes/snapshots' do
     end
 
     context 'when the stream is public' do
-
-      before(:each) do
-        stream.update(is_public: true)
-      end
-
       it 'returns the stream snapshot data' do
+        stream.update(is_public: true)
         get("/streams/#{stream.name}/snapshots")
 
         expect(last_response.status).to eq(200)
         expect(last_response.json.keys).
           to eq(['uris', 'formats', 'auth'])
       end
-
     end
 
     context 'when the stream is private' do
@@ -38,27 +33,28 @@ describe 'APIv1 routes/snapshots' do
         stream.update(is_public: false)
       end
 
-      context 'when the request does not have authentication' do
+      context 'when the request does not come with authentication' do
         it 'returns a FORBIDDEN status' do
           get("/streams/#{stream.name}/snapshots")
-          expect(last_response.status).to eq(403)
+          expect(last_response.status).to eq(401)
         end
       end
 
       context 'when the request comes with authentication' do
 
-        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
-
         context 'when the client is not authorized' do
           it 'returns a FORBIDDEN status' do
-            auth = { username: user.username, password: 'xxxx' }
-            get("/streams/#{stream.name}/snapshots", auth)
+            create(:user, username: 'xxxx', password: 'yyyy')
+            env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
+
+            get("/streams/#{stream.name}/snapshots", {}, env)
             expect(last_response.status).to eq(403)
           end
         end
 
         context 'when the client is authorized' do
           it 'returns the stream snapshot data' do
+            user = create(:user, username: 'xxxx', password: 'yyyy')
             stream.update(owner: user)
 
             env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }

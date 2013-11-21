@@ -16,12 +16,16 @@ module Evercam
     error_formatter :json, Formatters::JSONError
     formatter :json, Formatters::JSONObject
 
-    rescue_from NotFoundError do |e|
-      error_response({ status: 404, message: e.message })
+    rescue_from AuthenticationError do |e|
+      error_response({ status: 401, message: e.message })
     end
 
-    rescue_from AuthenticationError, ForbiddenError do |e|
+    rescue_from AuthorizationError do |e|
       error_response({ status: 403, message: e.message })
+    end
+
+    rescue_from NotFoundError do |e|
+      error_response({ status: 404, message: e.message })
     end
 
     helpers do

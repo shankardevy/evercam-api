@@ -6,6 +6,9 @@ module Evercam
   class AuthenticationError < EvercamError
   end
 
+  class AuthorizationError < EvercamError
+  end
+
 end
 
 require_relative './errors/web'

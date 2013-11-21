@@ -16,7 +16,7 @@ class Stream < Sequel::Model
       nil != permissions_dataset.
         first(token: seeker, name: right)
     else
-      raise Evercam::AuthenticationError,
+      raise Evercam::AuthorizationError,
         'unknown permission seeker type'
     end
   end
