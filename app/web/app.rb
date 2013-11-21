@@ -12,6 +12,16 @@ module Evercam
 
     register Sinatra::Flash
 
+    def with_user
+      uid = session[:user]
+      usr = uid ? User[uid] : nil
+
+      uri = CGI.escape(request.fullpath)
+      redirect "/login?rt=#{uri}" unless usr
+
+      yield usr
+    end
+
   end
 end
 
