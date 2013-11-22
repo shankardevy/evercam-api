@@ -12,13 +12,14 @@
   <meta name='author' content='Your name'>
 
   <link rel='stylesheet' href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.1/css/font-awesome.min.css'>
   <link rel='stylesheet' href='/css/template.bootstrap.css'>
 
   <script src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
   <script src='//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js'></script>
 </head>
 <body>
-<div class='main'>
+<div id='wrapper'>
 
   <header id='header'>
     <div class='container'>
@@ -31,9 +32,9 @@
               </a>
             </h1>
             <ul class='nav tm-navbar navbar-nav sf-menu'>
-              <li><a href='index.html'>Home</a></li>
+              <li><a href='/'>Home</a></li>
               <li><a href='#'>Connect</a></li>
-              <li><a href='docs.html'>Develop</a></li>
+              <li><a href='/docs'>Develop</a></li>
               <li><a href='#'>Marketplace</a></li>
               <li><a href='/login'>Sign In</a></li>
             </ul>
@@ -43,18 +44,20 @@
     </div>
   </header>
 
-  <div id='content'>
-    <div class='container'>
+  <div class='main'>
+    <div id='content'>
+      <div class='container'>
 
-      <% flash.each do |key,msg| %>
-        <div class='alert alert-dismissable alert-<%= key %>'>
-          <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-          <%= msg %>
-        </div>
-      <% end %>
+        <% flash.each do |key,msg| %>
+          <div class='alert alert-dismissable alert-<%= key %>'>
+            <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+            <%= msg %>
+          </div>
+        <% end %>
 
-      <%= yield %>
+        <%= yield %>
 
+      </div>
     </div>
   </div>
 
@@ -64,19 +67,26 @@
         <div class='col-sm-12 col-md-12 col-lg-12'>
           <ul class='social-icons'>
             <li>
-              <a href='#' class='icon-twitter'></a>
+              <a href='https://twitter.com/evrcm' target='_blank' class='fa-twitter'></a>
             </li>
             <li>
-              <a href='#' class='icon-facebook'></a>
+              <a href='https://www.facebook.com/evrcm' target='_blank' class='fa-facebook'></a>
             </li>
             <li>
-              <a href='#' class='icon-google-plus'></a>
+              <a href='http://plus.google.com/+evercam' target='_blank' class='fa-google-plus'></a>
             </li>
             <li>
-              <a href='#' class='icon-rss'></a>
+              <a href='http://www.linkedin.com/company/evercam' target='_blank' class='fa-linkedin'></a>
+            </li>
+            <li>
+              <a href='http://github.com/evercam' target='_blank' class='fa-github'></a>
             </li>
           </ul>
-          <span>&copy; 2013 Evercam, 12 Parnell Square East, Dublin 1, Ireland <strong>|</strong> Telephone +353 (1) 538 3333 <strong>|</strong> Email <a mailto='info@evercam.com'>info@evercam.com</a></span>
+          <span>
+            <a href='/about'>About Us</a>
+            <a href='/privacy'>Privacy &amp; Terms</a>
+            <a href='/jobs'>Jobs</a>
+          </span>
         </div>
       </div>
     </div>

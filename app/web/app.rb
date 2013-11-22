@@ -28,4 +28,5 @@ end
 
 require_relative './routes/login'
 require_relative './routes/oauth2'
+require_relative './routes/jobs'
 
