@@ -26,7 +26,7 @@ module Evercam
   end
 end
 
-require_relative './routes/login'
+require_relative './routes/root'
 require_relative './routes/oauth2'
-require_relative './routes/jobs'
+require_relative './routes/login'
 
