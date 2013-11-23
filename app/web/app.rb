@@ -13,6 +13,11 @@ module Evercam
     register Sinatra::Flash
     helpers Sinatra::RedirectWithFlash
 
+    error NotFoundError do
+      status 404
+      erb 'errors/404'.to_sym
+    end
+
     error BadRequestError do
       status 400
       @message = env['sinatra.error'].message
@@ -32,7 +37,7 @@ module Evercam
   end
 end
 
-['root', 'oauth2', 'login'].each do |rt|
+['root', 'oauth2', 'login', 'docs'].each do |rt|
   require_relative "./routes/#{rt}"
 end
 
