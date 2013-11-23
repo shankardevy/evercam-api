@@ -39,7 +39,7 @@ module Evercam
             context 'when the user does not have the right' do
               it 'return false' do
                 env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
-                resource = double(:resource, :has_right? => false)
+                resource = mock(:has_right? => false)
                 expect(subject.new(env).has_right?('xxxx', resource)).
                   to eq(false)
               end
@@ -48,7 +48,7 @@ module Evercam
             context 'when the user does have the right' do
               it 'return true' do
                 env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
-                resource = double(:resource, :has_right? => true)
+                resource = mock(:has_right? => true)
                 expect(subject.new(env).has_right?('xxxx', resource)).
                   to eq(true)
               end
@@ -75,7 +75,7 @@ module Evercam
             context 'when the user does not have the right' do
               it 'returns false' do
                 env = env_for(session: { user: user.id })
-                resource = double(:resource, :has_right? => false)
+                resource = mock(:has_right? => false)
                 expect(subject.new(env).has_right?('xxxx', resource) ).
                   to eq(false)
               end
@@ -84,7 +84,7 @@ module Evercam
             context 'whent he user does have the right' do
               it 'returns false' do
                 env = env_for(session: { user: user.id })
-                resource = double(:resource, :has_right? => true)
+                resource = mock(:has_right? => true)
                 expect(subject.new(env).has_right?('xxxx', resource) ).
                   to eq(true)
               end
@@ -118,7 +118,7 @@ module Evercam
 
           context 'when the token is valid but does not provide the right' do
             it 'returns false' do
-              resource = double(:resource, :has_right? => false)
+              resource = mock(:has_right? => false)
               expect(subject.new(env).has_right?('xxxx', resource)).
                 to eq(false)
             end
@@ -126,7 +126,7 @@ module Evercam
 
           context 'when the token is valid and does provide the right' do
             it 'returns false' do
-              resource = double(:resource, :has_right? => true)
+              resource = mock(:has_right? => true)
               expect(subject.new(env).has_right?('xxxx', resource)).
                 to eq(true)
             end

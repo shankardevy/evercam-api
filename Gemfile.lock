@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    actionmailer (0.6.1)
+      actionpack (>= 0.9.5)
+    actionpack (1.4.0)
     activesupport (4.0.1)
       i18n (~> 0.6, >= 0.6.4)
       minitest (~> 4.2)
@@ -44,10 +47,15 @@ GEM
     i18n (0.6.5)
     ice_nine (0.10.0)
     json (1.8.1)
+    metaclass (0.0.1)
     mini_portile (0.5.2)
     minitest (4.7.5)
+    mocha (0.14.0)
+      metaclass (~> 0.0.1)
     multi_json (1.8.2)
     multi_xml (0.5.5)
+    mutations (0.6.0)
+      activesupport
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     pg (0.17.0)
@@ -100,12 +108,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   aws-sdk
   bcrypt-ruby
   dotenv
   factory_girl
   grape
   json
+  mocha
+  mutations
   nokogiri
   pg
   rack-test

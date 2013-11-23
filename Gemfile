@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
+gem 'mutations'
+gem 'actionmailer'
 gem 'grape'
 gem 'json'
 
@@ -26,6 +28,7 @@ end
 
 group :test do
   gem 'rack-test'
+  gem 'mocha', require: 'mocha/api'
   gem 'factory_girl'
   gem 'nokogiri'
   gem 'webmock', '1.15.2'

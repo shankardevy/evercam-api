@@ -8,7 +8,7 @@ describe Stream do
 
     context 'when the seeker is unknown' do
       it 'raises an AuthenticationError' do
-        expect { stream.has_right?('xxxx', double(:yyyy)) }.
+        expect { stream.has_right?('xxxx', mock) }.
           to raise_error(Evercam::AuthorizationError)
       end
     end

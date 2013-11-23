@@ -7,7 +7,7 @@ module Evercam
     subject { Evercam::Config }
 
     before(:each) do
-      stub_const("ENV", {})
+      ENV['EVERCAM_ENV'] = nil
     end
 
     describe '::env' do
