@@ -1,23 +1,27 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'sinatra-flash',
-  require: 'sinatra/flash'
-gem 'sinatra-redirect-with-flash',
-  require: 'sinatra/redirect_with_flash'
 gem 'grape'
 gem 'json'
 
 gem 'sequel'
-gem 'bcrypt-ruby',
-  require: 'bcrypt'
 gem 'pg'
 
 gem 'aws-sdk'
 gem 'dotenv'
 
+gem 'sinatra-flash',
+  require: 'sinatra/flash'
+
+gem 'sinatra-redirect-with-flash',
+  require: 'sinatra/redirect_with_flash'
+
+gem 'bcrypt-ruby',
+  require: 'bcrypt'
+
 group :development do
   gem 'shotgun'
+  gem 'rake'
 end
 
 group :test do

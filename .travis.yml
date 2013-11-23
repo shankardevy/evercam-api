@@ -1,0 +1,12 @@
+language: ruby
+
+rvm:
+  - 2.0.0
+
+services:
+  - postgresql
+
+before_script:
+  - createdb evercam_tst
+  - ./schema/build evercam_tst
+

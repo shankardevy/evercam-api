@@ -2,7 +2,7 @@ ENV['EVERCAM_ENV'] ||= 'test'
 
 require_relative '../lib/config'
 require_relative '../lib/errors'
-Bundler.require(:test)
+Bundler.require(:default, :test)
 
 def require_app(name)
   require_relative "../app/#{name}"
