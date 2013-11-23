@@ -10,7 +10,8 @@ module Evercam
         validate_client &&
           validate_redirect &&
           validate_type &&
-          validate_scopes
+          validate_scopes &&
+          validate_user_can_authorize
       end
 
       def redirect?
@@ -47,7 +48,21 @@ module Evercam
       end
 
       def validate_scopes
-        @p[:scope]
+        false == scopes.empty? &&
+          scopes.all? { |s| s.valid? }
+      end
+
+      def validate_user_can_authorize
+        scopes.all? do |s|
+          s.resource.has_right?('share', @u)
+        end
+      end
+
+      def scopes
+        names = @p[:scope] || ''
+        names.split(/[\s,]+/).map do |s|
+          AccessScope.new(s)
+        end
       end
 
       def client
@@ -78,6 +93,11 @@ module Evercam
           {
             error: :invalid_scope,
             error_description: 'the {scope} param is missing or is invalid'
+          }
+        elsif !validate_user_can_authorize
+          {
+            error: :access_denied,
+            error_description: 'the user cannot grant authorization to one or more scopes'
           }
         else
           nil

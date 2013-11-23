@@ -2,10 +2,12 @@
   Approve Access
 </h1>
 <h2>
-  #{app} has requested access to the following resources
+  #{@req.client.name} has requested access to the following resources
 </h2>
 <div>
-  #{resources}
+  <% @req.missing.each do |s| %>
+    <%= s.resource.name %>
+  <% end %>
 </div>
 <div>
   <form method='POST'>

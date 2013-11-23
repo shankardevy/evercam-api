@@ -9,7 +9,7 @@ module Evercam
 
       let(:atsr) { create(:access_token_stream_right) }
 
-      let(:user) { atsr.token.grantor }
+      let(:user) { atsr.stream.owner }
 
       let(:client) do
         atsr.token.grantee.tap do |c|
@@ -36,18 +36,21 @@ module Evercam
 
         context 'and a valid :redirect_uri is given' do
           let(:params) { valid.merge(scope: nil, redirect_uri: 'http://b') }
+
           its(:redirect?) { should eq(true) }
           its(:redirect_to) { should start_with('http://b') }
         end
 
         context 'and no :redirect_uri is given' do
           let(:params) { valid.merge(scope: nil, redirect_uri: nil) }
+
           its(:redirect?) { should eq(true) }
           its(:redirect_to) { should start_with(client.default_callback_uri) }
         end
 
         context 'with a bad :redirect_uri' do
           let(:params) { valid.merge(redirect_uri: 'http://c') }
+
           its(:redirect?) { should eq(false) }
           its(:redirect_to) { should be_nil }
           its(:error) { should match(/redirect_uri/) }
@@ -55,6 +58,7 @@ module Evercam
 
         context 'with a bad :client_id' do
           let(:params) { valid.merge(client_id: nil) }
+
           its(:redirect?) { should eq(false) }
           its(:redirect_to) { should be_nil }
           its(:error) { should match(/client_id/) }
@@ -62,27 +66,36 @@ module Evercam
 
         context 'with a bad :response_type' do
           let(:params) { valid.merge(response_type: 'xxxx') }
+
           its(:redirect?) { should eq(true) }
           its(:redirect_to) { should have_fragment({ error: :unsupported_response_type }) }
           its(:error) { should match(/response_type/) }
         end
 
-        context 'with a bad :scope', skip: true do
+        context 'with a bad :scope' do
           let(:params) { valid.merge(scope: 'a:b:c') }
+
           its(:redirect?) { should eq(true) }
           its(:redirect_to) { should have_fragment({ error: :invalid_scope }) }
           its(:error) { should match(/scope/) }
         end
 
+        context 'when the user is not authorized to grant all scopes' do
+          let(:user) { create(:user) }
+          let(:params) { valid }
+
+          its(:redirect?) { should eq(true) }
+          its(:redirect_to) { should have_fragment({ error: :access_denied }) }
+          its(:error) { should match(/cannot grant/) }
+        end
+
       end
 
       context 'when the client has grants for all scopes' do
+
       end
 
       context 'when the client is missing scope grants' do
-      end
-
-      context 'when the user is not authorized to grant all scopes' do
       end
 
     end
