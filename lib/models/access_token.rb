@@ -16,6 +16,11 @@ class AccessToken < Sequel::Model
     super
   end
 
+  def expires_in
+    seconds = expires_at - Time.now
+    seconds > 0 ? seconds.to_i : 0
+  end
+
   def is_valid?
     false == is_revoked? &&
       Time.now <= self.expires_at

@@ -46,5 +46,23 @@ describe AccessToken do
 
   end
 
+  describe '#expires_in' do
+
+    context 'when the token is still valid' do
+      it 'returns the number of seconds remaining' do
+        token = build(:access_token)
+        expect(token.expires_in).to be > 0
+      end
+    end
+
+    context 'when the token has expired' do
+      it 'returns zero' do
+        token = build(:access_token, expires_at: Time.now - 1)
+        expect(token.expires_in).to eq(0)
+      end
+    end
+
+  end
+
 end
 
