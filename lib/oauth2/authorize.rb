@@ -21,7 +21,7 @@ module Evercam
 
       def redirect_to
         return nil unless validate_client && validate_redirect
-        return nil if valid? && false == missing.empty?
+        return nil if valid? && false == missing.empty? && @decline.nil?
         return redirect_uri unless fragment
 
         encoded = URI.encode_www_form(fragment)
@@ -29,7 +29,7 @@ module Evercam
       end
 
       def error
-        unless valid?
+        unless valid? && nil == @decline
           fragment[:error_description]
         end
       end
@@ -45,6 +45,14 @@ module Evercam
             where(token_id: tokens, name: s.right).
             count
         end
+      end
+
+      def approve!
+        issue_access_token
+      end
+
+      def decline!
+        @decline = true
       end
 
       private
@@ -119,6 +127,11 @@ module Evercam
           {
             error: :access_denied,
             error_description: 'the user cannot grant authorization to one or more scopes'
+          }
+        elsif @decline
+          {
+            error: :access_denied,
+            error_description: 'the resource owner denied the authorization requested'
           }
         elsif @token
           {

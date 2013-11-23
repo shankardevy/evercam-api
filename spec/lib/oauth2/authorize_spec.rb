@@ -155,6 +155,58 @@ module Evercam
 
       end
 
+      context 'when the client approves the missing scopes' do
+
+        let(:stream1) do
+          create(:stream, owner: user0)
+        end
+
+        let(:params) do
+          valid.merge(scope: [
+            "stream:#{atsr0.name}:#{stream0.name}",
+            "stream:#{atsr0.name}:#{stream1.name}"
+          ].join(','))
+        end
+
+        let(:token1) { client0.tokens.order(:id).last }
+
+        before(:each) { subject.approve! }
+
+        it 'creates a new access token for the client' do
+          expect(token1).to_not eq(token0)
+          expect(client0.reload.tokens.count).to eq(2)
+        end
+
+        it 'create the new rights for the token' do
+          count = AccessTokenStreamRight.where(token: token1).count
+          expect(count).to eq(2)
+        end
+
+        its(:redirect?) { should eq(true) }
+        its(:redirect_to) { should have_fragment({ access_token: token1.request }) }
+
+      end
+
+      context 'when the client declines the missing scopes' do
+
+        let(:stream1) do
+          create(:stream, owner: user0)
+        end
+
+        let(:params) do
+          valid.merge(scope: [
+            "stream:#{atsr0.name}:#{stream1.name}"
+          ].join(','))
+        end
+
+        before(:each) { subject.decline! }
+
+        its(:redirect?) { should eq(true) }
+        its(:redirect_to) { should have_fragment({ error: :access_denied }) }
+        its(:error) { should match(/denied/) }
+
+      end
+
     end
   end
 end
