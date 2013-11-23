@@ -11,11 +11,11 @@ module Evercam
 
         context 'when no authentication is provided' do
 
-          let(:env) { {} }
+          let(:env) { { 'rack.session' => {} } }
 
           it 'raises an AuthenticationError' do
             expect { subject.new(env).has_right?('xxxx', nil) }.
-              to raise_error(AuthenticationError)
+              to raise_error(AuthenticationError, /supported/)
           end
 
         end
@@ -26,7 +26,7 @@ module Evercam
             it 'raises an AuthenticationError' do
               env = { 'HTTP_AUTHORIZATION' => 'Basic zzzz' }
               expect { subject.new(env).has_right?('xxxx', nil) }.
-                to raise_error(AuthenticationError)
+                to raise_error(AuthenticationError, /basic/)
             end
           end
 
@@ -66,7 +66,7 @@ module Evercam
             it 'raises an AuthenticationError' do
               env = env_for(session: { user: '0' })
               expect { subject.new(env).has_right?('xxxx', nil) }.
-                to raise_error(AuthenticationError)
+                to raise_error(AuthenticationError, /session/)
             end
           end
 
@@ -104,7 +104,7 @@ module Evercam
             it 'raises an AuthenticationError' do
               token.delete
               expect { subject.new(env).has_right?('xxxx', nil) }.
-                to raise_error(AuthenticationError)
+                to raise_error(AuthenticationError, /token/)
             end
           end
 
@@ -112,7 +112,7 @@ module Evercam
             it 'raises an AuthenticationError' do
               token.update(is_revoked: true).save
               expect { subject.new(env).has_right?('xxxx', nil) }.
-                to raise_error(AuthenticationError)
+                to raise_error(AuthenticationError, /token/)
             end
           end
 

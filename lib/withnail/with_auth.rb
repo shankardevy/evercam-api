@@ -31,7 +31,7 @@ module Evercam
       end
 
       def session
-        @env['rack.session']
+        @env['rack.session'] || {}
       end
 
       def auth_type
@@ -39,7 +39,7 @@ module Evercam
         when /basic/i then :basic
         when /bearer/i then :bearer
         else
-          session ? :session : nil
+          session[:user] ? :session : nil
         end
       end
 
@@ -51,7 +51,7 @@ module Evercam
         return user if user && user.password == ps
 
         raise AuthenticationError,
-          'invalid username / email and password combination'
+          'invalid basic authentication details'
       end
 
       def authenticate_with_rack_session
