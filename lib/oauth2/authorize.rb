@@ -2,52 +2,86 @@ module Evercam
   module OAuth2
     class Authorize
 
-      def initialize(params)
-        @params = params
+      def initialize(user, params)
+        @u, @p = user, params
       end
 
       def valid?
-        validate_response_type &&
-          validate_client_exists &&
-          validate_redirect_uri
+        validate_client &&
+          validate_redirect &&
+          validate_type &&
+          validate_scopes
       end
 
       def redirect?
-        validate_redirect_uri
+        nil != redirect_to
       end
 
-      def uri
-        return nil unless validate_redirect_uri
-        uri = @params[:redirect_uri] || client.default_callback_uri
-        URI.join(uri, '#error=unsupported_response_type').to_s
-      end
+      def redirect_to
+        return nil unless validate_redirect
+        return redirect_uri unless fragment
 
-      def client
-        @client ||= Client.by_exid(@params[:client_id])
+        encoded = URI.encode_www_form(fragment)
+        URI.join(redirect_uri, "##{encoded}").to_s
       end
 
       def error
-        if !validate_client_exists
-          'the {client_id} paramater is either missing or invalid'
-        elsif !validate_redirect_uri
-          'the {redirect_uri} parameter does not match any registered options'
+        unless valid?
+          fragment[:error_description]
         end
       end
 
       private
 
-      def validate_response_type
-        ['token'].include?(@params[:response_type])
-      end
-
-      def validate_client_exists
+      def validate_client
         nil != client
       end
 
-      def validate_redirect_uri
-        return false unless client
-        uri = @params[:redirect_uri]
-        nil == uri || client.allow_callback_uri?(uri)
+      def validate_redirect
+        uri = @p[:redirect_uri]
+        nil == uri || (client && client.allow_callback_uri?(uri))
+      end
+
+      def validate_type
+        @p[:response_type] == 'token'
+      end
+
+      def validate_scopes
+        @p[:scope]
+      end
+
+      def client
+        Client.by_exid(@p[:client_id])
+      end
+
+      def redirect_uri
+        @p[:redirect_uri] || client.default_callback_uri
+      end
+
+      def fragment
+        if !validate_client
+          {
+            error: :invalid_request,
+            error_description: 'the {client_id} param is missing or is invalid'
+          }
+        elsif !validate_redirect
+          {
+            error: :invalid_request,
+            error_description: 'the {redirect_uri} param does not match any registered values'
+          }
+        elsif !validate_type
+          {
+            error: :unsupported_response_type,
+            error_description: 'the {response_type} param is missing or is invalid'
+          }
+        elsif !validate_scopes
+          {
+            error: :invalid_scope,
+            error_description: 'the {scope} param is missing or is invalid'
+          }
+        else
+          nil
+        end
       end
 
     end

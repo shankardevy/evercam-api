@@ -5,18 +5,16 @@ describe 'WebApp routes/oauth2' do
 
   let(:app) { Evercam::WebApp }
 
-  let(:user) { create(:user) }
+  let(:atsr) { create(:access_token_stream_right) }
 
-  let(:client) { create(:client) }
+  let(:env) { env_for(session: { user: atsr.token.grantor.id }) }
 
-  let(:env) { env_for(session: { user: user.id }) }
-
-  let(:params) do
+  let(:valid) do
     {
       response_type: 'token',
-      client_id: client.exid,
-      redirect_uri: client.default_callback_uri,
-      scope: 'stream:view:xxxx'
+      client_id: atsr.token.grantee.exid,
+      redirect_uri: atsr.token.grantee.default_callback_uri,
+      scope: "stream:view:#{atsr.stream.name}"
     }
   end
 
@@ -35,7 +33,8 @@ describe 'WebApp routes/oauth2' do
 
     context 'with an unknown client or an illegal redirect_uri' do
       it 'redirects the error to the local error page' do
-        get('/oauth2/authorize', params.merge(client_id: 'xxxx'), env)
+        params = valid.merge(client_id: 'xxxx')
+        get('/oauth2/authorize', params, env)
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
@@ -45,11 +44,12 @@ describe 'WebApp routes/oauth2' do
 
     context 'with an which does not include the redirect_uri' do
       it 'redirects the error to the redirect_uri' do
-        get('/oauth2/authorize', params.merge(response_type: 'xxxx'), env)
+        params = valid.merge(response_type: 'xxxx')
+        get('/oauth2/authorize', params, env)
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
-          to start_with(client.default_callback_uri)
+          to start_with(atsr.token.grantee.default_callback_uri)
       end
     end
 
@@ -57,8 +57,30 @@ describe 'WebApp routes/oauth2' do
 
   context 'when the request is valid' do
 
+    let(:atsr0) { create(:access_token_stream_right) }
+
     context 'with the user having previously approved all scopes' do
-      it 'redirects to the redirect_uri with an access token'
+
+      let(:params) { valid.merge(scope: "stream:view:#{atsr0.stream.name}") }
+      before(:each) { get('/oauth2/authorize', params, env) }
+
+      it 'creates a new access token for the client' do
+        client = atsr0.token.grantee.reload
+        expect(client.tokens.count).to eq(2)
+      end
+
+      it 'redirects back to the redirect_uri' do
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).
+          to start_with(params[:redirect_uri])
+      end
+
+      it 'includes the new access token in the fragment' do
+        atsr1 = AccessTokenStreamRight.order(:created_at).last
+        expect(last_response.location).
+          to have_fragment({ access_token: atsr1.token.request })
+      end
+
     end
 
     context 'with the user needing to approve one or more scopes' do
