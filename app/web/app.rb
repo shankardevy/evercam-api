@@ -1,6 +1,3 @@
-require_relative '../../lib/config'
-require_relative '../../lib/models'
-require_relative '../../lib/errors'
 require_relative '../../lib/oauth2'
 
 module Evercam
@@ -35,7 +32,7 @@ module Evercam
   end
 end
 
-require_relative './routes/root'
-require_relative './routes/oauth2'
-require_relative './routes/login'
+['root', 'oauth2', 'login'].each do |rt|
+  require_relative "./routes/#{rt}"
+end
 
