@@ -48,6 +48,14 @@ module Evercam
           its(:redirect_to) { should start_with(client0.default_callback_uri) }
         end
 
+        context 'with no params at all' do
+          let(:params) { {} }
+
+          its(:redirect?) { should eq(false) }
+          its(:redirect_to) { should be_nil }
+          its(:error) { should match(/client_id/) }
+        end
+
         context 'with a bad :redirect_uri' do
           let(:params) { valid.merge(redirect_uri: 'http://c') }
 

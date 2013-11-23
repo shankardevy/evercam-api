@@ -20,7 +20,7 @@ module Evercam
       end
 
       def redirect_to
-        return nil unless validate_redirect
+        return nil unless validate_client && validate_redirect
         return nil if valid? && false == missing.empty?
         return redirect_uri unless fragment
 
@@ -32,6 +32,10 @@ module Evercam
         unless valid?
           fragment[:error_description]
         end
+      end
+
+      def client
+        Client.by_exid(@p[:client_id])
       end
 
       def missing
@@ -84,10 +88,6 @@ module Evercam
             AccessTokenStreamRight.create(token: t, name: s.right, stream: s.resource)
           end
         end
-      end
-
-      def client
-        Client.by_exid(@p[:client_id])
       end
 
       def redirect_uri
