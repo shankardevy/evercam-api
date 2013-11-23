@@ -14,5 +14,6 @@ end
 
 RSpec.configure do |c|
   c.expect_with :stdlib, :rspec
+  c.filter_run_excluding skip: true
 end
 
