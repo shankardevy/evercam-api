@@ -42,9 +42,8 @@ describe 'WebApp routes/oauth2' do
         params = valid.merge(client_id: 'xxxx')
         get('/oauth2/authorize', params, env)
 
-        expect(last_response.status).to eq(302)
-        expect(last_response.location).
-          to end_with('/errors/400')
+        expect(last_response.status).to eq(400)
+        expect(last_response.alerts).to_not be_empty
       end
     end
 

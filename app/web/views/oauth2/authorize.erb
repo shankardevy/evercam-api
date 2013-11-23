@@ -1,14 +1,14 @@
-<h1>
-  Approve Access
-</h1>
-<h2>
-  #{@req.client.name} has requested access to the following resources
-</h2>
-<div>
+<h3>
+  <%= @req.client.name %> has requested access to the following:
+</h3>
+<ol>
+  <li>
   <% @req.missing.each do |s| %>
-    <%= s.resource.name %>
+    permission to <strong><%= s.right %> <%= s.resource.name %></strong>
   <% end %>
-</div>
+  </li>
+</ol>
+<br />
 <div>
   <form method='POST'>
     <button type='submit' name='action' value='approve' class='btn btn-success'>

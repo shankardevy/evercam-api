@@ -17,6 +17,7 @@ module Evercam
     helpers Sinatra::RedirectWithFlash
 
     error BadRequestError do
+      status 400
       @message = env['sinatra.error'].message
       erb 'errors/400'.to_sym
     end
