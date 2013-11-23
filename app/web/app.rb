@@ -12,6 +12,7 @@ module Evercam
       Evercam::Config[:cookies]
 
     register Sinatra::Flash
+    helpers Sinatra::RedirectWithFlash
 
     def with_user
       uid = session[:user]
