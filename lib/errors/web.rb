@@ -4,6 +4,9 @@ module Evercam
     class NotFoundError < EvercamError
     end
 
+    class BadRequestError < EvercamError
+    end
+
   end
 end
 

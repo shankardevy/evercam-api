@@ -4,6 +4,7 @@ module Evercam
 
       def initialize(user, params)
         @u, @p = user, params
+        issue_access_token if valid? && missing.empty?
       end
 
       def valid?
@@ -20,6 +21,7 @@ module Evercam
 
       def redirect_to
         return nil unless validate_redirect
+        return nil if valid? && false == missing.empty?
         return redirect_uri unless fragment
 
         encoded = URI.encode_www_form(fragment)
@@ -29,6 +31,15 @@ module Evercam
       def error
         unless valid?
           fragment[:error_description]
+        end
+      end
+
+      def missing
+        scopes.select do |s|
+          tokens = client.tokens.map(&:id)
+          0 == s.resource.permissions.
+            where(token_id: tokens, name: s.right).
+            count
         end
       end
 
@@ -65,6 +76,16 @@ module Evercam
         end
       end
 
+      def issue_access_token
+        return nil unless valid?
+        @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
+          scopes.each do |s|
+            #TODO: t.add_right(s.right, s.resource)
+            AccessTokenStreamRight.create(token: t, name: s.right, stream: s.resource)
+          end
+        end
+      end
+
       def client
         Client.by_exid(@p[:client_id])
       end
@@ -98,6 +119,12 @@ module Evercam
           {
             error: :access_denied,
             error_description: 'the user cannot grant authorization to one or more scopes'
+          }
+        elsif @token
+          {
+            access_token: @token.request,
+            expires_in: @token.expires_in,
+            token_type: :bearer
           }
         else
           nil

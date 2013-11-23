@@ -7,12 +7,18 @@ module Evercam
   class WebApp < Sinatra::Base
 
     include WebErrors
+    set :raise_errors, false
+    set :show_exceptions, false
 
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 
     register Sinatra::Flash
     helpers Sinatra::RedirectWithFlash
+
+    error BadRequestError do
+      redirect '/errors/400', error: env['sinatra.error'].message
+    end
 
     def with_user
       uid = session[:user]

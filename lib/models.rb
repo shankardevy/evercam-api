@@ -1,4 +1,5 @@
 db = Sequel.connect(Evercam::Config[:database])
+Sequel::Model.plugin :association_proxies
 Sequel::Model.plugin :timestamps, update_on_create: true
 Sequel::Model.plugin :boolean_readers
 db.extension :pg_array

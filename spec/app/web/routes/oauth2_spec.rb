@@ -7,14 +7,20 @@ describe 'WebApp routes/oauth2' do
 
   let(:atsr) { create(:access_token_stream_right) }
 
-  let(:env) { env_for(session: { user: atsr.token.grantor.id }) }
+  let(:user0) { atsr.stream.owner }
+
+  let(:client0) { atsr.token.grantee }
+
+  let(:stream0) { atsr.stream }
+
+  let(:env) { env_for(session: { user: user0.id }) }
 
   let(:valid) do
     {
       response_type: 'token',
-      client_id: atsr.token.grantee.exid,
-      redirect_uri: atsr.token.grantee.default_callback_uri,
-      scope: "stream:view:#{atsr.stream.name}"
+      client_id: client0.exid,
+      redirect_uri: client0.default_callback_uri,
+      scope: "stream:#{atsr.name}:#{stream0.name}"
     }
   end
 
@@ -38,11 +44,11 @@ describe 'WebApp routes/oauth2' do
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
-          to end_with('/oauth2/error')
+          to end_with('/errors/400')
       end
     end
 
-    context 'with an which does not include the redirect_uri' do
+    context 'with an error not related to the redirect_uri' do
       it 'redirects the error to the redirect_uri' do
         params = valid.merge(response_type: 'xxxx')
         get('/oauth2/authorize', params, env)
@@ -57,15 +63,15 @@ describe 'WebApp routes/oauth2' do
 
   context 'when the request is valid' do
 
-    let(:atsr0) { create(:access_token_stream_right) }
 
     context 'with the user having previously approved all scopes' do
 
-      let(:params) { valid.merge(scope: "stream:view:#{atsr0.stream.name}") }
+      let(:params) { valid  }
+
       before(:each) { get('/oauth2/authorize', params, env) }
 
       it 'creates a new access token for the client' do
-        client = atsr0.token.grantee.reload
+        client = atsr.token.grantee.reload
         expect(client.tokens.count).to eq(2)
       end
 
@@ -84,7 +90,17 @@ describe 'WebApp routes/oauth2' do
     end
 
     context 'with the user needing to approve one or more scopes' do
-      it 'displays the approval request to the user'
+
+      let(:stream1) { create(:stream, owner: user0) }
+
+      let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
+
+      before(:each) { get('/oauth2/authorize', params, env) }
+
+      it 'displays the approval request to the user' do
+        expect(last_response.status).to eq(200)
+      end
+
     end
 
   end

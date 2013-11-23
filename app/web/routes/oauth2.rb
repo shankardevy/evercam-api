@@ -6,10 +6,10 @@ module Evercam
 
     get '/oauth2/authorize' do
       with_user do |user|
-        req = OAuth2::Authorize.new(user, params)
+        @req = OAuth2::Authorize.new(user, params)
 
-        redirect req.redirect_to if req.redirect?
-        raise BadRequestError, req.error unless req.valid?
+        redirect @req.redirect_to if @req.redirect?
+        raise BadRequestError, @req.error unless @req.valid?
 
         erb 'oauth2/authorize'.to_sym
       end
