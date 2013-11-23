@@ -16,6 +16,19 @@ module Evercam
     end
 
     post '/oauth2/authorize' do
+      with_user do |user|
+        @req = OAuth2::Authorize.new(user, params)
+
+        redirect @req.redirect_to if @req.redirect?
+        raise BadRequestError, @req.error unless @req.valid?
+
+        case params[:action]
+        when /approve/i then @req.approve!
+        when /decline/i then @req.decline!
+        end
+
+        redirect @req.redirect_to
+      end
     end
 
   end

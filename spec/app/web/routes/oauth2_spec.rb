@@ -24,82 +24,115 @@ describe 'WebApp routes/oauth2' do
     }
   end
 
-  context 'when the user is not logged in' do
-    it 'redirects the visitor to the login page' do
-      get('/oauth2/authorize', {}, {})
-      rt = CGI.escape('/oauth2/authorize')
+  describe 'GET /oauth2/authorize' do
 
-      expect(last_response.status).to eq(302)
-      expect(last_response.location).
-        to end_with("/login?rt=#{rt}")
-    end
-  end
-
-  context 'when the request is invalid' do
-
-    context 'with an unknown client or an illegal redirect_uri' do
-      it 'redirects the error to the local error page' do
-        params = valid.merge(client_id: 'xxxx')
-        get('/oauth2/authorize', params, env)
-
-        expect(last_response.status).to eq(400)
-        expect(last_response.alerts).to_not be_empty
-      end
-    end
-
-    context 'with an error not related to the redirect_uri' do
-      it 'redirects the error to the redirect_uri' do
-        params = valid.merge(response_type: 'xxxx')
-        get('/oauth2/authorize', params, env)
+    context 'when the user is not logged in' do
+      it 'redirects the visitor to the login page' do
+        get('/oauth2/authorize', {}, {})
+        rt = CGI.escape('/oauth2/authorize')
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
-          to start_with(atsr.token.grantee.default_callback_uri)
+          to end_with("/login?rt=#{rt}")
       end
+    end
+
+    context 'when the request is invalid' do
+
+      context 'with an unknown client or an illegal redirect_uri' do
+        it 'redirects the error to the local error page' do
+          params = valid.merge(client_id: 'xxxx')
+          get('/oauth2/authorize', params, env)
+
+          expect(last_response.status).to eq(400)
+          expect(last_response.alerts).to_not be_empty
+        end
+      end
+
+      context 'with an error not related to the redirect_uri' do
+        it 'redirects the error to the redirect_uri' do
+          params = valid.merge(response_type: 'xxxx')
+          get('/oauth2/authorize', params, env)
+
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).
+            to start_with(atsr.token.grantee.default_callback_uri)
+        end
+      end
+
+    end
+
+    context 'when the request is valid' do
+
+
+      context 'with the user having previously approved all scopes' do
+
+        let(:params) { valid  }
+
+        before(:each) { get('/oauth2/authorize', params, env) }
+
+        it 'creates a new access token for the client' do
+          client = atsr.token.grantee.reload
+          expect(client.tokens.count).to eq(2)
+        end
+
+        it 'redirects back to the redirect_uri' do
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).
+            to start_with(params[:redirect_uri])
+        end
+
+        it 'includes the new access token in the fragment' do
+          atsr1 = AccessTokenStreamRight.order(:created_at).last
+          expect(last_response.location).
+            to have_fragment({ access_token: atsr1.token.request })
+        end
+
+      end
+
+      context 'with the user needing to approve one or more scopes' do
+
+        let(:stream1) { create(:stream, owner: user0) }
+
+        let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
+
+        before(:each) { get('/oauth2/authorize', params, env) }
+
+        it 'displays the approval request to the user' do
+          expect(last_response.status).to eq(200)
+        end
+
+      end
+
     end
 
   end
 
-  context 'when the request is valid' do
+  describe 'POST /oauth2/authorize' do
 
+    let(:stream1) { create(:stream, owner: user0) }
 
-    context 'with the user having previously approved all scopes' do
+    let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
 
-      let(:params) { valid  }
-
-      before(:each) { get('/oauth2/authorize', params, env) }
-
-      it 'creates a new access token for the client' do
-        client = atsr.token.grantee.reload
-        expect(client.tokens.count).to eq(2)
-      end
-
-      it 'redirects back to the redirect_uri' do
-        expect(last_response.status).to eq(302)
-        expect(last_response.location).
-          to start_with(params[:redirect_uri])
-      end
-
-      it 'includes the new access token in the fragment' do
+    context 'when the user approves the authorization' do
+      it 'issues an access token and redirect the user agent' do
+        post('/oauth2/authorize', params.merge(action: 'approve'), env)
         atsr1 = AccessTokenStreamRight.order(:created_at).last
+
+        expect(last_response.status).to eq(302)
         expect(last_response.location).
           to have_fragment({ access_token: atsr1.token.request })
       end
-
     end
 
-    context 'with the user needing to approve one or more scopes' do
+    context 'when the user declines the authorization' do
+      it 'redirects the user agent with an :access_denied error' do
+        post('/oauth2/authorize', params.merge(action: 'decline'), env)
 
-      let(:stream1) { create(:stream, owner: user0) }
-
-      let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
-
-      before(:each) { get('/oauth2/authorize', params, env) }
-
-      it 'displays the approval request to the user' do
-        expect(last_response.status).to eq(200)
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).
+          to have_fragment({ error: :access_denied })
       end
-
     end
 
   end
