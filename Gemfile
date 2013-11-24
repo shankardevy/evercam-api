@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'mutations'
-gem 'actionmailer'
 gem 'grape'
 gem 'json'
+gem 'mail'
 
 gem 'sequel'
 gem 'pg'
