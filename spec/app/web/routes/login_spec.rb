@@ -1,5 +1,6 @@
 require 'rack_helper'
 require_app 'web/app'
+require_lib 'actors'
 
 describe 'WebApp routes/login' do
 
@@ -103,6 +104,13 @@ describe 'WebApp routes/login' do
       expect(last_response.location).to eq('http://example.org/login')
     end
 
+  end
+
+  describe 'GET /signup' do
+    it 'renders with an OK status' do
+      get '/signup'
+      expect(last_response.status).to eq(200)
+    end
   end
 
 end

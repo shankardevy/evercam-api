@@ -1,6 +1,6 @@
 base = File.dirname(__FILE__)
 
-['config', 'errors', 'models'].each do |lib|
+['config', 'errors', 'models', 'actors', 'mailers'].each do |lib|
   require File.join(base, 'lib', lib)
 end
 
