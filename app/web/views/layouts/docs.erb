@@ -2,6 +2,8 @@
 <html lang='en'>
 <head>
 <%= partial 'layouts/_head'.to_sym %>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.4/styles/tomorrow.min.css'>
+<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.4/highlight.min.js'></script>
 </head>
 <body>
 <div id='wrapper'>
@@ -18,7 +20,7 @@
           <h4>Documentation</h4>
           <ul>
             <li>
-              <a href='/doc/api/v1'>API V1</a>
+              <a href='/docs/api/v1'>API Version 1</a>
             </li>
             <li>
             <ul>
@@ -37,6 +39,14 @@
       </div>
     </div>
   </div>
+
+  <script>
+    $(document).ready(function() {
+        $('pre code').each(function(i, e) {
+          hljs.highlightBlock(e);
+        });
+    });
+  </script>
 
   <%= partial 'layouts/_footer'.to_sym %>
 
