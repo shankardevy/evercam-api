@@ -1,5 +1,9 @@
 base = File.dirname(__FILE__)
 
+['rack/cors'].each do |gem|
+  require gem
+end
+
 ['config', 'errors', 'models', 'actors', 'mailers'].each do |lib|
   require File.join(base, 'lib', lib)
 end
@@ -9,7 +13,16 @@ end
 end
 
 map '/v1' do
+
+  use Rack::Cors do
+    allow do
+      origins '*'
+      resource '*'
+    end
+  end
+
   run Evercam::APIv1
+
 end
 
 map '/' do

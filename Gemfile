@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'mutations'
+gem 'rack-cors'
 gem 'grape'
 gem 'json'
 gem 'mail'
