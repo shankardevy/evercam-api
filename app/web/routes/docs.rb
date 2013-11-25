@@ -1,15 +1,14 @@
 module Evercam
   class WebApp
 
-    set :api, File.join(settings.root, '..', 'api')
-
-    get '/docs/:version/:route' do |version, route|
-      path = File.join(settings.api, version, 'routes')
-
-      file = File.join(path, "#{route}.erb")
-      raise NotFoundError unless File.exists?(file)
-
-      erb route.to_sym, views: path
+    get '/docs/*' do
+      begin
+        file = params[:splat][0]
+        path = File.join('docs', file)
+        erb path.to_sym, layout: 'layouts/docs'.to_sym
+      rescue
+        raise NotFoundError
+      end
     end
 
   end

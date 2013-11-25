@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'mutations'
-gem 'rack-cors'
 gem 'grape'
 gem 'json'
 gem 'mail'
@@ -13,11 +12,17 @@ gem 'pg'
 gem 'aws-sdk'
 gem 'dotenv'
 
+gem 'rack-cors',
+  require: 'rack/cors'
+
 gem 'sinatra-flash',
   require: 'sinatra/flash'
 
 gem 'sinatra-redirect-with-flash',
   require: 'sinatra/redirect_with_flash'
+
+gem 'sinatra-partial',
+  require: 'sinatra/partial'
 
 gem 'bcrypt-ruby',
   require: 'bcrypt'

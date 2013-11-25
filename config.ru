@@ -1,9 +1,5 @@
 base = File.dirname(__FILE__)
 
-['rack/cors'].each do |gem|
-  require gem
-end
-
 ['config', 'errors', 'models', 'actors', 'mailers'].each do |lib|
   require File.join(base, 'lib', lib)
 end

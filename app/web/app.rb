@@ -7,11 +7,18 @@ module Evercam
     set :raise_errors, false
     set :show_exceptions, false
 
+    configure do
+      set :erb, layout: 'layouts/default'.to_sym
+    end
+
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 
     register Sinatra::Flash
     helpers Sinatra::RedirectWithFlash
+
+    register Sinatra::Partial
+    set :partial_template_engine, :erb
 
     error NotFoundError do
       status 404
