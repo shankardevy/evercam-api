@@ -44,7 +44,7 @@ module Evercam
   end
 end
 
-['root', 'oauth2', 'login', 'docs'].each do |rt|
+['root', 'oauth2', 'login', 'docs', 'connect'].each do |rt|
   require_relative "./routes/#{rt}"
 end
 
