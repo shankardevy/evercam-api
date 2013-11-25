@@ -28,6 +28,7 @@ gem 'bcrypt-ruby',
   require: 'bcrypt'
 
 group :development do
+  gem 'sqlite3'
   gem 'shotgun'
   gem 'rake'
 end
