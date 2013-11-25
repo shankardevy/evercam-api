@@ -1,16 +1,14 @@
 module Evercam
   class WebApp
 
-    get '/about' do
-      erb 'about'.to_sym
+    get '/' do
+      erb 'index'.to_sym
     end
 
-    get '/privacy' do
-      erb 'privacy'.to_sym
-    end
-
-    get '/jobs' do
-      erb 'jobs'.to_sym
+    ['about', 'privacy', 'terms', 'jobs'].each do |url|
+      get "/#{url}" do
+        erb url.to_sym
+      end
     end
 
   end
