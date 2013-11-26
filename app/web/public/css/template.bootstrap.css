@@ -1592,3 +1592,65 @@ footer span a:hover {
 
 }
 
+.content h3 {
+  padding-bottom: 50px;
+}
+
+.team {
+  margin: 0 auto;
+  width: 1010px;
+  overflow: hidden;
+  font-size: 16px;
+  margin-top: 60px;
+}
+
+.team h5 {
+  font-size: 18px;
+  font-weight: normal;
+}
+
+.team ul {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.team li {
+  display: inline-block;
+  text-align: center;
+  margin-bottom: 40px;
+  vertical-align: top;
+  height: 345px;
+  width: 33%;
+}
+
+.team li img {
+  -webkit-filter: grayscale(100%);
+}
+
+.team li:hover img {
+  transition: all 0.3s;
+  -webkit-filter: grayscale(0%);
+  -webkit-transition: all 0.3s;
+}
+
+.team li h5 {
+  color: #eb5f53;
+}
+
+.team li:nth-last-child(2),
+.team li:nth-last-child(1) {
+  width: 39.8%;
+}
+
+.team li:nth-last-child(2) {
+  margin-left: 10%
+}
+
+.team li:nth-last-child(1) {
+  margin-right: 10%;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
