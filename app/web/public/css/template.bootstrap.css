@@ -33,6 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
@@ -464,7 +465,13 @@ header #logo {
 
 .left-nav ol li,
 .left-nav ul li {
+  color: #c0c0c0;
   margin: 5px 0px;
+}
+
+.left-nav ol ol,
+.left-nav ul ul {
+  padding-left: 22px;
 }
 
 .cameraCont, .cameraContents, .camera_fakehover {

@@ -16,13 +16,12 @@
 
         <%= partial 'layouts/_flash'.to_sym %>
 
-        <div class='col-sm-2'>
-          <h4>Documentation</h4>
+        <div class='col-sm-2 left-nav'>
+          <h1>Documentation</h1>
           <ul>
             <li>
-              <a href='/docs/api/v1'>API Version 1</a>
-            </li>
-            <li>
+            <i class='fa fa-cloud'></i>
+            API V1
             <ul>
               <li><a href='/docs/api/v1/authentication'>Authentication</a></li>
               <li><a href='/docs/api/v1/snapshots'>Snapshots</a></li>
@@ -31,13 +30,28 @@
           </ul>
           <ul>
             <li>
-              <a href=''>evercam.js</a>
+            <i class='fa fa-cog'></i>
+            evercam.js
+            <ul>
+              <li>coming soon&hellip;</li>
+            </ul>
             </li>
           </ul>
           <ul>
             <li>
-              <a href=''>evercam.rb</a>
+            <i class='fa fa-cog'></i>
+            evercam.rb
+            <ul>
+              <li>coming soon&hellip;</li>
+            </ul>
             </li>
+          </ul>
+          <ul>
+            <li>
+            <i class='fa fa-link'></i>
+            Connect
+            <ul>
+              <li>coming soon&hellip;</li>
           </ul>
         </div>
 
@@ -51,9 +65,9 @@
 
   <script>
     $(document).ready(function() {
-        $('pre code').each(function(i, e) {
-          hljs.highlightBlock(e);
-        });
+      $('pre code').each(function(i, e) {
+        hljs.highlightBlock(e);
+      });
     });
   </script>
 
