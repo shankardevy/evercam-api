@@ -10,10 +10,16 @@
 :development:
   <<: *defaults
   :database: <%= ENV['DATABASE_URL'] %>
+  :mail:
+    :from: evercam.io <noreply@evercam.io>
+    :via: :sendmail
 
 :test:
   <<: *defaults
   :database: postgres://localhost/evercam_tst
+  :mail:
+    :from: evercam.io <noreply@evercam.io>
+    :via: :test
 
 :production:
   <<: *defaults

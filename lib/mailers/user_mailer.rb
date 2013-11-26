@@ -1,8 +1,13 @@
 module Evercam
   module Mailers
-    class UserMailer
+    class UserMailer < Mailer
 
-      def self.deliver(name, *vars)
+      def confirm
+        {
+          to: user.email,
+          subject: 'Evercam Confirmation',
+          body: erb('user/confirm.txt')
+        }
       end
 
     end

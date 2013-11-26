@@ -25,10 +25,10 @@ module Evercam
         end
 
         return nil if has_errors?
-        password = SecureRandom.hex(16)
+        pass = SecureRandom.hex(16)
 
-        User.create(inputs.merge(password: password, country: country)).tap do |u|
-          Mailers::UserMailer.deliver(:confirm, u, password)
+        User.create(inputs.merge(password: pass, country: country)).tap do |user|
+          Mailers::UserMailer.confirm(user: user, password: pass)
         end
       end
 

@@ -31,10 +31,16 @@ module Evercam
     end
 
     describe '::[]' do
+
+      it 'returns nil if the key does not exist' do
+        expect(subject[:xxxx]).to be_nil
+      end
+
       it 'returns the settings for the current env' do
         development = subject.settings[:development]
         expect(subject[:database]).to eq(development[:database])
       end
+
     end
 
   end

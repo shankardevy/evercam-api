@@ -4,7 +4,7 @@ gem 'sinatra'
 gem 'mutations'
 gem 'grape'
 gem 'json'
-gem 'mail'
+gem 'pony'
 
 gem 'sequel'
 gem 'pg'

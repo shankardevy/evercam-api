@@ -1,0 +1,11 @@
+Dear <%= user.fullname %>
+
+Congratulations and welcome to Evercam. Thanks for registering with us. To complete the process and activate your account we need you to confirm your email. To do this simply click on the link below and complete the final step on the evercam.io site.
+
+http://www.evercam.io/confirm?c=<%= password %>
+
+Thanks again and we hope you enjoy your Evercam experience.
+
+Best regards
+The Evercam Team
+

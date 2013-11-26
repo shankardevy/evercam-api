@@ -10,6 +10,10 @@ class User < Sequel::Model
     where(username: val).or(email: val).first
   end
 
+  def fullname
+    [forename, lastname].join(' ')
+  end
+
   def password
     Password.new(values[:password])
   end
