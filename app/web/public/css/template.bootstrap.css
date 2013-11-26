@@ -403,7 +403,11 @@ header #logo {
   border-bottom: 3px  solid transparent;
 }
 
-.tm-navbar > li.sfHover > a, .tm-navbar > li.sfHover > a:hover, .tm-navbar > li > a:hover, .tm-navbar > li.active > a, .tm-navbar > li.active > a:hover {
+.tm-navbar > li.sfHover > a,
+.tm-navbar > li.sfHover > a:hover,
+.tm-navbar > li > a:hover,
+.tm-navbar > li.active > a,
+.tm-navbar > li.active > a:hover {
   border-bottom: 3px  solid #eb5f53;
   background: none;
 }
@@ -443,6 +447,24 @@ header #logo {
   color: #ffffff;
   background: #646464;
   text-decoration: none;
+}
+
+.left-nav h1 {
+  font-size: 1em;
+  margin-top: 20px;
+  text-transform: uppercase;
+  padding: 0px;
+}
+
+.left-nav ol,
+.left-nav ul {
+  padding: 0px;
+  padding-left: 10px;
+}
+
+.left-nav ol li,
+.left-nav ul li {
+  margin: 5px 0px;
 }
 
 .cameraCont, .cameraContents, .camera_fakehover {
@@ -1562,5 +1584,4 @@ footer span a:hover {
   }
 
 }
-
 
