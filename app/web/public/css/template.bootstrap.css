@@ -1628,8 +1628,7 @@ footer span a:hover {
 }
 
 .team li:hover img {
-  transition: all 0.3s;
-  -webkit-filter: grayscale(0%);
+  -webkit-filter: none;
   -webkit-transition: all 0.3s;
 }
 
@@ -1639,7 +1638,7 @@ footer span a:hover {
 
 .team li:nth-last-child(2),
 .team li:nth-last-child(1) {
-  width: 39.8%;
+  width: 39.7%;
 }
 
 .team li:nth-last-child(2) {
