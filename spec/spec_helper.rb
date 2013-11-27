@@ -1,8 +1,14 @@
 ENV['EVERCAM_ENV'] ||= 'test'
 
+Bundler.require(:default, :test)
+
+# code coverage
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 require_relative '../lib/config'
 require_relative '../lib/errors'
-Bundler.require(:default, :test)
 
 def require_app(name)
   require_relative "../app/#{name}"

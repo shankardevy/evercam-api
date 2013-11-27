@@ -3,5 +3,6 @@
 .env
 
 spec/cassettes
+coverage/
 tmp/
 

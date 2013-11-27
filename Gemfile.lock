@@ -26,6 +26,7 @@ GEM
       safe_yaml (~> 0.9.0)
     descendants_tracker (0.0.3)
     diff-lcs (1.2.5)
+    docile (1.1.1)
     dotenv (0.9.0)
     equalizer (0.0.7)
     factory_girl (4.3.0)
@@ -86,6 +87,11 @@ GEM
     sequel (4.4.0)
     shotgun (0.9)
       rack (>= 1.0)
+    simplecov (0.8.2)
+      docile (~> 1.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -136,6 +142,7 @@ DEPENDENCIES
   rspec
   sequel
   shotgun
+  simplecov
   sinatra
   sinatra-flash
   sinatra-partial

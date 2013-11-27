@@ -34,6 +34,7 @@ group :development do
 end
 
 group :test do
+  gem 'simplecov'
   gem 'rack-test'
   gem 'mocha', require: 'mocha/api'
   gem 'factory_girl'
