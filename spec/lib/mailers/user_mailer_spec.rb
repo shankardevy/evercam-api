@@ -6,18 +6,26 @@ module Evercam
     describe UserMailer do
 
       let(:user) { create(:user) }
+      let(:password) { SecureRandom.hex(16) }
 
       subject { UserMailer }
 
       describe '#confirm' do
-        it 'renders the content correctly' do
-          mailer = subject.new(user: user, password: 'xxxx')
-          result = mailer.confirm
 
+        let(:result) do
+          subject.new(user: user, password: password).confirm
+        end
+
+        it 'renders the content correctly' do
           expect(result[:to]).to eq(user.email)
           expect(result[:subject]).to match(/confirm/i)
-          expect(result[:body]).to match(/xxxx/)
         end
+
+        it 'includes the username and password' do
+          expect(result[:body]).to match(user.username)
+          expect(result[:body]).to match(password)
+        end
+
       end
 
     end

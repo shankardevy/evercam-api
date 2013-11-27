@@ -1,6 +1,5 @@
 module Evercam
   module Actors
-
     class UserSignup < Mutations::Command
 
       required do
