@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'mutations'
 gem 'grape'
 gem 'json'
 gem 'pony'
@@ -11,6 +10,9 @@ gem 'pg'
 
 gem 'aws-sdk'
 gem 'dotenv'
+
+gem 'mutations',
+  github: 'garrettheaver/mutations'
 
 gem 'rack-cors',
   require: 'rack/cors'
@@ -36,11 +38,13 @@ end
 group :test do
   gem 'simplecov'
   gem 'rack-test'
-  gem 'mocha', require: 'mocha/api'
   gem 'factory_girl'
   gem 'nokogiri'
   gem 'webmock', '1.15.2'
   gem 'rspec'
   gem 'vcr'
+
+  gem 'mocha',
+    require: 'mocha/api'
 end
 

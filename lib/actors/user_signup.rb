@@ -10,24 +10,26 @@ module Evercam
         string :email
       end
 
-      def execute
+      def validate
         if User.by_login(username)
-          add_error(:username, :exists, 'the supplied username is already registered')
+          add_error(:username, :exists, 'Username is already registered')
         end
 
         if User.by_login(email)
-          add_error(:email, :exists, 'the supplied email is already registered')
+          add_error(:email, :exists, 'Email is already registered')
         end
 
-        unless country = Country.by_iso3166(inputs[:country])
-          add_error(:country, :invalid, 'the supplied country code does not exist')
+        unless Country.by_iso3166(inputs[:country])
+          add_error(:country, :invalid, 'Country is invalid')
         end
+      end
 
-        return nil if has_errors?
-        pass = SecureRandom.hex(16)
+      def execute
+        country = Country.by_iso3166(inputs[:country])
+        password = SecureRandom.hex(16)
 
-        User.create(inputs.merge(password: pass, country: country)).tap do |user|
-          Mailers::UserMailer.confirm(user: user, password: pass)
+        User.create(inputs.merge(password: password, country: country)).tap do |user|
+          Mailers::UserMailer.confirm(user: user, password: password)
         end
       end
 

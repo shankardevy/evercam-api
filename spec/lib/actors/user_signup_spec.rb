@@ -25,7 +25,10 @@ module Evercam
           params = valid.merge(username: user0.username)
 
           outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
           expect(outcome).to_not be_success
+          expect(errors[:username]).to eq(:exists)
         end
 
         it 'checks the email is not already registered' do
@@ -33,33 +36,42 @@ module Evercam
           params = valid.merge(email: user0.email)
 
           outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
           expect(outcome).to_not be_success
+          expect(errors[:email]).to eq(:exists)
         end
 
         it 'checks the country code exists' do
           params = valid.merge(country: 'zz')
+
           outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
           expect(outcome).to_not be_success
+          expect(errors[:country]).to eq(:invalid)
         end
 
       end
 
       describe 'account creation' do
 
-        it 'sets the password to a 16 char random string' do
-          User.expects(:create).with do |inputs|
+        it 'creates a user with a 32 char password' do
+          expect = User.expects(:create).with do |inputs|
             expect(inputs[:password].size).to eq(32)
-          end.returns(build(:user))
+          end
 
+          expect.returns(create(:user))
           UserSignup.run(valid)
         end
 
-        it 'sends an email confirmation message' do
-          Mailers::UserMailer.expects(:confirm).with do |inputs|
+        it 'sends an email confirmation message to the user' do
+          expect = Mailers::UserMailer.expects(:confirm).with do |inputs|
             expect(inputs[:user]).to be_a(User)
             expect(inputs[:password]).to be_a(String)
           end
 
+          expect.returns(nil)
           UserSignup.run(valid)
         end
 

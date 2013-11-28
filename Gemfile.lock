@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/garrettheaver/mutations.git
+  revision: 786cd0180d2679e1ed40643a9722346b9a6c18ad
+  specs:
+    mutations (0.6.0)
+      activesupport
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -56,8 +63,6 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
     multi_xml (0.5.5)
-    mutations (0.6.0)
-      activesupport
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     pg (0.17.0)
@@ -132,7 +137,7 @@ DEPENDENCIES
   grape
   json
   mocha
-  mutations
+  mutations!
   nokogiri
   pg
   pony
