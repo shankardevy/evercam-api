@@ -27,6 +27,7 @@
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
   :mail:
+    :from: evercam.io <noreply@evercam.io>
     :via: :smtp
     :via_options:
       :authentication: :plain
