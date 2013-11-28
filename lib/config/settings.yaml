@@ -26,4 +26,14 @@
   :database: <%= ENV['DATABASE_URL'] %>
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
+  :mail:
+    :via: :smtp
+    :via_options:
+      :authentication: :plain
+      :user_name: <%= ENV['SENDGRID_USERNAME'] %>
+      :password: <%= ENV['SENDGRID_PASSWORD'] %>
+      :enable_starttls_auto: true
+      :address: 'smtp.sendgrid.net'
+      :domain: 'heroku.com'
+      :port: 587
 
