@@ -1636,19 +1636,6 @@ footer span a:hover {
   color: #eb5f53;
 }
 
-.team li:nth-last-child(2),
-.team li:nth-last-child(1) {
-  width: 39.7%;
-}
-
-.team li:nth-last-child(2) {
-  margin-left: 10%
-}
-
-.team li:nth-last-child(1) {
-  margin-right: 10%;
-}
-
 .avatar {
   border-radius: 50%;
 }
