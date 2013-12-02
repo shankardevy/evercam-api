@@ -1,20 +1,20 @@
 <h1>Vendors</h1>
 <p>
-The vendors section of the API covers all operations which return information about hardware vendors and various different known model configurations.
+The vendors section of the API covers all operations which return information about hardware producers and various known model configurations.
 </p>
 
 <h4>GET /v1/vendors</h4>
 <p>
-This operation returns the list of all currently known hardware vendors and the MAC address prefixes they are known to use.
+This operation returns a list of all currently known vendors along with any MAC address prefixes they are known to use.
 </p>
 <p>
-A typical cURL command to GET the data for any particular vendor would look like this:
+A typical cURL command to GET the data for all vendors would look like this:
 </p>
 <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/vendors
 </code></pre>
 <p>
 <p>
-As this is a public section of the API no authentication or authorization detail need be provided though if you do provide any the operation will still be proceed. Provided the vendor is known, an <span class='label label-success'>OK 200</span> status will be returned along with a response in the format below. If the vendor is does not exist of is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
+As this is a public section of the API no authentication or authorization details are required. However, if you do provide these details the operation will still be processed as normal. This operation should always respond with an <span class='label label-success'>OK 200</span> status along with data in the following format:
 </p>
 <pre><code class='json'>{
   "vendors": [{
@@ -30,7 +30,7 @@ As this is a public section of the API no authentication or authorization detail
 
 <h4>GET /v1/vendors/{id}</h4>
 <p>
-This operation returns all information for a particular vendor including default settings for known models
+This operation returns all information for a particular vendor including default settings for known different model configurations.
 </p>
 <p>
 A typical cURL command to GET the data for any particular vendor would look like this:
@@ -39,7 +39,7 @@ A typical cURL command to GET the data for any particular vendor would look like
 </code></pre>
 <p>
 <p>
-As this is a public section of the API no authentication or authorization detail need be provided though if you do provide any the operation will still be proceed. Provided the vendor is known, an <span class='label label-success'>OK 200</span> status will be returned along with a response in the format below. If the vendor is does not exist of is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
+As this is a public section of the API no authentication or authorization details are required. However, if you do provide these details whe operation will still be processed as normal. Provided the vendor exists, an <span class='label label-success'>OK 200</span> status will be returned along with data in the format below. If the vendor does not exist or is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
 </p>
 <pre><code class='json'>{
   "vendors": [{

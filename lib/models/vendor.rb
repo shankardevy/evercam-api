@@ -12,5 +12,9 @@ class Vendor < Sequel::Model
     where(%("known_macs" @> ARRAY[?]), val.upcase).all
   end
 
+  def self.by_exid(val)
+    first(exid: val)
+  end
+
 end
 
