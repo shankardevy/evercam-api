@@ -45,22 +45,26 @@ CREATE UNIQUE INDEX ux_countries_iso3166_a2
 ON countries (iso3166_a2);
 
 --
--- device_vendors
+-- vendors
 --
-CREATE SEQUENCE sq_device_vendors;
+CREATE SEQUENCE sq_vendors;
 
-CREATE TABLE device_vendors
+CREATE TABLE vendors
 (
-  id int NOT NULL DEFAULT nextval('sq_device_vendors'),
-  CONSTRAINT pk_device_vendors PRIMARY KEY (id),
+  id int NOT NULL DEFAULT nextval('sq_vendors'),
+  CONSTRAINT pk_vendors PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  name text NOT NULL,
-  prefixes text[] NOT NULL
+  exid text NOT NULL,
+  known_macs text[] NOT NULL,
+  name text NOT NULL
 );
 
-CREATE INDEX vx_device_vendors_prefixes
-ON device_vendors USING GIN (prefixes);
+CREATE UNIQUE INDEX ux_vendors_exid
+ON vendors (exid);
+
+CREATE INDEX vx_vendors_known_macs
+ON vendors USING GIN (known_macs);
 
 --
 -- devices
@@ -79,6 +83,9 @@ CREATE TABLE devices
   username text NOT NULL,
   password text NOT NULL
 );
+
+CREATE INDEX ix_devices_vendor_id
+ON devices (vendor_id);
 
 --
 -- streams
@@ -184,7 +191,7 @@ ON DELETE RESTRICT;
 
 ALTER TABLE devices
 ADD CONSTRAINT fk_devices_vendor_id
-FOREIGN KEY (vendor_id) REFERENCES device_vendors (id)
+FOREIGN KEY (vendor_id) REFERENCES vendors (id)
 ON DELETE RESTRICT;
 
 ALTER TABLE streams
@@ -466,16 +473,16 @@ INSERT INTO countries (iso3166_a2, name) VALUES
   ('zm', 'Zambia'),
   ('zw', 'Zimbabwe');
 
-INSERT INTO device_vendors (name, prefixes) VALUES
-  ('ABUS Security-Center', '{8C:11:CB}'),
-  ('Avigilon Corporation', '{00:18:85}'),
-  ('AVTECH Corporation', '{00:0E:53}'),
-  ('Axis Communications', '{00:40:8C}'),
-  ('D-Link Corporation', '{00:05:5D,00:0D:88,00:0F:3D,00:11:95,00:13:46,00:15:E9,00:17:9A,00:19:5B,00:1B:11,00:1C:F0,00:1E:58,00:21:91,00:22:B0,00:24:01,00:26:5A,14:D6:4D,1C:7E:E5,28:10:7B,34:08:04,5C:D9:98,78:54:2E,84:C9:B2,90:94:E4,AC:F1:DF,B8:A3:86,BC:F6:85,C8:BE:19,C8:D3:A3,CC:B2:55,F0:7D:68,FC:75:16}'),
-  ('Hikvision Digital Technology', '{00:0C:43,00:40:48,8C:E7:48}'),
-  ('Panasonic Communications', '{00:80:F0}'),
-  ('TP-Link Technologies', '{54:E6:FC}'),
-  ('Ubiquiti Networks', '{00:27:22,04:18:D6,24:A4:3C,68:72:51,DC:9F:DB}'),
-  ('Vivotek', '{00:02:D1}'),
-  ('Y-cam Solutions', '{00:0D:F0,00:A1:B0}');
+INSERT INTO vendors (exid, name, known_macs) VALUES
+  ('abus', 'ABUS Security-Center', '{8C:11:CB}'),
+  ('avigilon', 'Avigilon Corporation', '{00:18:85}'),
+  ('avtech', 'AVTECH Corporation', '{00:0E:53}'),
+  ('axis', 'Axis Communications', '{00:40:8C}'),
+  ('dlink', 'D-Link Corporation', '{00:05:5D,00:0D:88,00:0F:3D,00:11:95,00:13:46,00:15:E9,00:17:9A,00:19:5B,00:1B:11,00:1C:F0,00:1E:58,00:21:91,00:22:B0,00:24:01,00:26:5A,14:D6:4D,1C:7E:E5,28:10:7B,34:08:04,5C:D9:98,78:54:2E,84:C9:B2,90:94:E4,AC:F1:DF,B8:A3:86,BC:F6:85,C8:BE:19,C8:D3:A3,CC:B2:55,F0:7D:68,FC:75:16}'),
+  ('hikvision', 'Hikvision Digital Technology', '{00:0C:43,00:40:48,8C:E7:48}'),
+  ('panasonic', 'Panasonic Communications', '{00:80:F0}'),
+  ('tplink', 'TP-Link Technologies', '{54:E6:FC}'),
+  ('ubiquiti', 'Ubiquiti Networks', '{00:27:22,04:18:D6,24:A4:3C,68:72:51,DC:9F:DB}'),
+  ('vivotek', 'Vivotek', '{00:02:D1}'),
+  ('ycam', 'Y-cam Solutions', '{00:0D:F0,00:A1:B0}');
 
