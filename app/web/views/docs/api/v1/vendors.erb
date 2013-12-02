@@ -1,0 +1,61 @@
+<h1>Vendors</h1>
+<p>
+The vendors section of the API covers all operations which return information about hardware vendors and various different known model configurations.
+</p>
+
+<h4>GET /v1/vendors</h4>
+<p>
+This operation returns the list of all currently known hardware vendors and the MAC address prefixes they are known to use.
+</p>
+<p>
+A typical cURL command to GET the data for any particular vendor would look like this:
+</p>
+<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/vendors
+</code></pre>
+<p>
+<p>
+As this is a public section of the API no authentication or authorization detail need be provided though if you do provide any the operation will still be proceed. Provided the vendor is known, an <span class='label label-success'>OK 200</span> status will be returned along with a response in the format below. If the vendor is does not exist of is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
+</p>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"]
+  },{
+    "id": "tplink",
+    ...
+  }]
+}
+</code></pre>
+
+<h4>GET /v1/vendors/{id}</h4>
+<p>
+This operation returns all information for a particular vendor including default settings for known models
+</p>
+<p>
+A typical cURL command to GET the data for any particular vendor would look like this:
+</p>
+<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/vendors/{vendor}
+</code></pre>
+<p>
+<p>
+As this is a public section of the API no authentication or authorization detail need be provided though if you do provide any the operation will still be proceed. Provided the vendor is known, an <span class='label label-success'>OK 200</span> status will be returned along with a response in the format below. If the vendor is does not exist of is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
+</p>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ubiquiti",
+    "name": "Ubiquiti Networks",
+    "known_macs": ["04:18:D6"],
+    "models": [{
+      "name": "*",
+      "auth": {
+        "basic": {
+          "username": "aaaa",
+          "password": "bbbb"
+        }
+      }
+    }]
+  }]
+}
+</code></pre>
+
