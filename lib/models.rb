@@ -8,6 +8,7 @@ if :postgres == db.adapter_scheme
 end
 
 require_relative './models/device'
+require_relative './models/device_vendor'
 require_relative './models/stream'
 require_relative './models/client'
 require_relative './models/access_token'

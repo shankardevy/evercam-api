@@ -45,6 +45,24 @@ CREATE UNIQUE INDEX ux_countries_iso3166_a2
 ON countries (iso3166_a2);
 
 --
+-- device_vendors
+--
+CREATE SEQUENCE sq_device_vendors;
+
+CREATE TABLE device_vendors
+(
+  id int NOT NULL DEFAULT nextval('sq_device_vendors'),
+  CONSTRAINT pk_device_vendors PRIMARY KEY (id),
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  name text NOT NULL,
+  prefixes text[] NOT NULL
+);
+
+CREATE INDEX vx_device_vendors_prefixes
+ON device_vendors USING GIN (prefixes);
+
+--
 -- devices
 --
 CREATE SEQUENCE sq_devices;
@@ -55,6 +73,7 @@ CREATE TABLE devices
   CONSTRAINT pk_devices PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  vendor_id int NOT NULL,
   external_uri text NOT NULL,
   internal_uri text NOT NULL,
   username text NOT NULL,
@@ -161,6 +180,11 @@ ON access_tokens_streams_rights (token_id, stream_id, name);
 ALTER TABLE users
 ADD CONSTRAINT fk_users_country_id
 FOREIGN KEY (country_id) REFERENCES countries (id)
+ON DELETE RESTRICT;
+
+ALTER TABLE devices
+ADD CONSTRAINT fk_devices_vendor_id
+FOREIGN KEY (vendor_id) REFERENCES device_vendors (id)
 ON DELETE RESTRICT;
 
 ALTER TABLE streams
