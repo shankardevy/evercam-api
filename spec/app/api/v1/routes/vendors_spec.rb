@@ -44,5 +44,45 @@ describe 'API routes/vendors' do
 
   end
 
+  describe 'GET /vendors/{mac}' do
+
+    let(:known_macs) do
+      firmware0 = create(:firmware)
+      firmware0.vendor.known_macs
+    end
+
+    context 'when the mac exists (first three octets)' do
+      it 'returns the data for the vendor' do
+        get "/vendors/#{known_macs[0][0,8]}"
+
+        expect(last_response.status).to eq(200)
+        response0 = last_response.json['vendors'][0]
+
+        expect(response0.keys).
+          to eq(['id', 'name', 'known_macs', 'firmwares'])
+      end
+    end
+
+    context 'when the mac exists (all six octets)' do
+      it 'returns the data for the vendor' do
+        get "/vendors/#{known_macs[0]}:Fa:Fb:Fc"
+
+        expect(last_response.status).to eq(200)
+        response0 = last_response.json['vendors'][0]
+
+        expect(response0.keys).
+          to eq(['id', 'name', 'known_macs', 'firmwares'])
+      end
+    end
+
+    context 'when the vendor does not exist' do
+      it 'returns a NOT FOUND 404 status' do
+        get '/vendors/FF:FF:FF'
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+  end
+
 end
 

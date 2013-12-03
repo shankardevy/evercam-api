@@ -10,9 +10,8 @@ This operation returns a list of all currently known vendors along with any MAC 
 <p>
 A typical cURL command to GET the data for all vendors would look like this:
 </p>
-<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/vendors
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors
 </code></pre>
-<p>
 <p>
 As this is a public section of the API no authentication or authorization details are required. However, if you do provide these details the operation will still be processed as normal. This operation should always respond with an <span class='label label-success'>OK 200</span> status along with data in the following format:
 </p>
@@ -30,14 +29,13 @@ As this is a public section of the API no authentication or authorization detail
 
 <h4>GET /v1/vendors/{id}</h4>
 <p>
-This operation returns all information for a particular vendor including default settings for known different model configurations.
+This operation returns all information for a particular vendor including default settings for known different firmware configurations.
 </p>
 <p>
 A typical cURL command to GET the data for any particular vendor would look like this:
 </p>
-<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/vendors/{vendor}
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors/ubiquiti
 </code></pre>
-<p>
 <p>
 As this is a public section of the API no authentication or authorization details are required. However, if you do provide these details whe operation will still be processed as normal. Provided the vendor exists, an <span class='label label-success'>OK 200</span> status will be returned along with data in the format below. If the vendor does not exist or is unknown a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
 </p>
@@ -59,3 +57,35 @@ As this is a public section of the API no authentication or authorization detail
 }
 </code></pre>
 
+<h4>GET /v1/vendors/{mac}</h4>
+<p>
+This operation matches a known MAC address (first three octects or all six) with possible vendors and returns all information for those vendors including default settings for known different firmware configurations.
+</p>
+<p>
+A typical cURL command to GET the data for any particular vendor would look like this:
+</p>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors/04:18:D6
+</code></pre>
+<p>
+As this is a public section of the API no authentication or authorization details are required. However, if you do provide these details whe operation will still be processed as normal. Provided the vendor exists, an <span class='label label-success'>OK 200</span> status will be returned along with data in the format below. If the vendor does not exist or the MAC address is not matched a <span class='label label-danger'>NOT FOUND 404</span> will be returned.
+</p>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ubiquiti",
+    "name": "Ubiquiti Networks",
+    "known_macs": ["04:18:D6"],
+    "firmwares": [{
+      "name": "*",
+      "auth": {
+        "basic": {
+          "username": "aaaa",
+          "password": "bbbb"
+        }
+      }
+    }]
+  },{
+    "id": "tplink",
+    ...
+  }]
+}
+</code></pre>
