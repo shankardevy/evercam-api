@@ -3,8 +3,8 @@ language: ruby
 rvm:
   - 2.0.0
 
-services:
-  - postgresql
+addons:
+  postgresql: 9.3
 
 before_script:
   - createdb evercam_tst
