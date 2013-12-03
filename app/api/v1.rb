@@ -1,5 +1,5 @@
-require_relative '../../lib/withnail'
-require_relative '../../lib/formatters'
+require_relative './v1/formatters/json'
+require_relative './v1/helpers/with_auth'
 
 module Evercam
   class APIv1 < Grape::API
@@ -28,7 +28,7 @@ module Evercam
 
     helpers do
       def auth
-        Withnail::WithAuth.new(env)
+        WithAuth.new(env)
       end
     end
 
