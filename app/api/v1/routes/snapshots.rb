@@ -21,12 +21,7 @@ module Evercam
             path: stream.snapshot_path
           }
         },
-        auth: {
-          basic: {
-            username: device.username,
-            password: device.password
-          }
-        }
+        auth: device.config['auth']
       }
     end
 

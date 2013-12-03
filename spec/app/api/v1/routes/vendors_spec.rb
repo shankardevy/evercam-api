@@ -11,8 +11,10 @@ describe 'API routes/vendors' do
       get '/vendors'
 
       expect(last_response.status).to eq(200)
-      expect(last_response.json.keys).
-        to eq(['vendors'])
+      response0 = last_response.json['vendors'][0]
+
+      expect(response0.keys).
+        to eq(['id', 'name', 'known_macs'])
     end
   end
 
@@ -20,12 +22,16 @@ describe 'API routes/vendors' do
 
     context 'when the vendor exists' do
       it 'returns the data for the vendor' do
-        vendor0 = create(:vendor)
+        firmware0 = create(:firmware)
+        vendor0 = firmware0.vendor
+
         get "/vendors/#{vendor0.exid}"
 
         expect(last_response.status).to eq(200)
-        expect(last_response.json.keys).
-          to eq(['vendors'])
+        response0 = last_response.json['vendors'][0]
+
+        expect(response0.keys).
+          to eq(['id', 'name', 'known_macs', 'firmwares'])
       end
     end
 

@@ -99,8 +99,7 @@ CREATE TABLE devices
   firmware_id int NOT NULL,
   external_uri text NOT NULL,
   internal_uri text NOT NULL,
-  username text NOT NULL,
-  password text NOT NULL
+  config json
 );
 
 CREATE INDEX ix_devices_firmware_id

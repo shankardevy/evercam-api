@@ -23,7 +23,10 @@ module Evercam
         vendors: [{
           id: vendor.exid,
           name: vendor.name,
-          known_macs: vendor.known_macs
+          known_macs: vendor.known_macs,
+          firmwares: vendor.firmwares.map do |fm|
+            fm.config.merge(name: fm.name)
+          end
         }]
       }
     end
