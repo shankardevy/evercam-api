@@ -509,3 +509,16 @@ INSERT INTO vendors (exid, name, known_macs) VALUES
   ('vivotek', 'Vivotek', '{00:02:D1}'),
   ('ycam', 'Y-cam Solutions', '{00:0D:F0,00:A1:B0}');
 
+INSERT INTO firmwares (vendor_id, name, config) VALUES
+  (1, '*', '{ "auth": { "basic": { "username": "admin", "password": "admin" } } }'),
+  (2, '*', '{ "auth": { "basic": { "username": "admin", "password": "admin" } } }'),
+  (3, '*', '{ "auth": { "basic": { "username": "admin", "password": "admin" } } }'),
+  (4, '*', '{ "auth": { "basic": { "username": "root", "password": "pass" } } }'),
+  (5, '*', '{ "auth": { "basic": { "username": "admin", "password": "" } } }'),
+  (6, '*', '{ "auth": { "basic": { "username": "admin", "password": "12345" } } }'),
+  (7, '*', '{ "auth": { "basic": { "username": "admin", "password": "12345" } } }'),
+  (8, '*', '{ "auth": { "basic": { "username": "admin", "password": "admin" } } }'),
+  (9, '*', '{ "auth": { "basic": { "username": "ubnt", "password": "ubnt" } } }'),
+  (10, '*', '{ "auth": { "basic": { "username": "root", "password": "" } } }'),
+  (11, '*', '{ "auth": { "basic": { "username": "admin", "password": "1234" } } }');
+
