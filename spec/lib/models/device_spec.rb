@@ -16,6 +16,17 @@ describe Device do
       expect(d0.config).to eq({ 'a' => 'yyyy' })
     end
 
+    it 'deep merges where both config have the same keys' do
+      firmware0.update(config: { 'a' => { 'b' => 'xxxx' } })
+      d0 = create(:device, firmware: firmware0, config: { 'a' => { 'c' => 'yyyy' } })
+      expect(d0.config).to eq({ 'a' => { 'b' => 'xxxx', 'c' => 'yyyy' } })
+    end
+
+    it 'returns the firmware config when device config is nil' do
+      d0 = create(:device, firmware: firmware0, config: nil)
+      expect(d0.config).to eq({ 'a' => 'xxxx' })
+    end
+
   end
 
 end

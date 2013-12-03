@@ -11,6 +11,9 @@ gem 'pg'
 gem 'aws-sdk'
 gem 'dotenv'
 
+gem 'activesupport',
+  require: 'active_support'
+
 gem 'mutations',
   github: 'garrettheaver/mutations'
 

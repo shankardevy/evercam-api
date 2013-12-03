@@ -4,7 +4,8 @@ class Device < Sequel::Model
   one_to_many :streams
 
   def config
-    firmware.config.merge(values[:config])
+    own = values[:config] || {}
+    firmware.config.deep_merge(own)
   end
 
 end
