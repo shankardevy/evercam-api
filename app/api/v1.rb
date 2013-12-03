@@ -36,5 +36,7 @@ module Evercam
 end
 
 require_relative './v1/routes/snapshots'
+
+require_relative './v1/presenters/vendor_presenter'
 require_relative './v1/routes/vendors'
 
