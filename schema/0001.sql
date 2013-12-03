@@ -67,6 +67,25 @@ CREATE INDEX vx_vendors_known_macs
 ON vendors USING GIN (known_macs);
 
 --
+-- firmwares
+--
+CREATE SEQUENCE sq_firmwares;
+
+CREATE TABLE firmwares
+(
+  id int NOT NULL DEFAULT nextval('sq_firmwares'),
+  CONSTRAINT pk_firmwares PRIMARY KEY (id),
+  created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  vendor_id int NOT NULL,
+  name text NOT NULL,
+  config json NOT NULL
+);
+
+CREATE INDEX ix_firmwares_vendor_id
+ON firmwares (vendor_id);
+
+--
 -- devices
 --
 CREATE SEQUENCE sq_devices;
@@ -77,15 +96,15 @@ CREATE TABLE devices
   CONSTRAINT pk_devices PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  vendor_id int NOT NULL,
+  firmware_id int NOT NULL,
   external_uri text NOT NULL,
   internal_uri text NOT NULL,
   username text NOT NULL,
   password text NOT NULL
 );
 
-CREATE INDEX ix_devices_vendor_id
-ON devices (vendor_id);
+CREATE INDEX ix_devices_firmware_id
+ON devices (firmware_id);
 
 --
 -- streams
@@ -189,9 +208,14 @@ ADD CONSTRAINT fk_users_country_id
 FOREIGN KEY (country_id) REFERENCES countries (id)
 ON DELETE RESTRICT;
 
-ALTER TABLE devices
-ADD CONSTRAINT fk_devices_vendor_id
+ALTER TABLE firmwares
+ADD CONSTRAINT fk_firmwares_vendor_id
 FOREIGN KEY (vendor_id) REFERENCES vendors (id)
+ON DELETE CASCADE;
+
+ALTER TABLE devices
+ADD CONSTRAINT fk_devices_firmware_id
+FOREIGN KEY (firmware_id) REFERENCES firmwares (id)
 ON DELETE RESTRICT;
 
 ALTER TABLE streams

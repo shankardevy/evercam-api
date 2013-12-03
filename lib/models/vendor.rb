@@ -1,6 +1,6 @@
 class Vendor < Sequel::Model
 
-  one_to_many :devices
+  one_to_many :firmwares
 
   def known_macs=(val)
     val = Sequel.pg_array(

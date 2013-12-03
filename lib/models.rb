@@ -5,15 +5,20 @@ Sequel::Model.plugin :timestamps, update_on_create: true
 
 if :postgres == db.adapter_scheme
   db.extension :pg_array
+  db.extension :pg_json
 end
 
-require_relative './models/device'
 require_relative './models/vendor'
+require_relative './models/firmware'
+
+require_relative './models/device'
 require_relative './models/stream'
+
 require_relative './models/client'
 require_relative './models/access_token'
 require_relative './models/access_token_right'
 require_relative './models/access_scope'
+
 require_relative './models/country'
 require_relative './models/user'
 
