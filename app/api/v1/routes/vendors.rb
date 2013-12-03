@@ -26,7 +26,7 @@ module Evercam
             name: vn.name,
             known_macs: vn.known_macs,
             firmwares: vn.firmwares.map do |fm|
-              fm.config.merge(name: fm.name)
+              { name: fm.name }.merge(fm.config)
             end
           }
         end
@@ -43,7 +43,7 @@ module Evercam
           name: vendor.name,
           known_macs: vendor.known_macs,
           firmwares: vendor.firmwares.map do |fm|
-            fm.config.merge(name: fm.name)
+            { name: fm.name }.merge(fm.config)
           end
         }]
       }
