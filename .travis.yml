@@ -7,7 +7,5 @@ addons:
   postgresql: 9.3
 
 before_script:
-  - createdb evercam_tst
-  - ./schema/clone evercam_tst
-  - ./schema/apply evercam_tst ./schema/0002
+  - ./scripts/travis
 
