@@ -2,7 +2,9 @@
 db=$1
 shift
 
-for p; do
-  psql $db < $p
+for v; do
+  for s in `ls $v/*.sql`; do
+    psql $db < $s
+  done
 done
 

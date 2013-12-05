@@ -1,0 +1,4 @@
+#!/bin/sh
+heroku pgbackups:capture --expire &&
+  curl -# -o ./schema/production.dump `heroku pgbackups:url`
+

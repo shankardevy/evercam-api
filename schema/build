@@ -1,6 +1,6 @@
 #!/bin/sh
 for db in $@; do
-  dropdb $db && createdb -T template1 $db &&
-    ./schema/apply $db ./schema/*.sql
+  dropdb $db && createdb $db &&
+    pg_restore -v -O -x -d $db ./schema/production.dump
 done
 
