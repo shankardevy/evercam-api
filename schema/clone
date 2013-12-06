@@ -1,3 +1,4 @@
 #!/bin/sh
-./schema/fetch && ./schema/build $@
+./schema/fetch \
+  && ./schema/build $@
 

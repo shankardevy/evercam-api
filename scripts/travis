@@ -1,6 +1,4 @@
 #!/bin/sh
-wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh \
-  && createdb evercam_tst \
-  && ./schema/build evercam_tst \
-  && ./schema/apply evercam_tst ./schema/0002
+createdb evercam_tst \
+  && ./schema/apply evercam_tst ./schema/0001
 

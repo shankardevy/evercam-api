@@ -1,4 +1,6 @@
 #!/bin/sh
-heroku pgbackups:capture --expire &&
-  curl -# -o ./schema/production.dump `heroku pgbackups:url`
+app="obscure-brook-6377"
+
+heroku pgbackups:capture --expire -a $app \
+  && curl -# -o ./schema/$app.dump `heroku pgbackups:url -a $app`
 

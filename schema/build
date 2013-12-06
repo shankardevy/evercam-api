@@ -1,6 +1,8 @@
 #!/bin/sh
+app="obscure-brook-6377"
+
 for db in $@; do
   dropdb $db && createdb $db &&
-    pg_restore -v -O -x -d $db ./schema/production.dump
+    pg_restore -v -O -x -d $db ./schema/$app.dump
 done
 
