@@ -1,7 +1,7 @@
 module Evercam
   class APIv1
 
-    get '/streams/:name/snapshots' do
+    get '/streams/:name/snapshots/new' do
       stream = ::Stream.by_name(params[:name])
       raise NotFoundError, 'stream was not found' unless stream
 

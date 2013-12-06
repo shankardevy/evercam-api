@@ -57,21 +57,21 @@ module Evercam
       describe 'account creation' do
 
         it 'creates a user with a 32 char password' do
-          expect = User.expects(:create).with do |inputs|
+          double = User.expects(:create).with do |inputs|
             expect(inputs[:password].size).to eq(32)
           end
 
-          expect.returns(create(:user))
+          double.returns(create(:user))
           UserSignup.run(valid)
         end
 
         it 'sends an email confirmation message to the user' do
-          expect = Mailers::UserMailer.expects(:confirm).with do |inputs|
+          double = Mailers::UserMailer.expects(:confirm).with do |inputs|
             expect(inputs[:user]).to be_a(User)
             expect(inputs[:password]).to be_a(String)
           end
 
-          expect.returns(nil)
+          double.returns(nil)
           UserSignup.run(valid)
         end
 
