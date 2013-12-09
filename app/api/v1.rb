@@ -1,6 +1,9 @@
 require_relative './v1/formatters/json'
 require_relative './v1/helpers/with_auth'
 
+require_relative '../../lib/actors'
+require_relative '../../lib/mailers'
+
 module Evercam
   class APIv1 < Grape::API
 
@@ -26,6 +29,10 @@ module Evercam
       error_response({ status: 404, message: e.message })
     end
 
+    rescue_from :all do |e|
+      error_response({ status: 500, message: 'Woops!, Sorry but we dropped the ball' })
+    end
+
     helpers do
       def auth
         WithAuth.new(env)
@@ -39,4 +46,6 @@ require_relative './v1/routes/snapshots'
 
 require_relative './v1/presenters/vendor_presenter'
 require_relative './v1/routes/vendors'
+
+require_relative './v1/routes/users'
 
