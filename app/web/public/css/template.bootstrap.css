@@ -1640,3 +1640,48 @@ footer span a:hover {
   border-radius: 50%;
 }
 
+/*************** FOR CONNECT.HTML *****************/
+#connect_container{
+	padding: 10px 0px 20px 30px;
+	/*border: 1px solid #dddbdb;*/
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	text-align: center;
+	background: #f7f7f7;
+}
+
+#connect_container h4{
+	font-size: 22px;
+	padding-bottom: 5px;
+}
+
+#connect_container h3{
+	line-height: 35px;
+	padding-bottom: 15px;
+}
+
+#connect_container img{
+	padding-bottom: 15px;
+}
+
+/*************** FOR MEDIA.HTML *****************/
+.img_container{
+	text-align: center;	
+	margin: auto;
+	vertical-align:bottom;
+	overflow: hidden;
+	padding: 20px 0;
+}
+
+.img_container p{
+	text-align: center;	
+}
+
+.imgFile{
+	font-weight: bold;
+}
+
+.imgSize{
+	margin-top: -10px;
+}
