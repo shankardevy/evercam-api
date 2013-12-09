@@ -1686,7 +1686,7 @@ footer span a:hover {
 	margin-top: -10px;
 }
 
-/*************** ABOUT.HTML *****************/
+/*************** ABOUT page *****************/
 .member h5{
 		color: #EB5F53;
 		font-size: 18px;
@@ -1694,4 +1694,12 @@ footer span a:hover {
 }
 .member p{
 	font-size: 16px;
+}
+
+/*************** FOOTER *****************/
+.menu_footer a:link{
+	text-decoration: none;
+}
+.menu_footer a:hover{
+	color: #EB5F53;
 }
