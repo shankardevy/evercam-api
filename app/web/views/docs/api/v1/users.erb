@@ -33,4 +33,13 @@ If the operation was successful the server will return a <span class='label labe
   }]
 }
 </code></pre>
+<p>
+Should the operation fail due to invalid parameters the server will return a <span class='label label-danger'>400 BAD REQUEST</span> along with error messages describing the failure:
+<pre><code class='json'>{
+  "message": [
+    "Username already exists",
+    ...
+  ]
+}
+</code></pre>
 
