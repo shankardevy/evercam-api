@@ -1641,7 +1641,7 @@ footer span a:hover {
 }
 
 /*************** CONNECT page *****************/
-#connect_container{
+.connect_container{
 	padding: 10px 0px 20px 30px;
 	/*border: 1px solid #dddbdb;*/
 	-webkit-border-radius: 5px;
@@ -1651,17 +1651,17 @@ footer span a:hover {
 	background: #f7f7f7;
 }
 
-#connect_container h4{
+.connect_container h4{
 	font-size: 22px;
 	padding-bottom: 5px;
 }
 
-#connect_container h3{
+.connect_container h3{
 	line-height: 35px;
 	padding-bottom: 15px;
 }
 
-#connect_container img{
+.connect_container img{
 	padding-bottom: 15px;
 }
 
