@@ -1,0 +1,36 @@
+<h1>Users</h1>
+<p>
+The vendors section of the API covers all operations which return information about hardware producers and various known model configurations.
+</p>
+
+<h4>POST /v1/users</h4>
+<p>
+This operation starts the process of creating a new user. It expects the basic user information fields such as forename, lastname, email, etc and will begin the process of signing up a new user by sending a confirmation link to the supplied email.
+</p>
+<p>
+A typical cURL command to GET the data for all vendors would look like this:
+</p>
+<pre><code class='http'>curl -X POST https://api.evercam.io/v1/users \
+  -d "forename=Joe" \
+  -d "lastname=Bloggs" \
+  -d "email=joe.bloggs@example.org" \
+  -d "username=joeyb" \
+  -d "country=us"
+</code></pre>
+<p>
+If the operation was successful the server will return a <span class='label label-success'>201 CREATED</span> status and a body such as the following.
+</p>
+<pre><code class='json'>{
+  "users": [{
+    "id": "joeyb",
+    "forename": "Joe",
+    "lastname": "Bloggs",
+    "email": "joe.bloggs@example.org",
+    "country": "us",
+    "created_at": 1386582328,
+    "updated_at": 1386582328,
+    "confirmed_at": null
+  }]
+}
+</code></pre>
+
