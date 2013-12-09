@@ -30,6 +30,21 @@ describe 'API routes/users' do
       end
     end
 
+    context 'when the username or email already exists' do
+      it 'returns a 400 BAD Request status' do
+        create(:user, username: 'xxxx')
+        post('/users', params.merge(username: 'xxxx'))
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when the country code does not exist' do
+      it 'returns a 400 BAD Request status' do
+        post('/users', params.merge(country: 'xx'))
+        expect(last_response.status).to eq(400)
+      end
+    end
+
   end
 
 end

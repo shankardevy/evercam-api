@@ -3,6 +3,7 @@ module Evercam
 
     post '/users' do
       outcome = Actors::UserSignup.run(params)
+      raise OutcomeError, outcome unless outcome.success?
       user = outcome.result
 
       {
