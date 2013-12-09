@@ -1640,7 +1640,7 @@ footer span a:hover {
   border-radius: 50%;
 }
 
-/*************** FOR CONNECT.HTML *****************/
+/*************** CONNECT page *****************/
 #connect_container{
 	padding: 10px 0px 20px 30px;
 	/*border: 1px solid #dddbdb;*/
@@ -1665,7 +1665,7 @@ footer span a:hover {
 	padding-bottom: 15px;
 }
 
-/*************** FOR MEDIA.HTML *****************/
+/*************** MEDIA page *****************/
 .img_container{
 	text-align: center;	
 	margin: auto;
@@ -1684,4 +1684,14 @@ footer span a:hover {
 
 .imgSize{
 	margin-top: -10px;
+}
+
+/*************** ABOUT.HTML *****************/
+.member h5{
+		color: #EB5F53;
+		font-size: 18px;
+		font-weight: normal;
+}
+.member p{
+	font-size: 16px;
 }
