@@ -1,0 +1,4 @@
+Email address: <%= email %>
+User agent: <%= request.user_agent %>
+IP address: <%= request.ip %>
+
