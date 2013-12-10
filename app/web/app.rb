@@ -33,14 +33,15 @@ module Evercam
       erb 'errors/400'.to_sym
     end
 
-    def with_user
+    def curr_user
       uid = session[:user]
-      usr = uid ? User[uid] : nil
+      uid ? User[uid] : nil
+    end
 
+    def with_user
       uri = CGI.escape(request.fullpath)
-      redirect "/login?rt=#{uri}" unless usr
-
-      yield usr
+      redirect "/login?rt=#{uri}" unless curr_user
+      yield curr_user
     end
 
   end
