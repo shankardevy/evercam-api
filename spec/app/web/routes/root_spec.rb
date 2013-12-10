@@ -6,7 +6,7 @@ describe 'WebApp routes/root' do
   let(:app) { Evercam::WebApp }
 
   ['/', '/about', '/privacy', '/terms', '/jobs',
-  '/marketplace', '/media', '/connect'].each do |url|
+   '/marketplace', '/media'].each do |url|
     describe "GET #{url}" do
       it 'renders with an OK status' do
         expect(get(url).status).to eq(200)
