@@ -2078,6 +2078,13 @@ footer span a:hover {
 	font-size: 6.5em;
 }
 
+.app_container a{
+	color: #798A9C;
+}
+.app_container a:hover, a:focus{
+	color: #EB5F53;
+}
+
 .app_container .btn{
     background: none repeat scroll 0 0 #EB5F53;
     border: medium none;
@@ -2091,6 +2098,10 @@ footer span a:hover {
     margin-top: 25px;
     padding: 10px 23px 11px;
     text-transform: uppercase;
+}
+
+.app_container .btn a:hover, a:focus{
+	background: #C54D48;
 }
 
 .form_container{
