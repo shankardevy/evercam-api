@@ -2101,7 +2101,8 @@ footer span a:hover {
     text-transform: uppercase;
 }
 
-.app_container .btn :hover, .btn:focus{
+.app_container .btn :hover{
+	color: #fff;
 	background: #C54D48;
 }
 
