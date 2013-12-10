@@ -2055,6 +2055,10 @@ footer span a:hover {
 
 /*************** FOR Marketplace.HTML *****************/
 
+.marketplace_cont{
+	padding-bottom: 80px;
+}
+
 .app_container{
 	text-align: center;	
 	margin-bottom: 40px;
