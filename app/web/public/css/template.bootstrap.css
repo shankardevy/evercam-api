@@ -2072,6 +2072,7 @@ footer span a:hover {
 
 .app_container h4{
 	padding-top: 10px;
+	font-weight: bold;
 }
 
 .app_container i{
@@ -2079,7 +2080,7 @@ footer span a:hover {
 }
 
 .app_container a{
-	color: #798A9C;
+	color: #4D4D4D;
 }
 .app_container a:hover, a:focus{
 	color: #EB5F53;
@@ -2100,13 +2101,13 @@ footer span a:hover {
     text-transform: uppercase;
 }
 
-.app_container .btn a:hover, a:focus{
+.app_container .btn :hover, .btn:focus{
 	background: #C54D48;
 }
 
 .form_container{
 	padding: 10px 0px 20px 0px;
-	margin-top: 10px;
+	margin-top: 10 0px 60px 0px;
 	/*border: 1px solid #dddbdb;*/
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;
