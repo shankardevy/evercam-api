@@ -1,9 +1,5 @@
 base = File.dirname(__FILE__)
 
-['config', 'errors', 'models', 'actors', 'mailers'].each do |lib|
-  require File.join(base, 'lib', lib)
-end
-
 ['api/v1', 'web/app'].each do |app|
   require File.join(base, 'app', app)
 end
