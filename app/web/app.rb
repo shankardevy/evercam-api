@@ -1,3 +1,5 @@
+require_relative '../../lib/actors'
+require_relative '../../lib/mailers'
 require_relative '../../lib/oauth2'
 
 module Evercam

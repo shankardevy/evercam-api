@@ -1,0 +1,57 @@
+<div class='col-sm-10 col-sm-offset-1'>
+  <div id="beta">
+
+    <h1>Programmable Cameras</h1>
+    <h4>We make it simple to control, manage and interact with IP cameras through a developer friendly RESTful interface</h4>
+
+    <br />
+
+    <form method="POST" action="/interested">
+      <h3>Interested? Sign Up Today&hellip;</h3>
+      <input id="email" type="email" name="email" placeholder="Your email" required>
+      <input id="signup" type="submit" value="Sign up">
+    </form>
+
+    <br />
+
+    <h4>Take advantage of our marketplace apps and add amazing new functionality to your camera streams in seconds&hellip;</h4>
+    <div id="marketplace">
+
+      <div id="market_container">
+        <i data-desc="Create timelapse videos using image sequences captured by your camera" class="fa fa-5x fa-clock-o"></i>
+        <i data-desc="Blur faces and vehicle license plates for anonymity" class="fa fa-5x fa-eye-slash"></i>
+        <i data-desc="Multicast your stream to any number of people without using up your broadband" class="fa fa-5x fa-signal"></i>
+        <i data-desc="Quickly transcribe your audio steam to text" class="fa fa-5x fa-file-text"></i>
+        <i data-desc="Determine if motion detected by a camera is just an itsy bitsy spider" class="fa fa-5x fa-bug"></i>
+        <i data-desc="Add watermarks like company logos to your videos" class="fa fa-5x fa-film"></i>
+        <i data-desc="Create Android apps without coding" class="fa fa-5x fa-android"></i>
+        <i data-desc="Monitor and send an alert if your camera goes offline" class="fa fa-5x fa-heart"></i>
+        <i data-desc="Send an email or sms when motion occurs" class="fa fa-5x fa-exclamation-triangle"></i>
+        <i data-desc="Connect your live stream directly to Facebook" class="fa fa-5x fa-facebook-square"></i>
+        <i data-desc="Send an SMS to your camera and it will respond with an MMS" class="fa fa-5x fa-envelope"></i>
+        <i data-desc="Send an audio stream to your camera" class="fa fa-5x fa-volume-up"></i>
+        <i data-desc="Archive and share your footage securely with other users" class="fa fa-5x fa-cloud"></i>
+        <i data-desc="Tell us what you want and we will build it for you" class="fa fa-5x fa-question-circle"></i>
+      </div>
+
+    </div>
+
+    <h4 id="desc">
+    </h4>
+
+    <script>
+      $(document).ready(function() {
+        var $i = $('#marketplace i');
+        var $desc = $('#desc');
+        $i.on('mouseover', function() {
+          $desc.text($(this).data('desc'));
+        });
+        $i.on('mouseout', function() {
+          $desc.text('');
+        });
+      });
+    </script>
+
+  </div>
+</div>
+

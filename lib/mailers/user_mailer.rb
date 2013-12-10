@@ -10,6 +10,14 @@ module Evercam
         }
       end
 
+      def interested
+        {
+          to: 'signups@evercam.io',
+          subject: 'Signup on evercam.io',
+          body: erb('user/interested.txt')
+        }
+      end
+
     end
   end
 end
