@@ -1,0 +1,15 @@
+<h1>Woops! - 404 Not Found</h1>
+
+<div>
+  <p>
+  Uh Oh! Looks like we've lost something, are you sure this is where you left it?
+  </p>
+  <% case @error
+     when Sinatra::NotFound %>
+  <% else %>
+    <div class='alert alert-danger'>
+      <%= @error.message %>
+    </div>
+  <% end %>
+</div>
+
