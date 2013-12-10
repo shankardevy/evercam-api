@@ -6,7 +6,7 @@ module Evercam
     end
 
     ['about', 'privacy', 'terms', 'jobs', 
-	'marketplace' 'media' 'connect'].each do |url|
+	'marketplace', 'media', 'connect'].each do |url|
       get "/#{url}" do
         erb url.to_sym
       end
