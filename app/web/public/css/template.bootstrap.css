@@ -451,7 +451,7 @@ header #logo {
 }
 
 .left-nav h1 {
-  font-size: 1em;
+  font-size: 1.2em;
   margin-top: 20px;
   text-transform: uppercase;
   padding: 0px;
@@ -460,7 +460,7 @@ header #logo {
 .left-nav ol,
 .left-nav ul {
   padding: 0px;
-  padding-left: 10px;
+  /**padding-left: 10px;*****/
 }
 
 .left-nav ol li,
@@ -2200,4 +2200,11 @@ footer span a:hover {
 
 .block-3{
 	padding-bottom: 70px;
+}
+
+
+/******** additional styling to terms & privacy page *********/
+.termsHeading h1{
+	font-size: 1.2em;
+	margin-top: 56px;
 }
