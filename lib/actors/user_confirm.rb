@@ -12,6 +12,10 @@ module Evercam
           add_error(:username, :exists, 'Username does not exist')
         end
 
+        if user && user.confirmed_at
+          add_error(:username, :confirmed, 'Username is already confirmed')
+        end
+
         if user && user.password != confirmation
           add_error(:confirmation, :invalid, 'Confirmation code is invalid')
         end

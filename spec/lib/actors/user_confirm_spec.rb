@@ -25,6 +25,14 @@ module Evercam
           expect(outcome.errors.symbolic[:confirmation]).to eq(:invalid)
         end
 
+        it 'validates that the account is not already validated' do
+          user0.update(confirmed_at: Time.now)
+          outcome = subject.run(username: user0.username, confirmation: 'abcd')
+
+          expect(outcome).to_not be_success
+          expect(outcome.errors.symbolic[:username]).to eq(:confirmed)
+        end
+
       end
 
       describe 'user confirmation' do
