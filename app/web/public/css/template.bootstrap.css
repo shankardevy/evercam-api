@@ -452,7 +452,7 @@ header #logo {
 
 .left-nav h1 {
   font-size: 1.2em;
-  margin-top: 20px;
+  margin-top: 56px;
   text-transform: uppercase;
   padding: 0px;
 }
@@ -2204,7 +2204,12 @@ footer span a:hover {
 
 
 /******** additional styling to terms & privacy page *********/
-.termsHeading h1{
+/*.termsHeading h1{
 	font-size: 1.2em;
 	margin-top: 56px;
+}
+*/
+
+.top_privacy h4{
+	padding-top: 36px;
 }
