@@ -6,6 +6,9 @@
  'oauth2'
 ].each { |f| require_relative "../../lib/#{f}" }
 
+['helpers/form_helpers'
+].each { |f| require_relative "./#{f}" }
+
 module Evercam
   class WebApp < Sinatra::Base
 
@@ -57,6 +60,8 @@ module Evercam
         yield curr_user
       end
     end
+
+    helpers Evercam::FormHelpers
 
   end
 end

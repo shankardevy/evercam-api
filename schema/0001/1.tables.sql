@@ -9,6 +9,7 @@ CREATE TABLE users
   CONSTRAINT pk_users PRIMARY KEY (id),
   created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  confirmed_at timestamptz,
   forename text NOT NULL,
   lastname text NOT NULL,
   username text NOT NULL,
