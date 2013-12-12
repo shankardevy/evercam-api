@@ -41,9 +41,9 @@ describe 'WebApp routes/signup' do
 
   end
 
-  describe 'GET /confirm' do
+  describe '/confirm' do
 
-    context 'when the params are invalid' do
+    context 'when the credentials are invalid' do
       it 'redirects the user to the signup page' do
         user0 = create(:user, password: 'aaaa')
         get("/confirm?u=#{user0.username}&c=xxxx")
@@ -63,14 +63,54 @@ describe 'WebApp routes/signup' do
       end
     end
 
-    context 'when the params are valid' do
-      it 'renders with the users name' do
-        user0 = create(:user, password: 'xxxx')
-        get("/confirm?u=#{user0.username}&c=xxxx")
+    describe 'GET' do
 
-        expect(last_response.status).to eq(200)
-        expect(last_response.body).to match(user0.forename)
+      context 'when the params are valid' do
+        it 'renders with the users name' do
+          user0 = create(:user, password: 'xxxx')
+          get("/confirm?u=#{user0.username}&c=xxxx")
+
+          expect(last_response.status).to eq(200)
+          expect(last_response.body).to match(user0.forename)
+        end
       end
+
+    end
+
+    describe 'POST' do
+
+      let(:user0) { create(:user, password: 'xxxx') }
+
+      context 'when the passwords do not match' do
+        it 'show the user an error message' do
+          params = { password: 'abcd', confirmation: 'efgh' }
+          post("/confirm?u=#{user0.username}&c=xxxx", params)
+          expect(last_response.alerts(:error)).to_not be_empty
+        end
+      end
+
+      context 'when the password do match' do
+
+        before(:each) do
+          params = { password: 'abcd', confirmation: 'abcd' }
+          post("/confirm?u=#{user0.username}&c=xxxx", params)
+        end
+
+        it 'sets up a session for the user' do
+          expect(session[:user]).to eq(user0.pk)
+        end
+
+        it 'redirects to the users index page' do
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to end_with("/users/#{user0.username}")
+        end
+
+        it 'updates the users password' do
+          expect(user0.reload.password).to eq('abcd')
+        end
+
+      end
+
     end
 
   end

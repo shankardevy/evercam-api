@@ -11,8 +11,9 @@ class Rack::MockResponse
       split('=')[1]
   end
 
-  def alerts
-    html.css('div.alert')
+  def alerts(key=nil)
+    key ? html.css("div.alert-#{key}") :
+      html.css('div.alert')
   end
 
   def json

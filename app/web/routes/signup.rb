@@ -17,16 +17,22 @@ module Evercam
     end
 
     get '/confirm' do
-      @user = User.by_login(params[:u])
+      @user = confirm_validate
+      erb 'confirm'.to_sym
+    end
 
-      if @user && @user.confirmed?
-        redirect '/login', info: 'This account has already been confirmed, you can now login'
+    post '/confirm' do
+      @user = confirm_validate
+
+      Actors::UserConfirm.run(username: params[:u], confirmation: params[:c])
+      outcome = Actors::UserReset.run(params.merge(username: params[:u]))
+
+      if outcome.success?
+        session[:user] = @user.pk
+        redirect "/users/#{@user.username}", info: 'Your account has now been confirmed'
       end
 
-      unless @user && @user.password == params[:c]
-        redirect '/signup', error: 'Sorry but these credentials do not appear to be valid'
-      end
-
+      flash.now[:error] = outcome.errors
       erb 'confirm'.to_sym
     end
 
@@ -42,6 +48,22 @@ module Evercam
       end
 
       redirect '/'
+    end
+
+    private
+
+    def confirm_validate
+      User.by_login(params[:u]).tap do |user|
+
+        if user && user.confirmed?
+          redirect '/login', info: 'This account has already been confirmed, you can now login'
+        end
+
+        unless user && user.password == params[:c]
+          redirect '/signup', error: 'Sorry but these credentials do not appear to be valid'
+        end
+
+      end
     end
 
   end
