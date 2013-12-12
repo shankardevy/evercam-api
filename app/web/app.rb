@@ -16,6 +16,10 @@ module Evercam
     set :raise_errors, false
     set :show_exceptions, false
 
+    set :cookie_options do
+      { expires: Time.now + 365 * 24 * 60 * 60 }
+    end
+
     configure do
       set :erb, layout: 'layouts/default'.to_sym
     end
@@ -24,9 +28,8 @@ module Evercam
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 
-    # enable flash hash and redirect helpers
+    # enable flash hash
     register Sinatra::Flash
-    helpers Sinatra::RedirectWithFlash
 
     # enable partial helpers and default to erb
     register Sinatra::Partial
@@ -61,6 +64,8 @@ module Evercam
       end
     end
 
+    helpers Sinatra::Cookies
+    helpers Sinatra::RedirectWithFlash
     helpers Evercam::FormHelpers
 
   end

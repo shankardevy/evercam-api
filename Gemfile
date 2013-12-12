@@ -23,6 +23,9 @@ gem 'rack-cors',
 gem 'sinatra-flash',
   require: 'sinatra/flash'
 
+gem 'sinatra-contrib',
+  require: 'sinatra/contrib'
+
 gem 'sinatra-redirect-with-flash',
   require: 'sinatra/redirect_with_flash'
 
