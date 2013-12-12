@@ -15,15 +15,7 @@ describe 'WebApp routes/signup' do
 
   describe 'POST /signup' do
 
-    let(:params) do
-      {
-        forename: 'Garrett',
-        lastname: 'Heaver',
-        username: 'garrettheaver',
-        email: 'garrett@evercam.io',
-        country: 'ie'
-      }
-    end
+    let(:params) { build(:user).values.merge(country: 'ie') }
 
     context 'when it creates the user' do
       it 'redirects to /login and displays a success message' do
