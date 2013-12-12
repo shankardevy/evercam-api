@@ -1722,13 +1722,13 @@ footer span a:hover {
   font-size: 3em;
   font-weight: bold;
   margin: 10px 0px;
-  padding-bottom: 10px;
+  padding: 10px;
 }
 
 #beta h4 {
   font-weight: normal;
+  padding: 15px 0 15px 0;
 }
-
 
 #email {
   border: 1px solid #eb5f53;
@@ -1769,7 +1769,7 @@ footer span a:hover {
 }
 
 #beta form {
-  background: #f5f5f5 !important;
+  background: #efeeee; !important;
   padding: 15px 0px 30px 0px;
   border-radius: 4px;
 }
@@ -1782,12 +1782,12 @@ footer span a:hover {
 
 #marketplace {
   margin: 0 auto;
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 #marketplace h4 {
   text-align: center;
-  padding-bottom: 30px;
+  padding-bottom: 5px;
 }
 
 #marketplace i {
@@ -1977,4 +1977,43 @@ footer span a:hover {
 
 .top_privacy h4{
 	padding-top: 36px;
+}
+
+
+
+
+.signup_form #email {
+display: block;
+border: 1px solid #eb5f53;
+width: 98%;
+height: 60px;
+padding: 6px 12px;
+font-size: 24px;
+line-height: 1.428571429;
+color: #555;
+vertical-align: middle;
+background-color: #fff;
+background-image: none;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.signup_form #signup {
+  border: 0;
+  padding: 0;
+  width: 170px;
+  font-size: 24px;
+  font-weight: 800;
+  display: inline-block;
+  background: #EB5F53;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 45px;
+  height: 60px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
