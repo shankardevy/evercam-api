@@ -2209,3 +2209,51 @@ footer span a:hover {
   box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
 }
 
+.msg-float {
+  position: relative;
+}
+
+.msg-float .msg-holder {
+  position: absolute;
+  font-weight: bold;
+  font-size: .8em;
+
+  width: auto;
+  top: -0.8em;
+  right: 0px;
+
+  -webkit-transform: translate(0, 0);
+  -moz-transform: translate(0, 0);
+  -o-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+
+  -webkit-transition: -webkit-transform 150ms, opacity 100ms, visibility 100ms;
+  transition: transform 150ms, opacity 100ms, visibility 100ms;
+
+  visibility: hidden;
+  opacity: 0;
+}
+
+.msg-float .msg-holder.active {
+  -webkit-transform: translate(0, -1em);
+  -moz-transform: translate(0, -1em);
+  -o-transform: translate(0, -1em);
+  -ms-transform: translate(0, -1em);
+  transform: translate(0, -1em);
+
+  -webkit-transition: -webkit-transform 100ms, opacity 120ms, visibility 120ms;
+  transition: transform 100ms, opacity 120ms, visibility 120ms;
+
+  visibility: visible;
+  display: block;
+  opacity: 1;
+}
+
+.msg-float .msg-notice {
+  color: #5bc0de;
+}
+
+.msg-float .msg-error {
+  color: #b94a48;
+}
