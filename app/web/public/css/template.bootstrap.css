@@ -1878,14 +1878,14 @@ footer span a:hover {
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-	text-align: center;
 	background: #efeeee;
 	font-size: 25px;
 }
 
 .form_container h1{
 	font-size: 33px;
-	padding-bottom: 30px;
+	padding: 20px 0px 30px 0px;
+	text-align: center;
 }
 
 .form-horizontal{
@@ -1901,7 +1901,7 @@ footer span a:hover {
     margin-right: 20px;
     padding: 10px 20px;
     vertical-align: top;
-    width: 440px;
+    width: 90%;
 }
 
 #inputWhat{
