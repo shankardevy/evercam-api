@@ -23,12 +23,11 @@ module Evercam
 
     post '/confirm' do
       @user = confirm_validate
-
-      Actors::UserConfirm.run(username: params[:u], confirmation: params[:c])
       outcome = Actors::UserReset.run(params.merge(username: params[:u]))
 
       if outcome.success?
         session[:user] = @user.pk
+        Actors::UserConfirm.run(username: params[:u], confirmation: params[:c])
         redirect "/users/#{@user.username}", info: 'Your account has now been confirmed'
       end
 
