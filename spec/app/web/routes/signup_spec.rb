@@ -41,6 +41,40 @@ describe 'WebApp routes/signup' do
 
   end
 
+  describe 'GET /confirm' do
+
+    context 'when the params are invalid' do
+      it 'redirects the user to the signup page' do
+        user0 = create(:user, password: 'aaaa')
+        get("/confirm?u=#{user0.username}&c=xxxx")
+
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).to end_with('/signup')
+      end
+    end
+
+    context 'when the user is already confirmed' do
+      it 'redirects the user to the login page' do
+        user0 = create(:user, confirmed_at: Time.now)
+        get("/confirm?u=#{user0.username}&c=xxxx")
+
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).to end_with('/login')
+      end
+    end
+
+    context 'when the params are valid' do
+      it 'renders with the users name' do
+        user0 = create(:user, password: 'xxxx')
+        get("/confirm?u=#{user0.username}&c=xxxx")
+
+        expect(last_response.status).to eq(200)
+        expect(last_response.body).to match(user0.forename)
+      end
+    end
+
+  end
+
   describe 'POST /interested' do
 
     context 'when the email is valid' do

@@ -16,6 +16,20 @@ module Evercam
       end
     end
 
+    get '/confirm' do
+      @user = User.by_login(params[:u])
+
+      if @user && @user.confirmed?
+        redirect '/login', info: 'This account has already been confirmed, you can now login'
+      end
+
+      unless @user && @user.password == params[:c]
+        redirect '/signup', error: 'Sorry but these credentials do not appear to be valid'
+      end
+
+      erb 'confirm'.to_sym
+    end
+
     post '/interested' do
       email = params[:email]
 
@@ -29,7 +43,6 @@ module Evercam
 
       redirect '/'
     end
-
 
   end
 end
