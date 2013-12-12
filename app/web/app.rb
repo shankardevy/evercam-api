@@ -16,8 +16,9 @@ module Evercam
     set :raise_errors, false
     set :show_exceptions, false
 
+    # set cookies for three years
     set :cookie_options do
-      { expires: Time.now + 365 * 24 * 60 * 60 }
+      { expires: Time.now + 3 * 365 * 24 * 60 * 60 }
     end
 
     configure do
@@ -73,6 +74,7 @@ end
 
 ['routes/root',
  'routes/oauth2',
+ 'routes/signup',
  'routes/login',
  'routes/connect',
  'routes/docs'
