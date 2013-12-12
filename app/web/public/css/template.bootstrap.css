@@ -1872,7 +1872,7 @@ footer span a:hover {
 }
 
 .form_container{
-	padding: 10px 0px 20px 0px;
+	padding: 10px 2px 20px 0px;
 	margin-top: 10 0px 60px 0px;
 	/*border: 1px solid #dddbdb;*/
 	-webkit-border-radius: 5px;
@@ -1901,7 +1901,7 @@ footer span a:hover {
     margin-right: 20px;
     padding: 10px 20px;
     vertical-align: top;
-    width: 90%;
+    width: 100%;
 }
 
 #inputWhat{
@@ -1911,10 +1911,10 @@ footer span a:hover {
     font-size: 24px;
 	height: 180px;
     max-height: 250px;
-	max-width: 90%;
+	max-width: 100%;
     padding: 10px 20px;
     vertical-align: top;
-    width: 90%;
+    width: 100%;
 }
 
 
@@ -1944,7 +1944,7 @@ footer span a:hover {
     line-height: 45px;
     padding: 0;
     text-transform: uppercase;
-    width: 230px;
+    width: 180px;
 }
 
 .form-group{
@@ -1961,6 +1961,7 @@ footer span a:hover {
 .form-horizontal .radio-inline, 
 .form-horizontal .checkbox-inline{
 	padding-top: 10px;
+	color: #4D4D4D;
 }
 
 .block-3{
