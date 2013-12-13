@@ -1595,7 +1595,7 @@ footer span a:hover {
 .content h3 {
   padding-bottom: 50px;
 }
-
+/*************** This is from the old about page with list markup********
 .team {
   margin: 0 auto;
   width: 1010px;
@@ -1635,7 +1635,7 @@ footer span a:hover {
 .team li h5 {
   color: #eb5f53;
 }
-
+*/
 .avatar {
   border-radius: 50%;
 }
@@ -1697,6 +1697,15 @@ footer span a:hover {
 }
 .member p{
   font-size: 16px;
+}
+
+.member img {
+  -webkit-filter: grayscale(100%);
+}
+
+.member:hover img {
+  -webkit-filter: none;
+  -webkit-transition: all 0.3s;
 }
 
 /*************** FOOTER *****************/
@@ -1920,9 +1929,6 @@ footer span a:hover {
     width: 100%;
 }
 
-
-
-
 #inputHow{
 	border: 1px solid #EB5F53;
     border-radius: 5px;
@@ -1982,9 +1988,6 @@ footer span a:hover {
 .top_privacy h4{
 	padding-top: 36px;
 }
-
-
-
 
 .signup_form #email {
 display: block;
