@@ -1,22 +1,23 @@
-<div class='col-sm-6 col-sm-offset-3'>
-  <h1><%= @title = 'Sign In' %></h1>
+<div class='col-sm-8 col-sm-offset-2'>
+	<h1><%= @title = 'Sign In' %></h1>
+	<div class ="signIn">
+		<form role='form', method='POST'>
 
-  <form role='form', method='POST'>
+			<div class='form-group'>
+			  <label for='username'>Username or Email</label>
+			  <input class='form-control' name='username' type='text' id ="inputEmail3" placeholder='username or email' required>
+			</div>
 
-    <div class='form-group'>
-      <label for='username'>Username or Email</label>
-      <input class='form-control' name='username' type='text' placeholder='Username or Email' required>
-    </div>
+			<div class='form-group'>
+			  <label for='password'>Password</label>
+			  <input class='form-control' id ="inputEmail3" name='password' type='password' placeholder='password' required>
+			</div>
 
-    <div class='form-group'>
-      <label for='password'>Password</label>
-      <input class='form-control' name='password' type='password' placeholder='Password' required>
-    </div>
+			<button type='submit' class='btn btn-primary pull-right' id="submit">
+			  Sign In
+			</button>
 
-    <button type='submit' class='btn btn-primary pull-right'>
-      Sign In
-    </button>
-
-  </form>
+		</form>
+	</div>
 </div>
 

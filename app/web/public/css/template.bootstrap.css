@@ -2018,3 +2018,11 @@ transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
+/*************updates to login page ****************/
+
+.signIn{
+	color: #4D4D4D;
+	font-size: 25px;
+	
+}
