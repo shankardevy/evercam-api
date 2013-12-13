@@ -1872,8 +1872,8 @@ footer span a:hover {
 }
 
 .form_container{
-	padding: 10px 2px 20px 0px;
-	margin-top: 10 0px 60px 0px;
+	padding: 10px 2px 40px 0px;
+	margin: 10px 0px 60px 0px;
 	/*border: 1px solid #dddbdb;*/
 	-webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -2024,5 +2024,7 @@ transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 .signIn{
 	color: #4D4D4D;
 	font-size: 25px;
-	
+}
+.signIn h1{
+	padding-bottom: 5px;
 }
