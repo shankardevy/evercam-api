@@ -1648,7 +1648,7 @@ footer span a:hover {
   -moz-border-radius: 5px;
   border-radius: 5px;
   text-align: center;
-  background: #f7f7f7;
+  background: #EFEEEE;
 }
 
 .connect_container h4{
@@ -1663,6 +1663,9 @@ footer span a:hover {
 
 .connect_container img{
   padding-bottom: 15px;
+}
+.connect_container .img-responsive{
+	margin: 0 auto;
 }
 
 /*************** MEDIA page *****************/
