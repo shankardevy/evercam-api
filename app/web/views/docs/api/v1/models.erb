@@ -7,10 +7,10 @@ The models section of the API covers all operations which return information abo
 
 <h4>GET /v1/models</h4>
 <p>
-This operation returns a list of all IP camera vendors along with any MAC address prefixes they are known to use and the list of model names we currently hold configuration information about on Evercam.
+This operation returns a list of all IP camera vendors along with any MAC address prefixes they are known to use and the list of model names we currently hold configuration information about on Evercam. Further information for a particular model is avaiable through one of the more specific endpoints listed below.
 </p>
 <p>
-A typical cURL command to GET the data for all IP camera vendors would look like this:
+A typical <span class='badge'>curl</span> command to GET the data for all IP camera vendors would look like this:
 </p>
 <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models
 </code></pre>
@@ -29,10 +29,10 @@ A typical cURL command to GET the data for all IP camera vendors would look like
 
 <h4>GET /v1/models/{vendor}</h4>
 <p>
-This operation returns all information for a particular vendor including default settings for known different firmware configurations.
+This operation returns the generic defaults and capability information for a particular vendor. It can be used as a model configuration of last resort in cases where an exact name is unknown or is not currently listed on Evercam. It should be noted that the details provided via this endpoint may not be correct for your particular model and as such, more accurate information should be retrieved via the specific model call where possible.
 </p>
 <p>
-A typical cURL command to GET the data for any particular vendor would look like this:
+A typical <span class='badge'>curl</span> command to GET the generic model data for a particular vendor would look like this:
 </p>
 <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ubiquiti
 </code></pre>
@@ -59,7 +59,7 @@ A typical cURL command to GET the data for any particular vendor would look like
 This operation matches a known MAC address (first three octects or all six) with possible vendors and returns all information for those vendors including default settings for known different firmware configurations.
 </p>
 <p>
-A typical cURL command to GET the data for any particular vendor would look like this:
+A typical <span class='badge'>curl</span> command to GET the data for a particular model would look like this:
 </p>
 <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam/YCW005
 </code></pre>
@@ -83,3 +83,4 @@ A typical cURL command to GET the data for any particular vendor would look like
   }]
 }
 </code></pre>
+

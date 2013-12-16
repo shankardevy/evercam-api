@@ -60,8 +60,8 @@ module Evercam
 end
 
 ['routes/snapshots',
- 'routes/vendors',
  'presenters/vendor_presenter',
+ 'routes/models',
  'routes/users'
 ].each { |f| require_relative "./v1/#{f}" }
 
