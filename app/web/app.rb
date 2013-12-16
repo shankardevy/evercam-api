@@ -6,12 +6,20 @@
  'oauth2'
 ].each { |f| require_relative "../../lib/#{f}" }
 
+['helpers/form_helpers'
+].each { |f| require_relative "./#{f}" }
+
 module Evercam
   class WebApp < Sinatra::Base
 
     include WebErrors
     set :raise_errors, false
     set :show_exceptions, false
+
+    # set cookies for three years
+    set :cookie_options do
+      { expires: Time.now + 3 * 365 * 24 * 60 * 60 }
+    end
 
     configure do
       set :erb, layout: 'layouts/default'.to_sym
@@ -21,9 +29,8 @@ module Evercam
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 
-    # enable flash hash and redirect helpers
+    # enable flash hash
     register Sinatra::Flash
-    helpers Sinatra::RedirectWithFlash
 
     # enable partial helpers and default to erb
     register Sinatra::Partial
@@ -58,13 +65,19 @@ module Evercam
       end
     end
 
+    helpers Sinatra::Cookies
+    helpers Sinatra::RedirectWithFlash
+    helpers Evercam::FormHelpers
+
   end
 end
 
 ['routes/root',
  'routes/oauth2',
+ 'routes/signup',
  'routes/login',
  'routes/connect',
+ 'routes/users',
  'routes/docs'
 ].each { |f| require_relative "./#{f}" }
 

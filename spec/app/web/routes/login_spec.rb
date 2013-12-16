@@ -106,12 +106,5 @@ describe 'WebApp routes/login' do
 
   end
 
-  describe 'GET /signup' do
-    it 'renders with an OK status' do
-      get '/signup'
-      expect(last_response.status).to eq(200)
-    end
-  end
-
 end
 

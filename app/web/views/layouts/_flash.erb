@@ -1,7 +1,11 @@
 <% flash.each do |key,msg| %>
   <div class='alert alert-dismissable alert-<%= key %>'>
     <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-    <%= msg %>
+    <% if Mutations::ErrorHash === msg %>
+      One or more errors occured. Please correct each highlighted field before trying again.
+    <% else %>
+      <%= msg %>
+    <% end %>
   </div>
 <% end %>
 

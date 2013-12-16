@@ -22,5 +22,9 @@ class User < Sequel::Model
     values[:password] = Password.create(val, cost: 10)
   end
 
+  def confirmed?
+    false == self.confirmed_at.nil?
+  end
+
 end
 

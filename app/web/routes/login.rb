@@ -24,11 +24,6 @@ module Evercam
       redirect '/login'
     end
 
-    get '/signup' do
-      @countries = Country.all
-      erb 'signup'.to_sym
-    end
-
   end
 end
 

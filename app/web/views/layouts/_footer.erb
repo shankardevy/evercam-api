@@ -19,16 +19,27 @@
           <a href='http://github.com/evercam' target='_blank' class='fa-github'></a>
           </li>
         </ul>
-		<div class="menu_footer">
-			<span>
-			  <a href='/about'>About Us</a>
-			  <a href='/terms'>Terms</a>
-			  <a href='/privacy'>Privacy</a>
-			  <a href='/jobs'>Jobs</a>
-			</span>
-		</div>
+        <div class="menu_footer">
+          <span>
+            <a href='/about'>About Us</a>
+            <a href='/terms'>Terms</a>
+            <a href='/privacy'>Privacy</a>
+            <a href='/jobs'>Jobs</a>
+          </span>
+        </div>
       </div>
     </div>
   </div>
 </footer>
+
+<% if curr_user || cookies[:email] %>
+  <script id="IntercomSettingsScriptTag">
+    window.intercomSettings = {
+      app_id: "f9c1fd60de50d31bcbc3f4d8d74c9c6dbc40e95a",
+      email: "<%= curr_user ? curr_user.email : cookies[:email] %>",
+      created_at: <%= curr_user ? curr_user.created_at.to_i : cookies[:created_at] %>
+    };
+  </script>
+  <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()</script>
+<% end %>
 
