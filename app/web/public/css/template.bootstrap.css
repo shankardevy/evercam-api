@@ -451,16 +451,15 @@ header #logo {
 }
 
 .left-nav h1 {
-  font-size: 1.2em;
-  margin-top: 56px;
+  font-size: 1em;
   text-transform: uppercase;
+  margin: 10px 0px;
   padding: 0px;
 }
 
 .left-nav ol,
 .left-nav ul {
   padding: 0px;
-  /**padding-left: 10px;*****/
 }
 
 .left-nav ol li,

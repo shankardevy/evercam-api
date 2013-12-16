@@ -1,0 +1,85 @@
+<h1>Models</h1>
+<p>
+The models section of the API covers all operations which return information about camera manufacturers and the known model configurations and variants. This information is being continually updated by Evercam and as such, it is not recommended to cache this data locally within your own application for longer than nessesary.
+</p>
+
+<%= partial('docs/api/v1/_public') %>
+
+<h4>GET /v1/models</h4>
+<p>
+This operation returns a list of all IP camera vendors along with any MAC address prefixes they are known to use and the list of model names we currently hold configuration information about on Evercam.
+</p>
+<p>
+A typical cURL command to GET the data for all IP camera vendors would look like this:
+</p>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models
+</code></pre>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "models": ["YCW005", "YCB005", "YCWHD5", ... ]
+  },{
+    "id": "tplink",
+    ...
+  }]
+}
+</code></pre>
+
+<h4>GET /v1/models/{vendor}</h4>
+<p>
+This operation returns all information for a particular vendor including default settings for known different firmware configurations.
+</p>
+<p>
+A typical cURL command to GET the data for any particular vendor would look like this:
+</p>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ubiquiti
+</code></pre>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ubiquiti",
+    "name": "Ubiquiti Networks",
+    "known_macs": ["04:18:D6"],
+    "firmwares": [{
+      "name": "*",
+      "auth": {
+        "basic": {
+          "username": "aaaa",
+          "password": "bbbb"
+        }
+      }
+    }]
+  }]
+}
+</code></pre>
+
+<h4>GET /v1/models/{vendor}/{model}</h4>
+<p>
+This operation matches a known MAC address (first three octects or all six) with possible vendors and returns all information for those vendors including default settings for known different firmware configurations.
+</p>
+<p>
+A typical cURL command to GET the data for any particular vendor would look like this:
+</p>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam/YCW005
+</code></pre>
+<pre><code class='json'>{
+  "vendors": [{
+    "id": "ubiquiti",
+    "name": "Ubiquiti Networks",
+    "known_macs": ["04:18:D6"],
+    "firmwares": [{
+      "name": "*",
+      "auth": {
+        "basic": {
+          "username": "aaaa",
+          "password": "bbbb"
+        }
+      }
+    }]
+  },{
+    "id": "tplink",
+    ...
+  }]
+}
+</code></pre>
