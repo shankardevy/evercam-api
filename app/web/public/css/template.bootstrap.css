@@ -451,8 +451,8 @@ header #logo {
 }
 
 .left-nav h1 {
-  font-size: 1em;
-  margin-top: 20px;
+  font-size: 1.2em;
+  margin-top: 56px;
   text-transform: uppercase;
   padding: 0px;
 }
@@ -460,7 +460,7 @@ header #logo {
 .left-nav ol,
 .left-nav ul {
   padding: 0px;
-  padding-left: 10px;
+  /**padding-left: 10px;*****/
 }
 
 .left-nav ol li,
@@ -1595,7 +1595,7 @@ footer span a:hover {
 .content h3 {
   padding-bottom: 50px;
 }
-
+/*************** This is from the old about page with list markup********
 .team {
   margin: 0 auto;
   width: 1010px;
@@ -1635,7 +1635,7 @@ footer span a:hover {
 .team li h5 {
   color: #eb5f53;
 }
-
+*/
 .avatar {
   border-radius: 50%;
 }
@@ -1648,7 +1648,7 @@ footer span a:hover {
   -moz-border-radius: 5px;
   border-radius: 5px;
   text-align: center;
-  background: #f7f7f7;
+  background: #EFEEEE;
 }
 
 .connect_container h4{
@@ -1663,6 +1663,9 @@ footer span a:hover {
 
 .connect_container img{
   padding-bottom: 15px;
+}
+.connect_container .img-responsive{
+	margin: 0 auto;
 }
 
 /*************** MEDIA page *****************/
@@ -1696,6 +1699,15 @@ footer span a:hover {
   font-size: 16px;
 }
 
+.member img {
+  -webkit-filter: grayscale(100%);
+}
+
+.member:hover img {
+  -webkit-filter: none;
+  -webkit-transition: all 0.3s;
+}
+
 /*************** FOOTER *****************/
 .menu_footer a:link{
   text-decoration: none;
@@ -1722,13 +1734,13 @@ footer span a:hover {
   font-size: 3em;
   font-weight: bold;
   margin: 10px 0px;
-  padding-bottom: 10px;
+  padding: 10px;
 }
 
 #beta h4 {
   font-weight: normal;
+  padding: 15px 0 15px 0;
 }
-
 
 #email {
   border: 1px solid #eb5f53;
@@ -1769,7 +1781,7 @@ footer span a:hover {
 }
 
 #beta form {
-  background: #f5f5f5 !important;
+  background: #efeeee; !important;
   padding: 15px 0px 30px 0px;
   border-radius: 4px;
 }
@@ -1782,12 +1794,12 @@ footer span a:hover {
 
 #marketplace {
   margin: 0 auto;
-  padding-top: 40px;
+  padding-top: 20px;
 }
 
 #marketplace h4 {
   text-align: center;
-  padding-bottom: 30px;
+  padding-bottom: 5px;
 }
 
 #marketplace i {
@@ -1814,243 +1826,6 @@ footer span a:hover {
   text-align: center;
   color: #798a9c;
   height: 1em;
-}
-/*************** FOR Marketplace.HTML *****************/
-
-.app_container{
-  text-align: center;
-  margin-bottom: 40px;
-  vertical-align:bottom;
-  overflow: hidden;
-}
-
-.app_container .col-md-4{
-  margin-bottom: 40px;
-}
-
-.app_container p{
-  font-size: 16px;
-}
-
-.app_container h4{
-  padding-top: 10px;
-}
-
-.app_container i{
-  font-size: 6.5em;
-}
-
-.form_container{
-  padding: 10px 0px 20px 0px;
-  margin-top: 10px;
-  /*border: 1px solid #dddbdb;*/
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  text-align: center;
-  background: #f7f7f7;
-  font-size: 25px;
-}
-
-.form_container h1{
-  font-size: 33px;
-  padding-bottom: 30px;
-}
-
-.form-horizontal{
-  margin: auto;
-}
-
-#inputEmail3{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#inputWhat{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 180px;
-  max-height: 250px;
-  max-width: 440px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#inputHow{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 5px 10px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#submit{
-  background: none repeat scroll 0 0 #EB5F53;
-  border: 0 none;
-  border-radius: 5px;
-  color: #FFFFFF;
-  display: inline-block;
-  font-size: 24px;
-  font-weight: 800;
-  height: 60px;
-  line-height: 45px;
-  padding: 0;
-  text-transform: uppercase;
-  width: 230px;
-}
-
-.form-group{
-  margin-bottom: 20px;
-}
-
-.btn{
-  margin-top: 0px;
-}
-
-.form-horizontal .control-label,
-.form-horizontal .radio,
-.form-horizontal .checkbox,
-.form-horizontal .radio-inline,
-.form-horizontal .checkbox-inline{
-  padding-top: 10px;
-}
-
-.block-3{
-  padding-bottom: 70px;
-}
-
-/*************** FOR Marketplace.HTML *****************/
-
-.app_container{
-  text-align: center;
-  margin-bottom: 40px;
-  vertical-align:bottom;
-  overflow: hidden;
-}
-
-.app_container .col-md-4{
-  margin-bottom: 40px;
-}
-
-.app_container p{
-  font-size: 16px;
-}
-
-.app_container h4{
-  padding-top: 10px;
-}
-
-.app_container i{
-  font-size: 6.5em;
-}
-
-.form_container{
-  padding: 10px 0px 20px 0px;
-  margin-top: 10px;
-  /*border: 1px solid #dddbdb;*/
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  text-align: center;
-  background: #f7f7f7;
-  font-size: 25px;
-}
-
-.form_container h1{
-  font-size: 33px;
-  padding-bottom: 30px;
-}
-
-.form-horizontal{
-  margin: auto;
-}
-
-#inputEmail3{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#inputWhat{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 180px;
-  max-height: 250px;
-  max-width: 440px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#inputHow{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 5px 10px;
-  vertical-align: top;
-  width: 440px;
-}
-
-#submit{
-  background: none repeat scroll 0 0 #EB5F53;
-  border: 0 none;
-  border-radius: 5px;
-  color: #FFFFFF;
-  display: inline-block;
-  font-size: 24px;
-  font-weight: 800;
-  height: 60px;
-  line-height: 45px;
-  padding: 0;
-  text-transform: uppercase;
-  width: 230px;
-}
-
-.form-group{
-  margin-bottom: 20px;
-}
-
-.btn{
-  margin-top: 0px;
-}
-
-.form-horizontal .control-label,
-.form-horizontal .radio,
-.form-horizontal .checkbox,
-.form-horizontal .radio-inline,
-.form-horizontal .checkbox-inline{
-  padding-top: 10px;
-}
-
-.block-3{
-  padding-bottom: 70px;
 }
 
 /*************** FOR Marketplace.HTML *****************/
@@ -2109,20 +1884,20 @@ footer span a:hover {
 }
 
 .form_container{
-  padding: 10px 0px 20px 0px;
-  margin-top: 10 0px 60px 0px;
-  /*border: 1px solid #dddbdb;*/
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  text-align: center;
-  background: #f7f7f7;
-  font-size: 25px;
+	padding: 10px 2px 40px 0px;
+	margin: 10px 0px 60px 0px;
+	/*border: 1px solid #dddbdb;*/
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	background: #efeeee;
+	font-size: 25px;
 }
 
 .form_container h1{
-  font-size: 33px;
-  padding-bottom: 30px;
+	font-size: 33px;
+	padding: 20px 0px 30px 0px;
+	text-align: center;
 }
 
 .form-horizontal{
@@ -2130,56 +1905,55 @@ footer span a:hover {
 }
 
 #inputEmail3{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
+	border: 1px solid #EB5F53;
+    border-radius: 5px;
+    color: #373D4D;
+    font-size: 24px;
+    height: 60px;
+    margin-right: 20px;
+    padding: 10px 20px;
+    vertical-align: top;
+    width: 100%;
 }
 
 #inputWhat{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 180px;
-  max-height: 250px;
-  max-width: 440px;
-  margin-right: 20px;
-  padding: 10px 20px;
-  vertical-align: top;
-  width: 440px;
+	border: 1px solid #EB5F53;
+    border-radius: 5px;
+    color: #373D4D;
+    font-size: 24px;
+	height: 180px;
+    max-height: 250px;
+	max-width: 100%;
+    padding: 10px 20px;
+    vertical-align: top;
+    width: 100%;
 }
 
 #inputHow{
-  border: 1px solid #EB5F53;
-  border-radius: 5px;
-  color: #373D4D;
-  font-size: 24px;
-  height: 60px;
-  margin-right: 20px;
-  padding: 5px 10px;
-  vertical-align: top;
-  width: 440px;
+	border: 1px solid #EB5F53;
+    border-radius: 5px;
+    color: #373D4D;
+    font-size: 24px;
+    height: 60px;
+    margin-right: 20px;
+    padding: 5px 10px;
+    vertical-align: top;
+    width: 440px;
 }
 
 #submit{
-  background: none repeat scroll 0 0 #EB5F53;
-  border: 0 none;
-  border-radius: 5px;
-  color: #FFFFFF;
-  display: inline-block;
-  font-size: 24px;
-  font-weight: 800;
-  height: 60px;
-  line-height: 45px;
-  padding: 0;
-  text-transform: uppercase;
-  width: 230px;
+    background: none repeat scroll 0 0 #EB5F53;
+    border: 0 none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 800;
+    height: 60px;
+    line-height: 45px;
+    padding: 0;
+    text-transform: uppercase;
+    width: 180px;
 }
 
 .form-group{
@@ -2190,18 +1964,76 @@ footer span a:hover {
   margin-top: 0px;
 }
 
-.form-horizontal .control-label,
-.form-horizontal .radio,
-.form-horizontal .checkbox,
-.form-horizontal .radio-inline,
+.form-horizontal .control-label, 
+.form-horizontal .radio, 
+.form-horizontal .checkbox, 
+.form-horizontal .radio-inline, 
 .form-horizontal .checkbox-inline{
-  padding-top: 10px;
+	padding-top: 10px;
+	color: #4D4D4D;
 }
 
 .block-3{
   padding-bottom: 70px;
 }
 
+
+/******** additional styling to terms & privacy page *********/
+/*.termsHeading h1{
+	font-size: 1.2em;
+	margin-top: 56px;
+}
+*/
+
+.top_privacy h4{
+	padding-top: 36px;
+}
+
+.signup_form #email {
+display: block;
+border: 1px solid #eb5f53;
+width: 98%;
+height: 60px;
+padding: 6px 12px;
+font-size: 24px;
+line-height: 1.428571429;
+color: #555;
+vertical-align: middle;
+background-color: #fff;
+background-image: none;
+border-radius: 4px;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.signup_form #signup {
+  border: 0;
+  padding: 0;
+  width: 170px;
+  font-size: 24px;
+  font-weight: 800;
+  display: inline-block;
+  background: #EB5F53;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 45px;
+  height: 60px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+/*************updates to login page ****************/
+
+.signIn{
+	color: #4D4D4D;
+	font-size: 25px;
+}
+.signIn h1{
+	padding-bottom: 5px;
+}
 /* FORM STYLES */
 .form-control.has-error {
   border-color: #b94a48;
