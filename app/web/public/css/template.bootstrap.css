@@ -367,6 +367,12 @@ header #logo {
   margin-top: 10px;
 }
 
+
+.navbar-default{
+	background-color: #FFF;
+	border: 1px solid #FFF;
+}
+
 .tm-navbar {
   padding: 0px;
   margin: 56px 0 0 0;
@@ -1348,6 +1354,10 @@ footer span a:hover {
 
 @media (max-width: 991px) {
 
+  .container {
+    padding: 0
+  }
+  
   .tab-img {
     background: none
   }
@@ -1364,6 +1374,10 @@ footer span a:hover {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+
+  .container {
+    padding: 0
+  }
 
   .slider .camera_wrap {
     min-height: 350px
@@ -1389,20 +1403,103 @@ footer span a:hover {
 
 }
 
+
 @media (max-width: 767px) {
 
-  header h1 {
+#bs-example-navbar-collapse{
+	background-color: #EFEEEE;
+}
+
+ header h1 {
     float: none
-  }
+ }
 
-  .select-menu {
+ .select-menu {
     display: block !important
-  }
+ }
 
-  .tm-navbar {
-    display: none !important
-  }
+.tm-navbar {
+  padding: 0px;
+  margin: 30px 15px 20px 0;
+  position: relative;
+  z-index: 5;
+  float: left;
+}
 
+.tm-navbar > li {
+  padding: 0;
+  margin-left: 20px;
+  position: relative;
+}
+
+.tm-navbar > li:first-child {
+  margin-left: 20px;
+}
+
+.tm-navbar > li.sub-menu > a:before {
+  content: " ";
+  position: absolute;
+  background: url(../img/menu-marker.gif) 0 0 no-repeat;
+  width: 5px;
+  height: 6px;
+  left: 50%;
+  bottom: 3px;
+  margin-left: -2px;
+}
+
+.tm-navbar > li > a {
+  color: #4d4d4d;
+  font-size: 16px;
+  line-height: 20px;
+  padding: 0 0 13px 0;
+  border-bottom: 3px  solid transparent;
+}
+
+.tm-navbar > li.sfHover > a,
+.tm-navbar > li.sfHover > a:hover,
+.tm-navbar > li > a:hover,
+.tm-navbar > li.active > a,
+.tm-navbar > li.active > a:hover {
+  border-bottom: 3px  solid #eb5f53;
+  background: none;
+}
+
+.tm-navbar ul {
+  position: absolute;
+  list-style: none;
+  display: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 28px 10px 28px 10px;
+  margin: 0;
+  width: 155px;
+  text-align: center;
+  left: -10px;
+  top: 45px;
+  background: #4d4d4d;
+  border-radius: 4px;
+}
+
+.tm-navbar ul li {
+  font-size: 16px;
+  line-height: 22px;
+  display: block;
+}
+
+.tm-navbar ul li a {
+  color: #ffffff;
+  display: block;
+  padding: 4px 10px 5px 20px;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.tm-navbar ul li a:hover {
+  color: #ffffff;
+  background: #646464;
+  text-decoration: none;
+}
   .camera_caption {
     top: 30px;
     width: 60%;
