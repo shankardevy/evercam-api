@@ -1,53 +1,54 @@
  <div class="container">
      
   <div class="row">    
-      <div class="col-sm-4 col-md-4 col-lg-4">
-      	<h3>Address</h3>
- 		<address class="address">
-          <p class="text-info2">Dublin:</p>
-          <p>12 Parnell Square East, Dublin 1, Ireland</p>
-          <p class="text-info2">Phone:</p>
-          <p>+353 (1) 538 3333</p>
-          <p class="text-info2">USA:</p>
-          9867 Mill Road, Cambridge, MG09 99HT.
-        </address>
-      </div>
-      <div class="col-sm-8 col-md-8 col-lg-8">
-      	<h3>Contact Us</h3>
-		<form id="contact-form" class="contact-form">
-          <div class="success"> Contact form submitted! <strong>We will be in touch soon.</strong> </div>
-          <fieldset>
-            <div class="coll-1">
-              <label class="name">
-                <input type="text" value="Name:"><br>
-                <span class="error">*This is not a valid name.</span> <span class="empty">*This field is required.</span> </label>
-            </div>
-            <div class="coll-2">
-              <label class="email">
-                <input type="email" value="E-mail:"><br>
-                <span class="error">*This is not a valid email address.</span> <span class="empty">*This field is required.</span> </label>
-            </div>
-            <div class="coll-3">
-              <label class="phone">
-                <input type="tel" value="Phone:"><br>
-                <span class="error">*This is not a valid phone number.</span> <span class="empty">*This field is required.</span> </label>
-            </div>
-            <div class="clear"></div>
-            <div>
-              <label class="message">
-                <textarea>Message:</textarea><br>
-                <span class="error">*The message is too short.</span> <span class="empty">*This field is required.</span> </label>
-            </div>
-            <div class="clear"></div>
-            <div class="buttons-wrapper clearfix"><a class="link" data-type="submit">Submit</a></div>
-          </fieldset>
-        </form>
-      </div>
-  </div>
+		<div class="col-sm-10 col-sm-offset-1">
+			<h3>Contact Us</h3>
+			<div class="contactform_container">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">	
+						<div class="col-sm-8 col-sm-offset-2">
+							<input type="text" class="form-control" id="inputEmail3" placeholder="name">
+						</div>
+					</div>
+					<div class="form-group">	
+						<div class="col-sm-8 col-sm-offset-2">
+							<input type="email" class="form-control" id="inputEmail3" placeholder="email">
+						</div>
+					</div>
+					<div class="form-group">				
+						<div class="col-sm-8 col-sm-offset-2">
+							<textarea class="form-control" id="inputWhat" placeholder="your message goes here"></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-9">
+							<button type="submit" class="btn btn-default" id="submit" >Submit</button>
+						</div>
+					</div>
+				</form>
+			</div><!-- end form_container -->
+
+	
+	<div class="address">
+		<div class="col-md-6">
+			<h4>Dublin Office</h4>
+			<p>12 Parnell Square East, Dublin 1, <br/>Ireland</p>
+			<p>Telephone:  +353 (1) 538 3333</p>
+			<p>E-Mail: <a href="mailto:info@evercam.io">info@evercam.io</a></p>
+			<div class="map"><iframe src="https://mapsengine.google.com/map/u/0/embed?mid=zo2fMMAkgMMs.kzJ0biOyIYMo" width="640" height="480"></iframe></small></div>
+		</div>
+		<div class="col-md-6">
+			<h4>Californian Office</h4>
+			<p>800 W. El Camino Real, Suite 350, Mountain View,<br/> CA 94040, USA</p>
+			<p>Telephone:  +353 (1) 538 3333</p>
+			<p>E-Mail: <a href="mailto:info@evercam.io">info@evercam.io</a></p>
+			<div class="map"><iframe src="https://mapsengine.google.com/map/u/0/embed?mid=zo2fMMAkgMMs.kzJ0biOyIYMo" width="640" height="480"></iframe></div>
+		</div>
+	</div>
+
     <div class="row">    
     <div class="col-sm-12 col-md-12 col-lg-12">
     	<div class="map"><iframe src="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Brooklyn,+New+York,+NY,+United+States&amp;aq=0&amp;sll=37.0625,-95.677068&amp;sspn=61.282355,146.513672&amp;ie=UTF8&amp;hq=&amp;hnear=Brooklyn,+Kings,+New+York&amp;ll=40.649974,-73.950005&amp;spn=0.01628,0.025663&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe></div>
     </div>
   </div> 
  </div> 
-</div>
