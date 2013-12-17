@@ -48,6 +48,7 @@ group :test do
   gem 'nokogiri'
   gem 'webmock', '1.15.2'
   gem 'rspec'
+  gem 'guard-rspec'
   gem 'vcr'
 
   gem 'mocha',

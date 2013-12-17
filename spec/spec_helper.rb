@@ -1,5 +1,6 @@
 ENV['EVERCAM_ENV'] ||= 'test'
 
+require 'bundler'
 Bundler.require(:default, :test)
 
 # code coverage
@@ -20,7 +21,9 @@ end
 
 RSpec.configure do |c|
   c.expect_with :stdlib, :rspec
+  c.filter_run :focus => true
   c.filter_run_excluding skip: true
+  c.run_all_when_everything_filtered = true
   c.mock_framework = :mocha
 end
 
