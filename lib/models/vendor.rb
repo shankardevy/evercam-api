@@ -1,5 +1,7 @@
 class Vendor < Sequel::Model
 
+  REGEX_MAC = /([0-9A-F]{2}[:-]){2,5}([0-9A-F]{2})/i
+
   one_to_many :firmwares
 
   def known_macs=(val)

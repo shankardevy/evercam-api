@@ -5,9 +5,10 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
+  let!(:vendor0) { create(:vendor) }
+
   describe 'GET /models' do
     it 'returns the set of all known vendors' do
-      create(:vendor)
       get '/models'
 
       expect(last_response.status).to eq(200)
@@ -44,41 +45,58 @@ describe 'API routes/models' do
 
   end
 
-  describe 'GET /model/{mac}' do
+  describe 'GET /vendors' do
 
-    let(:known_macs) do
-      firmware0 = create(:firmware)
-      firmware0.vendor.known_macs
+    before(:each) { get('/vendors') }
+
+    it 'returns an OK status code' do
+      expect(last_response.status).to eq(200)
     end
 
+    it 'returns the data for each vendor' do
+      expect(last_response.json['vendors'][0].keys).
+        to eq(['id', 'name', 'known_macs', 'is_supported'])
+    end
+
+  end
+
+  describe 'GET /vendors/{mac}' do
+
+    let(:known_macs) { vendor0.known_macs }
+
     context 'when the mac exists (first three octets)' do
-      it 'returns the data for the vendor' do
-        get "/models/#{known_macs[0][0,8]}"
 
+      before(:each) { get("/vendors/#{vendor0.known_macs[0]}") }
+
+      it 'returns an OK status code' do
         expect(last_response.status).to eq(200)
-        response0 = last_response.json['vendors'][0]
-
-        expect(response0.keys).
-          to eq(['id', 'name', 'known_macs', 'firmwares'])
       end
+
+      it 'returns the data for the vendor' do
+        expect(last_response.json['vendors'][0].keys).
+          to eq(['id', 'name', 'known_macs', 'is_supported'])
+      end
+
     end
 
     context 'when the mac exists (all six octets)' do
-      it 'returns the data for the vendor' do
-        get "/models/#{known_macs[0]}:Fa:Fb:Fc"
 
+      before(:each) { get("/vendors/#{vendor0.known_macs[0]}:Fa:Fb:Fc") }
+
+      it 'returns an OK status code' do
         expect(last_response.status).to eq(200)
-        response0 = last_response.json['vendors'][0]
-
-        expect(response0.keys).
-          to eq(['id', 'name', 'known_macs', 'firmwares'])
       end
+
+      it 'returns the data for the vendor' do
+        expect(last_response.json['vendors'][0].keys).
+          to eq(['id', 'name', 'known_macs', 'is_supported'])
+      end
+
     end
 
     context 'when the vendor does not exist' do
       it 'returns a NOT FOUND 404 status' do
-        get '/models/FF:FF:FF'
-        expect(last_response.status).to eq(404)
+        expect(get('/vendors/FF:FF:FF').status).to eq(404)
       end
     end
 

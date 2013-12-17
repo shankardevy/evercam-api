@@ -15,7 +15,8 @@ module Evercam
       {
         id: vendor.exid,
         name: vendor.name,
-        known_macs: vendor.known_macs
+        known_macs: vendor.known_macs,
+        is_supported: !vendor.firmwares.empty?
       }
     end
 
