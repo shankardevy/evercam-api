@@ -51,9 +51,11 @@ module Evercam
     end
 
     helpers do
+
       def auth
         WithAuth.new(env)
       end
+
     end
 
   end
