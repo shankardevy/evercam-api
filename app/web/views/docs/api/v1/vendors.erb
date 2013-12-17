@@ -1,26 +1,27 @@
 <h1>Vendors</h1>
-<p>
-</p>
 
-<%= partial('docs/api/v1/_public') %>
+<%= partial('docs/api/v1/_is_public') %>
 
 <h4>GET /v1/vendors</h4>
 <p>
-This operation returns a list of all IP camera vendors along with any MAC address prefixes they are known to use and the list of model names we currently hold configuration information about on Evercam. Further information for a particular model is avaiable through one of the more specific endpoints listed below.
+This operation returns an array of all IEEE registered network hardware vendors along with any MAC prefixes (<a href='http://en.wikipedia.org/wiki/Organizationally_Unique_Identifier' target='_blank'>OUIs</a>) they are known to use. The response key <strong>is_supported</strong> can be used to determine the vendors who are known to produce IP cameras that Evercam currently has support for. Further information on models for those particular vendors is available through the <a href='models'>/v1/models/{vendor}</a> endpoint.
 </p>
-<p>
-A typical <span class='badge'>curl</span> command to GET the data for all IP camera vendors would look like this:
-</p>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models
+<h5>Example Request</h5>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors
 </code></pre>
+<h5>Example Response</h5>
 <pre><code class='json'>{
   "vendors": [{
     "id": "ycam",
     "name": "Y-cam Solutions",
     "known_macs": ["00:0D:F0"],
-    "models": ["YCW005", "YCB005", "YCWHD5", ... ]
+    "is_supported": true
   },{
-    "id": "tplink",
+    "id": "679c8a3",
+    "name": "Cisco Systems, Inc.",
+    "known_macs": ["F0:25:72", ...],
+    "is_supported": false
+  },{
     ...
   }]
 }
@@ -28,27 +29,23 @@ A typical <span class='badge'>curl</span> command to GET the data for all IP cam
 
 <h4>GET /v1/vendors/{mac}</h4>
 <p>
-This operation returns the generic defaults and capability information for a particular vendor. It can be used as a model configuration of last resort in cases where an exact name is unknown or is not currently listed on Evercam. It should be noted that the details provided via this endpoint may not be correct for your particular model and as such, more accurate information should be retrieved via the specific model call where possible.
+This operation returns an array of vendors known to use a particular MAC prefix (<a href='http://en.wikipedia.org/wiki/Organizationally_Unique_Identifier' target='_blank'>OUI</a>). If an entry exists in Evercam for the MAC prefix, the server will return a <span class='label label-success'>200 OK</span> status with one or more matching vendor entries. If there are no matches the server will return a <span class='label label-danger'>404 NOT FOUND</span> status. The <strong>{mac}</strong> parameter can consist of either the first three octects or the full six octects of the MAC address to be matched.
 </p>
 <p>
-A typical <span class='badge'>curl</span> command to GET the generic model data for a particular vendor would look like this:
+As above, the response key <strong>is_supported</strong> can be used to determine the vendors who are known to produce IP cameras that Evercam currently has support for. Further information on models for those particular vendors is available through the <a href='models'>/v1/models/{vendor}</a> endpoint.
 </p>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ubiquiti
+<h5>Example Request</h5>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors/00:0D:F0
 </code></pre>
+<h5>Example Response</h5>
 <pre><code class='json'>{
   "vendors": [{
-    "id": "ubiquiti",
-    "name": "Ubiquiti Networks",
-    "known_macs": ["04:18:D6"],
-    "firmwares": [{
-      "name": "*",
-      "auth": {
-        "basic": {
-          "username": "aaaa",
-          "password": "bbbb"
-        }
-      }
-    }]
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "is_supported": true
+  },{
+    ...
   }]
 }
 </code></pre>
