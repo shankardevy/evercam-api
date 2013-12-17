@@ -13,12 +13,12 @@ module Evercam
     end
 
     get '/vendors' do
-      vendors = Vendor.all
+      vendors = ::Vendor.eager(:firmwares).all
       VendorPresenter.export(vendors)
     end
 
     get '/vendors/:mac', requirements: { mac: Vendor::REGEX_MAC } do
-      vendors = ::Vendor.by_mac(params[:mac][0,8])
+      vendors = ::Vendor.by_mac(params[:mac][0,8]).eager(:firmwares).all
       raise NotFoundError, 'mac address was not matched' if vendors.empty?
       VendorPresenter.export(vendors)
     end

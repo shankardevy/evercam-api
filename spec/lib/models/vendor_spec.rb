@@ -29,7 +29,7 @@ describe Vendor do
 
     it 'finds vendors using any string casing' do
       vendor0 = create(:vendor, known_macs: ['0A:0B:0C'])
-      vendor1 = subject.by_mac('0a:0b:0C')
+      vendor1 = subject.by_mac('0a:0b:0C').all
       expect(vendor1).to eq([vendor0])
     end
 

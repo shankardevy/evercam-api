@@ -11,11 +11,11 @@ class Vendor < Sequel::Model
   end
 
   def self.by_mac(val)
-    where(%("known_macs" @> ARRAY[?]), val.upcase).all
+    where(%("known_macs" @> ARRAY[?]), val.upcase)
   end
 
   def self.by_exid(val)
-    first(exid: val)
+    where(exid: val)
   end
 
 end
