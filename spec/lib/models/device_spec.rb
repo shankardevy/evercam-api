@@ -6,6 +6,11 @@ describe Device do
 
     let(:firmware0) { create(:firmware, config: { 'a' => 'xxxx' }) }
 
+    it 'returns device config if firmware is nil' do
+      d0 = create(:device, firmware: nil, config: { 'a' => 'zzzz' })
+      expect(d0.config).to eq({ 'a' => 'zzzz' })
+    end
+
     it 'merges its config with that of its firmware' do
       d0 = create(:device, firmware: firmware0, config: { 'b' => 'yyyy' })
       expect(d0.config).to eq({ 'a' => 'xxxx', 'b' => 'yyyy'})

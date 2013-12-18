@@ -1,0 +1,56 @@
+<h1>Streams</h1>
+
+<%= partial('docs/api/v1/_is_private') %>
+
+<h4>POST /v1/streams</h4>
+<p>
+This operation creates a new stream in the Evercam system associated with the authenticated users account. All parameters are required, the stream id must be unique within Evercam and at least one endpoint must be specified. If the stream is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
+</p>
+<h5>Example Request</h5>
+<pre><code class='http'>curl -X POST https://api.evercam.io/v1/streams \
+  -u '{your-username}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "id": "{my-stream-name}",
+        "endpoints": ["http://127.0.0.1:8080"],
+        "is_public": true,
+        "snapshots": {
+          "jpg": "/onvif/snapshot"
+        },
+        "auth": {
+          "basic": {
+            "username": "user1",
+            "password": "abcde"
+          }
+        }
+      }'
+</code></pre>
+<h5>Example Success Response</h5>
+<pre><code class='json'>{
+  "streams": [{
+    "id": "my-stream-name",
+    "owner": "{your-username}",
+    "created_at": 1387370779,
+    "updated_at": 1387370779,
+    "endpoints": ["http://127.0.0.1:8080"],
+    "is_public": true,
+    "snapshots": {
+      "jpg": "/onvif/snapshot"
+    },
+    "auth": {
+      "basic": {
+        "username": "user1",
+        "password": "abcde"
+      }
+    }
+  }]
+}
+</code></pre>
+<h5>Example Failure Response</h5>
+<pre><code class='json'>{
+  "message": [
+    "Stream already exists",
+    ...
+  ]
+}
+</code></pre>
