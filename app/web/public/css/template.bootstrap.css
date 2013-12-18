@@ -1575,45 +1575,45 @@ footer span a:hover {
 }
 /*************** This is from the old about page with list markup********
 .team {
-  margin: 0 auto;
-  width: 1010px;
-  overflow: hidden;
-  font-size: 16px;
-  margin-top: 60px;
+margin: 0 auto;
+width: 1010px;
+overflow: hidden;
+font-size: 16px;
+margin-top: 60px;
 }
 
 .team h5 {
-  font-size: 18px;
-  font-weight: normal;
+font-size: 18px;
+font-weight: normal;
 }
 
 .team ul {
-  list-style-type: none;
-  padding: 0px;
+list-style-type: none;
+padding: 0px;
 }
 
 .team li {
-  display: inline-block;
-  text-align: center;
-  margin-bottom: 40px;
-  vertical-align: top;
-  height: 345px;
-  width: 33%;
+display: inline-block;
+text-align: center;
+margin-bottom: 40px;
+vertical-align: top;
+height: 345px;
+width: 33%;
 }
 
 .team li img {
-  -webkit-filter: grayscale(100%);
+-webkit-filter: grayscale(100%);
 }
 
 .team li:hover img {
-  -webkit-filter: none;
-  -webkit-transition: all 0.3s;
+-webkit-filter: none;
+-webkit-transition: all 0.3s;
 }
 
 .team li h5 {
-  color: #eb5f53;
+color: #eb5f53;
 }
-*/
+ */
 .avatar {
   border-radius: 50%;
 }
@@ -1643,7 +1643,7 @@ footer span a:hover {
   padding-bottom: 15px;
 }
 .connect_container .img-responsive{
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 /*************** MEDIA page *****************/
@@ -1862,20 +1862,20 @@ footer span a:hover {
 }
 
 .form_container{
-	padding: 10px 2px 40px 0px;
-	margin: 10px 0px 60px 0px;
-	/*border: 1px solid #dddbdb;*/
-	-webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-	background: #efeeee;
-	font-size: 25px;
+  padding: 10px 2px 40px 0px;
+  margin: 10px 0px 60px 0px;
+  /*border: 1px solid #dddbdb;*/
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #efeeee;
+  font-size: 25px;
 }
 
 .form_container h1{
-	font-size: 33px;
-	padding: 20px 0px 30px 0px;
-	text-align: center;
+  font-size: 33px;
+  padding: 20px 0px 30px 0px;
+  text-align: center;
 }
 
 .form-horizontal{
@@ -1883,55 +1883,55 @@ footer span a:hover {
 }
 
 #inputEmail3{
-	border: 1px solid #EB5F53;
-    border-radius: 5px;
-    color: #373D4D;
-    font-size: 24px;
-    height: 60px;
-    margin-right: 20px;
-    padding: 10px 20px;
-    vertical-align: top;
-    width: 100%;
+  border: 1px solid #EB5F53;
+  border-radius: 5px;
+  color: #373D4D;
+  font-size: 24px;
+  height: 60px;
+  margin-right: 20px;
+  padding: 10px 20px;
+  vertical-align: top;
+  width: 100%;
 }
 
 #inputWhat{
-	border: 1px solid #EB5F53;
-    border-radius: 5px;
-    color: #373D4D;
-    font-size: 24px;
-	height: 180px;
-    max-height: 250px;
-	max-width: 100%;
-    padding: 10px 20px;
-    vertical-align: top;
-    width: 100%;
+  border: 1px solid #EB5F53;
+  border-radius: 5px;
+  color: #373D4D;
+  font-size: 24px;
+  height: 180px;
+  max-height: 250px;
+  max-width: 100%;
+  padding: 10px 20px;
+  vertical-align: top;
+  width: 100%;
 }
 
 #inputHow{
-	border: 1px solid #EB5F53;
-    border-radius: 5px;
-    color: #373D4D;
-    font-size: 24px;
-    height: 60px;
-    margin-right: 20px;
-    padding: 5px 10px;
-    vertical-align: top;
-    width: 440px;
+  border: 1px solid #EB5F53;
+  border-radius: 5px;
+  color: #373D4D;
+  font-size: 24px;
+  height: 60px;
+  margin-right: 20px;
+  padding: 5px 10px;
+  vertical-align: top;
+  width: 440px;
 }
 
 #submit{
-    background: none repeat scroll 0 0 #EB5F53;
-    border: 0 none;
-    border-radius: 5px;
-    color: #FFFFFF;
-    display: inline-block;
-    font-size: 24px;
-    font-weight: 800;
-    height: 60px;
-    line-height: 45px;
-    padding: 0;
-    text-transform: uppercase;
-    width: 180px;
+  background: none repeat scroll 0 0 #EB5F53;
+  border: 0 none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 800;
+  height: 60px;
+  line-height: 45px;
+  padding: 0;
+  text-transform: uppercase;
+  width: 180px;
 }
 
 .form-group{
@@ -1942,48 +1942,40 @@ footer span a:hover {
   margin-top: 0px;
 }
 
-.form-horizontal .control-label, 
-.form-horizontal .radio, 
-.form-horizontal .checkbox, 
-.form-horizontal .radio-inline, 
+.form-horizontal .control-label,
+.form-horizontal .radio,
+.form-horizontal .checkbox,
+.form-horizontal .radio-inline,
 .form-horizontal .checkbox-inline{
-	padding-top: 10px;
-	color: #4D4D4D;
+  padding-top: 10px;
+  color: #4D4D4D;
 }
 
 .block-3{
   padding-bottom: 70px;
 }
 
-
-/******** additional styling to terms & privacy page *********/
-/*.termsHeading h1{
-	font-size: 1.2em;
-	margin-top: 56px;
-}
-*/
-
 .top_privacy h4{
-	padding-top: 36px;
+  padding-top: 36px;
 }
 
 .signup_form #email {
-display: block;
-border: 1px solid #eb5f53;
-width: 98%;
-height: 60px;
-padding: 6px 12px;
-font-size: 24px;
-line-height: 1.428571429;
-color: #555;
-vertical-align: middle;
-background-color: #fff;
-background-image: none;
-border-radius: 4px;
--webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
--webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  display: block;
+  border: 1px solid #eb5f53;
+  width: 98%;
+  height: 60px;
+  padding: 6px 12px;
+  font-size: 24px;
+  line-height: 1.428571429;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
 .signup_form #signup {
@@ -2006,11 +1998,11 @@ transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 /*************updates to login page ****************/
 
 .signIn{
-	color: #4D4D4D;
-	font-size: 25px;
+  color: #4D4D4D;
+  font-size: 25px;
 }
 .signIn h1{
-	padding-bottom: 5px;
+  padding-bottom: 5px;
 }
 /* FORM STYLES */
 .form-control.has-error {
@@ -2067,3 +2059,9 @@ transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 .msg-float .msg-error {
   color: #b94a48;
 }
+
+.status.label {
+  font-weight: normal;
+  text-transform: uppercase;
+}
+

@@ -21,6 +21,17 @@ module Evercam
       }
     end
 
+    get '/users/:username/streams' do
+      user = ::User.by_login(params[:username])
+      raise NotFoundError, 'user does not exist' unless user
+
+      streams = user.streams.select do |s|
+        s.is_public || (auth.user && s.has_right?('view', auth.user))
+      end
+
+      StreamPresenter.export(streams)
+    end
+
   end
 end
 

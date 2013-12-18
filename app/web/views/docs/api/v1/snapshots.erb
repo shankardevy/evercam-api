@@ -13,7 +13,7 @@ A typical cURL command to GET the data for any particular private stream would l
 <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/streams/{stream}/snapshots/new \
   -H 'Authorization: Bearer {token}' </code></pre>
 <p>
-Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <span class='label label-success'>OK 200</span> status code and the stream snapshot data using the following JSON format:
+Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream snapshot data using the following format:
 </p>
 <pre><code class='json'>{
   "uris":{

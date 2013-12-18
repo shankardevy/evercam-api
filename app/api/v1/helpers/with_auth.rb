@@ -6,7 +6,7 @@ module Evercam
     end
 
     def has_right?(right, resource)
-      resource.has_right?(right, seeker)
+      resource.has_right?(right, seeker!)
     end
 
     def seeker
@@ -18,18 +18,31 @@ module Evercam
       when :session
         authenticate_with_rack_session
       else
-        raise AuthenticationError,
-          'no supported authentication was supplied'
+        nil
       end
     end
 
     def user
-      case auth_type
-      when :basic, :session
-        seeker
-      when :bearer
-        seeker.grantor
+      case s = seeker
+      when User then s
+      when AccessToken then s.grantor
+      else nil
       end
+    end
+
+    def seeker!
+      demand!
+      seeker
+    end
+
+    def user!
+      demand!
+      user
+    end
+
+    def demand!
+      raise AuthenticationError,
+        'no supported authentication was supplied' unless seeker
     end
 
     private

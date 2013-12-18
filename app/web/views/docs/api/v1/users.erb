@@ -1,15 +1,10 @@
 <h1>Users</h1>
-<p>
-The vendors section of the API covers all operations which return information about hardware producers and various known model configurations.
-</p>
 
 <h4>POST /v1/users</h4>
 <p>
-This operation starts the process of creating a new user. It expects the basic user information fields such as forename, lastname, email, etc and will begin the process of signing up a new user by sending a confirmation link to the supplied email.
+This operation starts the process of creating a new user. It expects the basic user information such as forename, lastname, email, etc and will begin the process of signing up a new user by sending a confirmation link to the supplied email. If the supplied information is valid the server will respond with a <%= code(201) %> status. Any invalid information will cause the server to respond with a <%= code(400) %> status.
 </p>
-<p>
-A typical cURL command to GET the data for all vendors would look like this:
-</p>
+<h5>Example Request</h5>
 <pre><code class='http'>curl -X POST https://api.evercam.io/v1/users \
   -d "forename=Joe" \
   -d "lastname=Bloggs" \
@@ -17,9 +12,7 @@ A typical cURL command to GET the data for all vendors would look like this:
   -d "username=joeyb" \
   -d "country=us"
 </code></pre>
-<p>
-If the operation was successful the server will return a <span class='label label-success'>201 CREATED</span> status and a body such as the following.
-</p>
+<h5>Example Success Response</h5>
 <pre><code class='json'>{
   "users": [{
     "id": "joeyb",
@@ -33,13 +26,45 @@ If the operation was successful the server will return a <span class='label labe
   }]
 }
 </code></pre>
-<p>
-Should the operation fail due to invalid parameters the server will return a <span class='label label-danger'>400 BAD REQUEST</span> along with error messages describing the failure:
+<h5>Example Failure Response</h5>
 <pre><code class='json'>{
   "message": [
     "Username already exists",
     ...
   ]
 }
+</code></pre>
+
+<h4>GET /v1/users/{username}/streams</h4>
+<p>
+This operation returns the list of streams a user currently has ownership of. It operates in both public access and protected access modes. If you do not provide any authentication information along with the request it will return all of the users public streams. If you provide authentication information it will return the list of public streams and streams owner by the user that you have been granted view access on. Provided the <strong>{username}</strong> exists the server will respond with a <%= code(200) %> status. If the username does not exist the server will respond with a <%= code(404) %> status.
+<h5>Example Request</h5>
+<pre><code class='http'>curl -X GET https://api.evercam.io/v1/users/{username}/streams \
+  -u {your-username}
+</code></pre>
+<h5>Example Response</h5>
+<pre><code class='json'>{
+ "streams": [{
+    "id": "my-stream-name",
+    "owner": "{your-username}",
+    "created_at": 1387370779,
+    "updated_at": 1387370779,
+    "endpoints": ["http://127.0.0.1:8080"],
+    "is_public": true,
+    "snapshots": {
+      "jpg": "/onvif/snapshot"
+    },
+    "auth": {
+      "basic": {
+        "username": "user1",
+        "password": "abcde"
+      }
+    }
+  },{
+    "id": "my-other-stream",
+    ...
+  }]
+}
+
 </code></pre>
 

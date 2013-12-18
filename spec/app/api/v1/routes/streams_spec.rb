@@ -64,6 +64,12 @@ describe 'API routes/streams' do
 
     end
 
+    context 'when no authentication is provided' do
+      it 'returns an UNAUTHROZIED status' do
+        expect(post('/streams', params).status).to eq(401)
+      end
+    end
+
   end
 
 end

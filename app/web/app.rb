@@ -6,7 +6,8 @@
  'oauth2'
 ].each { |f| require_relative "../../lib/#{f}" }
 
-['helpers/form_helpers'
+['helpers/form_helpers',
+ 'helpers/template_helpers'
 ].each { |f| require_relative "./#{f}" }
 
 module Evercam
@@ -68,6 +69,7 @@ module Evercam
     helpers Sinatra::Cookies
     helpers Sinatra::RedirectWithFlash
     helpers Evercam::FormHelpers
+    helpers Evercam::TemplateHelpers
 
   end
 end
