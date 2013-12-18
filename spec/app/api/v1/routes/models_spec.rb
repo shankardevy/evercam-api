@@ -5,44 +5,65 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:vendor0) { create(:vendor) }
+  let!(:vendor0) { create(:firmware).vendor }
+  let!(:vendor1) { create(:vendor) }
 
   describe 'GET /models' do
-    it 'returns the set of all known vendors' do
-      get '/models'
 
+    before(:each) { get('/models') }
+
+    let(:json) { last_response.json['vendors'] }
+
+    it 'returns an OK status' do
       expect(last_response.status).to eq(200)
-      response0 = last_response.json['vendors'][0]
-
-      expect(response0.keys).
-        to eq(['id', 'name', 'known_macs'])
     end
+
+    it 'returns the vendor data' do
+      expect(json[0].keys).
+        to eq(['id', 'name', 'known_macs', 'models'])
+    end
+
+    it 'only returns supported vendors' do
+      expect(json.map{ |v| v['id'] }).
+        to eq([vendor0.exid])
+    end
+
   end
 
   describe 'GET /models/{vendor}' do
 
-    context 'when the vendor exists' do
-      it 'returns the data for the vendor' do
-        firmware0 = create(:firmware)
-        vendor0 = firmware0.vendor
+    context 'when the vendor is supported' do
 
-        get "/models/#{vendor0.exid}"
+      before(:each) { get("/models/#{vendor0.exid}") }
 
+      let(:json) { last_response.json['vendors'] }
+
+      it 'returns an OK status' do
         expect(last_response.status).to eq(200)
-        response0 = last_response.json['vendors'][0]
+      end
 
-        expect(response0.keys).
-          to eq(['id', 'name', 'known_macs', 'firmwares'])
+      it 'returns the vendor data' do
+        expect(last_response.json['vendors'][0].keys).
+          to eq(['id', 'name', 'known_macs', 'models'])
+      end
+
+    end
+
+    context 'when the vendor is not supported' do
+      it 'returns a NOT FOUND status' do
+        expect(get("/models/#{vendor1.exid}").status).to eq(404)
       end
     end
 
     context 'when the vendor does not exist' do
-      it 'returns a NOT FOUND 404 status' do
-        get '/models/xxxx'
-        expect(last_response.status).to eq(404)
+      it 'returns a NOT FOUND status' do
+        expect(get('/models/xxxx').status).to eq(404)
       end
     end
 
+  end
+
+  describe 'GET /models/{vendor}/{model}' do
   end
 
   describe 'GET /vendors' do

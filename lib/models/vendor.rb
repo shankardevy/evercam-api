@@ -4,12 +4,20 @@ class Vendor < Sequel::Model
 
   one_to_many :firmwares
 
-  def self.by_mac(val)
-    where(%("known_macs" @> ARRAY[?]), val.upcase)
-  end
+  dataset_module do
 
-  def self.by_exid(val)
-    where(exid: val)
+    def by_exid(val)
+      where(exid: val)
+    end
+
+    def by_mac(val)
+      where(%("known_macs" @> ARRAY[?]), val.upcase)
+    end
+
+    def supported
+      join(:firmwares, :vendor_id => :id)
+    end
+
   end
 
   def known_macs=(val)

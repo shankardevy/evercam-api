@@ -5,7 +5,8 @@ module Evercam
       {
         vendors: Array(obj).map do |vn|
           basic(vn).tap do |doc|
-            doc.merge!(firmwares(vn)) if opts[:firmwares]
+            doc.merge!(supported(vn)) if opts[:supported]
+            doc.merge!(models(vn)) if opts[:models]
           end
         end
       }
@@ -16,15 +17,18 @@ module Evercam
         id: vendor.exid,
         name: vendor.name,
         known_macs: vendor.known_macs,
+      }
+    end
+
+    def self.supported(vendor)
+      {
         is_supported: !vendor.firmwares.empty?
       }
     end
 
-    def self.firmwares(vendor)
+    def self.models(vendor)
       {
-        firmwares: vendor.firmwares.map do |fm|
-          { name: fm.name }.merge(fm.config)
-        end
+        models: vendor.firmwares.map(&:known_models).flatten
       }
     end
 
