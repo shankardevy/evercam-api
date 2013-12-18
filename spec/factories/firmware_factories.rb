@@ -3,7 +3,7 @@ FactoryGirl.define do
     vendor
     sequence(:name) { |n| "name#{n}" }
     known_models ['*']
-    config({a: 1})
+    config({})
   end
 end
 
