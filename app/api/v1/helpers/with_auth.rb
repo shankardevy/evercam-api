@@ -23,6 +23,15 @@ module Evercam
       end
     end
 
+    def user
+      case auth_type
+      when :basic, :session
+        seeker
+      when :bearer
+        seeker.grantor
+      end
+    end
+
     private
 
     def header

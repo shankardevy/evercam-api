@@ -47,6 +47,7 @@ module Evercam
 
     # woops, we broke something, go crazy...
     rescue_from :all do |e|
+      puts e.inspect
       error_response({ status: 500, message: 'Sorry, we dropped the ball' })
     end
 
@@ -63,8 +64,10 @@ end
 
 ['routes/snapshots',
  'routes/models',
+ 'routes/streams',
  'presenters/vendor_presenter',
  'presenters/model_presenter',
+ 'presenters/stream_presenter',
  'routes/users'
 ].each { |f| require_relative "./v1/#{f}" }
 
