@@ -43,7 +43,7 @@ Similar to above, this operation returns a list of models for a given IP camera 
 
 <h4>GET /v1/models/{vendor}/{model}</h4>
 <p>
-This operation returns the specific defaults and capabilities configuration data Evercam stores for a given camera model from a particular hardware vendor. Provided the <strong>{vendor}</strong> and <strong>{model}</strong> actually exist and are supported by Evercam, the server will respond with a <span class='label label-success'>200 OK</span> status and the model data. If the specified <strong>{vendor}</strong> or <strong>{model}</strong> does not exist or is not supported by Evercam the server will return a <span class='label label-danger'>404 NOT FOUND</span> status. The array of models returned from this endpoint should only ever contain one item.
+This operation returns the specific defaults and capabilities configuration data Evercam stores for a given camera model from a particular hardware vendor. Provided the <strong>{vendor}</strong> and <strong>{model}</strong> actually exist and are supported by Evercam, the server will respond with a <span class='label label-success'>200 OK</span> status and the model data. If the specified <strong>{vendor}</strong> exists but the <strong>{model}</strong> is not supported by Evercam the server will return the default configuration Evercam holds for this vendor. If the specified <strong>{vendor}</strong> does not exist or is not a manufacturer of IP camera equipment supported by Evercam the server will return a <span class='label label-danger'>404 NOT FOUND</span> status. The array of models returned from this endpoint should only ever contain one item.
 </p>
 <h5>Example Request</h5>
 <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam/YCW005
@@ -53,6 +53,7 @@ This operation returns the specific defaults and capabilities configuration data
   "models": [{
     "vendor": "ycam",
     "name": "YCW005",
+    "known_models": ["YCW005", ...],
     "defaults": {
       "snapshots": {
         "jpg": "/Streaming/channels/1/picture"

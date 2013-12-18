@@ -15,7 +15,8 @@ class Vendor < Sequel::Model
     end
 
     def supported
-      join(:firmwares, :vendor_id => :id)
+      join(:firmwares, :vendor_id => :id).
+        select_all(:vendors)
     end
 
   end

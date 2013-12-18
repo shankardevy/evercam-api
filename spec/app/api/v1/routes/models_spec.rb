@@ -5,7 +5,8 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:vendor0) { create(:firmware).vendor }
+  let!(:firmware0) { create(:firmware) }
+  let!(:vendor0) { firmware0.vendor }
   let!(:vendor1) { create(:vendor) }
 
   describe 'GET /models' do
@@ -36,8 +37,6 @@ describe 'API routes/models' do
 
       before(:each) { get("/models/#{vendor0.exid}") }
 
-      let(:json) { last_response.json['vendors'] }
-
       it 'returns an OK status' do
         expect(last_response.status).to eq(200)
       end
@@ -64,6 +63,36 @@ describe 'API routes/models' do
   end
 
   describe 'GET /models/{vendor}/{model}' do
+
+    context 'when the model exists' do
+
+      before(:each) { get("/models/#{vendor0.exid}/#{firmware0.known_models[0]}") }
+
+      it 'returns an OK status' do
+        expect(last_response.status).to eq(200)
+      end
+
+      it 'returns the model data' do
+        expect(last_response.json['models'][0].keys).
+          to eq(['vendor', 'name', 'known_models', 'defaults'])
+      end
+
+    end
+
+    context 'when the model does not exist' do
+
+      before(:each) { get("/models/#{vendor0.exid}/xxxx") }
+
+      it 'returns an OK status' do
+        expect(last_response.status).to eq(200)
+      end
+
+      it 'returns the default model data' do
+        expect(last_response.json['models'][0]['known_models']).to eq(['*'])
+      end
+
+    end
+
   end
 
   describe 'GET /vendors' do
