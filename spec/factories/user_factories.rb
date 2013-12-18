@@ -5,7 +5,7 @@ FactoryGirl.define do
     sequence(:username) { |n| "username#{n}" }
     sequence(:password) { |n| "password#{n}" }
     sequence(:email) { |n| "email#{n}evercam.io" }
-    country_id 100
+    country
   end
 end
 

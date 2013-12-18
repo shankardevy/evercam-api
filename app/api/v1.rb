@@ -51,17 +51,20 @@ module Evercam
     end
 
     helpers do
+
       def auth
         WithAuth.new(env)
       end
+
     end
 
   end
 end
 
 ['routes/snapshots',
- 'routes/vendors',
+ 'routes/models',
  'presenters/vendor_presenter',
+ 'presenters/model_presenter',
  'routes/users'
 ].each { |f| require_relative "./v1/#{f}" }
 

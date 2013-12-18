@@ -15,7 +15,9 @@ describe 'WebApp routes/signup' do
 
   describe 'POST /signup' do
 
-    let(:params) { build(:user).values.merge(country: 'ie') }
+    let(:params) do
+      build(:user).values.merge(country: create(:country).iso3166_a2)
+    end
 
     context 'when it creates the user' do
       it 'redirects to /login and displays a success message' do

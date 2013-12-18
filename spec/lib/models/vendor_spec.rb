@@ -25,11 +25,40 @@ describe Vendor do
 
   end
 
+  describe '#get_firmware_for' do
+
+    let!(:firmware0) { create(:firmware, known_models: ['*']) }
+    let!(:firmware1) { create(:firmware, vendor: firmware0.vendor, known_models: ['abcd']) }
+
+    subject { firmware0.vendor }
+
+    it 'returns the default on no match' do
+      firmware = subject.get_firmware_for('xxxx')
+      expect(firmware).to eq(firmware0)
+    end
+
+    it 'returns an exact match' do
+      firmware = subject.get_firmware_for('abcd')
+      expect(firmware).to eq(firmware1)
+    end
+
+    it 'returns partial match' do
+      firmware = subject.get_firmware_for('abcd-e')
+      expect(firmware).to eq(firmware1)
+    end
+
+    it 'returns a case insensitive match' do
+      firmware = subject.get_firmware_for('ABCD-E')
+      expect(firmware).to eq(firmware1)
+    end
+
+  end
+
   describe '::by_mac' do
 
     it 'finds vendors using any string casing' do
       vendor0 = create(:vendor, known_macs: ['0A:0B:0C'])
-      vendor1 = subject.by_mac('0a:0b:0C')
+      vendor1 = subject.by_mac('0a:0b:0C').all
       expect(vendor1).to eq([vendor0])
     end
 

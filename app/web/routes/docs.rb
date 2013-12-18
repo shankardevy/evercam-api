@@ -10,7 +10,7 @@ module Evercam
         file = params[:splat][0]
         path = File.join('docs', file)
         erb path.to_sym, layout: 'layouts/docs'.to_sym
-      rescue
+      rescue Exception => e
         raise NotFoundError
       end
     end

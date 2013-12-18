@@ -1,4 +1,5 @@
 #!/bin/sh
-createdb evercam_tst \
-  && ./schema/apply evercam_tst ./schema/0001
+createdb evercam_tst
+psql evercam_tst < ./schema/0001/1.tables.sql
+psql evercam_tst < ./schema/0002/1.alters.sql
 

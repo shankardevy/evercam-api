@@ -12,7 +12,7 @@ module Evercam
           lastname: 'Heaver',
           username: 'garrettheaver',
           email: 'garrett@evercam.io',
-          country: 'ie'
+          country: create(:country).iso3166_a2
         }
       end
 
