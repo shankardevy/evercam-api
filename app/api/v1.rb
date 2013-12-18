@@ -47,6 +47,7 @@ module Evercam
 
     # woops, we broke something, go crazy...
     rescue_from :all do |e|
+      Grape::API.logger.error e
       error_response({ status: 500, message: 'Sorry, we dropped the ball' })
     end
 
