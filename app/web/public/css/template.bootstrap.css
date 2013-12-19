@@ -2278,3 +2278,20 @@ color: #eb5f53;
 .address{
 	margin-top: 60px;
 }
+
+/**************** Signup page *******************/
+.signup{
+  color: #4D4D4D;
+  font-size: 25px;
+}
+.signup a{
+	text-decoration: none;
+	color: #DC4C3F;
+}
+.signup a:hover{
+	color: #C54D48;
+}
+.account p{
+	text-align: center;
+	padding-top: 60px;
+}
