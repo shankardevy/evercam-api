@@ -13,7 +13,6 @@ body {
   outline: none
 }
 
-
 #wrapper {
   position: relative;
   min-height: 100.1%;
@@ -324,7 +323,6 @@ header {
   background: #fff;
 }
 
-
 header h1 {
   display: inline-block;
   float: left;
@@ -337,8 +335,6 @@ header h1 {
   font-weight: normal;
   font-family: 'Pacifico', cursive;
 }
-
-
 
 header h1 a.navbar-brand {
   font-size: 50px;
@@ -369,7 +365,6 @@ header #logo {
   cursor: pointer;
   margin-top: 10px;
 }
-
 
 .navbar-default{
 	background-color: #FFF;
@@ -1848,7 +1843,7 @@ color: #eb5f53;
   font-size: 3em;
   font-weight: bold;
   margin: 10px 0px;
-  padding: 10px;
+  padding: 10px 0 25px 0;
 }
 
 #beta h4 {
@@ -1896,7 +1891,7 @@ color: #eb5f53;
 
 #beta form {
   background: #efeeee; !important;
-  padding: 15px 0px 30px 0px;
+  padding: 15px 0px 50px 0px;
   border-radius: 4px;
 }
 
@@ -2055,6 +2050,21 @@ color: #eb5f53;
   width: 440px;
 }
 
+.signIn #submit{
+  background: none repeat scroll 0 0 #EB5F53;
+  border: 0 none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 800;
+  height: 60px;
+  line-height: 45px;
+  padding: 0;
+  text-transform: uppercase;
+  width: 163px;
+}
+
 #submit{
   background: none repeat scroll 0 0 #EB5F53;
   border: 0 none;
@@ -2131,15 +2141,50 @@ color: #eb5f53;
   border-radius: 5px;
 }
 
+.signup{
+  color: #4D4D4D;
+  font-size: 25px;
+}
+
+.signup a{
+	text-decoration: none;
+	color: #DC4C3F;
+}
+
+.signup a:hover{
+	color: #C54D48;
+}
+
+.account p{
+	text-align: center;
+	padding-top: 60px;
+}
+
 /*************updates to login page ****************/
 
 .signIn{
   color: #4D4D4D;
   font-size: 25px;
 }
+
 .signIn h1{
   padding-bottom: 5px;
 }
+
+.signIn a{
+	text-decoration: none;
+	color: #EB5F53;
+}
+
+.signIn a:hover{
+	color: #DC4C3F;
+}
+
+.form-group a{
+		text-decoration: none;
+	color: #333;
+}
+
 /* FORM STYLES */
 .form-control.has-error {
   border-color: #b94a48;
@@ -2240,6 +2285,7 @@ color: #eb5f53;
 	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
 .contact-form  #message{
 	display: block;
 	border: 1px solid #eb5f53;
@@ -2258,6 +2304,7 @@ color: #eb5f53;
 	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
 .contactform_container{
 	padding: 40px 2px 30px 0px;
 	margin: 10px 0px 30px 0px;
@@ -2277,4 +2324,10 @@ color: #eb5f53;
 
 .address{
 	margin-top: 60px;
+}
+
+.form-group p{
+	text-align: right;
+	font-size: 16px;
+	padding-top: 15px;
 }
