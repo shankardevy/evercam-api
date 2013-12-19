@@ -2131,15 +2131,45 @@ color: #eb5f53;
   border-radius: 5px;
 }
 
+.signup{
+  color: #4D4D4D;
+  font-size: 25px;
+}
+
+.signup a{
+	text-decoration: none;
+	color: #DC4C3F;
+}
+
+.signup a:hover{
+	color: #C54D48;
+}
+
+.account p{
+	text-align: center;
+	padding-top: 60px;
+}
+
 /*************updates to login page ****************/
 
 .signIn{
   color: #4D4D4D;
   font-size: 25px;
 }
+
 .signIn h1{
   padding-bottom: 5px;
 }
+
+.signIn a{
+	text-decoration: none;
+	color: #DC4C3F;
+}
+
+.signIn a:hover{
+	color: #C54D48;
+}
+
 /* FORM STYLES */
 .form-control.has-error {
   border-color: #b94a48;
@@ -2279,19 +2309,8 @@ color: #eb5f53;
 	margin-top: 60px;
 }
 
-/**************** Signup page *******************/
-.signup{
-  color: #4D4D4D;
-  font-size: 25px;
-}
-.signup a{
-	text-decoration: none;
-	color: #DC4C3F;
-}
-.signup a:hover{
-	color: #C54D48;
-}
-.account p{
-	text-align: center;
-	padding-top: 60px;
+.form-group p{
+	text-align: right;
+	font-size: 16px;
+	padding-top: 15px;
 }
