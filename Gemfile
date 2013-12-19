@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rake'
 gem 'sinatra'
 gem 'grape'
 gem 'json'
@@ -38,7 +39,6 @@ gem 'bcrypt-ruby',
 group :development do
   gem 'sqlite3'
   gem 'shotgun'
-  gem 'rake'
 end
 
 group :test do
