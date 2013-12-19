@@ -2055,6 +2055,21 @@ color: #eb5f53;
   width: 440px;
 }
 
+.signIn #submit{
+  background: none repeat scroll 0 0 #EB5F53;
+  border: 0 none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 800;
+  height: 60px;
+  line-height: 45px;
+  padding: 0;
+  text-transform: uppercase;
+  width: 163px;
+}
+
 #submit{
   background: none repeat scroll 0 0 #EB5F53;
   border: 0 none;
@@ -2163,12 +2178,20 @@ color: #eb5f53;
 
 .signIn a{
 	text-decoration: none;
-	color: #DC4C3F;
+	color: #EB5F53;
 }
 
 .signIn a:hover{
-	color: #C54D48;
+	color: #DC4C3F;
 }
+
+.form-group a{
+		text-decoration: none;
+	color: #333;
+}
+
+
+
 
 /* FORM STYLES */
 .form-control.has-error {
