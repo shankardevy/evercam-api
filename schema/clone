@@ -1,4 +1,22 @@
 #!/bin/sh
-./schema/fetch \
-  && ./schema/build $@
+
+PRO="obscure-brook-6377"
+STG="powerful-ocean-5002"
+
+case $1 in
+  "dev" )
+    heroku pgbackups:capture -a $PRO --expire \
+      && dropdb --if-exists evercam_dev && createdb evercam_dev \
+      && curl -s `heroku pgbackups:url -a $PRO` | \
+      pg_restore -v -x -O -d evercam_dev ;;
+  "tst" )
+    heroku pgbackups:capture -a $PRO --expire \
+      && dropdb --if-exists evercam_tst && createdb evercam_tst \
+      && curl -s `heroku pgbackups:url -a $PRO` | \
+      pg_restore -s -v -x -O -d evercam_tst ;;
+  "stg" )
+    heroku pgbackups:capture -a $PRO --expire \
+      && heroku pgbackups:restore DATABASE -a $STG \
+      `heroku pgbackups:url -a $PRO` ;;
+esac
 

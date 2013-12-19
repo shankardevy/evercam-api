@@ -1,6 +1,0 @@
-#!/bin/sh
-app="obscure-brook-6377"
-
-heroku pgbackups:capture --expire -a $app \
-  && curl -# -o ./schema/$app.dump `heroku pgbackups:url -a $app`
-
