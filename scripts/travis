@@ -1,4 +1,6 @@
 #!/bin/sh
-./schema/clone tst
-./schema/migrate tst
+createdb evercam_tst
+for sql in `find ./schema -name '*.structure.sql'`; do
+  psql evercam_tst < $sql
+done
 
