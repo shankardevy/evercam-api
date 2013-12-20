@@ -2345,6 +2345,31 @@ color: #eb5f53;
 
 .icon_text p{
 	color: #4d4d4d;
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 20px;
+}
+
+.intro_home h1{
+	padding-top: 30px;
+	color: #9E3128;
+}
+
+.intro_home h4{
+	padding: 0;
+	margin: 0;
+	line-height: 40px;
+}
+.jumbotron{
+	background: url("/img/test_background.png");
+}
+
+.jumbotron .intro_home h1{
+	color: #EB5F53;
+	font-size: 48px;
+}
+
+.jumbotron .intro_home h4{
+	color: #fff;
+	font-size: 24px;
+	padding-bottom: 20px;
 }
