@@ -1,0 +1,25 @@
+#!/bin/sh
+
+PRO="obscure-brook-6377"
+STG="powerful-ocean-5002"
+dir=$(find -s ./schema -type d | tail -n 1)
+
+case $1 in
+  "dev" )
+    for sql in `ls $dir/*.sql`; do
+      psql evercam_dev < $sql
+    done ;;
+  "tst" )
+    for sql in `ls $dir/*.structure.sql`; do
+      psql evercam_tst < $sql
+    done ;;
+  "stg" )
+    for sql in `ls $dir/*.sql`; do
+      heroku pg:psql -a $STG < $sql
+    done ;;
+  "pro" )
+    for sql in `ls $dir/*.sql`; do
+      heroku pg:psql -a $PRO < $sql
+    done ;;
+esac
+
