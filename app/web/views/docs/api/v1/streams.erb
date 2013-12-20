@@ -75,9 +75,20 @@ This operation creates a new stream in the Evercam system associated with the au
 
   <div class="tab-pane" id="node">
     <pre><code class='javascript'>var evercam = require("evercam");
-evercam.stream.create({'id': 'teststream', 'endpoints': ['http://127.0.0.1:8080'],
-                                       'is_public': true, "snapshots": {'jpg': '/onvif/snapshot'},
-                                       'auth': {'basic': {'username': 'user1', 'password': 'abcde'}}},
+evercam.stream.create({
+      'id': 'teststream',
+      'endpoints': ['http://127.0.0.1:8080'],
+      'is_public': true,
+      'snapshots': {
+        'jpg': '/onvif/snapshot'
+      },
+      'auth': {
+        'basic': {
+          'username': 'user1',
+          'password': 'abcde'
+        }
+      }
+  },
   function (errors, stream) {
     // asynchronously called
   }
@@ -109,9 +120,20 @@ evercam.stream.create({'id': 'teststream', 'endpoints': ['http://127.0.0.1:8080'
 
   <div class="tab-pane" id="python">
     <pre><code class='python'>import evercam
-evercam.Stream.create({'id': 'teststream', 'endpoints': ['http://127.0.0.1:8080'],
-                       'is_public': True, "snapshots": {'jpg': '/onvif/snapshot'},
-                       'auth': {'basic': {'username': 'user1', 'password': 'abcde'}}})
+evercam.Stream.create({
+  'id': 'teststream',
+  'endpoints': ['http://127.0.0.1:8080'],
+  'is_public': True,
+  'snapshots': {
+    'jpg': '/onvif/snapshot'
+  },
+  'auth': {
+    'basic': {
+      'username': 'user1',
+      'password': 'abcde'
+    }
+  }
+})
     </code></pre>
     <h5>Example Success Response</h5>
     <pre><code class='json'>
@@ -139,4 +161,3 @@ evercam.Stream.create({'id': 'teststream', 'endpoints': ['http://127.0.0.1:8080'
 
   </div>
 </div>
-
