@@ -679,6 +679,7 @@ header #logo {
   text-align: left;
   padding-top: 0 !important;
   margin-top: -6px !important;
+  clear: both;
 }
 
 .tab-pane > div {

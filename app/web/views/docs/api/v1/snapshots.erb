@@ -10,7 +10,20 @@ This operation returns all data required to connect to the stream device, authen
 <p>
 A typical cURL command to GET the data for any particular private stream would look like this:
 </p>
-<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/streams/{stream}/snapshots/new \
+
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+      <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/streams/{stream}/snapshots/new \
   -H 'Authorization: Bearer {token}' </code></pre>
 <p>
 Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream snapshot data using the following format:
@@ -33,4 +46,69 @@ Assuming your authentication information is verified and you are authorized to v
   }
 }
 </code></pre>
+  </div>
 
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+    </code></pre>
+  </div>
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.snapshot.get('teststream',
+    function (errors, snapshot) {
+      // asynchronously called
+    }
+);
+    </code></pre>
+
+    <p>
+    Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream snapshot data using the following format:
+    </p>
+    <pre><code class='json'>
+{
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Snapshot.get_snapshot('teststream')
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>
+&lt;evercam.Snapshot object&gt; JSON: {
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
+}
+    </code></pre>
+  </div>
+</div>

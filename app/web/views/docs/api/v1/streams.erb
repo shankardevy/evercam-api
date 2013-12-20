@@ -7,7 +7,19 @@
 This operation creates a new stream in the Evercam system associated with the authenticated users account. All parameters are required, the stream id must be unique within Evercam and at least one endpoint must be specified. If the stream is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X POST https://api.evercam.io/v1/streams \
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+    <pre><code class='http'>curl -X POST https://api.evercam.io/v1/streams \
   -u '{your-username}' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -24,9 +36,9 @@ This operation creates a new stream in the Evercam system associated with the au
           }
         }
       }'
-</code></pre>
-<h5>Example Success Response</h5>
-<pre><code class='json'>{
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>{
   "streams": [{
     "id": "my-stream-name",
     "owner": "{your-username}",
@@ -45,12 +57,107 @@ This operation creates a new stream in the Evercam system associated with the au
     }
   }]
 }
-</code></pre>
-<h5>Example Failure Response</h5>
-<pre><code class='json'>{
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='json'>{
   "message": [
     "Stream already exists",
     ...
   ]
 }
-</code></pre>
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.stream.create({
+      'id': 'teststream',
+      'endpoints': ['http://127.0.0.1:8080'],
+      'is_public': true,
+      'snapshots': {
+        'jpg': '/onvif/snapshot'
+      },
+      'auth': {
+        'basic': {
+          'username': 'user1',
+          'password': 'abcde'
+        }
+      }
+  },
+  function (errors, stream) {
+    // asynchronously called
+  }
+);
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>{
+  "id": "my-stream-name",
+  "owner": "{your-username}",
+  "created_at": 1387370779,
+  "updated_at": 1387370779,
+  "endpoints": ["http://127.0.0.1:8080"],
+  "is_public": true,
+  "snapshots": {
+    "jpg": "/onvif/snapshot"
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "abcde"
+    }
+  }
+}
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='json'>[Error: Stream already exists]
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Stream.create({
+  'id': 'teststream',
+  'endpoints': ['http://127.0.0.1:8080'],
+  'is_public': True,
+  'snapshots': {
+    'jpg': '/onvif/snapshot'
+  },
+  'auth': {
+    'basic': {
+      'username': 'user1',
+      'password': 'abcde'
+    }
+  }
+})
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>
+&lt;evercam.Stream object&gt; JSON: {
+  "id": "my-stream-name",
+  "owner": "{your-username}",
+  "created_at": 1387370779,
+  "updated_at": 1387370779,
+  "endpoints": ["http://127.0.0.1:8080"],
+  "is_public": true,
+  "snapshots": {
+    "jpg": "/onvif/snapshot"
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "abcde"
+    }
+  }
+}
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='python'>evercam.errors.StreamAlreadyExists
+    </code></pre>
+
+  </div>
+</div>

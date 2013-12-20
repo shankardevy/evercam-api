@@ -7,10 +7,21 @@
 This operation returns a list of all IP camera vendors along with any MAC address prefixes they are known to use and the list of model names we currently hold configuration information about on Evercam. For a full list of all known hardware vendors please see the <a href='vendors'>/v1/vendors</a> endpoint. Further information for a particular model is available through the more specific <strong>/models/{vendor}/{model}</strong> endpoint listed below. Note that the <strong>"*"</strong> model denotes the set of fallback configuration values to try for an unknown model from this vendor.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models
-</code></pre>
-<h5>Example Response</h5>
-<pre><code class='json'>{
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
   "vendors": [{
     "id": "ycam",
     "name": "Y-cam Solutions",
@@ -21,17 +32,81 @@ This operation returns a list of all IP camera vendors along with any MAC addres
     ...
   }]
 }
-</code></pre>
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+Vendor.getAll();
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='java'>ArrayList&lt;Vendor&gt;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.model.all(function (errors, vendors) {
+    // asynchronously called
+});
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "models": ["*", "YCW005", "YCB005", "YCWHD5", ... ]
+  },{
+    "id": "tplink",
+    ...
+  }
+]
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Model.all()
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "models": ["*", "YCW005", "YCB005", "YCWHD5", ... ]
+  },
+  &lt;evercam.Vendor object&gt;{
+    ...
+  }
+]
+    </code></pre>
+  </div>
+</div>
 
 <h4>GET /v1/models/{vendor}</h4>
 <p>
 Similar to above, this operation returns a list of models for a given IP camera vendor. Provided the <strong>{vendor}</strong> actually exists and is supported by Evercam, the server will respond with a <span class='label label-success'>200 OK</span> status and the vendor data. If the specified <strong>{vendor}</strong> does not exist or is not a manufacturer of IP camera equipment supported by Evercam the server will return a <span class='label label-danger'>404 NOT FOUND</span> status. The array of vendors returned from this endpoint should only ever contain one item. Note that the <strong>"*"</strong> model denotes the set of fallback configuration values to try for an unknown model from this vendor.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam
-</code></pre>
-<h5>Example Response</h5>
-<pre><code class='json'>{
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl1" data-toggle="tab">Curl</a></li>
+  <li><a href="#java1" data-toggle="tab">Java</a></li>
+  <li><a href="#node1" data-toggle="tab">Node</a></li>
+  <li><a href="#python1" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl1">
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
   "vendors": [{
     "id": "ycam",
     "name": "Y-cam Solutions",
@@ -39,17 +114,73 @@ Similar to above, this operation returns a list of models for a given IP camera 
     "models": ["*", "YCW005", "YCB005", "YCWHD5", ... ]
   }]
 }
-</code></pre>
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java1">
+    <pre><code class='java'>import io.evercam.*;
+Vendor.getAll();
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='java'>ArrayList&lt;Vendor&gt;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node1">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.model.by_vendor('ycam', function (errors, vendor) {
+    // asynchronously called
+});
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
+  "id": "ycam",
+  "name": "Y-cam Solutions",
+  "known_macs": ["00:0D:F0"],
+  "models": ["*", "YCW005", "YCB005", "YCWHD5", ... ]
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python1">
+    <pre><code class='python'>import evercam
+evercam.Model.by_vendor('ycam')
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "models": ["*", "YCW005", "YCB005", "YCWHD5", ... ]
+  }
+    </code></pre>
+  </div>
+</div>
+
 
 <h4>GET /v1/models/{vendor}/{model}</h4>
 <p>
 This operation returns the specific defaults and capabilities configuration data Evercam stores for a given camera model from a particular hardware vendor. Provided the <strong>{vendor}</strong> and <strong>{model}</strong> actually exist and are supported by Evercam, the server will respond with a <span class='label label-success'>200 OK</span> status and the model data. If the specified <strong>{vendor}</strong> exists but the <strong>{model}</strong> is not supported by Evercam the server will return the default configuration Evercam holds for this vendor. If the specified <strong>{vendor}</strong> does not exist or is not a manufacturer of IP camera equipment supported by Evercam the server will return a <span class='label label-danger'>404 NOT FOUND</span> status. The array of models returned from this endpoint should only ever contain one item.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam/YCW005
-</code></pre>
-<h5>Example Response</h5>
-<pre><code class='json'>{
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl2" data-toggle="tab">Curl</a></li>
+  <li><a href="#java2" data-toggle="tab">Java</a></li>
+  <li><a href="#node2" data-toggle="tab">Node</a></li>
+  <li><a href="#python2" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl2">
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/models/ycam/YCW005
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
   "models": [{
     "vendor": "ycam",
     "name": "YCW005",
@@ -67,5 +198,67 @@ This operation returns the specific defaults and capabilities configuration data
     }
   }]
 }
-</code></pre>
+    </code></pre>
+  </div>
 
+  <div class="tab-pane" id="java2">
+    <pre><code class='java'>import io.evercam.*;
+Vendor.getAll();
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='java'>ArrayList&lt;Vendor&gt;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node2">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.model.by_model('ycam', 'YCW005', function (errors, model) {
+    // asynchronously called
+});
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
+  "vendor": "ycam",
+  "name": "YCW005",
+  "known_models": ["YCW005", ...],
+  "defaults": {
+    "snapshots": {
+      "jpg": "/Streaming/channels/1/picture"
+    },
+    "auth": {
+      "basic": {
+        "username": "admin",
+        "password": "12345"
+      }
+    }
+  }
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python2">
+    <pre><code class='python'>import evercam
+evercam.Model.by_vendor('ycam').model('YCW005')
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>
+&lt;evercam.Model object&gt; JSON: {
+  "vendor": "ycam",
+  "name": "YCW005",
+  "known_models": ["YCW005", ...],
+  "defaults": {
+    "snapshots": {
+      "jpg": "/Streaming/channels/1/picture"
+    },
+    "auth": {
+      "basic": {
+        "username": "admin",
+        "password": "12345"
+      }
+    }
+  }
+}
+    </code></pre>
+  </div>
+</div>

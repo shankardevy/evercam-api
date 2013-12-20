@@ -7,10 +7,21 @@
 This operation returns an array of all IEEE registered network hardware vendors along with any MAC prefixes (<a href='http://en.wikipedia.org/wiki/Organizationally_Unique_Identifier' target='_blank'>OUIs</a>) they are known to use. The response key <strong>is_supported</strong> can be used to determine the vendors who are known to produce IP cameras that Evercam currently has support for. Further information on models for those particular vendors is available through the <a href='models'>/v1/models/{vendor}</a> endpoint.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors
-</code></pre>
-<h5>Example Response</h5>
-<pre><code class='json'>{
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
   "vendors": [{
     "id": "ycam",
     "name": "Y-cam Solutions",
@@ -25,7 +36,69 @@ This operation returns an array of all IEEE registered network hardware vendors 
     ...
   }]
 }
-</code></pre>
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+Vendor.getAll();
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='java'>ArrayList&lt;Vendor&gt;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.vendor.all(function (errors, vendors) {
+    // asynchronously called
+});
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "is_supported": true
+  },{
+    "id": "679c8a3",
+    "name": "Cisco Systems, Inc.",
+    "known_macs": ["F0:25:72", ...],
+    "is_supported": false
+  },{
+    ...
+  }
+]
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Vendor.all()
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "is_supported": true
+  },
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "679c8a3",
+    "name": "Cisco Systems, Inc.",
+    "known_macs": ["F0:25:72", ...],
+    "is_supported": false
+  },
+  &lt;evercam.Vendor object&gt;{
+    ...
+  }
+]
+    </code></pre>
+  </div>
+</div>
 
 <h4>GET /v1/vendors/{mac}</h4>
 <p>
@@ -35,10 +108,21 @@ This operation returns an array of vendors known to use a particular MAC prefix 
 As above, the response key <strong>is_supported</strong> can be used to determine the vendors who are known to produce IP cameras that Evercam currently has support for. Further information on models for those particular vendors is available through the <a href='models'>/v1/models/{vendor}</a> endpoint.
 </p>
 <h5>Example Request</h5>
-<pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors/00:0D:F0
-</code></pre>
-<h5>Example Response</h5>
-<pre><code class='json'>{
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl1" data-toggle="tab">Curl</a></li>
+  <li><a href="#java1" data-toggle="tab">Java</a></li>
+  <li><a href="#node1" data-toggle="tab">Node</a></li>
+  <li><a href="#python1" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl1">
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/vendors/00:0D:F0
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>{
   "vendors": [{
     "id": "ycam",
     "name": "Y-cam Solutions",
@@ -48,5 +132,66 @@ As above, the response key <strong>is_supported</strong> can be used to determin
     ...
   }]
 }
-</code></pre>
+    </code></pre>
+  </div>
 
+  <div class="tab-pane" id="java1">
+    <pre><code class='java'>import io.evercam.*;
+Vendor.getAll();
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='java'>ArrayList&lt;Vendor&gt;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node1">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.vendor.all(function (errors, vendors) {
+    // asynchronously called
+});
+    </code></pre>
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "is_supported": true
+  },{
+    "id": "679c8a3",
+    "name": "Cisco Systems, Inc.",
+    "known_macs": ["F0:25:72", ...],
+    "is_supported": false
+  },{
+    ...
+  }
+]
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python1">
+    <pre><code class='python'>import evercam
+evercam.Vendor.all()
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>[
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "ycam",
+    "name": "Y-cam Solutions",
+    "known_macs": ["00:0D:F0"],
+    "is_supported": true
+  },
+  &lt;evercam.Vendor object&gt; JSON: {
+    "id": "679c8a3",
+    "name": "Cisco Systems, Inc.",
+    "known_macs": ["F0:25:72", ...],
+    "is_supported": false
+  },
+  &lt;evercam.Vendor object&gt;{
+    ...
+  }
+]
+    </code></pre>
+  </div>
+</div>
