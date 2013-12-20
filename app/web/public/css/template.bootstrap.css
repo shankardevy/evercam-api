@@ -1410,6 +1410,7 @@ footer span a:hover {
 
 }
 
+
 @media (max-width: 767px) {
 
 #bs-example-navbar-collapse{
@@ -1602,6 +1603,7 @@ footer span a:hover {
 	width: 308px;
 	float: none;
   }
+
 
   .nav-tabs {
     margin: -5px 0 0 -5px
@@ -2064,10 +2066,6 @@ color: #eb5f53;
   width: 163px;
 }
 
-.signIn #submit:hover{
-  background: none repeat scroll 0 0 #9E3128;
-}
-
 #submit{
   background: none repeat scroll 0 0 #EB5F53;
   border: 0 none;
@@ -2083,11 +2081,6 @@ color: #eb5f53;
   width: 180px;
 }
 
-
-#submit:hover{
-	background: none repeat scroll 0 0 #9E3128;
-}
-  
 .form-group{
   margin-bottom: 20px;
 }
@@ -2147,10 +2140,6 @@ color: #eb5f53;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-}
-
-.signup_form #signup:hover {
-  background: #9E3128;
 }
 
 .signup{
@@ -2342,35 +2331,4 @@ color: #eb5f53;
 	text-align: right;
 	font-size: 16px;
 	padding-top: 15px;
-}
-
-.icon_text p{
-	color: #4d4d4d;
-	font-size: 17px;
-	line-height: 20px;
-}
-
-.intro_home h1{
-	padding-top: 30px;
-	color: #9E3128;
-}
-
-.intro_home h4{
-	padding: 0;
-	margin: 0;
-	line-height: 40px;
-}
-.jumbotron{
-	background: url("/img/test_background.png");
-}
-
-.jumbotron .intro_home h1{
-	color: #EB5F53;
-	font-size: 48px;
-}
-
-.jumbotron .intro_home h4{
-	color: #fff;
-	font-size: 24px;
-	padding-bottom: 20px;
 }
