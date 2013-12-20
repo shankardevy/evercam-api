@@ -1,0 +1,17 @@
+#!/bin/sh
+
+PRO="obscure-brook-6377"
+STG="powerful-ocean-5002"
+
+case $1 in
+  "stg" )
+    APP=$STG ;;
+  "pro" )
+    APP=$PRO ;;
+  * )
+    exit ;;
+esac
+
+echo $APP
+heroku pgbackups:capture -a $APP --expire
+
