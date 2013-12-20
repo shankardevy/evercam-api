@@ -54,68 +54,61 @@ Assuming your authentication information is verified and you are authorized to v
   </div>
   <div class="tab-pane" id="node">
     <pre><code class='javascript'>var evercam = require("evercam");
-evercam.user.create({
-    forename: 'Joe',
-    lastname: 'Bloggs',
-    email: 'joe.bloggs@example.org',
-    username: 'joeyb',
-    country: 'us'
-    },
-    function (errors, user) {
+evercam.snapshot.get('teststream',
+    function (errors, snapshot) {
       // asynchronously called
     }
 );
     </code></pre>
 
-      If the operation was successful the function will have null errors and user will look like this:
+    <p>
+    Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream snapshot data using the following format:
     </p>
     <pre><code class='json'>
 {
-    "id": "joeyb",
-    "forename": "Joe",
-    "lastname": "Bloggs",
-    "email": "joe.bloggs@example.org",
-    "country": "us",
-    "created_at": 1386582328,
-    "updated_at": 1386582328,
-    "confirmed_at": null
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
 }
-    </code></pre>
-    <p>
-    Should the operation fail due to invalid parameters the function will have following errors and undefined user:
-    <pre><code class='json'>[Error: Username already exists]
     </code></pre>
   </div>
 
   <div class="tab-pane" id="python">
     <pre><code class='python'>import evercam
-user = evercam.User.create_user({
-    'forename': 'Joe',
-    'lastname': 'Bloggs',
-    'email': 'joe.bloggs@example.org',
-    'username': 'joeyb',
-    'country': 'us'
-})
+evercam.Snapshot.get_snapshot('teststream')
     </code></pre>
 
-      If the operation was successful user object will look like this:
-    </p>
+    <h5>Example Response</h5>
     <pre><code class='json'>
-&lt;evercam.User object&gt; JSON: {
-    "id": "joeyb",
-    "forename": "Joe",
-    "lastname": "Bloggs",
-    "email": "joe.bloggs@example.org",
-    "country": "us",
-    "created_at": 1386582328,
-    "updated_at": 1386582328,
-    "confirmed_at": null
+&lt;evercam.Snapshot object&gt; JSON: {
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
 }
     </code></pre>
-    <p>
-    Should the operation fail due to invalid parameters the function will throw
-    <pre><code class='python'>evercam.errors.UsernameAlreadyExists
-    </code></pre>
-
   </div>
 </div>
