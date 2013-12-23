@@ -7,8 +7,6 @@ __get_command () {
       echo "psql evercam_dev" ;;
     "tst" )
       echo "psql evercam_tst" ;;
-    "url" )
-      echo "psql $DATABASE_URL" ;;
     "stg" )
       echo "heroku pg:psql -a powerful-ocean-5002" ;;
     "pro" )
@@ -27,7 +25,7 @@ __set_version () {
   $1 -c "UPDATE _schema SET value = '$2' WHERE key = 'VERSION'"
 }
 
-dir=$(find -s ./schema -type d | tail -n 1)
+dir=$(find ./schema -type d | sort | tail -n 1)
 command=$(__get_command $1)
 current=$(__get_current "$command")
 version=$(basename $dir)
