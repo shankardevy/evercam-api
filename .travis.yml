@@ -10,6 +10,9 @@ addons:
 before_script:
   - ./scripts/travis
 
+before_deploy:
+  - "./schema/migrate stg"
+
 deploy:
   provider: heroku
   app:
@@ -17,6 +20,5 @@ deploy:
   api_key:
     secure: ZztBXxYMZxZv65UJCKeLQF0amEy+5HX8/izUlFPD90AIosok7C2IhM0VhWtVlSYS4GvAagbvkZe4OR89vGYJaBzM8akA3J1X7PRm2AD+GEKmpxTkCrVUkR5iCoLDG+10wV50yYPKizR9Noi9DBpZcSnPOSHDHuIIvdWBjz63Nfw=
   run:
-    - "./schema/migrate stg"
     - restart
 
