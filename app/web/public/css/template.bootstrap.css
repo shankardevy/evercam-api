@@ -2332,3 +2332,82 @@ color: #eb5f53;
 	font-size: 16px;
 	padding-top: 15px;
 }
+
+/**********new home page ****************/
+
+.titles h4{
+	text-align: center;
+	font-size: 32px;
+}
+
+.language{
+	padding: 10px 0 10px 0;
+}
+
+.language h4{
+	color: #9E3128;
+}
+
+.language p{
+	text-align:left;
+	font-size: 18px;
+}
+
+.device{
+	padding: 10px 0 10px 0;
+}
+
+.device h4{
+	color: #9E3128;
+}
+
+.device p{
+	text-align:right;
+	font-size: 18px;
+}
+
+.icons{
+	padding-top: 50px;
+}
+
+.slider-bg {
+background: url(../img/oconnell_2.jpg) center 0 no-repeat;
+margin-top: 23px;
+}
+
+.image h1{
+	font-size: 46px;
+	padding: 90px 0 0 40px;
+	font-weight: bold;
+	color: #fff;
+}
+
+.image h4{
+	font-size: 2em;
+	padding: 5px 0 0 40px;
+	color: #fff;
+}
+
+.image #signup {
+  border: 0;
+  padding: 0;
+  width: 170px;
+  font-size: 24px;
+  font-weight: 800;
+  display: inline-block;
+  background: #DC4C3F;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 45px;
+  height: 60px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.image .btn-lg {
+  font-size: 25px;
+  line-height: 1em;
+  padding: 10px 20px 20px 40px;
+  margin-top: 20px;
+  text-transform: none;
+}
