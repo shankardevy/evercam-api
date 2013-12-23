@@ -10,9 +10,6 @@ addons:
 before_script:
   - ./scripts/travis
 
-before_deploy:
-  - "./schema/migrate stg"
-
 deploy:
   provider: heroku
   app:
