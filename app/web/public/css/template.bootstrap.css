@@ -2340,6 +2340,34 @@ color: #eb5f53;
 	font-size: 32px;
 }
 
+.titlesList{
+	padding-top: 15px;
+}
+
+.titlesList ul{
+	padding-bottom: 25px;
+}
+
+.titlesList ul  li{
+	font-size: 28px;
+}
+
+.titlesList ul  li{
+	display: inline;
+list-style-type: none;
+padding: 0 30px 0 30px;
+}
+
+.titlesList ul  li a{
+	color: #4D4D4D;
+}
+
+.titlesList ul  li a:hover{
+	color: #9E3128;
+	text-decoration: none;
+}
+
+
 .language{
 	padding: 10px 0 50px 0;
 	height: 270px;
