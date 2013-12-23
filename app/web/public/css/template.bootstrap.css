@@ -2341,33 +2341,49 @@ color: #eb5f53;
 }
 
 .language{
-	padding: 10px 0 10px 0;
+	padding: 10px 0 50px 0;
+	height: 270px;
 }
 
 .language h4{
 	color: #9E3128;
+	padding-top: 50px;
+	padding-bottom: 0;
+	margin-bottom: 0;
 }
 
 .language p{
+padding-top: 50px;
 	text-align:left;
 	font-size: 18px;
 }
 
+.language img{
+	align: right;
+}
+
 .device{
 	padding: 10px 0 10px 0;
+		height: 270px;
 }
 
 .device h4{
 	color: #9E3128;
+		padding-top: 50px;
 }
 
 .device p{
 	text-align:right;
 	font-size: 18px;
+	padding-top: 20px;
 }
 
 .icons{
 	padding-top: 50px;
+}
+
+.icons p{
+	font-size: 16px;
 }
 
 .slider-bg {
