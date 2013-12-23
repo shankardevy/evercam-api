@@ -7,6 +7,8 @@ __get_command () {
       echo "psql evercam_dev" ;;
     "tst" )
       echo "psql evercam_tst" ;;
+    "url" )
+      echo "psql $DATABASE_URL" ;;
     "stg" )
       echo "heroku pg:psql -a powerful-ocean-5002" ;;
     "pro" )
@@ -37,10 +39,10 @@ fi
 
 # pick files to apply
 case $1 in
-  "dev" | "stg" | "pro")
-    files=`ls $dir/*.sql` ;;
   "tst" )
     files=`ls $dir/*.structure.sql` ;;
+  * )
+    files=`ls $dir/*.sql` ;;
 esac
 
 # apply the sql files
