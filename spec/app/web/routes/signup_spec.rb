@@ -119,6 +119,11 @@ describe 'WebApp routes/signup' do
 
   describe 'POST /interested' do
 
+    it 'posts to here from the homepage signup form' do
+      form = get('/').html.css('form').first
+      expect(form[:action]).to eq('/interested')
+    end
+
     context 'when the email is valid' do
 
       it 'thanks the user for their interest' do
