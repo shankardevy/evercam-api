@@ -2341,7 +2341,7 @@ color: #eb5f53;
 }
 
 .titlesList{
-	padding-top: 15px;
+	padding-top: 3px;
 }
 
 .titlesList ul{
@@ -2389,11 +2389,12 @@ color: #eb5f53;
 
 .language img{
 	align: right;
+	padding: 30px 40px 0 0;
 }
 
 .device{
 	padding-top: 30px;
-	height: 270px;
+	height: 200px;
 }
 
 #beta .device h4{
@@ -2411,9 +2412,13 @@ color: #eb5f53;
 	margin: 0;
 }
 
+.device img{
+	padding: 60px 0 0 20px;
+}
+
 .billing{
 	padding-top: 30px;
-	height: 270px;
+	height: 200px;
 }
 
 #beta .billing h4{
@@ -2431,6 +2436,10 @@ color: #eb5f53;
 	margin: 0;
 }
 
+.billing img{
+	padding: 30px 40px 0 0;
+}
+
 .icons{
 	padding-top: 50px;
 }
@@ -2445,22 +2454,22 @@ color: #eb5f53;
 }
 
 .image h1{
-	font-size: 46px;
-	padding: 90px 0 0 40px;
+	font-size: 60px;
+	padding: 90px 0 0 100px;
 	font-weight: bold;
 	color: #fff;
 }
 
 .image h4{
 	font-size: 2em;
-	padding: 5px 0 0 40px;
+	padding: 5px 0 0 100px;
 	color: #fff;
 }
 
 .image #signup {
   border: 0;
   padding: 0;
-  width: 170px;
+  width: 160px;
   font-size: 24px;
   font-weight: 800;
   display: inline-block;
@@ -2468,15 +2477,20 @@ color: #eb5f53;
   text-transform: uppercase;
   color: #fff;
   line-height: 45px;
-  height: 60px;
+  height: 55px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
 .image .btn-lg {
   font-size: 25px;
   line-height: 1em;
-  padding: 10px 20px 20px 40px;
+  padding: 10px 20px 20px 100px;
   margin-top: 20px;
   text-transform: none;
+}
+
+.developerColor{
+	color: #9E3128;
 }
