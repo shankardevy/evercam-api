@@ -498,7 +498,7 @@ header #logo {
   z-index: 1;
   float: none;
   position: relative;
-  min-height: 480px;
+  min-height: 320px;
 }
 
 .slider .camera_wrap img {
@@ -2337,11 +2337,11 @@ color: #eb5f53;
 
 .titles h4{
 	text-align: center;
-	font-size: 32px;
+	font-size: 26px;
 }
 
 .titlesList{
-	padding-top: 15px;
+	padding-top: 3px;
 }
 
 .titlesList ul{
@@ -2349,13 +2349,14 @@ color: #eb5f53;
 }
 
 .titlesList ul  li{
-	font-size: 28px;
+	font-size: 22px;
+	font-weight: bold;
 }
 
 .titlesList ul  li{
 	display: inline;
-list-style-type: none;
-padding: 0 30px 0 30px;
+	list-style-type: none;
+	padding: 0 42px 0 42px;
 }
 
 .titlesList ul  li a{
@@ -2367,43 +2368,77 @@ padding: 0 30px 0 30px;
 	text-decoration: none;
 }
 
-
 .language{
-	padding: 10px 0 50px 0;
-	height: 270px;
+	padding-top: 20px;
+	height: 140px;
 }
 
-.language h4{
-	color: #9E3128;
-	padding-top: 50px;
-	padding-bottom: 0;
-	margin-bottom: 0;
+#beta .language h4{
+	font-weight: bold;
+	font-size: 18px;
+	text-align: left;
+	padding-bottom: 10px;
+	margin: 0;
 }
 
 .language p{
-padding-top: 50px;
 	text-align:left;
-	font-size: 18px;
+	font-size: 16px;
+	padding: 0;
+	margin: 0;
 }
 
 .language img{
 	align: right;
+	padding: 10px 40px 0 0;
 }
 
 .device{
-	padding: 10px 0 10px 0;
-		height: 270px;
+	padding-top: 40px;
+	height: 200px;
 }
 
-.device h4{
-	color: #9E3128;
-		padding-top: 50px;
+#beta .device h4{
+	font-weight: bold;
+	font-size: 18px;
+	text-align: left;
+	padding-bottom: 10px;
+	margin: 0;
 }
 
 .device p{
-	text-align:right;
+	text-align:left;
+	font-size: 16px;
+	padding: 0;
+	margin: 0;
+}
+
+.device img{
+	padding: 50px 0 0 20px;
+}
+
+.billing{
+	padding-top: 40px;
+	height: 170px;
+}
+
+#beta .billing h4{
+	font-weight: bold;
 	font-size: 18px;
-	padding-top: 20px;
+	text-align: left;
+	padding-bottom: 10px;
+	margin: 0;
+}
+
+.billing p{
+	text-align:left;
+	font-size: 16px;
+	padding: 0;
+	margin: 0;
+}
+
+.billing img{
+	padding: 20px 40px 0 0;
 }
 
 .icons{
@@ -2415,27 +2450,29 @@ padding-top: 50px;
 }
 
 .slider-bg {
-background: url(../img/oconnell_2.jpg) center 0 no-repeat;
-margin-top: 23px;
+	background: url(../img/oconnell_2.jpg) center 0 no-repeat;
+	margin-top: 23px;
 }
 
 .image h1{
-	font-size: 46px;
-	padding: 90px 0 0 40px;
+	font-size: 60px;
+	margin: 0;
+	padding: 40px 0 10px 100px;
 	font-weight: bold;
 	color: #fff;
 }
 
 .image h4{
 	font-size: 2em;
-	padding: 5px 0 0 40px;
+	padding: 5px 0 0 100px;
+	margin: 0;
 	color: #fff;
 }
 
 .image #signup {
   border: 0;
   padding: 0;
-  width: 170px;
+  width: 160px;
   font-size: 24px;
   font-weight: 800;
   display: inline-block;
@@ -2443,15 +2480,20 @@ margin-top: 23px;
   text-transform: uppercase;
   color: #fff;
   line-height: 45px;
-  height: 60px;
+  height: 55px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
 .image .btn-lg {
   font-size: 25px;
   line-height: 1em;
-  padding: 10px 20px 20px 40px;
+  padding: 10px 20px 20px 100px;
   margin-top: 20px;
   text-transform: none;
+}
+
+.developerColor{
+	color: #9E3128;
 }
