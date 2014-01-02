@@ -498,7 +498,7 @@ header #logo {
   z-index: 1;
   float: none;
   position: relative;
-  min-height: 480px;
+  min-height: 320px;
 }
 
 .slider .camera_wrap img {
@@ -2337,7 +2337,7 @@ color: #eb5f53;
 
 .titles h4{
 	text-align: center;
-	font-size: 32px;
+	font-size: 26px;
 }
 
 .titlesList{
@@ -2349,7 +2349,8 @@ color: #eb5f53;
 }
 
 .titlesList ul  li{
-	font-size: 26px;
+	font-size: 22px;
+	font-weight: bold;
 }
 
 .titlesList ul  li{
@@ -2369,12 +2370,12 @@ color: #eb5f53;
 
 .language{
 	padding-top: 20px;
-	height: 200px;
+	height: 140px;
 }
 
 #beta .language h4{
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 18px;
 	text-align: left;
 	padding-bottom: 10px;
 	margin: 0;
@@ -2382,24 +2383,24 @@ color: #eb5f53;
 
 .language p{
 	text-align:left;
-	font-size: 18px;
+	font-size: 16px;
 	padding: 0;
 	margin: 0;
 }
 
 .language img{
 	align: right;
-	padding: 30px 40px 0 0;
+	padding: 10px 40px 0 0;
 }
 
 .device{
-	padding-top: 30px;
+	padding-top: 40px;
 	height: 200px;
 }
 
 #beta .device h4{
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 18px;
 	text-align: left;
 	padding-bottom: 10px;
 	margin: 0;
@@ -2407,23 +2408,23 @@ color: #eb5f53;
 
 .device p{
 	text-align:left;
-	font-size: 18px;
+	font-size: 16px;
 	padding: 0;
 	margin: 0;
 }
 
 .device img{
-	padding: 60px 0 0 20px;
+	padding: 50px 0 0 20px;
 }
 
 .billing{
-	padding-top: 30px;
-	height: 200px;
+	padding-top: 40px;
+	height: 170px;
 }
 
 #beta .billing h4{
 	font-weight: bold;
-	font-size: 20px;
+	font-size: 18px;
 	text-align: left;
 	padding-bottom: 10px;
 	margin: 0;
@@ -2431,13 +2432,13 @@ color: #eb5f53;
 
 .billing p{
 	text-align:left;
-	font-size: 18px;
+	font-size: 16px;
 	padding: 0;
 	margin: 0;
 }
 
 .billing img{
-	padding: 30px 40px 0 0;
+	padding: 20px 40px 0 0;
 }
 
 .icons{
@@ -2455,7 +2456,8 @@ color: #eb5f53;
 
 .image h1{
 	font-size: 60px;
-	padding: 90px 0 0 100px;
+	margin: 0;
+	padding: 40px 0 10px 100px;
 	font-weight: bold;
 	color: #fff;
 }
@@ -2463,6 +2465,7 @@ color: #eb5f53;
 .image h4{
 	font-size: 2em;
 	padding: 5px 0 0 100px;
+	margin: 0;
 	color: #fff;
 }
 
