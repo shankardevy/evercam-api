@@ -2375,9 +2375,10 @@ color: #eb5f53;
 
 #beta .language h4{
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 17px;
+	letter-spacing: 1px;
 	text-align: left;
-	padding-bottom: 10px;
+	padding: 40px 0 10px 0;
 	margin: 0;
 }
 
@@ -2389,8 +2390,7 @@ color: #eb5f53;
 }
 
 .language img{
-	align: right;
-	padding: 10px 40px 0 0;
+
 }
 
 .device{
@@ -2400,9 +2400,10 @@ color: #eb5f53;
 
 #beta .device h4{
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 17px;
+	letter-spacing: 1px;
 	text-align: left;
-	padding-bottom: 10px;
+	padding: 20px 0 10px 0;
 	margin: 0;
 }
 
@@ -2414,7 +2415,7 @@ color: #eb5f53;
 }
 
 .device img{
-	padding: 50px 0 0 20px;
+	/*padding: 50px 0 0 20px;*/
 }
 
 .billing{
@@ -2424,9 +2425,10 @@ color: #eb5f53;
 
 #beta .billing h4{
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 17px;
+	letter-spacing: 1px;
 	text-align: left;
-	padding-bottom: 10px;
+	padding: 30px 0 10px 0;
 	margin: 0;
 }
 
@@ -2438,7 +2440,7 @@ color: #eb5f53;
 }
 
 .billing img{
-	padding: 20px 40px 0 0;
+	/*padding: 20px 40px 0 0;*/
 }
 
 .icons{
