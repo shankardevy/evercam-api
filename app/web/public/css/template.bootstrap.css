@@ -1376,8 +1376,6 @@ footer span a:hover {
 
 @media (min-width: 768px) and (max-width: 991px) {
 
-
-
 .tm-navbar{
 	display: block;
 	margin-left: auto;
@@ -2185,7 +2183,7 @@ color: #eb5f53;
 }
 
 .form-group a{
-		text-decoration: none;
+	text-decoration: none;
 	color: #333;
 }
 
@@ -2340,16 +2338,14 @@ color: #eb5f53;
 
 .titlesList{
 	padding-top: 3px;
-		font-size: 22px;
-		font-weight: bold;
+	font-size: 22px;
+	font-weight: bold;
 }
-
 
 .titles h4{
 	text-align: center;
 	font-size: 26px;
 }
-
 
 .titlesList ul{
 	padding-bottom: 25px;
@@ -2468,7 +2464,7 @@ color: #eb5f53;
 	margin-top: 23px;
 }
 
-.image h1{
+.camera_wrap .image h1{
 	font-size: 50px;
 	margin: 0;
 	padding: 40px 0 10px 100px;
@@ -2476,10 +2472,10 @@ color: #eb5f53;
 	color: #fff;
 }
 
-.image h4{
-	font-size: 1.9em;
-	padding: 5px 0 0 100px;
+.image p{
+	font-size: 1.8em;
 	margin: 0;
+	padding: 0 0 0 100px;
 	color: #fff;
 }
 
