@@ -575,8 +575,9 @@ header #logo {
   border-top: #f1f1f1 1px solid;
 }
 
-.block-2 {
-  padding-bottom: 58px
+.icon_block {
+	padding-top: 45px;
+  padding-bottom: 25px
 }
 
 .block-2 > div {
@@ -1374,6 +1375,8 @@ footer span a:hover {
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
+
+
 
 .tm-navbar{
 	display: block;
@@ -2382,7 +2385,7 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 50px 0 10px 30px;
+	padding: 50px 0 5px 30px;
 	margin: 0;
 }
 
@@ -2407,7 +2410,7 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 40px 0 10px 0;
+	padding: 40px 0 5px 0;
 	margin: 0;
 }
 
@@ -2432,7 +2435,7 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 40px 0 10px 0;
+	padding: 40px 0 5px 0;
 	margin: 0;
 }
 
@@ -2451,6 +2454,11 @@ color: #eb5f53;
 	padding-top: 50px;
 }
 
+.icons h4{
+	margin-bottom: 0 !important;
+	margin-top: 5px !important;
+}
+
 .icons p{
 	font-size: 16px;
 }
@@ -2461,7 +2469,7 @@ color: #eb5f53;
 }
 
 .image h1{
-	font-size: 60px;
+	font-size: 50px;
 	margin: 0;
 	padding: 40px 0 10px 100px;
 	font-weight: bold;
@@ -2469,7 +2477,7 @@ color: #eb5f53;
 }
 
 .image h4{
-	font-size: 2em;
+	font-size: 1.9em;
 	padding: 5px 0 0 100px;
 	margin: 0;
 	color: #fff;
