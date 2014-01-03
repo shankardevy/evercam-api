@@ -14,5 +14,10 @@ describe 'WebApp routes/root' do
     end
   end
 
+  it 'includes google analytics' do
+    script = get('/').html.css('#GoogleAnalyticsScriptTag')
+    expect(script).to_not be_empty
+  end
+
 end
 

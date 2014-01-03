@@ -69,6 +69,14 @@ describe 'WebApp routes/login' do
         expect(session[:user]).to eq(user.id)
       end
 
+      it 'includes the intercom.io script on the page' do
+        post('/login', params)
+        follow_redirect!
+
+        script = last_response.html.css('#IntercomSettingsScriptTag')
+        expect(script).to_not be_empty
+      end
+
       context 'when no :rt param is provided' do
         it 'does a REDIRECT to the users home page' do
           post('/login', params)

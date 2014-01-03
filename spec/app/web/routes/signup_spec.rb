@@ -143,6 +143,14 @@ describe 'WebApp routes/signup' do
         expect(cookies['created_at']).to_not be_nil
       end
 
+      it 'includes the intercom.io script on the page' do
+        post('/interested', { email: 'garrett@evercam.io' })
+        follow_redirect!
+
+        script = last_response.html.css('#IntercomSettingsScriptTag')
+        expect(script).to_not be_empty
+      end
+
     end
 
     context 'when the email is invalid' do
