@@ -2335,14 +2335,18 @@ color: #eb5f53;
 
 /**********new home page ****************/
 
+.titlesList{
+	padding-top: 3px;
+		font-size: 22px;
+		font-weight: bold;
+}
+
+
 .titles h4{
 	text-align: center;
 	font-size: 26px;
 }
 
-.titlesList{
-	padding-top: 3px;
-}
 
 .titlesList ul{
 	padding-bottom: 25px;
@@ -2378,23 +2382,23 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 40px 0 10px 0;
+	padding: 50px 0 10px 30px;
 	margin: 0;
 }
 
 .language p{
 	text-align:left;
 	font-size: 16px;
-	padding: 0;
+	padding: 0 0 0 30px;
 	margin: 0;
 }
 
 .language img{
-
+	padding-right: 50px;
 }
 
 .device{
-	padding-top: 40px;
+	padding-top: 15px;
 	height: 200px;
 }
 
@@ -2403,7 +2407,7 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 20px 0 10px 0;
+	padding: 40px 0 10px 0;
 	margin: 0;
 }
 
@@ -2415,11 +2419,11 @@ color: #eb5f53;
 }
 
 .device img{
-	/*padding: 50px 0 0 20px;*/
+	padding-left: 50px;
 }
 
 .billing{
-	padding-top: 40px;
+	padding-top: 15px;
 	height: 170px;
 }
 
@@ -2428,7 +2432,7 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 30px 0 10px 0;
+	padding: 40px 0 10px 0;
 	margin: 0;
 }
 
@@ -2440,7 +2444,7 @@ color: #eb5f53;
 }
 
 .billing img{
-	/*padding: 20px 40px 0 0;*/
+	padding-right: 50px;
 }
 
 .icons{
@@ -2452,7 +2456,7 @@ color: #eb5f53;
 }
 
 .slider-bg {
-	background: url(../img/oconnell_2.jpg) center 0 no-repeat;
+	background: url(../img/oconnell3.jpg) center 0 no-repeat;
 	margin-top: 23px;
 }
 
