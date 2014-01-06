@@ -1831,7 +1831,7 @@ color: #eb5f53;
 #beta {
   text-align: center;
   margin: 10px 0px 20px 0px;
-  padding-bottom: 30px;
+  padding-bottom: 55px;
 }
 
 #beta .alert {
@@ -1937,6 +1937,8 @@ color: #eb5f53;
   text-align: center;
   color: #798a9c;
   height: 1em;
+  padding: 0;
+  margin: 0;
 }
 
 /*************** FOR Marketplace.HTML *****************/
@@ -2381,14 +2383,14 @@ color: #eb5f53;
 	font-size: 17px;
 	letter-spacing: 1px;
 	text-align: left;
-	padding: 50px 0 5px 30px;
+	padding: 40px 0 5px 0;
 	margin: 0;
 }
 
 .language p{
 	text-align:left;
 	font-size: 16px;
-	padding: 0 0 0 30px;
+	padding: 0;
 	margin: 0;
 }
 
@@ -2398,7 +2400,7 @@ color: #eb5f53;
 
 .device{
 	padding-top: 15px;
-	height: 200px;
+	height: 140px;
 }
 
 #beta .device h4{
@@ -2423,7 +2425,7 @@ color: #eb5f53;
 
 .billing{
 	padding-top: 15px;
-	height: 170px;
+	height: 140px;
 }
 
 #beta .billing h4{
