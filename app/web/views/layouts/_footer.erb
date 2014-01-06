@@ -48,6 +48,7 @@
     window.intercomSettings = {
       app_id: "f9c1fd60de50d31bcbc3f4d8d74c9c6dbc40e95a",
       email: "<%= curr_user ? curr_user.email : cookies[:email] %>",
+      user_hash: "<%= OpenSSL::HMAC.hexdigest('sha256', '43ZKomJ9dVRm_8ycB_Bxc7pLnj1ath-D6LBW2x3c', curr_user ? curr_user.email : cookies[:email]) %>",
       created_at: <%= curr_user ? curr_user.created_at.to_i : cookies[:created_at] %>
     };
   </script>
