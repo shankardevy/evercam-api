@@ -1,0 +1,52 @@
+<% @title = 'Marketplace' %>
+<div class="container">
+  <div class="marketplace_cont">
+    <h1 class="center indent-1"><span>Marketplace</span></h1>
+    <div class="app_container">
+      <div class="row block-3">
+        <div class="col-sm-4 ">
+          <a href="#" class="iconhover"><i class="fa fa-clock-o icon-5x icon-align-center"></i></a>
+          <h4>Timelapse</h4>
+          <p>Create timelapse videos using image sequences captured by your camera.</p>
+          <p><a class="btn btn-default" href="#">Coming Soon &raquo;</a></p>
+        </div>
+        <div class="col-sm-4 ">
+          <a href="#" class="iconhover"><i class="fa fa-envelope icon-5x icon-align-center"></i></a>
+          <h4>SMS - MMS Snapshot</h4>
+          <p>Send a SMS to your camera it will respond with an MMS of the current view.</p>
+          <p><a class="btn btn-default" href="#">Coming Soon &raquo;</a></p>
+        </div>
+        <div class="col-sm-4 ">
+          <a href="#" class="iconhover"><i class="fa fa-android icon-5x icon-align-center"></i></a>
+          <h4>Android App Generator</h4>
+          <p>Create Android apps without coding. Share your camera securely.</p>
+          <p><a class="btn btn-default" href="#">Coming Soon &raquo;</a></p>
+        </div>
+      </div>
+    </div><!-- end app_container -->
+
+    <div class="form_container">
+      <h1>Have you some other ideas?</h1>
+      <form method="POST" action="/marketplace/idea" class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-4 col-sm-offset-1 control-label">Email</label>
+          <div class="col-sm-5">
+            <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Your address">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 col-sm-offset-1 control-label">What are you looking for?</label>
+          <div class="col-sm-5">
+            <textarea class="form-control" name="idea" id="inputWhat" placeholder="Your idea"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-5 col-sm-9">
+            <button type="submit" class="btn btn-default" id="submit" >TELL US</button>
+          </div>
+        </div>
+      </form>
+    </div><!-- end form_container -->
+  </div><!-- end marketplace_cont -->
+</div><!-- end container -->
+

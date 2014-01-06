@@ -21,9 +21,10 @@ describe 'WebApp routes/login' do
     context 'when the user is already logged in' do
 
       context 'when no :rt param is provided' do
-        it 'renders with an OK status' do
+        it 'redirect to the user homepage' do
           get('/login', {}, env)
-          expect(last_response.status).to eq(200)
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to end_with("/users/#{user.username}")
         end
       end
 
@@ -47,13 +48,15 @@ describe 'WebApp routes/login' do
         post('/login', { username: 'abcd', password: 'efgh' })
       end
 
-      it 'shows an error message' do
-        errors = last_response.alerts.css('.alert-error')
-        expect(errors).to_not be_empty
+      it 'redirects back to GET /login' do
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).to end_with('/login')
       end
 
-      it 'renders with an OK status' do
-        expect(last_response.status).to eq(200)
+      it 'shows an error message' do
+        follow_redirect!
+        errors = last_response.alerts.css('.alert-error')
+        expect(errors).to_not be_empty
       end
 
     end
@@ -75,6 +78,14 @@ describe 'WebApp routes/login' do
 
         script = last_response.html.css('#IntercomSettingsScriptTag')
         expect(script).to_not be_empty
+      end
+
+      it 'changes the header link to logout' do
+        post('/login', params)
+        follow_redirect!
+
+        logout = last_response.html.css('nav a[href="/logout"]')
+        expect(logout).to_not be_empty
       end
 
       context 'when no :rt param is provided' do

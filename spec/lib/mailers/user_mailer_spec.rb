@@ -41,6 +41,19 @@ module Evercam
 
       end
 
+      describe '#app_idea' do
+
+        let(:result) do
+          request = stub(user_agent: 'aaaa', ip: 'bbbb')
+          subject.new(email: 'xxxx', idea: 'yyyy', request: request).app_idea
+        end
+
+        it 'renders the content correctly' do
+          expect(result[:body]).to_not be_nil
+        end
+
+      end
+
     end
   end
 end
