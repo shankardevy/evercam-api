@@ -18,6 +18,14 @@ module Evercam
         }
       end
 
+      def app_idea
+        {
+          to: 'garrett@evercam.io',
+          subject: 'Marketplace idea on evercam.io',
+          body: erb('user/app_idea.txt')
+        }
+      end
+
     end
   end
 end

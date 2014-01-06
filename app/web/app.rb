@@ -33,6 +33,10 @@ module Evercam
     # enable flash hash
     register Sinatra::Flash
 
+    # configure intercom.io
+    Intercom.app_id = Evercam::Config[:intercom][:app_id]
+    Intercom.api_key = Evercam::Config[:intercom][:api_key]
+
     # enable partial helpers and default to erb
     register Sinatra::Partial
     set :partial_template_engine, :erb
@@ -79,6 +83,7 @@ end
  'routes/signup',
  'routes/login',
  'routes/connect',
+ 'routes/marketplace',
  'routes/users',
  'routes/docs'
 ].each { |f| require_relative "./#{f}" }

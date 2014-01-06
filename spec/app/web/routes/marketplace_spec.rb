@@ -1,36 +1,28 @@
 require 'rack_helper'
 require_app 'web/app'
 
-describe 'WebApp routes/root' do
+describe 'WebApp routes/marketplace' do
 
   let(:app) { Evercam::WebApp }
 
-  ['/', '/about', '/privacy', '/terms', '/jobs', '/media', '/contact'].each do |url|
-    describe "GET #{url}" do
-      it 'renders with an OK status' do
-        expect(get(url).status).to eq(200)
-      end
+  context 'GET /marketplace' do
+    it 'renders with an OK status' do
+      expect(get('/marketplace').status).to eq(200)
     end
   end
 
-  it 'includes google analytics' do
-    script = get('/').html.css('#GoogleAnalyticsScriptTag')
-    expect(script).to_not be_empty
-  end
+  context 'POST /marketplace/idea' do
 
-  context 'POST /contact' do
-
-    it 'redirects to GET /contact' do
-      post('/contact')
+    it 'redirects the marketplace index' do
+      post('/marketplace/idea', { email: 'xxxx', idea: '' })
       expect(last_response.status).to eq(302)
-      expect(last_response.location).to end_with('/contact')
+      expect(last_response.location).to end_with('/marketplace')
     end
 
     context 'when the parameters are valid' do
 
       before(:each) do
-        Intercom::MessageThread.expects(:create)
-        post('/contact', { name: 'Garrett', email: 'garrett@evercam.io', body: 'timelapse' })
+        post('/marketplace/idea', { email: 'garrett@evercam.io', idea: 'timelapse' })
         follow_redirect!
       end
 
@@ -41,7 +33,6 @@ describe 'WebApp routes/root' do
 
       it 'creates a cookie for the email and creation date' do
         cookies = rack_mock_session.cookie_jar
-        expect(cookies['name']).to eq('Garrett')
         expect(cookies['email']).to eq('garrett@evercam.io')
         expect(cookies['created_at']).to_not be_nil
       end
@@ -50,13 +41,12 @@ describe 'WebApp routes/root' do
 
     context 'when the parameters are invalid' do
       it 'displays an error message' do
-        post('/contact', { name: '', email: 'xxxx', body: '' })
+        post('/marketplace/idea', { email: 'xxxx', idea: '' })
         follow_redirect!
 
         errors = last_response.alerts.css('.alert-error')
         expect(errors).to_not be_empty
       end
-
     end
 
   end
