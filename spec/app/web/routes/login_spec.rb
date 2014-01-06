@@ -79,6 +79,14 @@ describe 'WebApp routes/login' do
         expect(script).to_not be_empty
       end
 
+      it 'changes the header link to logout' do
+        post('/login', params)
+        follow_redirect!
+
+        logout = last_response.html.css('nav a[href="/logout"]')
+        expect(logout).to_not be_empty
+      end
+
       context 'when no :rt param is provided' do
         it 'does a REDIRECT to the users home page' do
           post('/login', params)
