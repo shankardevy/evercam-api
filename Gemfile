@@ -12,6 +12,7 @@ gem 'pg'
 
 gem 'aws-sdk'
 gem 'dotenv'
+gem 'intercom'
 
 gem 'activesupport',
   require: 'active_support'
