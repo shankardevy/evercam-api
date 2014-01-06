@@ -21,9 +21,10 @@ describe 'WebApp routes/login' do
     context 'when the user is already logged in' do
 
       context 'when no :rt param is provided' do
-        it 'renders with an OK status' do
+        it 'redirect to the user homepage' do
           get('/login', {}, env)
-          expect(last_response.status).to eq(200)
+          expect(last_response.status).to eq(302)
+          expect(last_response.location).to end_with("/users/#{user.username}")
         end
       end
 

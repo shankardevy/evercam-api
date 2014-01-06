@@ -3,12 +3,17 @@ module Evercam
 
     get '/login' do
       rt = params[:rt]
-      redirect rt if rt && session[:user]
+
+      if curr_user
+        redirect rt ? rt : "/users/#{curr_user.username}"
+      end
+
       erb 'login'.to_sym
     end
 
     post '/login' do
       user = User.by_login(params[:username])
+
       unless user && user.password == params[:password]
         session[:user] = nil
         redirect '/login', error: 'Invalid username or email and password combination'
