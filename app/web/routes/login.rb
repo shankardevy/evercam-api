@@ -10,12 +10,11 @@ module Evercam
     post '/login' do
       user = User.by_login(params[:username])
       unless user && user.password == params[:password]
-        flash.now[:error] = 'Invalid username or email and password combination'
-        erb 'login'.to_sym
+        session[:user] = nil
+        redirect '/login', error: 'Invalid username or email and password combination'
       else
-        rt = params[:rt]
         session[:user] = user.id
-        redirect rt ? rt : "/users/#{user.username}"
+        redirect params[:rt] ? params[:rt] : "/users/#{user.username}"
       end
     end
 

@@ -47,13 +47,15 @@ describe 'WebApp routes/login' do
         post('/login', { username: 'abcd', password: 'efgh' })
       end
 
-      it 'shows an error message' do
-        errors = last_response.alerts.css('.alert-error')
-        expect(errors).to_not be_empty
+      it 'redirects back to GET /login' do
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).to end_with('/login')
       end
 
-      it 'renders with an OK status' do
-        expect(last_response.status).to eq(200)
+      it 'shows an error message' do
+        follow_redirect!
+        errors = last_response.alerts.css('.alert-error')
+        expect(errors).to_not be_empty
       end
 
     end
