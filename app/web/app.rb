@@ -23,7 +23,7 @@ module Evercam
     end
 
     configure do
-      set :erb, layout: 'layouts/default'.to_sym
+      set :erb, layout: 'layouts/default'.to_sym, trim: '-'
     end
 
     # ensure cookies work across subdomains
