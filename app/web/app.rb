@@ -79,6 +79,7 @@ end
  'routes/signup',
  'routes/login',
  'routes/connect',
+ 'routes/marketplace',
  'routes/users',
  'routes/docs'
 ].each { |f| require_relative "./#{f}" }
