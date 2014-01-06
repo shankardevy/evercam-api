@@ -575,9 +575,16 @@ header #logo {
   border-top: #f1f1f1 1px solid;
 }
 
+/*.large_icons h4 p{
+  padding-left: 10px;
+}
+*/
+
 .icon_block {
 	padding-top: 45px;
-  padding-bottom: 25px
+  padding-bottom: 25px;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 .block-2 > div {
@@ -1700,7 +1707,8 @@ footer span a:hover {
     margin-bottom: 20px;
     width: 100%;
   }
-
+  
+  
 }
 
 .content h3 {
@@ -1823,11 +1831,13 @@ color: #eb5f53;
 .menu_footer a:link{
   text-decoration: none;
 }
+
 .menu_footer a:hover{
   color: #EB5F53;
 }
 
 /* HOME PAGE TEMP */
+
 #beta {
   text-align: center;
   margin: 10px 0px 20px 0px;
@@ -1913,9 +1923,9 @@ color: #eb5f53;
   padding-bottom: 5px;
 }
 
-#marketplace i {
+/*#marketplace i {
   color: #798a9c;
-  font-size: 3em; /*This increases the icon size */
+  font-size: 3em; 
   border: 2px solid transparent;
   border-radius: 5px;
   text-align: center;
@@ -1923,8 +1933,31 @@ color: #eb5f53;
   margin: 10px;
   display: block;
   float: left;
-  width: 113px;
+  width: 100px;
+}*/
+
+#marketplace i{
+  color: #798a9c;
+  font-size: 3em; 
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 20px 0px;
+  margin: 7px;
+  width: 85px;
+  text-align: center;
 }
+
+#marketplace ul{
+  height: auto;
+  padding: 8px 0px;
+  margin: 0px;
+}
+#marketplace li{
+  display: inline; 
+  padding: 15px; 
+}
+
+
 
 #marketplace i.active, #marketplace i:hover {
   /*color: #fff;*/
