@@ -72,6 +72,16 @@ describe 'WebApp routes/login' do
         expect(session[:user]).to eq(user.id)
       end
 
+      it 'sets the users details in cookies' do
+        post('/login', params)
+        follow_redirect!
+
+        cookies = rack_mock_session.cookie_jar
+        expect(cookies['name']).to eq(user.fullname)
+        expect(cookies['email']).to eq(user.email)
+        expect(cookies['created_at']).to_not be_nil
+      end
+
       it 'includes the intercom.io script on the page' do
         post('/login', params)
         follow_redirect!

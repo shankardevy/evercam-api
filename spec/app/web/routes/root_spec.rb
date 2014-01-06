@@ -41,6 +41,7 @@ describe 'WebApp routes/root' do
 
       it 'creates a cookie for the email and creation date' do
         cookies = rack_mock_session.cookie_jar
+        expect(cookies['name']).to eq('Garrett')
         expect(cookies['email']).to eq('garrett@evercam.io')
         expect(cookies['created_at']).to_not be_nil
       end

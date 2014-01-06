@@ -18,7 +18,7 @@ module Evercam
         flash[:error] = 'Sorry but one or more of the form values was empty or invalid. Please try again'
       else
         Intercom::MessageThread.create(email: email, body: body)
-        cookies.merge!({ email: email, created_at: Time.now.to_i })
+        cookies.merge!({ name: name, email: email, created_at: Time.now.to_i })
         flash[:success] = "Thank you for your interest. We'll be in contact soon..."
       end
 
