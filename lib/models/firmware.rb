@@ -1,5 +1,5 @@
 class Firmware < Sequel::Model
   many_to_one :vendor
-  one_to_many :devices
+  one_to_many :streams
 end
 

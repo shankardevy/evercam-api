@@ -1,6 +1,6 @@
 class Stream < Sequel::Model
 
-  many_to_one :device
+  many_to_one :firmware
   one_to_many :permissions, class: 'AccessTokenStreamRight'
   many_to_one :owner, class: 'User'
 
@@ -19,6 +19,11 @@ class Stream < Sequel::Model
       raise Evercam::AuthorizationError,
         'unknown permission seeker type'
     end
+  end
+
+  def config
+    fconf = firmware ? firmware.config : {}
+    fconf.deep_merge(values[:config] || {})
   end
 
 end

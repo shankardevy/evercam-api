@@ -1,10 +1,23 @@
 FactoryGirl.define do
   factory :stream do
-    sequence(:name) { |n| "stream#{n}" }
-    association :device, factory: :device
+
     association :owner, factory: :user
-    snapshot_path '/Streaming/channels/1/picture'
+    sequence(:name) { |n| "stream#{n}" }
     is_public true
+
+    config({
+      endpoints: ['http://127.0.0.1'],
+      snapshots: {
+        jpg: '/onvif/snapshot'
+      },
+      auth: {
+        basic: {
+          username: 'abcd',
+          password: 'wxyz'
+        }
+      }
+    })
+
   end
 end
 
