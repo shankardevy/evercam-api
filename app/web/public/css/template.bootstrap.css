@@ -2559,7 +2559,7 @@ color: #eb5f53;
 }
 
 .devIcons{
-  padding: 50px 0 50px 0;
+  padding: 40px 0 60px 0;
 }
 
 .devIcons h5{
@@ -2575,4 +2575,8 @@ color: #eb5f53;
 
 .bottomRow{
   padding-bottom: 40px;
+}
+
+.bottomRow ul{
+  list-style-type: circle;
 }
