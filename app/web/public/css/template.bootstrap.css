@@ -1643,7 +1643,7 @@ footer span a:hover {
 @media (max-width: 481px) {
 
   header #logo {
-  padding-left: 50px;
+  padding-left: 20px;
 }
 
 
@@ -2546,4 +2546,33 @@ color: #eb5f53;
 
 .developerColor{
 	color: #9E3128;
+}
+
+/************developer homepage********************/
+
+.developer h1{
+  font-size: 26px;
+}
+
+.developer h5{
+  font-size: 18px;
+}
+
+.devIcons{
+  padding: 50px 0 50px 0;
+}
+
+.devIcons h5{
+  text-align: center;
+  font-size: 22px;
+}
+
+.devIcons p{
+  text-align: center;
+  width: 290px;
+  margin: 0 auto;
+}
+
+.bottomRow{
+  padding-bottom: 40px;
 }
