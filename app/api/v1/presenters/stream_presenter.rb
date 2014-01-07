@@ -9,12 +9,8 @@ module Evercam
             owner: st.owner.username,
             created_at: st.created_at.to_i,
             updated_at: st.updated_at.to_i,
-            endpoints: [st.device.external_uri],
-            is_public: st.is_public,
-            snapshots: {
-              jpg: st.snapshot_path
-            }
-          }.merge(st.device.config)
+            is_public: st.is_public
+          }.merge(st.config)
         end
       }
     end

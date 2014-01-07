@@ -57,5 +57,32 @@ describe Stream do
 
   end
 
+  describe '#config' do
+
+    let(:firmware0) { create(:firmware, config: { 'a' => 'xxxx' }) }
+
+    it 'returns stream config if firmware is nil' do
+      d0 = create(:stream, firmware: nil, config: { 'a' => 'zzzz' })
+      expect(d0.config).to eq({ 'a' => 'zzzz' })
+    end
+
+    it 'merges its config with that of its firmware' do
+      d0 = create(:stream, firmware: firmware0, config: { 'b' => 'yyyy' })
+      expect(d0.config).to eq({ 'a' => 'xxxx', 'b' => 'yyyy'})
+    end
+
+    it 'gives precedence to values from the stream config' do
+      d0 = create(:stream, firmware: firmware0, config: { 'a' => 'yyyy' })
+      expect(d0.config).to eq({ 'a' => 'yyyy' })
+    end
+
+    it 'deep merges where both stream have the same keys' do
+      firmware0.update(config: { 'a' => { 'b' => 'xxxx' } })
+      d0 = create(:stream, firmware: firmware0, config: { 'a' => { 'c' => 'yyyy' } })
+      expect(d0.config).to eq({ 'a' => { 'b' => 'xxxx', 'c' => 'yyyy' } })
+    end
+
+  end
+
 end
 

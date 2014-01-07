@@ -9,19 +9,17 @@ module Evercam
         raise AuthorizationError, 'not authorized to view this stream'
       end
 
-      device = stream.device
-
       {
         uris: {
-          external: device.external_uri,
-          internal: device.internal_uri
+          external: stream.config['endpoints'][0],
+          internal: stream.config['endpoints'][0],
         },
         formats: {
           jpg: {
-            path: stream.snapshot_path
+            path: stream.config['snapshots']['jpg']
           }
         },
-        auth: device.config['auth']
+        auth: stream.config['auth']
       }
     end
 

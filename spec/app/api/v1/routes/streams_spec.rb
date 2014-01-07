@@ -43,7 +43,7 @@ describe 'API routes/streams' do
       it 'returns the new stream data' do
         expect(last_response.json['streams'][0].keys).
           to eq(['id', 'owner', 'created_at', 'updated_at',
-                 'endpoints', 'is_public', 'snapshots', 'auth'])
+                 'is_public', 'endpoints', 'snapshots', 'auth'])
       end
 
     end

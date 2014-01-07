@@ -38,24 +38,17 @@ module Evercam
         User.db.transaction do
           owner = User.by_login(username)
 
-          device = Device.create({
-            external_uri: endpoints[0],
-            internal_uri: endpoints[0],
-            config: config
-          })
-
           Stream.create({
             name: id,
             owner: owner,
-            device: device,
-            snapshot_path: snapshots[:jpg],
-            is_public: is_public
+            is_public: is_public,
+            config: {
+              endpoints: inputs[:endpoints],
+              snapshots: inputs[:snapshots],
+              auth: inputs[:auth]
+            }
           })
         end
-      end
-
-      def config
-        {}.merge(auth: inputs[:auth])
       end
 
     end

@@ -64,7 +64,7 @@ describe 'API routes/users' do
       it 'returns the stream data' do
         expect(last_response.json['streams'][0].keys).
           to eq(['id', 'owner', 'created_at', 'updated_at',
-                 'endpoints', 'is_public', 'snapshots', 'auth'])
+                 'is_public', 'endpoints', 'snapshots', 'auth'])
       end
 
       it 'only returns public streams' do
@@ -87,7 +87,7 @@ describe 'API routes/users' do
       it 'returns the stream data' do
         expect(last_response.json['streams'][0].keys).
           to eq(['id', 'owner', 'created_at', 'updated_at',
-                 'endpoints', 'is_public', 'snapshots', 'auth'])
+                 'is_public', 'endpoints', 'snapshots', 'auth'])
       end
 
       it 'only returns public and private streams' do
