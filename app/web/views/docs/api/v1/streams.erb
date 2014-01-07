@@ -2,6 +2,7 @@
 
 <%= partial('docs/api/v1/_is_protected') %>
 
+<a name="get"></a>
 <h4>GET /v1/streams/{id}</h4>
 <p>
   This operation returns all data required to connect to the stream , authenticate where nessessary, and retrieve images in whatever formats are currently available. Public streams can be accessed without providing any authentication. Private streams require authentication via any <a href='/docs/api/v1/authentication'>supported method</a> and authorization to view it.
@@ -114,6 +115,7 @@ evercam.Snapshot.get_snapshot('teststream')
   </div>
 </div>
 
+<a name="post"></a>
 <h4>POST /v1/streams</h4>
 <p>
   This operation creates a new stream in the Evercam system associated with the authenticated users account. All parameters are required, the stream id must be unique within Evercam and at least one endpoint must be specified. If the stream is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
