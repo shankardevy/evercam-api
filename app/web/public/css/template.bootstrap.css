@@ -1642,6 +1642,11 @@ footer span a:hover {
 
 @media (max-width: 481px) {
 
+  header #logo {
+  padding-left: 50px;
+}
+
+
   .slider .camera_wrap {
     min-height: 200px
   }
