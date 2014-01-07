@@ -62,8 +62,7 @@ module Evercam
   end
 end
 
-['routes/snapshots',
- 'routes/models',
+['routes/models',
  'routes/streams',
  'presenters/vendor_presenter',
  'presenters/model_presenter',

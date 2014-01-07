@@ -5,7 +5,7 @@ module Evercam
       required do
         string :id
         string :username
-        array :endpoints, class: String, min: 1
+        array :endpoints, class: String
         boolean :is_public
 
         hash :snapshots do
@@ -29,26 +29,22 @@ module Evercam
           add_error(:stream, :exists, 'Stream already exists')
         end
 
-        unless endpoints.size > 0
+        unless endpoints && endpoints.size > 0
           add_error(:endpoints, :size, 'Endpoints must contain at least one item')
         end
       end
 
       def execute
-        User.db.transaction do
-          owner = User.by_login(username)
-
-          Stream.create({
-            name: id,
-            owner: owner,
-            is_public: is_public,
-            config: {
-              endpoints: inputs[:endpoints],
-              snapshots: inputs[:snapshots],
-              auth: inputs[:auth]
-            }
-          })
-        end
+        Stream.create({
+          name: id,
+          owner: User.by_login(username),
+          is_public: is_public,
+          config: {
+            endpoints: inputs[:endpoints],
+            snapshots: inputs[:snapshots],
+            auth: inputs[:auth]
+          }
+        })
       end
 
     end
