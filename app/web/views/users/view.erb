@@ -1,77 +1,68 @@
-
 <div class='col-sm-10 col-sm-offset-1'>
   <div class="addCamera">
-  
-  <h1>Hi <%= @user.forename %></h1>
-    <p>
-    We're working super hard to bring you a <strong>great</strong> Evercam experience, until then why not browse through our ever growing documentation and think about all the wonderful apps that are headed your way.
-    </p>
-    <p>
-    Best regards,<br />
-    The Evercam Team.
-    </p>
+    <h1>Hi <%= @user.forename %></h1>
+    <p>We're working super hard to bring you a <strong>great</strong> Evercam experience, until then why not browse through our ever growing documentation and think about all the wonderful apps that are headed your way.</p>
+    <p>Best regards,<br />The Evercam Team.</p>
 
-  
-  <div class="addCamera_container">
-    <h1>Camera Details</h1>
-    <form class="form-horizontal" role="form">
-      <div class="form-group">
-        <label for="inputEmail3" class="col-sm-4 control-label">Camera Name:</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" id="inputArea" placeholder="Camera Name">
+    <div class="addCamera_container">
+      <h1>Camera Details</h1>
+      <form class="form-horizontal" role="form">
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-4 control-label">Camera Name:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="inputArea" placeholder="Camera Name">
+          </div>
         </div>
-      </div>
+          
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">Camera URL or IP:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="inputArea" placeholder="Public IP / Dydns">
+            <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
+          </div>
+        </div>
+     
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">Camera Credentials:</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" id="inputArea" placeholder="Username">
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" id="inputArea" placeholder="Password">
+            </div>
+        </div>
         
-      <div class="form-group">
-        <label for="inputPassword3" class="col-sm-4 control-label">Camera URL or IP:</label>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" id="inputArea" placeholder="Public IP / Dydns">
-          <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
-        </div>
-      </div>
-   
-      <div class="form-group">
-        <label for="inputPassword3" class="col-sm-4 control-label">Camera Credentials:</label>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">Camera Ports:</label>
           <div class="col-sm-3">
-            <input type="text" class="form-control" id="inputArea" placeholder="Username">
+            <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">
+            <p>e.g. 80</p>
           </div>
           <div class="col-sm-3">
-            <input type="text" class="form-control" id="inputArea" placeholder="Password">
+            <input type="text" class="form-control" id="inputArea" placeholder="RTSP Port">
+            <p>e.g. 554</p>
           </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="inputPassword3" class="col-sm-4 control-label">Camera Ports:</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">
         </div>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="inputArea" placeholder="RTSP Port">
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="inputPassword3" class="col-sm-4 control-label">Camera Type:</label>
-        <div class="col-sm-3">
-          <input type="text" class="form-control" id="inputArea" placeholder="Select Camera">
-            <option>Select Camera</option>
-            <option>Camera 1</option>
-            <option>Camera 2</option>
-            <option>Camera 3</option>
-            <option>Camera 4</option>
-            <option>Camera 5</option>
+        
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-4 control-label">Camera Type:</label>
+          <div class="col-sm-3">
+            <select class="form-control" id="inputArea"> 
+              <option value="Select Camera">Select Camera</option>
+              <option value="Camera 1">Camera 1</option>
+              <option value="Camera 2">Camera 2</option>
+              <option value="Camera 3">Camera 3</option>
+            </select>
           </div>
-      </div>
-    
-      <div class="form-group">
-        <div class="col-sm-offset-4 col-sm-6">
-          <button type="submit" class="btn btn-default" id="add">Add</button>
         </div>
-      </div>
       
-      
-      
-    </form>
-  </div>
+        <div class="form-group">
+          <div class="col-sm-offset-4 col-sm-6">
+            <button type="submit" class="btn btn-default" id="add">Add</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
   </div>
 </div>
