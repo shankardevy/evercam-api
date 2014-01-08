@@ -786,8 +786,8 @@ ul.list-testimonials li:first-child {
 }
 
 .border-1 {
-  border-bottom: #f1f1f1 1px solid;
-  padding-bottom: 40px;
+  border-bottom: 1px solid #a3b0ff;
+  padding: 5px;
 }
 
 .border-4 {
@@ -2684,4 +2684,18 @@ width: 100px;
   padding: 0;
   text-transform: uppercase;
   width: 100px;
+}
+.streamContainer{
+
+  padding: 20px 0 20px 0;
+}
+
+.streamList{
+  padding: 10px 0 10px 0;
+
+}
+
+.streamList h4{
+  margin-top: 0;
+  padding-top: 0;
 }
