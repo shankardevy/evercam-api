@@ -1,9 +1,70 @@
-<h1>Hi <%= @user.forename %></h1>
-<p>
-We're working super hard to bring you a <strong>great</strong> Evercam experience, until then why not browse through our ever growing documentation and think about all the wonderful apps that are headed your way.
-</p>
-<p>
-Best regards<br />
-The Evercam Team
-</p>
 
+<div class='col-sm-10 col-sm-offset-1'>
+  <h1>Hi <%= @user.forename %></h1>
+    <p>
+    We're working super hard to bring you a <strong>great</strong> Evercam experience, until then why not browse through our ever growing documentation and think about all the wonderful apps that are headed your way.
+    </p>
+    <p>
+    Best regards<br />
+    The Evercam Team
+    </p>
+  <h1>Camera Details</h1>
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <label for="inputEmail3" class="col-sm-2 control-label">Camera Name:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="" placeholder="Camera Name">
+      </div>
+    </div>
+      
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-2 control-label">Camera URL or IP:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="" placeholder="Public IP / Dydns">
+        <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
+      </div>
+    </div>
+ 
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-2 control-label">Camera Credentials:</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" id="" placeholder="Username">
+        </div>
+        <label for="inputPassword3" class="col-sm-2 control-label">Camera Credentials:</label>
+        <div class="col-sm-5">
+          <input type="text" class="form-control" id="" placeholder="Password">
+        </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-2 control-label">Camera Ports:</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="" placeholder="HTTP Port">
+      </div>
+       <label for="inputPassword3" class="col-sm-2 control-label">Camera Credentials:</label>
+      <div class="col-sm-5">
+        <input type="text" class="form-control" id="" placeholder="Username">
+        <input type="text" class="form-control" id="" placeholder="RTSP Port">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label for="inputPassword3" class="col-sm-2 control-label">Camera Type:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="" placeholder="Public IP / Dydns">
+          <option>Select Camera</option>
+          <option>Camera 1</option>
+          <option>Camera 2</option>
+          <option>Camera 3</option>
+          <option>Camera 4</option>
+          <option>Camera 5</option>
+        </div>
+    </div>
+  
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default">Add</button>
+      </div>
+    </div>
+  </form>
+</div>
