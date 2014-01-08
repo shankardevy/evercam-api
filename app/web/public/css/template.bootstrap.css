@@ -2622,3 +2622,59 @@ width: 100px;
 .bottomRow ul{
   list-style-type: circle;
 }
+
+/********* views.erb **************/
+
+.addCamera{
+  font-size: 16px;
+  color: #373D4D;
+}
+
+#inputArea{
+  border: 1px solid #EB5F53;
+  border-radius: 5px;
+  color: #373D4D;
+  font-size: 16px;
+  height: 40px;
+  margin-right: 20px;
+  padding: 10px 20px;
+  vertical-align: top;
+  width: 100%;
+}
+
+.form-horizontal .control-label{
+  padding-top: 5px;
+  color: #4D4D4D;
+  font-size: 18px;
+}
+
+.addCamera_container{
+  padding: 10px 2px 40px 0px;
+  margin: 10px 0px 60px 0px;
+  /*border: 1px solid #dddbdb;*/
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background: #efeeee;
+  font-size: 25px;
+}
+
+.addCamera_container h1{
+  font-size: 26px;
+  text-align: center;
+  padding: 20px 0 20px 0;
+}
+
+#add{
+  background: none repeat scroll 0 0 #EB5F53;
+  border: 0 none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 800;
+  height: 40px;
+  padding: 0;
+  text-transform: uppercase;
+  width: 100px;
+}
