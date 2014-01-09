@@ -2701,10 +2701,27 @@ width: 100px;
   padding-top: 0;
 }
 
+.streamList h5{
+  font-weight: bold;
+  font-size: 16px;
+  padding: 7px 0 0 0;
+  margin-bottom: 3px;
+}
+
 .streamList p{
   padding: 0;
   margin: 0;
+    font-size: 16px;
 }
+
+.userInfo{
+  font-size: 14px;
+  padding-top: 10px;
+  margin-top: 10px;
+  color: #afaeae;
+}
+
+
 
 .modal-footer{
   margin-top: 0px;
@@ -2712,4 +2729,34 @@ width: 100px;
 
 .testpaddy{
   text-align: right;
+}
+
+.streamList img{
+  border:1px solid #a3b0ff;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;  
+}
+
+
+.onOffline{
+  padding: 10px 0 10px 0;
+}
+
+.onOffline i{
+  padding-right: 5px;
+  color: #7ae270;
+}
+
+.lineTest h4{
+  width: 500px;
+  margin-bottom: 3px;
+}
+
+.CameraInfo{
+
+}
+
+.CameraInfo img{
+  margin-right: 60px;
 }
