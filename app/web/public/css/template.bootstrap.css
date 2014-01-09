@@ -2735,11 +2735,20 @@ width: 100px;
   border:1px solid #a3b0ff;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  border-radius: 5px;  
+  border-radius: 5px; 
+   display: block;
+    margin: 0 auto;
 }
 
 .online{
   padding: 6px 0 10px 0;
+  position: relative;
+}
+
+.positionTest{
+  position: absolute;
+  top: 40px;
+  right: 0;
 }
 
 .offline{
@@ -2780,8 +2789,7 @@ width: 100px;
 }
 
 .apps{
-  background: blue;
-  height: 100px;
+  height: 60px;
   background: #EFEEEE;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -2790,4 +2798,13 @@ width: 100px;
 
 .stream h4{
   padding-top: 20px;
+}
+
+.permissions .table{
+  width: 80%;
+   border: 1px solid red;
+}
+
+.permissions .table td, th{
+  text-align:center;
 }
