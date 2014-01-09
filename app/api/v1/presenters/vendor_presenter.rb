@@ -1,35 +1,22 @@
+require_relative './presenter'
+
 module Evercam
-  class VendorPresenter
+  class VendorPresenter < Presenter
 
-    def self.export(obj, opts={})
-      {
-        vendors: Array(obj).map do |vn|
-          basic(vn).tap do |doc|
-            doc.merge!(supported(vn)) if opts[:supported]
-            doc.merge!(models(vn)) if opts[:models]
-          end
-        end
-      }
+    root :vendors
+
+    expose :exid, as: :id
+
+    expose :name
+
+    expose :known_macs
+
+    expose :is_supported, if: { supported: true } do |v,o|
+      false == v.firmwares.empty?
     end
 
-    def self.basic(vendor)
-      {
-        id: vendor.exid,
-        name: vendor.name,
-        known_macs: vendor.known_macs,
-      }
-    end
-
-    def self.supported(vendor)
-      {
-        is_supported: !vendor.firmwares.empty?
-      }
-    end
-
-    def self.models(vendor)
-      {
-        models: vendor.firmwares.map(&:known_models).flatten
-      }
+    expose :models, if: { models: true } do |v,o|
+      v.firmwares.map(&:known_models).flatten
     end
 
   end

@@ -69,7 +69,6 @@ module Evercam
   end
 end
 
-['presenters/vendor_presenter',
- 'presenters/model_presenter'
+[ 'presenters/model_presenter'
 ].each { |f| require_relative "./v1/#{f}" }
 
