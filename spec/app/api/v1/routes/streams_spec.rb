@@ -52,7 +52,7 @@ describe 'API routes/streams' do
 
     it 'returns all the stream data keys' do
       response = get("/streams/#{stream.name}")
-      expect(response.json['streams'][0]).to include_keys(
+      expect(response.json['streams'][0]).to have_keys(
         'id', 'created_at', 'updated_at', 'is_public',
         'endpoints', 'snapshots', 'auth')
     end
@@ -87,7 +87,7 @@ describe 'API routes/streams' do
       end
 
       it 'returns the new stream data keys' do
-        expect(last_response.json['streams'][0]).to include_keys(
+        expect(last_response.json['streams'][0]).to have_keys(
           'id', 'created_at', 'updated_at', 'is_public',
           'endpoints', 'snapshots', 'auth')
       end

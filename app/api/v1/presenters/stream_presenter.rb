@@ -1,18 +1,32 @@
-module Evercam
-  class StreamPresenter
+require_relative './presenter'
 
-    def self.export(obj, opts={})
-      {
-        streams: Array(obj).map do |st|
-          {
-            id: st.name,
-            owner: st.owner.username,
-            created_at: st.created_at.to_i,
-            updated_at: st.updated_at.to_i,
-            is_public: st.is_public
-          }.merge(st.config)
-        end
-      }
+module Evercam
+  class StreamPresenter < Presenter
+
+    root :streams
+
+    expose :name, as: :id
+    expose :is_public
+
+    with_options(format_with: :timestamp) do
+      expose :created_at
+      expose :updated_at
+    end
+
+    expose :owner do |s,o|
+      s.owner.username
+    end
+
+    expose :endpoints do |s,o|
+      s.config['endpoints']
+    end
+
+    expose :snapshots do |s,o|
+      s.config['snapshots']
+    end
+
+    expose :auth do |s,o|
+      s.config['auth']
     end
 
   end

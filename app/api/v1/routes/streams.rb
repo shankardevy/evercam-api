@@ -9,7 +9,7 @@ module Evercam
         raise AuthorizationError, 'not authorized to view this stream'
       end
 
-      StreamPresenter.export(stream)
+      present Array(stream), with: StreamPresenter
     end
 
     post '/streams' do
@@ -17,8 +17,9 @@ module Evercam
 
       outcome = Actors::StreamCreate.run(inputs)
       raise OutcomeError, outcome unless outcome.success?
+      stream = outcome.result
 
-      StreamPresenter.export(outcome.result)
+      present Array(stream), with: StreamPresenter
     end
 
   end

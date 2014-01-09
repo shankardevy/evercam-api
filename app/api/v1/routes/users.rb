@@ -29,7 +29,7 @@ module Evercam
         s.is_public || (auth.user && s.has_right?('view', auth.user))
       end
 
-      StreamPresenter.export(streams)
+      present streams, with: StreamPresenter
     end
 
   end

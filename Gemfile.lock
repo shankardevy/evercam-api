@@ -5,6 +5,15 @@ GIT
     mutations (0.6.0)
       activesupport
 
+GIT
+  remote: git://github.com/tim-vandecasteele/grape-swagger.git
+  revision: c1a935ffb2a6c2149d7baa34767f5a17ed61ff9c
+  specs:
+    grape-swagger (0.6.0)
+      grape (>= 0.2.0)
+      grape-entity (~> 0.3.0)
+      kramdown
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -54,6 +63,9 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
+    grape-entity (0.3.0)
+      activesupport
+      multi_json (>= 1.3.2)
     guard (2.2.5)
       formatador (>= 0.2.4)
       listen (~> 2.1)
@@ -68,6 +80,7 @@ GEM
     ice_nine (0.10.0)
     intercom (0.1.17)
     json (1.8.1)
+    kramdown (1.3.1)
     listen (2.4.0)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
@@ -186,6 +199,8 @@ DEPENDENCIES
   dotenv
   factory_girl
   grape
+  grape-entity
+  grape-swagger!
   guard-rspec
   intercom
   json
