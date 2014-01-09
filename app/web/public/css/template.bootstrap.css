@@ -2747,7 +2747,7 @@ width: 100px;
 
 .positionTest{
   position: absolute;
-  top: 40px;
+  top: 14px;
   right: 0;
 }
 
@@ -2788,23 +2788,58 @@ width: 100px;
   padding-right: 5px;
 }
 
+.applications {
+  padding: 80px 0 70px 0;
+}
+
 .apps{
   height: 60px;
   background: #EFEEEE;
+  padding: 15px 0 0 20px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;  
 }
 
+.apps i{
+  padding-right: 20px;
+}
+
+
+
 .stream h4{
-  padding-top: 20px;
+  margin-top: 0px;
+  
 }
 
 .permissions .table{
-  width: 80%;
-   border: 1px solid red;
+background: #EFEEEE;
+  width: 75%;
+   border: 1px solid #DADADA;
+     -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;  
+}
+
+.permissions .table td{
+  width:33.333px;
 }
 
 .permissions .table td, th{
   text-align:center;
 }
+
+.activityBox{
+  height: 100px;
+  background: #EFEEEE;
+  padding: 15px 0 0 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;  
+}
+
+.activityBox glyphicon glyphicon-play{
+  padding: 15px;
+  color: red;
+}
+
