@@ -20,7 +20,7 @@ module Evercam
       vendor = ::Vendor.supported.by_exid(params[:vendor]).first
       raise NotFoundError, 'model vendor was not found' unless vendor
       firmware = vendor.get_firmware_for(params[:model])
-      ModelPresenter.export(firmware)
+      present Array(firmware), with: ModelPresenter
     end
 
     get '/vendors' do

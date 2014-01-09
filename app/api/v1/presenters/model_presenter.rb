@@ -1,18 +1,17 @@
-module Evercam
-  class ModelPresenter
+require_relative './presenter'
 
-    def self.export(obj, opts={})
-      {
-        models: Array(obj).map do |md|
-          {
-            vendor: md.vendor.exid,
-            name: md.name,
-            known_models: md.known_models,
-            defaults: md.config
-          }
-        end
-      }
+module Evercam
+  class ModelPresenter < Presenter
+
+    root :models
+
+    expose :vendor do |m,o|
+      m.vendor.exid
     end
+
+    expose :name, :known_models
+
+    expose :config, as: :defaults
 
   end
 end
