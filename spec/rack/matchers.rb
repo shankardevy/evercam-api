@@ -14,7 +14,7 @@ RSpec::Matchers.define :have_fragment do |fragments|
   end
 end
 
-RSpec::Matchers.define :include_keys do |*keys|
+RSpec::Matchers.define :have_keys do |*keys|
   match do |actual|
     keys.all? { |k| actual.keys.include?(k) }
   end

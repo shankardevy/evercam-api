@@ -20,8 +20,8 @@ describe 'API routes/models' do
     end
 
     it 'returns the vendor data' do
-      expect(json[0].keys).
-        to eq(['id', 'name', 'known_macs', 'models'])
+      expect(json[0]).to have_keys(
+        'id', 'name', 'known_macs', 'models')
     end
 
     it 'only returns supported vendors' do
@@ -42,8 +42,8 @@ describe 'API routes/models' do
       end
 
       it 'returns the vendor data' do
-        expect(last_response.json['vendors'][0].keys).
-          to eq(['id', 'name', 'known_macs', 'models'])
+        expect(last_response.json['vendors'][0]).to have_keys(
+          'id', 'name', 'known_macs', 'models')
       end
 
     end
@@ -73,8 +73,8 @@ describe 'API routes/models' do
       end
 
       it 'returns the model data' do
-        expect(last_response.json['models'][0].keys).
-          to eq(['vendor', 'name', 'known_models', 'defaults'])
+        expect(last_response.json['models'][0]).to have_keys(
+          'vendor', 'name', 'known_models', 'defaults')
       end
 
     end
@@ -104,8 +104,8 @@ describe 'API routes/models' do
     end
 
     it 'returns the data for each vendor' do
-      expect(last_response.json['vendors'][0].keys).
-        to eq(['id', 'name', 'known_macs', 'is_supported'])
+      expect(last_response.json['vendors'][0]).to have_keys(
+        'id', 'name', 'known_macs', 'is_supported')
     end
 
   end
@@ -123,8 +123,8 @@ describe 'API routes/models' do
       end
 
       it 'returns the data for the vendor' do
-        expect(last_response.json['vendors'][0].keys).
-          to eq(['id', 'name', 'known_macs', 'is_supported'])
+        expect(last_response.json['vendors'][0]).to have_keys(
+          'id', 'name', 'known_macs', 'is_supported')
       end
 
     end
@@ -138,8 +138,8 @@ describe 'API routes/models' do
       end
 
       it 'returns the data for the vendor' do
-        expect(last_response.json['vendors'][0].keys).
-          to eq(['id', 'name', 'known_macs', 'is_supported'])
+        expect(last_response.json['vendors'][0]).to have_keys(
+          'id', 'name', 'known_macs', 'is_supported')
       end
 
     end

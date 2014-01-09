@@ -3,9 +3,13 @@ ruby '2.0.0'
 
 gem 'rake'
 gem 'sinatra'
-gem 'grape'
-gem 'json'
 gem 'pony'
+gem 'json'
+
+gem 'grape'
+gem 'grape-entity'
+gem 'grape-swagger',
+  github: 'tim-vandecasteele/grape-swagger'
 
 gem 'sequel'
 gem 'pg'
