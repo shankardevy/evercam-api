@@ -1,3 +1,4 @@
+require_relative '../presenters/model_presenter'
 require_relative '../presenters/vendor_presenter'
 
 module Evercam

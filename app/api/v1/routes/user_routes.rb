@@ -1,24 +1,15 @@
+require_relative '../presenters/user_presenter'
+require_relative '../presenters/stream_presenter'
+
 module Evercam
   class V1UserRoutes < Grape::API
 
     post '/users' do
       outcome = Actors::UserSignup.run(params)
       raise OutcomeError, outcome unless outcome.success?
-      user = outcome.result
 
-      {
-        users: [{
-          id: user.username,
-          forename: user.forename,
-          lastname: user.lastname,
-          username: user.username,
-          email: user.email,
-          country: user.country.iso3166_a2,
-          created_at: user.created_at.to_i,
-          updated_at: user.updated_at.to_i,
-          confirmed_at: nil
-        }]
-      }
+      user = outcome.result
+      present Array(user), with: UserPresenter
     end
 
     get '/users/:username/streams' do

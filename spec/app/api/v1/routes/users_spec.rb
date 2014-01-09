@@ -24,9 +24,9 @@ describe 'API routes/users' do
         expect(last_response.status).to eq(201)
         response0 = last_response.json['users'][0]
 
-        expect(response0.keys).
-          to eq(['id', 'forename', 'lastname', 'username', 'email',
-                 'country', 'created_at', 'updated_at', 'confirmed_at'])
+        expect(response0).to have_keys(
+          'id', 'forename', 'lastname', 'username', 'email',
+          'country', 'created_at', 'updated_at', 'confirmed_at')
       end
     end
 
