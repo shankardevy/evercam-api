@@ -1,13 +1,8 @@
-['config', 'models', 'actors', 'mailers'
-].each { |f| require_relative "../../lib/#{f}" }
+['config', 'models', 'actors', 'mailers'].
+  each { |f| require_relative "../../lib/#{f}" }
 
-['helpers/with_auth',
- 'formatters/grape_json_formatters',
- 'handlers/grape_error_handlers',
- 'routes/user_routes',
- 'routes/stream_routes',
- 'routes/model_routes'
-].each { |f| require_relative "./v1/#{f}" }
+Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).
+  each { |f| require f }
 
 module Evercam
   class APIv1 < Grape::API
