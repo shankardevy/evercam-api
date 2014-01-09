@@ -787,7 +787,6 @@ ul.list-testimonials li:first-child {
 
 .border-1 {
   border-bottom: 1px solid #a3b0ff;
-  padding: 5px;
 }
 
 .border-4 {
@@ -2634,8 +2633,8 @@ width: 100px;
   border: 1px solid #EB5F53;
   border-radius: 5px;
   color: #373D4D;
-  font-size: 16px;
-  height: 40px;
+  font-size: 14px;
+  height: 30px;
   margin-right: 20px;
   margin-top: 2px;
   padding: 10px 20px;
@@ -2644,14 +2643,15 @@ width: 100px;
 }
 
 .form-horizontal .control-label{
-  padding-top: 7px;
+  padding: 7px 0 0 0;
   color: #4D4D4D;
-  font-size: 18px;
+  font-size: 14px;
+  margin: 0;
 }
 
 .addCamera_container{
-  padding: 10px 2px 40px 0px;
-  margin: 10px 0px 60px 0px;
+  padding: 30px 2px 20px 0px;
+  margin: 0px;
   /*border: 1px solid #dddbdb;*/
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -2670,6 +2670,7 @@ width: 100px;
   text-align: left;
   padding: 5px 0 0 0;
   margin: 0;
+  font-size: 12px;
 }
 
 #add{
@@ -2698,4 +2699,17 @@ width: 100px;
 .streamList h4{
   margin-top: 0;
   padding-top: 0;
+}
+
+.streamList p{
+  padding: 0;
+  margin: 0;
+}
+
+.modal-footer{
+  margin-top: 0px;
+}
+
+.testpaddy{
+  text-align: right;
 }
