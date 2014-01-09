@@ -1,5 +1,7 @@
 module Evercam
-  class APIv1
+  class V1StreamRoutes < Grape::API
+
+    include WebErrors
 
     get '/streams/:name' do
       stream = ::Stream.by_name(params[:name])

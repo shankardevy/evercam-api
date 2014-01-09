@@ -8,7 +8,7 @@ module Evercam
     end
 
     class JSONObject
-      def self.call(object, env)
+      def self.call(object, env=nil)
         JSON.pretty_generate(object)
       end
     end
