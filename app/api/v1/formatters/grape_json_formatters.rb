@@ -1,5 +1,10 @@
 module Evercam
-  module Formatters
+  module GrapeJSONFormatters
+
+    def self.extended(base)
+      base.error_formatter :json, JSONError
+      base.formatter :json, JSONObject
+    end
 
     class JSONError
       def self.call(message, backtrace, options, env)
