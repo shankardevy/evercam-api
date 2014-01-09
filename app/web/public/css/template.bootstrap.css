@@ -2756,7 +2756,6 @@ width: 100px;
   color: #e86060;
 }
 
-
 .lineTest h4{
   width: 500px;
   margin-bottom: 3px;
@@ -2773,4 +2772,22 @@ width: 100px;
 .addButton{
   padding-bottom: 10px;
   float: right;
+}
+
+.camAddress i{
+  color: blue;
+  padding-right: 5px;
+}
+
+.apps{
+  background: blue;
+  height: 100px;
+  background: #EFEEEE;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;  
+}
+
+.stream h4{
+  padding-top: 20px;
 }
