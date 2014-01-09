@@ -1,5 +1,5 @@
 module Evercam
-  class APIv1
+  class V1UserRoutes < Grape::API
 
     post '/users' do
       outcome = Actors::UserSignup.run(params)

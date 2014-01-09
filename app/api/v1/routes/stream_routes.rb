@@ -1,3 +1,5 @@
+require_relative '../presenters/stream_presenter'
+
 module Evercam
   class V1StreamRoutes < Grape::API
 

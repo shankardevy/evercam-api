@@ -7,7 +7,9 @@
 
 ['formatters/json',
  'helpers/with_auth',
- 'routes/stream_routes'
+ 'routes/user_routes',
+ 'routes/stream_routes',
+ 'routes/model_routes'
 ].each { |f| require_relative "./v1/#{f}" }
 
 module Evercam
@@ -60,15 +62,14 @@ module Evercam
 
     end
 
+    mount V1UserRoutes
     mount V1StreamRoutes
+    mount V1ModelRoutes
 
   end
 end
 
-['routes/models',
- 'presenters/vendor_presenter',
- 'presenters/model_presenter',
- 'presenters/stream_presenter',
- 'routes/users'
+['presenters/vendor_presenter',
+ 'presenters/model_presenter'
 ].each { |f| require_relative "./v1/#{f}" }
 

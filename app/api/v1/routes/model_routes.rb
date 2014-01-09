@@ -1,5 +1,7 @@
 module Evercam
-  class APIv1
+  class V1ModelRoutes < Grape::API
+
+    include WebErrors
 
     get '/models' do
       vendors = ::Vendor.supported.eager(:firmwares).all
