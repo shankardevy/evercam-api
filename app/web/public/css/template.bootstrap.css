@@ -786,7 +786,7 @@ ul.list-testimonials li:first-child {
 }
 
 .border-1 {
-  border-bottom: 1px solid #a3b0ff;
+  border-bottom: 1px solid #dadada;
 }
 
 .border-4 {
@@ -2704,7 +2704,7 @@ width: 100px;
 .streamList h5{
   font-weight: bold;
   font-size: 16px;
-  padding: 7px 0 0 0;
+  padding: 5px 0 0 0;
   margin-bottom: 3px;
 }
 
@@ -2738,15 +2738,24 @@ width: 100px;
   border-radius: 5px;  
 }
 
-
-.onOffline{
-  padding: 10px 0 10px 0;
+.online{
+  padding: 6px 0 10px 0;
 }
 
-.onOffline i{
+.offline{
+  padding: 6px 0 10px 0;
+}
+
+.online i{
   padding-right: 5px;
   color: #7ae270;
 }
+
+.offline i{
+  padding-right: 5px;
+  color: #e86060;
+}
+
 
 .lineTest h4{
   width: 500px;
@@ -2759,4 +2768,9 @@ width: 100px;
 
 .CameraInfo img{
   margin-right: 60px;
+}
+
+.addButton{
+  padding-bottom: 10px;
+  float: right;
 }
