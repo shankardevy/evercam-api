@@ -1,0 +1,76 @@
+<h1>Evercam.js</h1>
+<p>
+  Evercam.js allows you to easily access all evercam.io APIs and also works as jQuery plugin which can easily show image
+  from any evercam-enabled camera on a website.
+  jQuery is dependency and it has to be included before evercam.js.
+</p>
+<h4>Including Evercam.js</h4>
+
+<p>
+  Edit your HTML page and put following two lines inside 'head' tag
+</p>
+
+
+<pre><code class="html">&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"&gt&lt;/script&gt
+&lt;script src='http://cdn.evercam.io/js/v1/evercam.js'&gt&lt;/script&gt</code></pre>
+
+So it will look like this:
+
+<pre><code class="html">&lt;!DOCTYPE html&gt
+&lt;html&gt
+&lt;head&gt
+  &lt;title&gt&lt;/title&gt
+  <b>&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"&gt&lt;/script&gt
+  &lt;script src='http://cdn.evercam.io/js/v1/evercam.js'&gt&lt;/script&gt</b>
+&lt;/head&gt
+&lt;body&gt
+
+&lt;/body&gt
+&lt;/html&gt</code></pre>
+
+<h4>Showing camera snapshots</h4>
+
+  <h4>Via attributes</h4>
+  <p>
+    Simplest way to show image from camera on your website is to just add img tag with evercam specific attributes.
+    Evercam.js will automatically load camera image into img tag with 'evercam' attribute set to stream name and refresh it
+    every X seconds times 1000 (set in 'refresh' attribute). Typical camera image resolution is 640x480 pixels but you can
+    adjust it to your needs using width and height parameters.
+  </p>
+
+  Following line of code will get new snapshot from camera every 5 seconds and display it as 320x240 pixels image:
+
+<pre><code class="html">&lt;img evercam='dublin-rememberance-floor2' width="320" height="240" refresh='5000' /&gt</code></pre>
+
+
+  Following html page will display camera image on full screen and update it every 2 seconds:
+
+<pre><code class="html">&lt;!DOCTYPE html&gt
+&lt;html&gt
+&lt;head&gt
+&lt;title&gt&lt;/title&gt
+  &lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"&gt&lt;/script&gt
+  &lt;script src='http://cdn.evercam.io/js/v1/evercam.js'&gt&lt;/script&gt
+&lt;/head&gt
+&lt;body&gt
+  &lt;img evercam='dublin-rememberance-floor2' width="100%" height="100%" refresh='2000' /&gt
+&lt;/body&gt
+&lt;/html&gt</code></pre>
+
+  <h4>Via JavaScript</h4>
+  <p>
+    Load camera image into jQuery selector by calling evercam method with 'snapshot' as first argument and options
+    dictionary as second.
+  </p>
+
+  <pre><code class="javascript">$(img).evercam('snapshot', {
+  name: name,
+  refresh: refreshRate
+});</code></pre>
+
+  Following code will get new snapshot from camera every 5 seconds and display it as 320x240 pixels image:
+
+  <pre><code class="javascript">$(img).evercam('snapshot', {
+  name: 'dublin-rememberance-floor2',
+  refresh: 5000
+}).width(320).height(240);</code></pre>
