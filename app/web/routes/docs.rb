@@ -5,10 +5,6 @@ module Evercam
       erb 'docs/index'.to_sym, layout: 'layouts/docs'.to_sym
     end
 
-    get '/docs/evercam.js' do
-      erb 'docs/evercam.js'.to_sym, layout: 'layouts/docs'.to_sym
-    end
-
     get '/docs/*' do
       begin
         file = params[:splat][0]
