@@ -789,6 +789,11 @@ ul.list-testimonials li:first-child {
   border-bottom: 1px solid #dadada;
 }
 
+.border-3 {
+  padding-top: 20px;
+  border-bottom: 1px solid #dadada;
+}
+
 .border-4 {
   padding-bottom: 40px;
 }
@@ -2697,8 +2702,8 @@ width: 100px;
 }
 
 .streamList h4{
-  margin-top: 0;
-  padding-top: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .streamList h5{
@@ -2741,9 +2746,14 @@ width: 100px;
 }
 
 .online{
-  padding: 6px 0 10px 0;
+  padding: 6px 0 5px 0;
   position: relative;
+  border-bottom: 1px solid red;
+    margin-bottom: none;
 }
+
+
+
 
 .positionTest{
   position: absolute;
@@ -2789,7 +2799,7 @@ width: 100px;
 }
 
 .applications {
-  padding: 80px 0 70px 0;
+  padding: 85px 0 45px 0;
 }
 
 .apps{
@@ -2814,8 +2824,8 @@ width: 100px;
 
 .permissions .table{
 background: #EFEEEE;
-  width: 75%;
-   border: 1px solid #DADADA;
+  width: 95%;
+   border: none !important;
      -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;  
@@ -2830,16 +2840,27 @@ background: #EFEEEE;
 }
 
 .activityBox{
-  height: 100px;
+  height: 133px;
   background: #EFEEEE;
-  padding: 15px 0 0 20px;
+  padding: 20px 0 0 30px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;  
 }
 
-.activityBox glyphicon glyphicon-play{
-  padding: 15px;
-  color: red;
+.activityBox p{
+  margin-bottom: 10px;
+}
+
+.permissions .glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  padding-left: 20px;
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
 }
 
