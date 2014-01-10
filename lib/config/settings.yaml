@@ -35,6 +35,12 @@
   :database: <%= ENV['DATABASE_URL'] %>
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
+  :swagger:
+    :v1:
+      :api_version: '1.0'
+      :mount_path: swagger
+      :hide_documentation_path: true
+      :base_path: http://www.evercam.io/v1
   :mail:
     :from: evercam.io <noreply@evercam.io>
     :via: :smtp
