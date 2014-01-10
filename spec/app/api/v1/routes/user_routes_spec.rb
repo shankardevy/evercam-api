@@ -53,13 +53,21 @@ describe 'API routes/users' do
     let!(:stream0) { create(:stream, owner: user0, is_public: true) }
     let!(:stream1) { create(:stream, owner: user0, is_public: false) }
 
+    context 'when the user does not exist' do
+      it 'returns a NOT FOUND status' do
+        expect(get('/users/xxxx/streams').status).to eq(404)
+      end
+    end
+
+    context 'when the user does exist' do
+      it 'returns an OK status' do
+        expect(get("/users/#{user0.username}/streams").status).to eq(200)
+      end
+    end
+
     context 'with no authentication information' do
 
       before(:each) { get("/users/#{user0.username}/streams") }
-
-      it 'returns an OK status' do
-        expect(last_response.status).to eq(200)
-      end
 
       it 'returns the stream data' do
         expect(last_response.json['streams'][0]).to have_keys(
@@ -79,10 +87,6 @@ describe 'API routes/users' do
       let(:auth) { env_for(session: { user: user0.id }) }
 
       before(:each) { get("/users/#{user0.username}/streams", {}, auth) }
-
-      it 'returns an OK status' do
-        expect(last_response.status).to eq(200)
-      end
 
       it 'returns the stream data' do
         expect(last_response.json['streams'][0]).to have_keys(

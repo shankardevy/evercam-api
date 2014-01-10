@@ -4,6 +4,8 @@ require_relative '../presenters/stream_presenter'
 module Evercam
   class V1UserRoutes < Grape::API
 
+    include WebErrors
+
     desc 'Starts the new user signup process', {
       entity: Evercam::Presenters::User
     }
