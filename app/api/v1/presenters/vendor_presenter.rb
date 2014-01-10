@@ -1,24 +1,52 @@
 require_relative './presenter'
 
 module Evercam
-  class VendorPresenter < Presenter
+  module Presenters
+    class Vendor < Presenter
 
-    root :vendors
+      root :vendors
 
-    expose :exid, as: :id
+      expose :id, documentation: {
+        type: 'string',
+        desc: 'Unique identifier for the vendor',
+        required: true
+      } do |v,o|
+        v.exid
+      end
 
-    expose :name
+      expose :name, documentation: {
+        type: 'string',
+        desc: 'Name of the vendor',
+        required: true
+      }
 
-    expose :known_macs
+      expose :known_macs, documentation: {
+        type: 'array',
+        desc: 'String array of MAC prefixes the vendor uses',
+        required: true,
+        items: {
+          type: 'string'
+        }
+      }
 
-    expose :is_supported, if: { supported: true } do |v,o|
-      false == v.firmwares.empty?
+      expose :is_supported, if: { supported: true }, documentation: {
+        type: 'boolean',
+        desc: 'Whether or not this vendor produces Evercam supported cameras',
+      } do |v,o|
+        false == v.firmwares.empty?
+      end
+
+      expose :models, if: { models: true }, documentation: {
+        type: 'array',
+        desc: 'String array of models currently known for this vendor',
+        items: {
+          type: 'string'
+        }
+      } do |v,o|
+        v.firmwares.map(&:known_models).flatten
+      end
+
     end
-
-    expose :models, if: { models: true } do |v,o|
-      v.firmwares.map(&:known_models).flatten
-    end
-
   end
 end
 
