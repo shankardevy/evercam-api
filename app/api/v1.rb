@@ -29,6 +29,11 @@ module Evercam
     mount V1StreamRoutes
     mount V1ModelRoutes
 
+    # bring on the swagger
+    add_swagger_documentation(
+      Evercam::Config[:swagger][:v1]
+    )
+
   end
 end
 
