@@ -14,6 +14,22 @@ module Evercam
         s.name
       end
 
+      with_options(format_with: :timestamp) do
+
+        expose :created_at, documentation: {
+          type: 'integer',
+          desc: 'Unix timestamp at creation',
+          required: true
+        }
+
+        expose :updated_at, documentation: {
+          type: 'integer',
+          desc: 'Unix timestamp at last update',
+          required: true
+        }
+
+      end
+
       expose :is_public, documentation: {
         type: 'boolean',
         desc: 'Whether or not this stream is publically available',
@@ -53,22 +69,6 @@ module Evercam
         required: true
       } do |s,o|
         s.config['auth']
-      end
-
-      with_options(format_with: :timestamp) do
-
-        expose :created_at, documentation: {
-          type: 'integer',
-          desc: 'Unix timestamp at creation',
-          required: true
-        }
-
-        expose :updated_at, documentation: {
-          type: 'integer',
-          desc: 'Unix timestamp at last update',
-          required: true
-        }
-
       end
 
     end

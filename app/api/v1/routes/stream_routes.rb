@@ -5,6 +5,9 @@ module Evercam
 
     include WebErrors
 
+    desc 'Returns all data for a given stream', {
+      entity: Evercam::Presenters::Stream
+    }
     get '/streams/:name' do
       stream = ::Stream.by_name(params[:name])
       raise NotFoundError, 'stream was not found' unless stream
@@ -13,9 +16,12 @@ module Evercam
         raise AuthorizationError, 'not authorized to view this stream'
       end
 
-      present Array(stream), with: StreamPresenter
+      present Array(stream), with: Presenters::Stream
     end
 
+    desc 'Creates a new stream owned by the authenticating user', {
+      entity: Evercam::Presenters::Stream
+    }
     post '/streams' do
       inputs = params.merge(username: auth.user!.username)
 
@@ -23,7 +29,7 @@ module Evercam
       raise OutcomeError, outcome unless outcome.success?
       stream = outcome.result
 
-      present Array(stream), with: StreamPresenter
+      present Array(stream), with: Presenters::Stream
     end
 
   end
