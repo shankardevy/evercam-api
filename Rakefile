@@ -1,4 +1,5 @@
 require 'rake'
+require 'rspec'
 
 if defined?(RSpec)
   require 'rspec/core/rake_task'
