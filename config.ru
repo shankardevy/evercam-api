@@ -1,5 +1,7 @@
-base = File.dirname(__FILE__)
+require 'bundler'
+Bundler.require(:default)
 
+base = File.dirname(__FILE__)
 ['api/v1', 'web/app'].each do |app|
   require File.join(base, 'app', app)
 end
