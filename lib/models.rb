@@ -2,13 +2,14 @@ require 'sequel'
 require_relative './config'
 
 db = Sequel.connect(Evercam::Config[:database])
+db.extension :newrelic_instrumentation
+
 Sequel::Model.plugin :boolean_readers
 Sequel::Model.plugin :association_proxies
 Sequel::Model.plugin :timestamps, update_on_create: true
 
 if :postgres == db.adapter_scheme
-  db.extension :pg_array
-  db.extension :pg_json
+  db.extension :pg_array, :pg_json
 end
 
 require_relative './models/vendor'

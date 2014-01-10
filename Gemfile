@@ -17,6 +17,7 @@ gem 'pg'
 gem 'aws-sdk'
 gem 'dotenv'
 gem 'intercom'
+gem 'newrelic_rpm'
 
 gem 'activesupport',
   require: 'active_support'
