@@ -114,9 +114,9 @@ user = evercam.User.create_user({
   </div>
 </div>
 
-<h4>GET /v1/users/{username}/cameras</h4>
+<h4>GET /v1/users/{id}/cameras</h4>
 <p>
-This operation returns the list of cameras a user currently has ownership of. It operates in both public access and protected access modes. If you do not provide any authentication information along with the request it will return all of the users public cameras. If you provide authentication information it will return the list of public cameras and cameras owner by the user that you have been granted view access on. Provided the <strong>{username}</strong> exists the server will respond with a <%= code(200) %> status. If the username does not exist the server will respond with a <%= code(404) %> status.
+This operation returns the list of cameras a user currently has ownership of. It operates in both public access and protected access modes. If you do not provide any authentication information along with the request it will return all of the users public cameras. If you provide authentication information it will return the list of public cameras and cameras owner by the user that you have been granted view access on. Provided the user <strong>{id}</strong> exists the server will respond with a <%= code(200) %> status. If the username does not exist the server will respond with a <%= code(404) %> status.
 <h5>Example Request</h5>
 <!-- Nav tabs -->
 <ul class="nav nav-pills pull-right">
@@ -129,7 +129,7 @@ This operation returns the list of cameras a user currently has ownership of. It
 <!-- Tab panes -->
 <div class="tab-content">
   <div class="tab-pane active" id="curl1">
-    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/users/{username}/cameras \
+    <pre><code class='http'>curl -X GET https://api.evercam.io/v1/users/{id}/cameras \
   -u {your-username}
     </code></pre>
     <h5>Example Response</h5>
