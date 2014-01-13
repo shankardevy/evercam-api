@@ -10,6 +10,9 @@ addons:
 before_script:
   - ./scripts/travis
 
+env:
+  - DATABASE_URL="postgres://localhost/evercam_tst"
+
 branches:
   only: master
 
