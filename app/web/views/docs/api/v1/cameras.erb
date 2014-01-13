@@ -1,14 +1,14 @@
-<h1>Streams</h1>
+<h1>Cameras</h1>
 
 <%= partial('docs/api/v1/_is_protected') %>
 
 <a name="get"></a>
-<h4>GET /v1/streams/{id}</h4>
+<h4>GET /v1/cameras/{id}</h4>
 <p>
-  This operation returns all data required to connect to the stream , authenticate where nessessary, and retrieve images in whatever formats are currently available. Public streams can be accessed without providing any authentication. Private streams require authentication via any <a href='/docs/api/v1/authentication'>supported method</a> and authorization to view it.
+  This operation returns all data required to connect to the camera , authenticate where nessessary, and retrieve images in whatever formats are currently available. Public cameras can be accessed without providing any authentication. Private cameras require authentication via any <a href='/docs/api/v1/authentication'>supported method</a> and authorization to view it.
 </p>
 <p>
-  A typical cURL command to GET the data for any particular private stream would look like this:
+  A typical cURL command to GET the data for any particular private camera would look like this:
 </p>
 
 
@@ -23,14 +23,14 @@
 <!-- Tab panes -->
 <div class="tab-content">
   <div class="tab-pane active" id="curl">
-    <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/streams/{id} \
+    <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/cameras/{id} \
   -u '{username}' </code></pre>
     <p>
-      Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream snapshot data using the following format:
+      Assuming your authentication information is verified and you are authorized to view the camera, the server will respond with an <%= code(200) %> status and the camera snapshot data using the following format:
     </p>
     <pre><code class='json'>{
-  "streams": [{
-    "id": "my-stream-name",
+  "cameras": [{
+    "id": "my-camera-name",
     "owner": "{your-username}",
     "created_at": 1387370779,
     "updated_at": 1387370779,
@@ -64,7 +64,7 @@ evercam.snapshot.get('teststream',
     </code></pre>
 
     <p>
-      Assuming your authentication information is verified and you are authorized to view the stream, the server will respond with an <%= code(200) %> status and the stream data using the following format:
+      Assuming your authentication information is verified and you are authorized to view the camera, the server will respond with an <%= code(200) %> status and the camera data using the following format:
     </p>
     <pre><code class='json'>
 {
@@ -116,9 +116,9 @@ evercam.Snapshot.get_snapshot('teststream')
 </div>
 
 <a name="post"></a>
-<h4>POST /v1/streams</h4>
+<h4>POST /v1/cameras</h4>
 <p>
-  This operation creates a new stream in the Evercam system associated with the authenticated users account. All parameters are required, the stream id must be unique within Evercam and at least one endpoint must be specified. If the stream is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
+  This operation creates a new camera in the Evercam system associated with the authenticated users account. All parameters are required, the camera id must be unique within Evercam and at least one endpoint must be specified. If the camera is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
 </p>
 <h5>Example Request</h5>
 
@@ -133,11 +133,11 @@ evercam.Snapshot.get_snapshot('teststream')
 <!-- Tab panes -->
 <div class="tab-content">
   <div class="tab-pane active" id="curl">
-    <pre><code class='http'>curl -X POST https://api.evercam.io/v1/streams \
+    <pre><code class='http'>curl -X POST https://api.evercam.io/v1/cameras \
   -u '{your-username}' \
   -H 'Content-Type: application/json' \
   -d '{
-        "id": "{my-stream-name}",
+        "id": "{my-camera-name}",
         "endpoints": ["http://.0.1:8080"],
         "is_public": true,
         "snapshots": {
@@ -153,8 +153,8 @@ evercam.Snapshot.get_snapshot('teststream')
     </code></pre>
     <h5>Example Success Response</h5>
     <pre><code class='json'>{
-  "streams": [{
-    "id": "my-stream-name",
+  "cameras": [{
+    "id": "my-camera-name",
     "owner": "{your-username}",
     "created_at": 1387370779,
     "updated_at": 1387370779,
@@ -210,7 +210,7 @@ evercam.stream.create({
     </code></pre>
     <h5>Example Success Response</h5>
     <pre><code class='json'>{
-  "id": "my-stream-name",
+  "id": "my-camera-name",
   "owner": "{your-username}",
   "created_at": 1387370779,
   "updated_at": 1387370779,
@@ -252,7 +252,7 @@ evercam.Stream.create({
     <h5>Example Success Response</h5>
     <pre><code class='json'>
 &lt;evercam.Stream object&gt; JSON: {
-  "id": "my-stream-name",
+  "id": "my-camera-name",
   "owner": "{your-username}",
   "created_at": 1387370779,
   "updated_at": 1387370779,
