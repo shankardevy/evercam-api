@@ -77,6 +77,16 @@
       $('pre code').each(function(i, e) {
         hljs.highlightBlock(e);
       });
+
+      if (typeof $.cookie('lang') !== 'undefined') {
+        $("a[href^='#" + $.cookie('lang') + "'").click();
+      }
+
+      $('.nav-pills a').click(function(e) {
+        var lang = $(this).text().toLowerCase();
+        $.cookie('lang', lang);
+        $("a[href^='#" + lang + "'").not(this).tab('show');
+      });
     });
   </script>
 
