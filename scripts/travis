@@ -1,6 +1,6 @@
 #!/bin/sh
 createdb evercam_tst
-for sql in `find ./schema -name '*.structure.sql' | sort`; do
+for sql in `find ./migrations -name '*.structure.sql' | sort`; do
   psql evercam_tst < $sql
 done
 
