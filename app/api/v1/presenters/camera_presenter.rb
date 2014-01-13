@@ -8,7 +8,7 @@ module Evercam
 
       expose :id, documentation: {
         type: 'string',
-        desc: 'Unqiue Evercam name of the stream',
+        desc: 'Unqiue Evercam name of the camera',
         required: true
       } do |s,o|
         s.name
@@ -32,13 +32,13 @@ module Evercam
 
       expose :is_public, documentation: {
         type: 'boolean',
-        desc: 'Whether or not this stream is publically available',
+        desc: 'Whether or not this camera is publically available',
         required: true
       }
 
       expose :owner, documentation: {
         type: 'string',
-        desc: 'Username of stream owner',
+        desc: 'Username of camera owner',
         required: true
       } do |s,o|
         s.owner.username
@@ -46,7 +46,7 @@ module Evercam
 
       expose :endpoints, documentation: {
         type: 'array',
-        desc: 'String array of all available stream endpoints',
+        desc: 'String array of all available camera endpoints',
         required: true,
         items: {
           type: 'string'
