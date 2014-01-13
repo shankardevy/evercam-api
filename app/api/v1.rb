@@ -26,7 +26,7 @@ module Evercam
 
     # mount actual endpoints
     mount V1UserRoutes
-    mount V1StreamRoutes
+    mount V1CameraRoutes
     mount V1ModelRoutes
 
     # bring on the swagger

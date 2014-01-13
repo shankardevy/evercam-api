@@ -2,9 +2,9 @@ require_relative './presenter'
 
 module Evercam
   module Presenters
-    class Stream < Presenter
+    class Camera < Presenter
 
-      root :streams
+      root :cameras
 
       expose :id, documentation: {
         type: 'string',

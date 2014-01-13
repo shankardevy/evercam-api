@@ -47,37 +47,37 @@ describe 'API routes/users' do
 
   end
 
-  describe 'GET /users/{username}/streams' do
+  describe 'GET /users/{username}/cameras' do
 
     let!(:user0) { create(:user) }
-    let!(:stream0) { create(:stream, owner: user0, is_public: true) }
-    let!(:stream1) { create(:stream, owner: user0, is_public: false) }
+    let!(:camera0) { create(:stream, owner: user0, is_public: true) }
+    let!(:camera1) { create(:stream, owner: user0, is_public: false) }
 
     context 'when the user does not exist' do
       it 'returns a NOT FOUND status' do
-        expect(get('/users/xxxx/streams').status).to eq(404)
+        expect(get('/users/xxxx/cameras').status).to eq(404)
       end
     end
 
     context 'when the user does exist' do
       it 'returns an OK status' do
-        expect(get("/users/#{user0.username}/streams").status).to eq(200)
+        expect(get("/users/#{user0.username}/cameras").status).to eq(200)
       end
     end
 
     context 'with no authentication information' do
 
-      before(:each) { get("/users/#{user0.username}/streams") }
+      before(:each) { get("/users/#{user0.username}/cameras") }
 
-      it 'returns the stream data' do
-        expect(last_response.json['streams'][0]).to have_keys(
+      it 'returns the camera data' do
+        expect(last_response.json['cameras'][0]).to have_keys(
           'id', 'owner', 'created_at', 'updated_at',
           'is_public', 'endpoints', 'snapshots', 'auth')
       end
 
-      it 'only returns public streams' do
-        expect(last_response.json['streams'].map{ |s| s['id'] }).
-          to eq([stream0.name])
+      it 'only returns public cameras' do
+        expect(last_response.json['cameras'].map{ |s| s['id'] }).
+          to eq([camera0.name])
       end
 
     end
@@ -86,17 +86,17 @@ describe 'API routes/users' do
 
       let(:auth) { env_for(session: { user: user0.id }) }
 
-      before(:each) { get("/users/#{user0.username}/streams", {}, auth) }
+      before(:each) { get("/users/#{user0.username}/cameras", {}, auth) }
 
-      it 'returns the stream data' do
-        expect(last_response.json['streams'][0]).to have_keys(
+      it 'returns the camera data' do
+        expect(last_response.json['cameras'][0]).to have_keys(
           'id', 'owner', 'created_at', 'updated_at',
           'is_public', 'endpoints', 'snapshots', 'auth')
       end
 
-      it 'only returns public and private streams' do
-        expect(last_response.json['streams'].map{ |s| s['id'] }).
-          to eq([stream0.name, stream1.name])
+      it 'only returns public and private cameras' do
+        expect(last_response.json['cameras'].map{ |s| s['id'] }).
+          to eq([camera0.name, camera1.name])
       end
 
     end

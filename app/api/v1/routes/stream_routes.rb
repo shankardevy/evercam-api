@@ -1,35 +1,35 @@
-require_relative '../presenters/stream_presenter'
+require_relative '../presenters/camera_presenter'
 
 module Evercam
-  class V1StreamRoutes < Grape::API
+  class V1CameraRoutes < Grape::API
 
     include WebErrors
 
-    desc 'Returns all data for a given stream', {
-      entity: Evercam::Presenters::Stream
+    desc 'Returns all data for a given camera', {
+      entity: Evercam::Presenters::Camera
     }
-    get '/streams/:name' do
-      stream = ::Stream.by_name(params[:name])
-      raise NotFoundError, 'stream was not found' unless stream
+    get '/cameras/:name' do
+      camera = ::Stream.by_name(params[:name])
+      raise NotFoundError, 'camera was not found' unless camera
 
-      unless stream.is_public? || auth.has_right?('view', stream)
-        raise AuthorizationError, 'not authorized to view this stream'
+      unless camera.is_public? || auth.has_right?('view', camera)
+        raise AuthorizationError, 'not authorized to view this camera'
       end
 
-      present Array(stream), with: Presenters::Stream
+      present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Creates a new stream owned by the authenticating user', {
-      entity: Evercam::Presenters::Stream
+    desc 'Creates a new camera owned by the authenticating user', {
+      entity: Evercam::Presenters::Camera
     }
-    post '/streams' do
+    post '/cameras' do
       inputs = params.merge(username: auth.user!.username)
 
       outcome = Actors::StreamCreate.run(inputs)
       raise OutcomeError, outcome unless outcome.success?
-      stream = outcome.result
+      camera = outcome.result
 
-      present Array(stream), with: Presenters::Stream
+      present Array(camera), with: Presenters::Camera
     end
 
   end
