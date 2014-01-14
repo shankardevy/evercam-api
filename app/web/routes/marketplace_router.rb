@@ -1,6 +1,7 @@
+require_relative "./web_router"
 
 module Evercam
-  class WebApp
+  class WebMarketPlaceRouter < WebRouter
 
     get '/marketplace' do
       erb 'marketplace/index'.to_sym

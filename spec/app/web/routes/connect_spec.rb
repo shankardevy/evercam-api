@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'web/app'
 
-describe 'WebApp routes/connect' do
+describe 'WebApp routes/connect_router' do
 
   let(:app) { Evercam::WebApp }
 

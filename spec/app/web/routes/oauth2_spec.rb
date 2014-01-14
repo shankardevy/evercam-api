@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'web/app'
 
-describe 'WebApp routes/oauth2' do
+describe 'WebApp routes/oauth2_router' do
 
   let(:app) { Evercam::WebApp }
 

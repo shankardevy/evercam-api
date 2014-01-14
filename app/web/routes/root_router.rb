@@ -1,5 +1,7 @@
+require_relative "./web_router"
+
 module Evercam
-  class WebApp
+  class WebRootRouter < WebRouter
 
     get '/' do
       erb 'index'.to_sym

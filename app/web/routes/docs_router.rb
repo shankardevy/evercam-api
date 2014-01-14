@@ -1,5 +1,7 @@
+require_relative "./web_router"
+
 module Evercam
-  class WebApp
+  class WebDocsRouter < WebRouter
 
     get '/docs' do
       erb 'docs/index'.to_sym, layout: 'layouts/docs'.to_sym
