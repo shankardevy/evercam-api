@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'web/app'
 
-describe 'WebApp routes/marketplace' do
+describe 'WebApp routes/marketplace_router' do
 
   let(:app) { Evercam::WebApp }
 

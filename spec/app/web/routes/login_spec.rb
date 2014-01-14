@@ -2,7 +2,7 @@ require 'rack_helper'
 require_app 'web/app'
 require_lib 'actors'
 
-describe 'WebApp routes/login' do
+describe 'WebApp routes/login_router' do
 
   let(:app) { Evercam::WebApp }
 

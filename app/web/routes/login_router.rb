@@ -1,5 +1,7 @@
+require_relative "./web_router"
+
 module Evercam
-  class WebApp
+  class WebLoginRouter < WebRouter
 
     get '/login' do
       rt = params[:rt]

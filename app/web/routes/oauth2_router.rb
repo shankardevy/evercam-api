@@ -1,5 +1,7 @@
+require_relative "./web_router"
+
 module Evercam
-  class WebApp
+  class WebOAuth2Router < WebRouter
 
     get '/oauth2/error' do
     end

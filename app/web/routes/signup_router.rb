@@ -1,8 +1,11 @@
+require_relative "./web_router"
+
 module Evercam
-  class WebApp
+  class WebSignupRouter < WebRouter
 
     get '/signup' do
       @countries = Country.all
+
       erb 'signup'.to_sym
     end
 
