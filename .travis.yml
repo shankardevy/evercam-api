@@ -16,6 +16,11 @@ env:
 branches:
   only: master
 
+notifications:
+  email:
+    recipients:
+      on_success: always
+
 deploy:
   provider: heroku
   app:
