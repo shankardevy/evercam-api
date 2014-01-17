@@ -24,7 +24,7 @@ module Evercam
       user = ::User.by_login(params[:username])
       raise NotFoundError, 'user does not exist' unless user
 
-      cameras = user.streams.select do |s|
+      cameras = user.cameras.select do |s|
         s.is_public || (auth.user && s.has_right?('view', auth.user))
       end
 

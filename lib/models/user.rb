@@ -2,7 +2,7 @@ class User < Sequel::Model
 
   include BCrypt
 
-  one_to_many :streams, key: :owner_id
+  one_to_many :cameras, key: :owner_id
   one_to_many :tokens, class: 'AccessToken', key: :grantor_id
   many_to_one :country
 

@@ -7,13 +7,13 @@ module Evercam
 
       let(:user0) { create(:user) }
 
-      let(:stream0) { create(:stream, owner: user0) }
+      let(:camera0) { create(:camera, owner: user0) }
 
       let(:client0) { create(:client, callback_uris: ['http://a', 'http://b']) }
 
       let(:token0) { create(:access_token, grantor: user0, grantee: client0) }
 
-      let(:atsr0) { create(:access_token_stream_right, token: token0, stream: stream0) }
+      let(:camera_right0) { create(:camera_right, token: token0, camera: camera0) }
 
       subject { Authorize.new(user0, params) }
 
@@ -22,7 +22,7 @@ module Evercam
           response_type: 'token',
           client_id: client0.exid,
           redirect_uri: client0.default_callback_uri,
-          scope: "stream:#{atsr0.name}:#{stream0.name}"
+          scope: "camera:#{camera_right0.name}:#{camera0.name}"
         }
       end
 
@@ -113,8 +113,8 @@ module Evercam
         end
 
         it 'create the new rights for the token' do
-          count = stream0.permissions.
-            where(token: token1, name: atsr0.name).count
+          count = camera0.permissions.
+            where(token: token1, name: camera_right0.name).count
 
           expect(count).to eq(1)
         end
@@ -133,14 +133,14 @@ module Evercam
 
       context 'when the client is missing scope grants' do
 
-        let(:stream1) do
-          create(:stream, owner: user0)
+        let(:camera1) do
+          create(:camera, owner: user0)
         end
 
         let(:params) do
           valid.merge(scope: [
-            "stream:#{atsr0.name}:#{stream0.name}",
-            "stream:#{atsr0.name}:#{stream1.name}"
+            "camera:#{camera_right0.name}:#{camera0.name}",
+            "camera:#{camera_right0.name}:#{camera1.name}"
           ].join(','))
         end
 
@@ -150,21 +150,21 @@ module Evercam
         it 'returns the missing scopes' do
           expect(subject.missing.size).to eq(1)
           expect(subject.missing[0].resource).
-            to eq(stream1)
+            to eq(camera1)
         end
 
       end
 
       context 'when the client approves the missing scopes' do
 
-        let(:stream1) do
-          create(:stream, owner: user0)
+        let(:camera1) do
+          create(:camera, owner: user0)
         end
 
         let(:params) do
           valid.merge(scope: [
-            "stream:#{atsr0.name}:#{stream0.name}",
-            "stream:#{atsr0.name}:#{stream1.name}"
+            "camera:#{camera_right0.name}:#{camera0.name}",
+            "camera:#{camera_right0.name}:#{camera1.name}"
           ].join(','))
         end
 
@@ -178,7 +178,7 @@ module Evercam
         end
 
         it 'create the new rights for the token' do
-          count = AccessTokenStreamRight.where(token: token1).count
+          count = CameraRight.where(token: token1).count
           expect(count).to eq(2)
         end
 
@@ -189,13 +189,13 @@ module Evercam
 
       context 'when the client declines the missing scopes' do
 
-        let(:stream1) do
-          create(:stream, owner: user0)
+        let(:camera1) do
+          create(:camera, owner: user0)
         end
 
         let(:params) do
           valid.merge(scope: [
-            "stream:#{atsr0.name}:#{stream1.name}"
+            "camera:#{camera_right0.name}:#{camera1.name}"
           ].join(','))
         end
 

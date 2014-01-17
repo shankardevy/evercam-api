@@ -5,13 +5,13 @@ describe 'WebApp routes/oauth2_router' do
 
   let(:app) { Evercam::WebApp }
 
-  let(:atsr) { create(:access_token_stream_right) }
+  let(:camera_right) { create(:camera_right) }
 
-  let(:user0) { atsr.stream.owner }
+  let(:user0) { camera_right.camera.owner }
 
-  let(:client0) { atsr.token.grantee }
+  let(:client0) { camera_right.token.grantee }
 
-  let(:stream0) { atsr.stream }
+  let(:camera0) { camera_right.camera }
 
   let(:env) { env_for(session: { user: user0.id }) }
 
@@ -20,7 +20,7 @@ describe 'WebApp routes/oauth2_router' do
       response_type: 'token',
       client_id: client0.exid,
       redirect_uri: client0.default_callback_uri,
-      scope: "stream:#{atsr.name}:#{stream0.name}"
+      scope: "camera:#{camera_right.name}:#{camera0.name}"
     }
   end
 
@@ -56,7 +56,7 @@ describe 'WebApp routes/oauth2_router' do
 
           expect(last_response.status).to eq(302)
           expect(last_response.location).
-            to start_with(atsr.token.grantee.default_callback_uri)
+            to start_with(camera_right.token.grantee.default_callback_uri)
         end
       end
 
@@ -64,16 +64,12 @@ describe 'WebApp routes/oauth2_router' do
 
     context 'when the request is valid' do
 
-
       context 'with the user having previously approved all scopes' do
 
-        let(:params) { valid  }
+        let(:params) { valid }
 
-        before(:each) { get('/oauth2/authorize', params, env) }
-
-        it 'creates a new access token for the client' do
-          client = atsr.token.grantee.reload
-          expect(client.tokens.count).to eq(2)
+        before(:each) do
+          get('/oauth2/authorize', params, env)
         end
 
         it 'redirects back to the redirect_uri' do
@@ -83,18 +79,22 @@ describe 'WebApp routes/oauth2_router' do
         end
 
         it 'includes the new access token in the fragment' do
-          atsr1 = AccessTokenStreamRight.order(:created_at).last
+          camera_right1 = CameraRight.order(:created_at).last
           expect(last_response.location).
-            to have_fragment({ access_token: atsr1.token.request })
+            to have_fragment({ access_token: camera_right1.token.request })
+        end
+
+        it 'creates a new access token for the client' do
+          expect(client0.reload.tokens.count).to eq(2)
         end
 
       end
 
       context 'with the user needing to approve one or more scopes' do
 
-        let(:stream1) { create(:stream, owner: user0) }
+        let(:camera1) { create(:camera, owner: user0) }
 
-        let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
+        let(:params) { valid.merge(scope: "camera:view:#{camera1.name}") }
 
         before(:each) { get('/oauth2/authorize', params, env) }
 
@@ -110,18 +110,18 @@ describe 'WebApp routes/oauth2_router' do
 
   describe 'POST /oauth2/authorize' do
 
-    let(:stream1) { create(:stream, owner: user0) }
+    let(:camera1) { create(:camera, owner: user0) }
 
-    let(:params) { valid.merge(scope: "stream:view:#{stream1.name}") }
+    let(:params) { valid.merge(scope: "camera:view:#{camera1.name}") }
 
     context 'when the user approves the authorization' do
       it 'issues an access token and redirect the user agent' do
         post('/oauth2/authorize', params.merge(action: 'approve'), env)
-        atsr1 = AccessTokenStreamRight.order(:created_at).last
+        camera_right1 = CameraRight.order(:created_at).last
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
-          to have_fragment({ access_token: atsr1.token.request })
+          to have_fragment({ access_token: camera_right1.token.request })
       end
     end
 

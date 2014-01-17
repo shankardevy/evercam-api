@@ -25,5 +25,6 @@ RSpec.configure do |c|
   c.filter_run_excluding skip: true
   c.run_all_when_everything_filtered = true
   c.mock_framework = :mocha
+  c.fail_fast = true if ENV['FAIL_FAST']
 end
 

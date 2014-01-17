@@ -6,8 +6,8 @@ class AccessScope
 
   def resource
     case @tp
-    when /stream/i
-      Stream.by_name(@id)
+    when /camera/i
+      Camera.by_name(@id)
     when /user/i
       User.by_login(@id)
     else nil

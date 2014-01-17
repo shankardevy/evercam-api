@@ -1,7 +1,7 @@
-class Stream < Sequel::Model
+class Camera < Sequel::Model
 
   many_to_one :firmware
-  one_to_many :permissions, class: 'AccessTokenStreamRight'
+  one_to_many :permissions, class: 'CameraRight'
   many_to_one :owner, class: 'User'
 
   def self.by_name(name)

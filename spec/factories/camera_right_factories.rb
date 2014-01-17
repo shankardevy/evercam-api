@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :access_token_stream_right do
+  factory :camera_right do
+    association :camera, factory: :camera
     association :token, factory: :access_token
-    association :stream, factory: :stream
     name 'abcd'
   end
 end

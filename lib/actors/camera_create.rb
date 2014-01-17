@@ -1,6 +1,6 @@
 module Evercam
   module Actors
-    class StreamCreate < Mutations::Command
+    class CameraCreate < Mutations::Command
 
       required do
         string :id
@@ -25,8 +25,8 @@ module Evercam
           add_error(:username, :exists, 'Username does not exist')
         end
 
-        if Stream.by_name(id)
-          add_error(:stream, :exists, 'Stream already exists')
+        if Camera.by_name(id)
+          add_error(:camera, :exists, 'Camera already exists')
         end
 
         unless endpoints && endpoints.size > 0
@@ -35,7 +35,7 @@ module Evercam
       end
 
       def execute
-        Stream.create({
+        Camera.create({
           name: id,
           owner: User.by_login(username),
           is_public: is_public,

@@ -7,7 +7,7 @@ describe 'API routes/cameras' do
 
   describe 'GET /cameras/:id' do
 
-    let(:camera) { create(:stream, is_public: true) }
+    let(:camera) { create(:camera, is_public: true) }
 
     context 'when the camera does not exist' do
       it 'returns a NOT FOUND status' do
@@ -24,7 +24,7 @@ describe 'API routes/cameras' do
 
     context 'when the camera is private' do
 
-      let(:camera) { create(:stream, is_public: false) }
+      let(:camera) { create(:camera, is_public: false) }
 
       context 'when the request is unauthenticated' do
         it 'returns an UNAUTHORIZED status' do
@@ -68,7 +68,7 @@ describe 'API routes/cameras' do
         id: 'my-new-camera',
         is_public: true
       }.merge(
-        build(:stream).config
+        build(:camera).config
       )
     }
 
@@ -83,7 +83,7 @@ describe 'API routes/cameras' do
       end
 
       it 'creates a new camera in the system' do
-        expect(Stream.first.name).to eq(params[:id])
+        expect(Camera.first.name).to eq(params[:id])
       end
 
       it 'returns the new camera data keys' do

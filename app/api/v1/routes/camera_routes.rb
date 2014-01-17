@@ -9,7 +9,7 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:name' do
-      camera = ::Stream.by_name(params[:name])
+      camera = ::Camera.by_name(params[:name])
       raise NotFoundError, 'camera was not found' unless camera
 
       unless camera.is_public? || auth.has_right?('view', camera)
@@ -25,7 +25,7 @@ module Evercam
     post '/cameras' do
       inputs = params.merge(username: auth.user!.username)
 
-      outcome = Actors::StreamCreate.run(inputs)
+      outcome = Actors::CameraCreate.run(inputs)
       raise OutcomeError, outcome unless outcome.success?
       camera = outcome.result
 

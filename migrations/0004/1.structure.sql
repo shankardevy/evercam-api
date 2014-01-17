@@ -11,19 +11,16 @@ ALTER TABLE camera_rights DROP COLUMN name;
 ALTER TABLE camera_rights DROP COLUMN stream_id;
 ALTER TABLE camera_rights DROP COLUMN token_id;
 
-ALTER TABLE camera_rights ADD COLUMN rights text[] NOT NULL;
+ALTER TABLE camera_rights ADD COLUMN name text NOT NULL;
 ALTER TABLE camera_rights ADD COLUMN camera_id int NOT NULL;
-ALTER TABLE camera_rights ADD COLUMN access_token_id int NOT NULL;
-ALTER TABLE camera_rights ADD COLUMN user_id int NOT NULL;
+ALTER TABLE camera_rights ADD COLUMN access_token_id int;
+ALTER TABLE camera_rights ADD COLUMN user_id int;
 
-CREATE INDEX vx_camera_rights_rights
-ON camera_rights USING GIN (rights);
+CREATE UNIQUE INDEX ix_camera_rights_camera_id_access_token_id
+ON camera_rights (camera_id, access_token_id, name);
 
-CREATE INDEX ix_camera_rights_camera_id_access_token_id
-ON camera_rights (camera_id, access_token_id);
-
-CREATE INDEX ix_camera_rights_camera_id_user_id
-ON camera_rights (camera_id, user_id);
+CREATE UNIQUE INDEX ix_camera_rights_camera_id_user_id
+ON camera_rights (camera_id, user_id, name);
 
 ALTER TABLE camera_rights
 ADD CONSTRAINT fk_camera_rights_camera_id
