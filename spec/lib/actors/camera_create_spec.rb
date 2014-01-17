@@ -57,6 +57,16 @@ module Evercam
           expect(errors[:endpoints]).to eq(:size)
         end
 
+        it 'checks each endpoint is a valid uri' do
+          params = valid.merge(endpoints: ['h'])
+
+          outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
+          expect(outcome).to_not be_success
+          expect(errors[:endpoints]).to eq(:valid)
+        end
+
       end
 
     end

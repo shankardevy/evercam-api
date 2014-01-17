@@ -13,7 +13,7 @@ namespace :db do
   require 'sequel'
   namespace :migrate do
 
-    Sequel.extension :migration
+    Sequel.extension :migration, :pg_json, :pg_array
 
     task :up do
       db = Sequel.connect(Evercam::Config[:database])

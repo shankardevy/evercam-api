@@ -2,6 +2,7 @@ class Camera < Sequel::Model
 
   many_to_one :firmware
   one_to_many :permissions, class: 'CameraRight'
+  one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
 
   def self.by_name(name)

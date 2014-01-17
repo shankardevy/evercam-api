@@ -66,6 +66,7 @@ describe 'API routes/cameras' do
     let(:params) {
       {
         id: 'my-new-camera',
+        endpoints: ['http://localhost:1234'],
         is_public: true
       }.merge(
         build(:camera).config

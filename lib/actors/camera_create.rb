@@ -29,22 +29,38 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        unless endpoints && endpoints.size > 0
+        if nil == endpoints || endpoints.size == 0
           add_error(:endpoints, :size, 'Endpoints must contain at least one item')
+        else
+          endpoints.each do |e|
+            unless e =~ URI.regexp
+              add_error(:endpoints, :valid, 'One or more endpoints is not a valid URI')
+            end
+          end
         end
       end
 
       def execute
-        Camera.create({
+        camera = Camera.create({
           name: id,
           owner: User.by_login(username),
           is_public: is_public,
           config: {
-            endpoints: inputs[:endpoints],
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]
           }
         })
+
+        inputs[:endpoints].each do |e|
+          endpoint = URI.parse(e)
+          camera.add_endpoint({
+            scheme: endpoint.scheme,
+            host: endpoint.host,
+            port: endpoint.port
+          })
+        end
+
+        camera
       end
 
     end
