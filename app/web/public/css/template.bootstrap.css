@@ -2634,6 +2634,11 @@ width: 100px;
   color: #373D4D;
 }
 
+.addCamera h4{
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
 #inputArea{
   border: 1px solid #EB5F53;
   border-radius: 5px;
@@ -2821,8 +2826,8 @@ width: 100px;
 }
 
 .applications {
-  padding: 90px 0 45px 0;
-  font-size: 16px;
+  padding: 60px 0 35px 0;
+  font-size: 14px;
 }
 
 .apps{
@@ -2842,6 +2847,9 @@ width: 100px;
   margin-top: 0px;
 }
 
+.permissions{
+    font-size: 14px;
+}
 .permissions .table{
   background: #f7f6f6;
   width: 95%;
@@ -2866,9 +2874,10 @@ width: 100px;
 }
 
 .activityBox{
-  height: 133px;
+  height: 125px;
   background: #f7f6f6;
   padding: 20px 0 0 30px;
+  font-size: 14px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;  
