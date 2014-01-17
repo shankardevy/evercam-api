@@ -4,6 +4,8 @@ module Evercam
 
       required do
         string :id
+        string :name
+
         string :username
         array :endpoints, class: String
         boolean :is_public
@@ -42,9 +44,11 @@ module Evercam
 
       def execute
         camera = Camera.create({
-          name: id,
+          exid: id,
+          name: name,
           owner: User.by_login(username),
           is_public: is_public,
+          is_online: false,
           config: {
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]

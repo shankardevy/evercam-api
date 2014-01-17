@@ -53,8 +53,8 @@ describe 'API routes/cameras' do
     it 'returns all the camera data keys' do
       response = get("/cameras/#{camera.name}")
       expect(response.json['cameras'][0]).to have_keys(
-        'id', 'created_at', 'updated_at', 'is_public',
-        'endpoints', 'snapshots', 'auth')
+        'id', 'name', 'owner', 'created_at', 'updated_at',
+        'is_public', 'is_online', 'endpoints', 'snapshots', 'auth')
     end
 
   end
@@ -66,6 +66,7 @@ describe 'API routes/cameras' do
     let(:params) {
       {
         id: 'my-new-camera',
+        name: "Garrett's Super New Camera",
         endpoints: ['http://localhost:1234'],
         is_public: true
       }.merge(
@@ -84,13 +85,13 @@ describe 'API routes/cameras' do
       end
 
       it 'creates a new camera in the system' do
-        expect(Camera.first.name).to eq(params[:id])
+        expect(Camera.first.exid).
+          to eq(params[:id])
       end
 
-      it 'returns the new camera data keys' do
-        expect(last_response.json['cameras'][0]).to have_keys(
-          'id', 'created_at', 'updated_at', 'is_public',
-          'endpoints', 'snapshots', 'auth')
+      it 'returns the new camera' do
+        expect(last_response.json['cameras'].map{ |s| s['id'] }).
+          to eq([Camera.first.exid])
       end
 
     end

@@ -31,11 +31,13 @@
     <pre><code class='json'>{
   "cameras": [{
     "id": "my-camera-name",
+    "name": "My Fancy New Camera",
     "owner": "{your-username}",
     "created_at": 1387370779,
     "updated_at": 1387370779,
     "endpoints": ["http://176.34.180.134:1234"],
     "is_public": true,
+    "is_online": true,
     "snapshots": {
       "jpg": "/onvif/snapshot"
     },
@@ -138,6 +140,7 @@ evercam.Snapshot.get_snapshot('teststream')
   -H 'Content-Type: application/json' \
   -d '{
         "id": "{my-camera-name}",
+        "name": "My Fancy New Camera",
         "endpoints": ["http://.0.1:8080"],
         "is_public": true,
         "snapshots": {
@@ -155,6 +158,7 @@ evercam.Snapshot.get_snapshot('teststream')
     <pre><code class='json'>{
   "cameras": [{
     "id": "my-camera-name",
+    "name": "My Fancy New Camera",
     "owner": "{your-username}",
     "created_at": 1387370779,
     "updated_at": 1387370779,
