@@ -6,7 +6,6 @@ FactoryGirl.define do
     is_public true
 
     config({
-      endpoints: ['http://127.0.0.1'],
       snapshots: {
         jpg: '/onvif/snapshot'
       },

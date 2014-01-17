@@ -52,7 +52,7 @@ module Evercam
           type: 'string'
         }
       } do |s,o|
-        s.config['endpoints']
+        s.endpoints.map(&:to_s)
       end
 
       expose :snapshots, documentation: {

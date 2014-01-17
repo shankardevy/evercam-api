@@ -20,5 +20,7 @@ require_relative './models/access_right'
 
 require_relative './models/user'
 require_relative './models/country'
+
 require_relative './models/camera'
+require_relative './models/camera_endpoint'
 
