@@ -2742,20 +2742,25 @@ width: 100px;
 }
 
 .online{
-  padding: 0 0 5px 0;
+  padding: 0px;
   position: relative;
   margin-bottom: none;
 }
 
+.online h4{
+  padding: 0px;
+  margin: 0;
+}
+
 .offline{
-  padding: 0 0 5px 0;
+  padding: 0px;
   position: relative;
   margin-bottom: none;
 }
 
 .positionTest{
   position: absolute;
-  top: 14px;
+  top: 5px;
   right: 0;
 }
 
@@ -2817,6 +2822,7 @@ width: 100px;
 
 .applications {
   padding: 90px 0 45px 0;
+  font-size: 16px;
 }
 
 .apps{
@@ -2849,8 +2855,14 @@ width: 100px;
   width:33.333px;
 }
 
-.permissions .table td, th{
-  text-align:center;
+.permissions .table td, th, tr{
+  text-align:left;
+  vertical-align: middle;
+}
+
+.permissions  i{
+    padding-left: 10px;
+    color:#99BBD6;
 }
 
 .activityBox{
