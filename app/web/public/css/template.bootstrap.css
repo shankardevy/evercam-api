@@ -2714,6 +2714,7 @@ width: 100px;
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 3px;
+  margin-top: 5px;
 }
 
 .streamList p{
@@ -2753,7 +2754,12 @@ width: 100px;
 }
 
 .online h4{
-  padding: 0px;
+  padding: 0 0 10px 0;
+  margin: 0;
+}
+
+.offline h4{
+  padding: 0 0 10px 0;
   margin: 0;
 }
 
@@ -2767,6 +2773,14 @@ width: 100px;
   position: absolute;
   top: 5px;
   right: 0;
+}
+
+.positionTest p{
+  margin: 0;
+}
+
+.positionTest i{
+  padding-left: 30px;
 }
 
 .online i{
@@ -2820,9 +2834,42 @@ width: 100px;
   border-color: #285e8e;
 }
 
+.settingsButton {
+  padding: 10px 0 25px 0;
+  float: left;
+}
+
+.settingsButton .btn-primary {
+  color: #fff;
+  background-color: #759fc0;
+  border-color: #759fc0;
+}
+
+.settingsButton .btn-primary {
+  color: #fff;
+  background-color: #759fc0;
+  border-color: #759fc0;
+}
+
+.settingsButton  .btn-primary:hover, 
+.btn-primary:focus, 
+.btn-primary:active, 
+.btn-primary.active, 
+.open .dropdown-toggle
+.btn-primary {
+  color: #fff;
+  background-color: #3276b1;
+  border-color: #285e8e;
+}
+
 .camAddress i{
   color: #99bbd6;
   padding-right: 5px;
+}
+
+.camAddress p{
+  line-height: 2px;
+  margin: 0 0 10px 0;
 }
 
 .applications {
@@ -2875,8 +2922,9 @@ width: 100px;
 
 .activityBox{
   height: 125px;
+  overflow: auto;
   background: #f7f6f6;
-  padding: 20px 0 0 30px;
+  padding: 10px 0 0 15px;
   font-size: 14px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
