@@ -10,14 +10,14 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -30,7 +30,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: _schema; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: _schema; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE _schema (
@@ -39,10 +39,8 @@ CREATE TABLE _schema (
 );
 
 
-ALTER TABLE public._schema OWNER TO garrett;
-
 --
--- Name: sq_access_tokens; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_access_tokens; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_access_tokens
@@ -53,10 +51,8 @@ CREATE SEQUENCE sq_access_tokens
     CACHE 1;
 
 
-ALTER TABLE public.sq_access_tokens OWNER TO garrett;
-
 --
--- Name: access_tokens; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: access_tokens; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE access_tokens (
@@ -72,10 +68,8 @@ CREATE TABLE access_tokens (
 );
 
 
-ALTER TABLE public.access_tokens OWNER TO garrett;
-
 --
--- Name: sq_access_tokens_streams_rights; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_access_tokens_streams_rights; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_access_tokens_streams_rights
@@ -86,10 +80,8 @@ CREATE SEQUENCE sq_access_tokens_streams_rights
     CACHE 1;
 
 
-ALTER TABLE public.sq_access_tokens_streams_rights OWNER TO garrett;
-
 --
--- Name: access_tokens_streams_rights; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: access_tokens_streams_rights; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE access_tokens_streams_rights (
@@ -102,10 +94,8 @@ CREATE TABLE access_tokens_streams_rights (
 );
 
 
-ALTER TABLE public.access_tokens_streams_rights OWNER TO garrett;
-
 --
--- Name: sq_clients; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_clients; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_clients
@@ -116,10 +106,8 @@ CREATE SEQUENCE sq_clients
     CACHE 1;
 
 
-ALTER TABLE public.sq_clients OWNER TO garrett;
-
 --
--- Name: clients; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: clients; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE clients (
@@ -133,10 +121,8 @@ CREATE TABLE clients (
 );
 
 
-ALTER TABLE public.clients OWNER TO garrett;
-
 --
--- Name: sq_countries; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_countries; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_countries
@@ -147,10 +133,8 @@ CREATE SEQUENCE sq_countries
     CACHE 1;
 
 
-ALTER TABLE public.sq_countries OWNER TO garrett;
-
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE countries (
@@ -162,10 +146,8 @@ CREATE TABLE countries (
 );
 
 
-ALTER TABLE public.countries OWNER TO garrett;
-
 --
--- Name: sq_devices; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_devices; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_devices
@@ -176,10 +158,8 @@ CREATE SEQUENCE sq_devices
     CACHE 1;
 
 
-ALTER TABLE public.sq_devices OWNER TO garrett;
-
 --
--- Name: devices; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: devices; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE devices (
@@ -193,10 +173,8 @@ CREATE TABLE devices (
 );
 
 
-ALTER TABLE public.devices OWNER TO garrett;
-
 --
--- Name: sq_firmwares; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_firmwares; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_firmwares
@@ -207,10 +185,8 @@ CREATE SEQUENCE sq_firmwares
     CACHE 1;
 
 
-ALTER TABLE public.sq_firmwares OWNER TO garrett;
-
 --
--- Name: firmwares; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: firmwares; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE firmwares (
@@ -224,10 +200,8 @@ CREATE TABLE firmwares (
 );
 
 
-ALTER TABLE public.firmwares OWNER TO garrett;
-
 --
--- Name: sq_streams; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_streams; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_streams
@@ -238,10 +212,8 @@ CREATE SEQUENCE sq_streams
     CACHE 1;
 
 
-ALTER TABLE public.sq_streams OWNER TO garrett;
-
 --
--- Name: sq_users; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_users; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_users
@@ -252,10 +224,8 @@ CREATE SEQUENCE sq_users
     CACHE 1;
 
 
-ALTER TABLE public.sq_users OWNER TO garrett;
-
 --
--- Name: sq_vendors; Type: SEQUENCE; Schema: public; Owner: garrett
+-- Name: sq_vendors; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE sq_vendors
@@ -266,10 +236,8 @@ CREATE SEQUENCE sq_vendors
     CACHE 1;
 
 
-ALTER TABLE public.sq_vendors OWNER TO garrett;
-
 --
--- Name: streams; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: streams; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE streams (
@@ -284,10 +252,8 @@ CREATE TABLE streams (
 );
 
 
-ALTER TABLE public.streams OWNER TO garrett;
-
 --
--- Name: streams_old; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: streams_old; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE streams_old (
@@ -302,10 +268,8 @@ CREATE TABLE streams_old (
 );
 
 
-ALTER TABLE public.streams_old OWNER TO garrett;
-
 --
--- Name: users; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -322,10 +286,8 @@ CREATE TABLE users (
 );
 
 
-ALTER TABLE public.users OWNER TO garrett;
-
 --
--- Name: vendors; Type: TABLE; Schema: public; Owner: garrett; Tablespace: 
+-- Name: vendors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE vendors (
@@ -338,10 +300,8 @@ CREATE TABLE vendors (
 );
 
 
-ALTER TABLE public.vendors OWNER TO garrett;
-
 --
--- Name: pk_access_tokens; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_access_tokens; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY access_tokens
@@ -349,7 +309,7 @@ ALTER TABLE ONLY access_tokens
 
 
 --
--- Name: pk_access_tokens_streams_rights; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_access_tokens_streams_rights; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY access_tokens_streams_rights
@@ -357,7 +317,7 @@ ALTER TABLE ONLY access_tokens_streams_rights
 
 
 --
--- Name: pk_clients; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_clients; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY clients
@@ -365,7 +325,7 @@ ALTER TABLE ONLY clients
 
 
 --
--- Name: pk_countries; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_countries; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY countries
@@ -373,7 +333,7 @@ ALTER TABLE ONLY countries
 
 
 --
--- Name: pk_devices; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_devices; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY devices
@@ -381,7 +341,7 @@ ALTER TABLE ONLY devices
 
 
 --
--- Name: pk_firmwares; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_firmwares; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY firmwares
@@ -389,7 +349,7 @@ ALTER TABLE ONLY firmwares
 
 
 --
--- Name: pk_schema; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_schema; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY _schema
@@ -397,7 +357,7 @@ ALTER TABLE ONLY _schema
 
 
 --
--- Name: pk_streams; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_streams; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY streams
@@ -405,7 +365,7 @@ ALTER TABLE ONLY streams
 
 
 --
--- Name: pk_streams_old; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_streams_old; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY streams_old
@@ -413,7 +373,7 @@ ALTER TABLE ONLY streams_old
 
 
 --
--- Name: pk_users; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_users; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -421,7 +381,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: pk_vendors; Type: CONSTRAINT; Schema: public; Owner: garrett; Tablespace: 
+-- Name: pk_vendors; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY vendors
@@ -429,119 +389,119 @@ ALTER TABLE ONLY vendors
 
 
 --
--- Name: ix_access_tokens_grantee_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_access_tokens_grantee_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_access_tokens_grantee_id ON access_tokens USING btree (grantee_id);
 
 
 --
--- Name: ix_access_tokens_grantor_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_access_tokens_grantor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_access_tokens_grantor_id ON access_tokens USING btree (grantor_id);
 
 
 --
--- Name: ix_devices_firmware_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_devices_firmware_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_devices_firmware_id ON devices USING btree (firmware_id);
 
 
 --
--- Name: ix_firmwares_vendor_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_firmwares_vendor_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_firmwares_vendor_id ON firmwares USING btree (vendor_id);
 
 
 --
--- Name: ix_streams_device_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_streams_device_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_streams_device_id ON streams_old USING btree (device_id);
 
 
 --
--- Name: ix_streams_owner_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_streams_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_streams_owner_id ON streams USING btree (owner_id);
 
 
 --
--- Name: ix_users_country_id; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ix_users_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX ix_users_country_id ON users USING btree (country_id);
 
 
 --
--- Name: ux_access_tokens_request; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_access_tokens_request; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_access_tokens_request ON access_tokens USING btree (request);
 
 
 --
--- Name: ux_access_tokens_streams_rights_m_n; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_access_tokens_streams_rights_m_n; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_access_tokens_streams_rights_m_n ON access_tokens_streams_rights USING btree (token_id, stream_id, name);
 
 
 --
--- Name: ux_clients_exid; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_clients_exid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_clients_exid ON clients USING btree (exid);
 
 
 --
--- Name: ux_countries_iso3166_a2; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_countries_iso3166_a2; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_countries_iso3166_a2 ON countries USING btree (iso3166_a2);
 
 
 --
--- Name: ux_streams_name; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_streams_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_streams_name ON streams USING btree (name);
 
 
 --
--- Name: ux_users_email; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_users_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_users_email ON users USING btree (email);
 
 
 --
--- Name: ux_users_username; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_users_username; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_users_username ON users USING btree (username);
 
 
 --
--- Name: ux_vendors_exid; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: ux_vendors_exid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX ux_vendors_exid ON vendors USING btree (exid);
 
 
 --
--- Name: vx_vendors_known_macs; Type: INDEX; Schema: public; Owner: garrett; Tablespace: 
+-- Name: vx_vendors_known_macs; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX vx_vendors_known_macs ON vendors USING gin (known_macs);
 
 
 --
--- Name: fk_access_tokens_grantee_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_access_tokens_grantee_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY access_tokens
@@ -549,7 +509,7 @@ ALTER TABLE ONLY access_tokens
 
 
 --
--- Name: fk_access_tokens_grantor_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_access_tokens_grantor_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY access_tokens
@@ -557,7 +517,7 @@ ALTER TABLE ONLY access_tokens
 
 
 --
--- Name: fk_access_tokens_streams_rights_stream_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_access_tokens_streams_rights_stream_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY access_tokens_streams_rights
@@ -565,7 +525,7 @@ ALTER TABLE ONLY access_tokens_streams_rights
 
 
 --
--- Name: fk_access_tokens_streams_rights_token_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_access_tokens_streams_rights_token_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY access_tokens_streams_rights
@@ -573,7 +533,7 @@ ALTER TABLE ONLY access_tokens_streams_rights
 
 
 --
--- Name: fk_devices_firmware_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_devices_firmware_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY devices
@@ -581,7 +541,7 @@ ALTER TABLE ONLY devices
 
 
 --
--- Name: fk_firmwares_vendor_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_firmwares_vendor_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY firmwares
@@ -589,7 +549,7 @@ ALTER TABLE ONLY firmwares
 
 
 --
--- Name: fk_streams_device_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_streams_device_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY streams_old
@@ -597,7 +557,7 @@ ALTER TABLE ONLY streams_old
 
 
 --
--- Name: fk_streams_firmware_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_streams_firmware_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY streams
@@ -605,7 +565,7 @@ ALTER TABLE ONLY streams
 
 
 --
--- Name: fk_streams_owner_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_streams_owner_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY streams_old
@@ -613,7 +573,7 @@ ALTER TABLE ONLY streams_old
 
 
 --
--- Name: fk_streams_owner_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_streams_owner_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY streams
@@ -621,7 +581,7 @@ ALTER TABLE ONLY streams
 
 
 --
--- Name: fk_users_country_id; Type: FK CONSTRAINT; Schema: public; Owner: garrett
+-- Name: fk_users_country_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY users
@@ -629,12 +589,10 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: public; Type: ACL; Schema: -; Owner: garrett
+-- Name: public; Type: ACL; Schema: -; Owner: -
 --
 
 REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM garrett;
-GRANT ALL ON SCHEMA public TO garrett;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
