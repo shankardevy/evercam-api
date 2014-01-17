@@ -14,15 +14,10 @@ namespace :db do
   namespace :migrate do
 
     Sequel.extension :migration
-    DB = Sequel.connect(Evercam::Config[:database])
-    MIGRATIONS = 'migrations'
 
     task :up do
-      Sequel::Migrator.run(DB, MIGRATIONS)
-    end
-
-    task :down do
-      Sequel::Migrator.run(DB, MIGRATIONS, :target => 0)
+      db = Sequel.connect(Evercam::Config[:database])
+      Sequel::Migrator.run(db, 'migrations')
     end
 
   end

@@ -1,6 +1,10 @@
 #!/bin/sh
-createdb evercam_tst
-for sql in `find ./migrations -name '*.structure.sql' | sort`; do
-  psql evercam_tst < $sql
-done
+export EVERCAM_ENV="test"
+SCHEMA="./migrations/20140117140552.dump"
+
+dropdb --if-exists evercam_tst \
+  && createdb evercam_tst \
+  && psql evercam_tst < $SCHEMA
+
+bundle exec rake db:migrate:up
 
