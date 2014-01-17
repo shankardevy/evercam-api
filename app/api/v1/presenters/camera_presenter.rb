@@ -20,6 +20,12 @@ module Evercam
         required: true
       }
 
+      expose :is_public, documentation: {
+        type: 'boolean',
+        desc: 'Whether or not this camera is publically available',
+        required: true
+      }
+
       with_options(format_with: :timestamp) do
 
         expose :created_at, documentation: {
@@ -34,18 +40,12 @@ module Evercam
           required: true
         }
 
-        expose :heartbeat_at, documentation: {
+        expose :last_heartbeat_at, documentation: {
           type: 'integer',
           desc: 'Unix timestamp at last heartbeat check'
         }
 
       end
-
-      expose :is_public, documentation: {
-        type: 'boolean',
-        desc: 'Whether or not this camera is publically available',
-        required: true
-      }
 
       expose :is_online, documentation: {
         type: 'boolean',

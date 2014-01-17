@@ -6,7 +6,7 @@ Sequel.migration do
       rename_column :name, :exid
       add_column :name, :text
       add_column :is_online, :boolean
-      add_column :heartbeat_at, :timestamptz
+      add_column :last_heartbeat_at, :timestamptz
     end
 
     from(:cameras).update({
