@@ -3,7 +3,7 @@
 .env
 .project
 
-schema/*.dump
+*.dump
 
 spec/cassettes
 coverage/
