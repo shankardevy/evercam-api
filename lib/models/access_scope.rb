@@ -7,7 +7,7 @@ class AccessScope
   def resource
     case @tp
     when /camera/i
-      Camera.by_name(@id)
+      Camera.by_exid(@id)
     when /user/i
       User.by_login(@id)
     else nil

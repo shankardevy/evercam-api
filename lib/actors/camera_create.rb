@@ -27,7 +27,7 @@ module Evercam
           add_error(:username, :exists, 'Username does not exist')
         end
 
-        if Camera.by_name(id)
+        if Camera.by_exid(id)
           add_error(:camera, :exists, 'Camera already exists')
         end
 

@@ -17,7 +17,7 @@ describe 'API routes/cameras' do
 
     context 'when the camera is public' do
       it 'returns the camera data' do
-        response = get("/cameras/#{camera.name}")
+        response = get("/cameras/#{camera.exid}")
         expect(response.status).to eq(200)
       end
     end
@@ -28,7 +28,7 @@ describe 'API routes/cameras' do
 
       context 'when the request is unauthenticated' do
         it 'returns an UNAUTHORIZED status' do
-          expect(get("/cameras/#{camera.name}").status).to eq(401)
+          expect(get("/cameras/#{camera.exid}").status).to eq(401)
         end
       end
 
@@ -36,7 +36,7 @@ describe 'API routes/cameras' do
         it 'returns a FORBIDDEN status' do
           create(:user, username: 'xxxx', password: 'yyyy')
           env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          expect(get("/cameras/#{camera.name}", {}, env).status).to eq(403)
+          expect(get("/cameras/#{camera.exid}", {}, env).status).to eq(403)
         end
       end
 
@@ -44,14 +44,14 @@ describe 'API routes/cameras' do
         it 'returns the camera data' do
           camera.update(owner: create(:user, username: 'xxxx', password: 'yyyy'))
           env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          expect(get("/cameras/#{camera.name}", {}, env).status).to eq(200)
+          expect(get("/cameras/#{camera.exid}", {}, env).status).to eq(200)
         end
       end
 
     end
 
     it 'returns all the camera data keys' do
-      response = get("/cameras/#{camera.name}")
+      response = get("/cameras/#{camera.exid}")
       expect(response.json['cameras'][0]).to have_keys(
         'id', 'name', 'owner', 'created_at', 'updated_at',
         'is_public', 'is_online', 'endpoints', 'snapshots', 'auth')

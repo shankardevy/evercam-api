@@ -8,6 +8,7 @@ module Evercam
       let(:valid) do
         {
           id: 'my-new-camera',
+          name: 'My Fancy New Camera',
           username: create(:user).username,
           endpoints: ['http://localhost:9393'],
           is_public: true,
@@ -38,7 +39,7 @@ module Evercam
         end
 
         it 'checks the camera does not already exist' do
-          params = valid.merge(id: create(:camera).name)
+          params = valid.merge(id: create(:camera).exid)
 
           outcome = subject.run(params)
           errors = outcome.errors.symbolic

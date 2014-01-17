@@ -8,8 +8,8 @@ module Evercam
     desc 'Returns all data for a given camera', {
       entity: Evercam::Presenters::Camera
     }
-    get '/cameras/:name' do
-      camera = ::Camera.by_name(params[:name])
+    get '/cameras/:id' do
+      camera = ::Camera.by_exid(params[:id])
       raise NotFoundError, 'camera was not found' unless camera
 
       unless camera.is_public? || auth.has_right?('view', camera)

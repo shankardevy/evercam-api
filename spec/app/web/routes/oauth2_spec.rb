@@ -20,7 +20,7 @@ describe 'WebApp routes/oauth2_router' do
       response_type: 'token',
       client_id: client0.exid,
       redirect_uri: client0.default_callback_uri,
-      scope: "camera:#{camera_right.name}:#{camera0.name}"
+      scope: "camera:#{camera_right.name}:#{camera0.exid}"
     }
   end
 
@@ -94,7 +94,7 @@ describe 'WebApp routes/oauth2_router' do
 
         let(:camera1) { create(:camera, owner: user0) }
 
-        let(:params) { valid.merge(scope: "camera:view:#{camera1.name}") }
+        let(:params) { valid.merge(scope: "camera:view:#{camera1.exid}") }
 
         before(:each) { get('/oauth2/authorize', params, env) }
 
@@ -112,7 +112,7 @@ describe 'WebApp routes/oauth2_router' do
 
     let(:camera1) { create(:camera, owner: user0) }
 
-    let(:params) { valid.merge(scope: "camera:view:#{camera1.name}") }
+    let(:params) { valid.merge(scope: "camera:view:#{camera1.exid}") }
 
     context 'when the user approves the authorization' do
       it 'issues an access token and redirect the user agent' do
