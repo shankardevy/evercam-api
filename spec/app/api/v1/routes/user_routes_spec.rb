@@ -50,8 +50,8 @@ describe 'API routes/users' do
   describe 'GET /users/{username}/cameras' do
 
     let!(:user0) { create(:user) }
-    let!(:camera0) { create(:stream, owner: user0, is_public: true) }
-    let!(:camera1) { create(:stream, owner: user0, is_public: false) }
+    let!(:camera0) { create(:camera, owner: user0, is_public: true) }
+    let!(:camera1) { create(:camera, owner: user0, is_public: false) }
 
     context 'when the user does not exist' do
       it 'returns a NOT FOUND status' do

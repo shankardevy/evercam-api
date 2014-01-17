@@ -42,7 +42,7 @@ module Evercam
         scopes.select do |s|
           tokens = client.tokens.map(&:id)
           0 == s.resource.permissions.
-            where(token_id: tokens, name: s.right).
+            where(access_token_id: tokens, name: s.right).
             count
         end
       end
@@ -93,7 +93,7 @@ module Evercam
         @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
           scopes.each do |s|
             #TODO: t.add_right(s.right, s.resource)
-            AccessTokenStreamRight.create(token: t, name: s.right, stream: s.resource)
+            CameraRight.create(token: t, name: s.right, camera: s.resource)
           end
         end
       end

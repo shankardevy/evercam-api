@@ -4,7 +4,7 @@ describe AccessScope do
 
   subject { AccessScope }
 
-  let(:stream) { create(:stream) }
+  let(:camera) { create(:camera) }
 
   let(:user) { create(:user) }
 
@@ -12,15 +12,15 @@ describe AccessScope do
 
     context 'when the type is unknown' do
       it 'returns nil' do
-        scope = subject.new("xxxx:view:#{stream.name}")
+        scope = subject.new("xxxx:view:#{camera.name}")
         expect(scope.resource).to be_nil
       end
     end
 
-    context 'when it is a stream' do
-      it 'returns the instance of the stream' do
-        scope = subject.new("stream:view:#{stream.name}")
-        expect(scope.resource).to eq(stream)
+    context 'when it is a camera' do
+      it 'returns the instance of the camera' do
+        scope = subject.new("camera:view:#{camera.name}")
+        expect(scope.resource).to eq(camera)
       end
     end
 
@@ -44,14 +44,14 @@ describe AccessScope do
 
     context 'when the resource does not exist' do
       it 'returns false' do
-        scope = subject.new("stream:view:yyyy")
+        scope = subject.new("camera:view:yyyy")
         expect(scope.valid?).to eq(false)
       end
     end
 
     context 'when the resource exists' do
       it 'returns true' do
-        scope = subject.new("stream:view:#{stream.name}")
+        scope = subject.new("camera:view:#{camera.name}")
         expect(scope.valid?).to eq(true)
       end
     end

@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :stream do
+  factory :camera do
 
     association :owner, factory: :user
     sequence(:name) { |n| "stream#{n}" }
