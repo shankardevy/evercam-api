@@ -34,6 +34,11 @@ module Evercam
           required: true
         }
 
+        expose :heartbeat_at, documentation: {
+          type: 'integer',
+          desc: 'Unix timestamp at last heartbeat check'
+        }
+
       end
 
       expose :is_public, documentation: {
@@ -44,8 +49,7 @@ module Evercam
 
       expose :is_online, documentation: {
         type: 'boolean',
-        desc: 'Whether or not this camera is currently online',
-        required: true
+        desc: 'Whether or not this camera is currently online'
       }
 
       expose :owner, documentation: {

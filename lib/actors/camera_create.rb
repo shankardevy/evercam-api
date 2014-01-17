@@ -48,7 +48,6 @@ module Evercam
           name: name,
           owner: User.by_login(username),
           is_public: is_public,
-          is_online: false,
           config: {
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]
