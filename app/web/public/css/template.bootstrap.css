@@ -2172,6 +2172,21 @@ width: 100px;
   width: 180px;
 }
 
+#signUp_button{
+  background: none repeat scroll 0 0 #EB5F53;
+  border: 0 none;
+  border-radius: 5px;
+  color: #FFFFFF;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 800;
+  height: 40px;
+  line-height: 45px;
+  padding: 0;
+  text-transform: uppercase;
+  width: 120px;
+}
+
 .form-group{
   margin-bottom: 20px;
 }
@@ -2696,7 +2711,6 @@ font-weight: normal;
 }
 
 .form-horizontal .control-label{
-  padding: 7px 0 0 0;
   color: #4D4D4D;
   font-size: 14px;
   margin: 0;
