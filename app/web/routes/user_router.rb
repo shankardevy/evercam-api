@@ -11,5 +11,9 @@ module Evercam
 
     end
 
+    get '/users/:username/cameras/:camera' do |username, camera|
+      erb 'users/cameras/view'.to_sym
+    end
+
   end
 end
