@@ -20,8 +20,8 @@ module Evercam
     desc 'Returns the set of cameras owned by a particular user', {
       entity: Evercam::Presenters::Camera
     }
-    get '/users/:username/cameras' do
-      user = ::User.by_login(params[:username])
+    get '/users/:id/cameras' do
+      user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
 
       cameras = user.cameras.select do |s|

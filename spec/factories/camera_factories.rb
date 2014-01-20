@@ -1,9 +1,13 @@
 FactoryGirl.define do
   factory :camera do
 
+    sequence(:exid) { |n| "exid#{n}" }
+    sequence(:name) { |n| "name#{n}" }
+
     association :owner, factory: :user
-    sequence(:name) { |n| "stream#{n}" }
+
     is_public true
+    is_online true
 
     config({
       snapshots: {

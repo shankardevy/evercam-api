@@ -5,8 +5,8 @@ class Camera < Sequel::Model
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
 
-  def self.by_name(name)
-    first(name: name)
+  def self.by_exid(exid)
+    first(exid: exid)
   end
 
   def has_right?(right, seeker)

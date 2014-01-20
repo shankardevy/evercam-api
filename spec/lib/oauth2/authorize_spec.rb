@@ -22,7 +22,7 @@ module Evercam
           response_type: 'token',
           client_id: client0.exid,
           redirect_uri: client0.default_callback_uri,
-          scope: "camera:#{camera_right0.name}:#{camera0.name}"
+          scope: "camera:#{camera_right0.name}:#{camera0.exid}"
         }
       end
 
@@ -139,8 +139,8 @@ module Evercam
 
         let(:params) do
           valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera0.name}",
-            "camera:#{camera_right0.name}:#{camera1.name}"
+            "camera:#{camera_right0.name}:#{camera0.exid}",
+            "camera:#{camera_right0.name}:#{camera1.exid}"
           ].join(','))
         end
 
@@ -163,8 +163,8 @@ module Evercam
 
         let(:params) do
           valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera0.name}",
-            "camera:#{camera_right0.name}:#{camera1.name}"
+            "camera:#{camera_right0.name}:#{camera0.exid}",
+            "camera:#{camera_right0.name}:#{camera1.exid}"
           ].join(','))
         end
 
@@ -195,7 +195,7 @@ module Evercam
 
         let(:params) do
           valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera1.name}"
+            "camera:#{camera_right0.name}:#{camera1.exid}"
           ].join(','))
         end
 

@@ -4,6 +4,8 @@ module Evercam
 
       required do
         string :id
+        string :name
+
         string :username
         array :endpoints, class: String
         boolean :is_public
@@ -25,7 +27,7 @@ module Evercam
           add_error(:username, :exists, 'Username does not exist')
         end
 
-        if Camera.by_name(id)
+        if Camera.by_exid(id)
           add_error(:camera, :exists, 'Camera already exists')
         end
 
@@ -42,7 +44,8 @@ module Evercam
 
       def execute
         camera = Camera.create({
-          name: id,
+          exid: id,
+          name: name,
           owner: User.by_login(username),
           is_public: is_public,
           config: {

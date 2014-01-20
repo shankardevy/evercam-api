@@ -69,15 +69,9 @@ describe 'API routes/users' do
 
       before(:each) { get("/users/#{user0.username}/cameras") }
 
-      it 'returns the camera data' do
-        expect(last_response.json['cameras'][0]).to have_keys(
-          'id', 'owner', 'created_at', 'updated_at',
-          'is_public', 'endpoints', 'snapshots', 'auth')
-      end
-
       it 'only returns public cameras' do
         expect(last_response.json['cameras'].map{ |s| s['id'] }).
-          to eq([camera0.name])
+          to eq([camera0.exid])
       end
 
     end
@@ -88,15 +82,9 @@ describe 'API routes/users' do
 
       before(:each) { get("/users/#{user0.username}/cameras", {}, auth) }
 
-      it 'returns the camera data' do
-        expect(last_response.json['cameras'][0]).to have_keys(
-          'id', 'owner', 'created_at', 'updated_at',
-          'is_public', 'endpoints', 'snapshots', 'auth')
-      end
-
       it 'only returns public and private cameras' do
         expect(last_response.json['cameras'].map{ |s| s['id'] }).
-          to eq([camera0.name, camera1.name])
+          to eq([camera0.exid, camera1.exid])
       end
 
     end

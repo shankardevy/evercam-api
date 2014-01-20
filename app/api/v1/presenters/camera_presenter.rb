@@ -8,11 +8,23 @@ module Evercam
 
       expose :id, documentation: {
         type: 'string',
-        desc: 'Unqiue Evercam name of the camera',
+        desc: 'Unqiue Evercam identifier for the camera',
         required: true
       } do |s,o|
-        s.name
+        s.exid
       end
+
+      expose :name, documentation: {
+        type: 'string',
+        desc: 'Human readable / friendly name for the camera',
+        required: true
+      }
+
+      expose :is_public, documentation: {
+        type: 'boolean',
+        desc: 'Whether or not this camera is publically available',
+        required: true
+      }
 
       with_options(format_with: :timestamp) do
 
@@ -28,12 +40,16 @@ module Evercam
           required: true
         }
 
+        expose :polled_at, documentation: {
+          type: 'integer',
+          desc: 'Unix timestamp at last heartbeat poll'
+        }
+
       end
 
-      expose :is_public, documentation: {
+      expose :is_online, documentation: {
         type: 'boolean',
-        desc: 'Whether or not this camera is publically available',
-        required: true
+        desc: 'Whether or not this camera is currently online'
       }
 
       expose :owner, documentation: {

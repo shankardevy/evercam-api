@@ -12,14 +12,14 @@ describe AccessScope do
 
     context 'when the type is unknown' do
       it 'returns nil' do
-        scope = subject.new("xxxx:view:#{camera.name}")
+        scope = subject.new("xxxx:view:#{camera.exid}")
         expect(scope.resource).to be_nil
       end
     end
 
     context 'when it is a camera' do
       it 'returns the instance of the camera' do
-        scope = subject.new("camera:view:#{camera.name}")
+        scope = subject.new("camera:view:#{camera.exid}")
         expect(scope.resource).to eq(camera)
       end
     end
@@ -51,7 +51,7 @@ describe AccessScope do
 
     context 'when the resource exists' do
       it 'returns true' do
-        scope = subject.new("camera:view:#{camera.name}")
+        scope = subject.new("camera:view:#{camera.exid}")
         expect(scope.valid?).to eq(true)
       end
     end
