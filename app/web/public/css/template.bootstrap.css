@@ -2206,7 +2206,14 @@ width: 100px;
 
 .signup{
   color: #4D4D4D;
-  font-size: 25px;
+  font-size: 22px;
+  margin: 0 0 10px 0;
+}
+
+.signup p{
+  color: #4D4D4D;
+  font-size: 22px;
+    margin: 0 0 10px 0;
 }
 
 .signup a{
@@ -2221,6 +2228,13 @@ width: 100px;
 .account p{
   text-align: center;
   padding-top: 60px;
+  font-weight: normal;
+}
+
+.signup label {
+display: inline-block;
+margin-bottom: 5px;
+font-weight: normal;
 }
 
 /*************updates to login page ****************/
