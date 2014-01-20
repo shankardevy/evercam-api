@@ -878,7 +878,7 @@ ul.list-testimonials li:first-child {
 }
 
 .list-blog h4 {
-  margin: 0 0 0 0
+  margin: 0 0 0 0;
 }
 
 .list-blog .pull-left {
@@ -1362,8 +1362,6 @@ footer span a:hover {
   }
 
 }
-
-
 
 @media (max-width: 991px) {
 
@@ -2747,7 +2745,7 @@ font-weight: normal;
 }
 
 .streamList{
-  padding: 10px 0 0 0;
+  padding: 10px 0 10px 0;
 }
 
 .streamList h4{
@@ -2803,7 +2801,6 @@ font-weight: normal;
 }
 
 .offline h4{
-  padding: 0 0 10px 0;
   margin: 0;
 }
 
@@ -2930,7 +2927,7 @@ font-weight: normal;
 }
 
 .permissions{
-    font-size: 14px;
+  font-size: 14px;
 }
 .permissions .table{
   background: #f7f6f6;
