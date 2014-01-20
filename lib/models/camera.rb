@@ -22,6 +22,11 @@ class Camera < Sequel::Model
     end
   end
 
+  def timezone
+    Timezone::Zone.new zone:
+      (values[:timezone] || 'Etc/UTC')
+  end
+
   def config
     fconf = firmware ? firmware.config : {}
     fconf.deep_merge(values[:config] || {})

@@ -57,6 +57,20 @@ describe Camera do
 
   end
 
+  describe '#timezone' do
+
+    it 'defaults to UTC when no zone is specified' do
+      expect(build(:camera, timezone: nil).timezone).
+        to eq(Timezone::Zone.new zone: 'Etc/UTC')
+    end
+
+    it 'returns the correct zone instance when on is set' do
+      expect(build(:camera, timezone: 'America/Chicago').timezone).
+        to eq(Timezone::Zone.new zone: 'America/Chicago')
+    end
+
+  end
+
   describe '#config' do
 
     let(:firmware0) { create(:firmware, config: { 'a' => 'xxxx' }) }
