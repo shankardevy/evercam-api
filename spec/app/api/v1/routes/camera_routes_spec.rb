@@ -55,7 +55,7 @@ describe 'API routes/cameras' do
       expect(response.json['cameras'][0]).to have_keys(
         'id', 'name', 'owner', 'created_at', 'updated_at',
         'polled_at', 'is_public', 'is_online', 'endpoints',
-        'snapshots', 'auth')
+        'timezone', 'snapshots', 'auth')
     end
 
   end

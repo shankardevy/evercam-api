@@ -68,6 +68,31 @@ module Evercam
           expect(errors[:endpoints]).to eq(:valid)
         end
 
+        it 'checks any provided timezone is valid' do
+          params = valid.merge(timezone: 'BADZONE')
+
+          outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
+          expect(outcome).to_not be_success
+          expect(errors[:timezone]).to eq(:valid)
+        end
+
+      end
+
+      describe 'optional params' do
+
+        it 'sets the timezone value when provided' do
+          timezone = Timezone::Zone.new zone: 'America/Chicago'
+          params = valid.merge(timezone: timezone.zone)
+
+          outcome = subject.run(params)
+          result = outcome.result
+
+          expect(outcome).to be_success
+          expect(result.timezone).to eq(timezone)
+        end
+
       end
 
     end

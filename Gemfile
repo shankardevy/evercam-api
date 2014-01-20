@@ -15,8 +15,9 @@ gem 'sequel'
 gem 'pg'
 
 gem 'aws-sdk'
-gem 'dotenv'
 gem 'intercom'
+gem 'timezone'
+gem 'dotenv'
 
 gem 'newrelic_rpm'
 gem 'newrelic-grape'

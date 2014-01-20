@@ -22,6 +22,10 @@ module Evercam
         end
       end
 
+      optional do
+        string :timezone
+      end
+
       def validate
         unless User.by_login(username)
           add_error(:username, :exists, 'Username does not exist')
@@ -40,10 +44,14 @@ module Evercam
             end
           end
         end
+
+        if timezone && false == Timezone::Zone.names.include?(timezone)
+          add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
+        end
       end
 
       def execute
-        camera = Camera.create({
+        camera = Camera.new({
           exid: id,
           name: name,
           owner: User.by_login(username),
@@ -53,6 +61,9 @@ module Evercam
             auth: inputs[:auth]
           }
         })
+
+        camera.timezone = timezone if timezone
+        camera.save
 
         inputs[:endpoints].each do |e|
           endpoint = URI.parse(e)
