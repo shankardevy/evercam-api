@@ -40,9 +40,9 @@ module Evercam
           required: true
         }
 
-        expose :last_heartbeat_at, documentation: {
+        expose :polled_at, documentation: {
           type: 'integer',
-          desc: 'Unix timestamp at last heartbeat check'
+          desc: 'Unix timestamp at last heartbeat poll'
         }
 
       end
