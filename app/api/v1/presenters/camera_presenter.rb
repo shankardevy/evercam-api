@@ -20,11 +20,13 @@ module Evercam
         required: true
       }
 
-      expose :is_public, documentation: {
-        type: 'boolean',
-        desc: 'Whether or not this camera is publically available',
+      expose :owner, documentation: {
+        type: 'string',
+        desc: 'Username of camera owner',
         required: true
-      }
+      } do |s,o|
+        s.owner.username
+      end
 
       with_options(format_with: :timestamp) do
 
@@ -47,18 +49,24 @@ module Evercam
 
       end
 
+      expose :timezone, documentation: {
+        type: 'string',
+        desc: 'Name of the IANA/tz timezone where this camera is located',
+        required: true
+      } do |s,o|
+        s.timezone.zone
+      end
+
       expose :is_online, documentation: {
         type: 'boolean',
         desc: 'Whether or not this camera is currently online'
       }
 
-      expose :owner, documentation: {
-        type: 'string',
-        desc: 'Username of camera owner',
+      expose :is_public, documentation: {
+        type: 'boolean',
+        desc: 'Whether or not this camera is publically available',
         required: true
-      } do |s,o|
-        s.owner.username
-      end
+      }
 
       expose :endpoints, documentation: {
         type: 'array',
