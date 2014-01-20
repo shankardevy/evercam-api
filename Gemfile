@@ -6,9 +6,11 @@ gem 'rack-ssl-enforcer',
   github: 'tobmatth/rack-ssl-enforcer'
 
 gem 'rake'
-gem 'sinatra'
+gem 'sinatra',
+  require: 'sinatra/base'
 gem 'pony'
 gem 'json'
+gem 'sidekiq'
 
 gem 'grape'
 gem 'grape-entity'

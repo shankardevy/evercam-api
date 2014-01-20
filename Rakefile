@@ -23,3 +23,19 @@ namespace :db do
 
 end
 
+namespace :schedule do
+
+  require_relative './lib/workers'
+  require_relative './lib/models'
+  db = Sequel::Model.db
+
+  task :minute do
+    cameras = db[:streams]
+    cameras.select(:name).each do |row|
+      HeartBeatWorker.perform_async(row[:name])
+    end
+
+
+  end
+
+end
