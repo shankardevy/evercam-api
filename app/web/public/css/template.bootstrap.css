@@ -1363,11 +1363,6 @@ footer span a:hover {
 
 }
 
-@media (max-width: 1200px) {
-  .right_container{
-    padding-top: 20px;
-  }
-}
 
 
 @media (max-width: 991px) {
@@ -2804,7 +2799,6 @@ font-weight: normal;
 }
 
 .online h4{
-  padding: 0 0 10px 0;
   margin: 0;
 }
 
@@ -2846,14 +2840,6 @@ font-weight: normal;
 .lineTest h4{
   width: 500px;
   margin-bottom: 3px;
-}
-
-.CameraInfo{
-
-}
-
-.CameraInfo img{
-  margin-right: 60px;
 }
 
 .addButton {
