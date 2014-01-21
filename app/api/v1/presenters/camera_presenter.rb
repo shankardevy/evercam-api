@@ -28,6 +28,20 @@ module Evercam
         s.owner.username
       end
 
+      expose :vendor, documentation: {
+        type: 'string',
+        desc: 'Unique identifier for the camera vendor'
+      } do |c,o|
+        nil == c.firmware ? nil : c.firmware.vendor.exid
+      end
+
+      expose :model, documentation: {
+        type: 'string',
+        desc: 'Name of the camera model'
+      } do |c,o|
+        nil == c.firmware ? nil : c.firmware.name
+      end
+
       with_options(format_with: :timestamp) do
 
         expose :created_at, documentation: {
