@@ -2710,6 +2710,18 @@ font-weight: normal;
   width: 100%;
 }
 
+#TZinputArea{
+  border: 1px solid #EB5F53;
+  border-radius: 5px;
+  color: #373D4D;
+  font-size: 14px;
+  height: 30px;
+  margin-right: 20px;
+  margin-top: 1px;
+  vertical-align: top;
+  width: 100%;
+}
+
 .form-horizontal .control-label{
   color: #4D4D4D;
   font-size: 14px;

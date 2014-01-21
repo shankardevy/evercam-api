@@ -138,7 +138,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Camera Details:</h4>
+          <h4 class="modal-title" id="myModalLabel">Settings:</h4>
         </div>
         
         <div class="modal-body">
@@ -156,6 +156,7 @@
                 <label for="inputEmail3" class="col-sm-3 control-label">Camera ID:</label>
                 <div class="col-sm-8">
                   <input type="text" class="form-control" id="inputArea" placeholder="Camera ID">
+                  <p>This must be unique to Evercam</p>
                 </div>
               </div>
                 
@@ -170,7 +171,108 @@
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-3 control-label">Time Zone:</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="inputArea" placeholder="Time Zone">
+                  <select type="text" class="form-control" id="TZinputArea" placeholder="Time Zone">
+                    <option>(UTC-12:00) International Date Line West</option>
+                    <option>(UTC-11:00) Coordinated Universal Time-11</option>
+                    <option>(UTC-10:00) Hawaii</option>
+                    <option>(UTC-09:00) Alaska</option>
+                    <option>(UTC-08:00) Baja California</option>
+                    <option>(UTC-08:00) Pacific Time (US &amp; Canada)</option>
+                    <option>(UTC-07:00) Arizona</li><li>(UTC-07:00) Chihuahua, La Paz, Mazatlan</option>
+                    <option>(UTC-07:00) Mountain Time (US &amp; Canada)</option>
+                    <option>(UTC-06:00) Central America</option>
+                    <option>(UTC-06:00) Central Time (US &amp; Canada)</option>
+                    <option>(UTC-06:00) Guadalajara, Mexico City, Monterrey</option>
+                    <option>(UTC-06:00) Saskatchewan</option>
+                    <option>(UTC-05:00) Bogota, Lima, Quito</option>
+                    <option>(UTC-05:00) Eastern Time (US &amp; Canada)</option>
+                    <option>(UTC-05:00) Indiana (East)</option>
+                    <option>(UTC-04:30) Caracas</option>
+                    <option>(UTC-04:00) Asuncion</option>
+                    <option>(UTC-04:00) Atlantic Time (Canada)</option>
+                    <option>(UTC-04:00) Cuiaba</option>
+                    <option>(UTC-04:00) Georgetown, La Paz, Manaus, San Juan</option>
+                    <option>(UTC-04:00) Santiago</option>
+                    <option>(UTC-03:30) Newfoundland</option>
+                    <option>(UTC-03:00) Brasilia</option>
+                    <option>(UTC-03:00) Buenos Aires</option>
+                    <option>(UTC-03:00) Cayenne, Fortaleza</option>
+                    <option>(UTC-03:00) Greenland</option>
+                    <option>(UTC-03:00) Montevideo</option>
+                    <option>(UTC-03:00) Salvador</option>
+                    <option>(UTC-02:00) Coordinated Universal Time-02</option>
+                    <option>(UTC-02:00) Mid-Atlantic</option>
+                    <option>(UTC-01:00) Azores</option>
+                    <option>(UTC-01:00) Cape Verde Is.</option>
+                    <option>(UTC) Casablanca</option>
+                    <option>(UTC) Coordinated Universal Time</option>
+                    <option value="0"  selected="selected">(UTC) Dublin, Edinburgh, Lisbon, London</option>
+                    <option>(UTC) Monrovia, Reykjavik</option>
+                    <option>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</option>
+                    <option>(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</option>
+                    <option>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris</option>
+                    <option>(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb</option>
+                    <option>(UTC+01:00) Tripoli</option>
+                    <option>(UTC+01:00) West Central Africa</option>
+                    <option>(UTC+01:00) Windhoek</option>
+                    <option>(UTC+02:00) Athens, Bucharest</option>
+                    <option>(UTC+02:00) Beirut</option>
+                    <option>(UTC+02:00) Cairo</option>
+                    <option>(UTC+02:00) Damascus</option>
+                    <option>(UTC+02:00) E. Europe</option>
+                    <option>(UTC+02:00) Harare, Pretoria</option>
+                    <option>(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</option>
+                    <option>(UTC+02:00) Istanbul</option>
+                    <option>(UTC+02:00) Jerusalem</option>
+                    <option>(UTC+03:00) Amman</option>
+                    <option>(UTC+03:00) Baghdad</option>>
+                    <option>(UTC+03:00) Kaliningrad, Minsk</option>
+                    <option>(UTC+03:00) Kuwait, Riyadh</option>
+                    <option>(UTC+03:00) Nairobi</option>
+                    <option>(UTC+03:30) Tehran</option>
+                    <option>(UTC+04:00) Abu Dhabi, Muscat</option>
+                    <option>(UTC+04:00) Baku</option>
+                    <option>(UTC+04:00) Moscow, St. Petersburg, Volgograd</option>
+                    <option>(UTC+04:00) Port Louis</option>
+                    <option>(UTC+04:00) Tbilisi</option>
+                    <option>(UTC+04:00) Yerevan</option>
+                    <option>(UTC+04:30) Kabul</option>
+                    <option>(UTC+05:00) Islamabad, Karachi</option>
+                    <option>(UTC+05:00) Tashkent</option>
+                    <option>(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi</option>
+                    <option>(UTC+05:30) Sri Jayawardenepura</option>
+                    <option>(UTC+05:45) Kathmandu</option>
+                    <option>(UTC+06:00) Astana</option>
+                    <option>(UTC+06:00) Dhaka</option>
+                    <option>(UTC+06:00) Ekaterinburg</option>
+                    <option>(UTC+06:30) Yangon (Rangoon)</option>
+                    <option>(UTC+07:00) Bangkok, Hanoi, Jakarta</option>
+                    <option>(UTC+07:00) Novosibirsk</option>
+                    <option>(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi</option>
+                    <option>(UTC+08:00) Krasnoyarsk</option>
+                    <option>(UTC+08:00) Kuala Lumpur, Singapore</option>
+                    <option>(UTC+08:00) Perth</option>
+                    <option>(UTC+08:00) Taipei</option>
+                    <option>(UTC+08:00) Ulaanbaatar</option>
+                    <option>(UTC+09:00) Irkutsk</option>
+                    <option>(UTC+09:00) Osaka, Sapporo, Tokyo</option>
+                    <option>(UTC+09:00) Seoul</option>
+                    <option>(UTC+09:30) Adelaide</li><li>(UTC+09:30) Darwin</option>
+                    <option>(UTC+10:00) Brisbane</option>
+                    <option>(UTC+10:00) Canberra, Melbourne, Sydney</option>
+                    <option>(UTC+10:00) Guam, Port Moresby</option>
+                    <option>(UTC+10:00) Hobart</option>
+                    <option>(UTC+10:00) Yakutsk</option>
+                    <option>(UTC+11:00) Solomon Is., New Caledonia</option>
+                    <option>(UTC+11:00) Vladivostok</option>
+                    <option>(UTC+12:00) Auckland, Wellington</option>
+                    <option>(UTC+12:00) Coordinated Universal Time+12</option>
+                    <option>(UTC+12:00) Fiji</option>
+                    <option>(UTC+12:00) Magadan</option>
+                    <option>(UTC+12:00) Petropavlovsk-Kamchatsky - Old</option>
+                    <option>(UTC+13:00) Nuku&#39;alofa</option>
+                    <option>(UTC+13:00) Samoa</option>
+                  </select>
                 </div>
               </div>
            
@@ -188,11 +290,11 @@
                 <label for="inputPassword3" class="col-sm-3 control-label">Camera Ports:</label>
                 <div class="col-sm-4">
                   <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">
-                  <p>e.g. 80</p>
+                  <p>Default: 80</p>
                 </div>
                 <div class="col-sm-4">
                   <input type="text" class="form-control" id="inputArea" placeholder="RTSP Port">
-                  <p>e.g. 554</p>
+                  <p>Default: 554</p>
                 </div>
               </div>
             </form>
