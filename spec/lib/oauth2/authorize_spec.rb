@@ -87,20 +87,27 @@ module Evercam
       end
 
       context 'when the user is not authorized to grant all scopes' do
+
         subject { Authorize.new(create(:user), valid) }
 
         its(:valid?) { should eq(false) }
         its(:redirect?) { should eq(true) }
         its(:redirect_to) { should have_fragment({ error: :access_denied }) }
         its(:error) { should match(/cannot grant/) }
+
       end
 
-      context 'when the client has previous grants for all scopes' do
+      context 'when the user has previously granted for all scopes to this client' do
 
         let(:params) { valid }
 
         before(:each) do
-          create(:access_token, grantee: client0, scopes: [params[:scope]])
+          create(
+            :access_token,
+            grantee: client0,
+            grantor: user0,
+            scopes: [params[:scope]]
+          )
         end
 
         it 'creates a new access token for the client' do
@@ -111,15 +118,12 @@ module Evercam
           expect(subject.token.scopes.count).to eq(1)
         end
 
-        its(:valid?) { should eq(true) }
-        its(:redirect?) { should eq(true) }
+        it 'wants to redirect' do
+          expect(subject).to be_redirect
+        end
 
         it 'is a valid request' do
           expect(subject).to be_valid
-        end
-
-        it 'wants to redirect the client' do
-          expect(subject).to be_redirect
         end
 
         it 'does not have any missing scopes' do
@@ -142,18 +146,52 @@ module Evercam
           create(:camera, owner: user0)
         end
 
-        let(:params) do
-          valid.merge(scope: [
+        let(:scopes) do
+          [
             "camera:view:#{camera0.exid}",
             "camera:view:#{camera1.exid}"
-          ].join(','))
+          ]
         end
 
-        its(:valid?) { should eq(true) }
-        its(:redirect?) { should eq(false) }
+        let(:params) do
+          valid.merge(scope: scopes.join(','))
+        end
+
+        it 'is a valid request' do
+          expect(subject).to be_valid
+        end
+
+        it 'does not want to redirect' do
+          expect(subject).to_not be_redirect
+        end
 
         it 'returns the missing scopes' do
           expect(subject.missing.size).to eq(2)
+        end
+
+        it 'ignores any grants by other users' do
+          create(:access_token, grantor: create(:user), grantee: client0, scopes: scopes)
+          expect(subject.missing.size).to eq(2)
+        end
+
+      end
+
+      context 'when the request is for generic scopes' do
+
+        let(:params) do
+          valid.merge(scope: 'cameras:view:all')
+        end
+
+        it 'is a valid request' do
+          expect(subject).to be_valid
+        end
+
+        it 'does not want to redirect' do
+          expect(subject).to_not be_redirect
+        end
+
+        it 'returns the missing scopes' do
+          expect(subject.missing.size).to eq(1)
         end
 
       end

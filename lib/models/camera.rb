@@ -15,7 +15,7 @@ class Camera < Sequel::Model
     when :view
       is_public? || (nil != auth && (
         auth.scopes.include?("camera:view:#{exid}") ||
-        auth.scopes.include?("cameras:view:#{owner.username}")
+        auth.scopes.include?("cameras:view:all")
       ))
     end
   end

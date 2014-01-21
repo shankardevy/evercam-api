@@ -43,6 +43,11 @@ describe AccessScope do
       expect(scope.resource).to eq(camera0)
     end
 
+    it 'is not a generic scope' do
+      scope = subject.new("camera:view:#{camera0.exid}")
+      expect(scope).to_not be_generic
+    end
+
     it 'is not valid if the resource does not exist' do
       scope = subject.new('camera:view:xxxx')
       expect(scope).to_not be_valid
@@ -54,19 +59,14 @@ describe AccessScope do
 
     let(:user0) { create(:user) }
 
-    it 'is valid if the user exists' do
-      scope = subject.new("cameras:view:#{user0.username}")
+    it 'is valid' do
+      scope = subject.new("cameras:view:all")
       expect(scope).to be_valid
     end
 
-    it 'returns the user resource' do
-      scope = subject.new("cameras:view:#{user0.username}")
-      expect(scope.resource).to eq(user0)
-    end
-
-    it 'is not valid if the resource does not exist' do
-      scope = subject.new('cameras:view:xxxx')
-      expect(scope).to_not be_valid
+    it 'is generic' do
+      scope = subject.new("cameras:view:all")
+      expect(scope).to be_generic
     end
 
   end

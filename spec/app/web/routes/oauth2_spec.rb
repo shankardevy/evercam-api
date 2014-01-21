@@ -67,7 +67,12 @@ describe 'WebApp routes/oauth2_router' do
         let(:params) { valid }
 
         before(:each) do
-          create(:access_token, grantee: client0, scopes: [params[:scope]])
+          create(
+            :access_token,
+            grantor: user0,
+            grantee: client0,
+            scopes: [params[:scope]]
+          )
           get('/oauth2/authorize', params, env)
         end
 

@@ -43,7 +43,7 @@ module Evercam
       def missing
         scopes.select do |s|
           false == client.tokens.any? do |t|
-            t.scopes.include?(s.to_s)
+            t.grantor == @u && t.scopes.include?(s.to_s)
           end
         end
       end
@@ -78,7 +78,7 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.resource.allow?(:share, @u)
+          s.generic? || s.resource.allow?(:share, @u)
         end
       end
 

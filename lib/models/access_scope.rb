@@ -13,13 +13,15 @@ class AccessScope
       case type
       when :camera
         Camera.by_exid(id)
-      when :cameras
-        User.by_login(id)
       end
   end
 
+  def generic?
+    [:cameras].include?(type)
+  end
+
   def valid?
-    nil != resource
+    generic? || nil != resource
   end
 
   def to_s

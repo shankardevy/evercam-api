@@ -27,15 +27,15 @@ describe Camera do
           expect(camera.allow?(:view, nil)).to eq(false)
         end
 
-        it 'is true when auth has specific camera scope' do
+        it 'is true when auth includes specific camera scope' do
           token = build(:access_token)
           token.scopes.append("camera:view:#{camera.exid}")
           expect(camera.allow?(:view, token)).to eq(true)
         end
 
-        it 'is true when the auth has a generic user all scope' do
+        it 'is true when the auth includes a generic all scope' do
           token = build(:access_token)
-          token.scopes.append("cameras:view:#{camera.owner.username}")
+          token.scopes.append("cameras:view:all")
           expect(camera.allow?(:view, token)).to eq(true)
         end
 
