@@ -27,7 +27,7 @@ class AccessToken < Sequel::Model
   end
 
   def scopes
-    values[:scopes] || []
+    values[:scopes] ||= Sequel.pg_array([])
   end
 
 end

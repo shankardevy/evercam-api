@@ -73,6 +73,12 @@ describe AccessToken do
       end
     end
 
+    it 'allows common operators like #append' do
+      token0 = build(:access_token, scopes: nil)
+      token0.scopes.append('test:scope')
+      expect(token0.scopes).to eq(['test:scope'])
+    end
+
   end
 
 end

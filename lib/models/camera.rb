@@ -1,7 +1,6 @@
 class Camera < Sequel::Model
 
   many_to_one :firmware
-  one_to_many :permissions, class: 'CameraRight'
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
 
@@ -19,6 +18,18 @@ class Camera < Sequel::Model
     else
       raise Evercam::AuthorizationError,
         'unknown permission seeker type'
+    end
+  end
+
+  def allow?(right, auth)
+    return true if auth == owner
+
+    case right
+    when :view
+      is_public? || (nil != auth && (
+        auth.scopes.include?("camera:view:#{exid}") ||
+        auth.scopes.include?("cameras:view:#{owner.username}")
+      ))
     end
   end
 

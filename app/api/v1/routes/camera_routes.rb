@@ -10,9 +10,10 @@ module Evercam
     }
     get '/cameras/:id' do
       camera = ::Camera.by_exid(params[:id])
-      raise NotFoundError, 'camera was not found' unless camera
+      raise NotFoundError, 'Camera was not found' unless camera
 
-      unless camera.is_public? || auth.has_right?('view', camera)
+      unless camera.allow?(:view, auth.seeker)
+        raise AuthenticationError unless auth.seeker
         raise AuthorizationError, 'not authorized to view this camera'
       end
 

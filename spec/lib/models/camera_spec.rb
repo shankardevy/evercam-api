@@ -4,53 +4,47 @@ describe Camera do
 
   let(:camera) { create(:camera) }
 
-  describe '#has_right?' do
+  describe '#allow?' do
 
-    context 'when the seeker is unknown' do
-      it 'raises an AuthenticationError' do
-        expect { camera.has_right?('xxxx', mock) }.
-          to raise_error(Evercam::AuthorizationError)
-      end
+    it 'is true for all rights when the auth is the owner' do
+      expect(camera.allow?(:view, camera.owner)).to eq(true)
     end
 
-    context 'when the seeker is a user' do
+    describe ':view right' do
 
-      context 'when the user is the owner' do
-        it 'returns true' do
-          user = camera.owner
-          expect(camera.has_right?('xxxx', user)).
-            to eq(true)
-        end
+      it 'is true when the camera is public' do
+        camera.update(is_public: true)
+        expect(camera.allow?(:view, nil)).to eq(true)
       end
 
-      context 'when the user is not the owner' do
-        it 'returns false' do
-          user = create(:user)
-          expect(camera.has_right?('xxxx', user)).
-            to eq(false)
+      context 'when the camera is not public' do
+
+        before(:each) do
+          camera.update(is_public: false)
         end
-      end
 
-    end
-
-    context 'when the seeker is an access token' do
-
-      context 'when the access token has the right' do
-        it 'returns true' do
-          atsr = create(:camera_right)
-          token, camera = atsr.token, atsr.camera
-          expect(camera.has_right?(atsr.name, token)).
-            to eq(true)
+        it 'is false when auth is nil' do
+          expect(camera.allow?(:view, nil)).to eq(false)
         end
-      end
 
-      context 'when the access token does not have right' do
-        it 'returns false' do
-          atsr = create(:camera_right)
-          token, camera = atsr.token, atsr.camera
-          expect(camera.has_right?('xxxx', token)).
-            to eq(false)
+        it 'is true when auth has specific camera scope' do
+          token = build(:access_token)
+          token.scopes.append("camera:view:#{camera.exid}")
+          expect(camera.allow?(:view, token)).to eq(true)
         end
+
+        it 'is true when the auth has a generic user all scope' do
+          token = build(:access_token)
+          token.scopes.append("cameras:view:#{camera.owner.username}")
+          expect(camera.allow?(:view, token)).to eq(true)
+        end
+
+        it 'is false when the auth has no privisioning scope' do
+          token = build(:access_token)
+          token.scopes.append("camera:view:xxxx")
+          expect(camera.allow?(:view, token)).to eq(false)
+        end
+
       end
 
     end

@@ -58,5 +58,12 @@ describe AccessScope do
 
   end
 
+  describe '#to_s' do
+    it 'returns the basic string version' do
+      scope = subject.new("camera:view:#{camera.exid}")
+      expect(scope.to_s).to eq("camera:view:#{camera.exid}")
+    end
+  end
+
 end
 

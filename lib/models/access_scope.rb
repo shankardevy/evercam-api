@@ -22,5 +22,9 @@ class AccessScope
     nil != resource
   end
 
+  def to_s
+    [@tp, @rt, @id].join(':')
+  end
+
 end
 
