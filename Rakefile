@@ -1,8 +1,7 @@
 require 'rake'
 require_relative './lib/config'
-require 'rspec' rescue nil
 
-if defined?(RSpec)
+if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
   task default: :spec
