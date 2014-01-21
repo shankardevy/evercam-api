@@ -78,7 +78,7 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.resource.has_right?('share', @u)
+          s.resource.allow?(:share, @u)
         end
       end
 

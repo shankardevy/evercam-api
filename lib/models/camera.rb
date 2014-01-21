@@ -8,19 +8,6 @@ class Camera < Sequel::Model
     first(exid: exid)
   end
 
-  def has_right?(right, seeker)
-    case seeker
-    when User
-      seeker == self.owner
-    when AccessToken
-      nil != permissions_dataset.
-        first(token: seeker, name: right)
-    else
-      raise Evercam::AuthorizationError,
-        'unknown permission seeker type'
-    end
-  end
-
   def allow?(right, auth)
     return true if auth == owner
 
