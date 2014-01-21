@@ -2915,7 +2915,20 @@ font-weight: normal;
 }
 
 .camAddress p{
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
+}
+
+.Refresh{
+  width: 80px;
+}
+
+.Refresh p{
+  margin: 0 0 15px 0;
+}
+
+.Refresh i{
+  color: #99bbd6;
+  padding-right: 5px;
 }
 
 .applications {
