@@ -64,5 +64,16 @@ describe AccessToken do
 
   end
 
+  describe '#scopes' do
+
+    context 'when the database is null' do
+      it 'returns an empty set' do
+        token0 = AccessToken.new(scopes: nil)
+        expect(token0.scopes).to be_empty
+      end
+    end
+
+  end
+
 end
 

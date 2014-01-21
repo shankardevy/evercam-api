@@ -42,5 +42,16 @@ describe User do
 
   end
 
+  describe '#scopes' do
+
+    context 'when the database is null' do
+      it 'returns an empty set' do
+        user0 = User.new(scopes: nil)
+        expect(user0.scopes).to be_empty
+      end
+    end
+
+  end
+
 end
 
