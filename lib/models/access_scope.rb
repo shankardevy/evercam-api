@@ -1,21 +1,21 @@
 class AccessScope
 
+  attr_reader :type, :right, :id
+
   def initialize(str)
-    @tp, @rt, @id = str.split(':')
+    parts = str.split(':')
+    @type, @right, @id = parts[0].to_sym,
+      parts[1].to_sym, parts[2] if 3 == parts.size
   end
 
   def resource
-    case @tp
-    when /camera/i
-      Camera.by_exid(@id)
-    when /user/i
-      User.by_login(@id)
-    else nil
-    end
-  end
-
-  def right
-    @rt
+    @resource =
+      case type
+      when :camera
+        Camera.by_exid(id)
+      when :cameras
+        User.by_login(id)
+      end
   end
 
   def valid?
@@ -23,7 +23,7 @@ class AccessScope
   end
 
   def to_s
-    [@tp, @rt, @id].join(':')
+    [@type, @right, @id].join(':')
   end
 
 end
