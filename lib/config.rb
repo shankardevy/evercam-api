@@ -1,16 +1,18 @@
+require 'yaml'
+require 'dotenv'
+require 'erb'
+
 module Evercam
   class Config
     class << self
 
       # local .env
-      require 'dotenv'
       Dotenv.load
 
       def [](key)
         settings[env][key]
       end
 
-      require 'yaml'
       def settings
         @settings ||= (YAML.load(
           ERB.new(File.read(File.join(
