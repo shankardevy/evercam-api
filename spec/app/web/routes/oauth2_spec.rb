@@ -5,13 +5,11 @@ describe 'WebApp routes/oauth2_router' do
 
   let(:app) { Evercam::WebApp }
 
-  let(:camera_right) { create(:camera_right) }
+  let(:camera0) { create(:camera) }
 
-  let(:user0) { camera_right.camera.owner }
+  let(:user0) { camera0.owner }
 
-  let(:client0) { camera_right.token.grantee }
-
-  let(:camera0) { camera_right.camera }
+  let(:client0) { create(:client) }
 
   let(:env) { env_for(session: { user: user0.id }) }
 
@@ -20,7 +18,7 @@ describe 'WebApp routes/oauth2_router' do
       response_type: 'token',
       client_id: client0.exid,
       redirect_uri: client0.default_callback_uri,
-      scope: "camera:#{camera_right.name}:#{camera0.exid}"
+      scope: "camera:view:#{camera0.exid}"
     }
   end
 
@@ -56,7 +54,7 @@ describe 'WebApp routes/oauth2_router' do
 
           expect(last_response.status).to eq(302)
           expect(last_response.location).
-            to start_with(camera_right.token.grantee.default_callback_uri)
+            to start_with(client0.default_callback_uri)
         end
       end
 
@@ -69,7 +67,17 @@ describe 'WebApp routes/oauth2_router' do
         let(:params) { valid }
 
         before(:each) do
+          create(
+            :access_token,
+            grantor: user0,
+            grantee: client0,
+            scopes: [params[:scope]]
+          )
           get('/oauth2/authorize', params, env)
+        end
+
+        it 'creates a new access token for the client' do
+          expect(client0.reload.tokens.count).to eq(2)
         end
 
         it 'redirects back to the redirect_uri' do
@@ -79,13 +87,8 @@ describe 'WebApp routes/oauth2_router' do
         end
 
         it 'includes the new access token in the fragment' do
-          camera_right1 = CameraRight.order(:created_at).last
           expect(last_response.location).
-            to have_fragment({ access_token: camera_right1.token.request })
-        end
-
-        it 'creates a new access token for the client' do
-          expect(client0.reload.tokens.count).to eq(2)
+            to have_fragment({ access_token: client0.reload.tokens.last.request })
         end
 
       end
@@ -117,11 +120,10 @@ describe 'WebApp routes/oauth2_router' do
     context 'when the user approves the authorization' do
       it 'issues an access token and redirect the user agent' do
         post('/oauth2/authorize', params.merge(action: 'approve'), env)
-        camera_right1 = CameraRight.order(:created_at).last
 
         expect(last_response.status).to eq(302)
         expect(last_response.location).
-          to have_fragment({ access_token: camera_right1.token.request })
+          to have_fragment({ access_token: client0.reload.tokens.last.request })
       end
     end
 

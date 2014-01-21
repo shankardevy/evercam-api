@@ -2,6 +2,8 @@ module Evercam
   module OAuth2
     class Authorize
 
+      attr_reader :token
+
       def initialize(user, params)
         @u, @p = user, params
         issue_access_token if valid? && missing.empty?
@@ -40,10 +42,9 @@ module Evercam
 
       def missing
         scopes.select do |s|
-          tokens = client.tokens.map(&:id)
-          0 == s.resource.permissions.
-            where(access_token_id: tokens, name: s.right).
-            count
+          false == client.tokens.any? do |t|
+            t.grantor == @u && t.scopes.include?(s.to_s)
+          end
         end
       end
 
@@ -77,7 +78,7 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.resource.has_right?('share', @u)
+          s.generic? || s.resource.allow?(:share, @u)
         end
       end
 
@@ -90,12 +91,11 @@ module Evercam
 
       def issue_access_token
         return nil unless valid?
-        @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
-          scopes.each do |s|
-            #TODO: t.add_right(s.right, s.resource)
-            CameraRight.create(token: t, name: s.right, camera: s.resource)
-          end
-        end
+        @token = AccessToken.create(
+          grantor: @u,
+          grantee: client,
+          scopes: scopes
+        )
       end
 
       def redirect_uri

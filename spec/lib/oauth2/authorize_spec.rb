@@ -11,10 +11,6 @@ module Evercam
 
       let(:client0) { create(:client, callback_uris: ['http://a', 'http://b']) }
 
-      let(:token0) { create(:access_token, grantor: user0, grantee: client0) }
-
-      let(:camera_right0) { create(:camera_right, token: token0, camera: camera0) }
-
       subject { Authorize.new(user0, params) }
 
       let(:valid) do
@@ -22,7 +18,7 @@ module Evercam
           response_type: 'token',
           client_id: client0.exid,
           redirect_uri: client0.default_callback_uri,
-          scope: "camera:#{camera_right0.name}:#{camera0.exid}"
+          scope: "camera:view:#{camera0.exid}"
         }
       end
 
@@ -91,43 +87,56 @@ module Evercam
       end
 
       context 'when the user is not authorized to grant all scopes' do
+
         subject { Authorize.new(create(:user), valid) }
 
         its(:valid?) { should eq(false) }
         its(:redirect?) { should eq(true) }
         its(:redirect_to) { should have_fragment({ error: :access_denied }) }
         its(:error) { should match(/cannot grant/) }
+
       end
 
-      context 'when the client has grants for all scopes' do
+      context 'when the user has previously granted for all scopes to this client' do
 
         let(:params) { valid }
 
-        before(:each) { subject }
-
-        let(:token1) { client0.tokens.order(:id).last }
+        before(:each) do
+          create(
+            :access_token,
+            grantee: client0,
+            grantor: user0,
+            scopes: [params[:scope]]
+          )
+        end
 
         it 'creates a new access token for the client' do
-          expect(token1).to_not eq(token0)
-          expect(client0.reload.tokens.count).to eq(2)
+          expect(subject.client.reload.tokens.count).to eq(2)
         end
 
-        it 'create the new rights for the token' do
-          count = camera0.permissions.
-            where(token: token1, name: camera_right0.name).count
-
-          expect(count).to eq(1)
+        it 'adds all the requested scopes to the new token' do
+          expect(subject.token.scopes.count).to eq(1)
         end
 
-        its(:valid?) { should eq(true) }
-        its(:redirect?) { should eq(true) }
-        its(:missing) { should be_empty }
+        it 'wants to redirect' do
+          expect(subject).to be_redirect
+        end
 
-        its(:redirect_to) { should have_fragment({
-          access_token: token1.request,
-          expires_in: token1.expires_in,
-          token_type: :bearer
-        }) }
+        it 'is a valid request' do
+          expect(subject).to be_valid
+        end
+
+        it 'does not have any missing scopes' do
+          expect(subject.missing).to eq([])
+        end
+
+        it 'includes the token in the redirect fragment' do
+          expect(subject.redirect_to).to have_fragment({
+            access_token: subject.token.request,
+            expires_in: subject.token.expires_in,
+            token_type: :bearer
+          })
+        end
 
       end
 
@@ -137,20 +146,52 @@ module Evercam
           create(:camera, owner: user0)
         end
 
-        let(:params) do
-          valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera0.exid}",
-            "camera:#{camera_right0.name}:#{camera1.exid}"
-          ].join(','))
+        let(:scopes) do
+          [
+            "camera:view:#{camera0.exid}",
+            "camera:view:#{camera1.exid}"
+          ]
         end
 
-        its(:valid?) { should eq(true) }
-        its(:redirect?) { should eq(false) }
+        let(:params) do
+          valid.merge(scope: scopes.join(','))
+        end
+
+        it 'is a valid request' do
+          expect(subject).to be_valid
+        end
+
+        it 'does not want to redirect' do
+          expect(subject).to_not be_redirect
+        end
+
+        it 'returns the missing scopes' do
+          expect(subject.missing.size).to eq(2)
+        end
+
+        it 'ignores any grants by other users' do
+          create(:access_token, grantor: create(:user), grantee: client0, scopes: scopes)
+          expect(subject.missing.size).to eq(2)
+        end
+
+      end
+
+      context 'when the request is for generic scopes' do
+
+        let(:params) do
+          valid.merge(scope: 'cameras:view:all')
+        end
+
+        it 'is a valid request' do
+          expect(subject).to be_valid
+        end
+
+        it 'does not want to redirect' do
+          expect(subject).to_not be_redirect
+        end
 
         it 'returns the missing scopes' do
           expect(subject.missing.size).to eq(1)
-          expect(subject.missing[0].resource).
-            to eq(camera1)
         end
 
       end
@@ -163,27 +204,32 @@ module Evercam
 
         let(:params) do
           valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera0.exid}",
-            "camera:#{camera_right0.name}:#{camera1.exid}"
+            "camera:view:#{camera0.exid}",
+            "camera:view:#{camera1.exid}"
           ].join(','))
         end
-
-        let(:token1) { client0.tokens.order(:id).last }
 
         before(:each) { subject.approve! }
 
         it 'creates a new access token for the client' do
-          expect(token1).to_not eq(token0)
-          expect(client0.reload.tokens.count).to eq(2)
+          expect(subject.client.reload.tokens.count).to eq(1)
         end
 
         it 'create the new rights for the token' do
-          count = CameraRight.where(token: token1).count
-          expect(count).to eq(2)
+          expect(subject.token.scopes.count).to eq(2)
         end
 
-        its(:redirect?) { should eq(true) }
-        its(:redirect_to) { should have_fragment({ access_token: token1.request }) }
+        it 'wants to redirect the client' do
+          expect(subject).to be_redirect
+        end
+
+        it 'includes the token in the redirect fragment' do
+          expect(subject.redirect_to).to have_fragment({
+            access_token: subject.token.request,
+            expires_in: subject.token.expires_in,
+            token_type: :bearer
+          })
+        end
 
       end
 
@@ -195,7 +241,7 @@ module Evercam
 
         let(:params) do
           valid.merge(scope: [
-            "camera:#{camera_right0.name}:#{camera1.exid}"
+            "camera:view:#{camera1.exid}"
           ].join(','))
         end
 

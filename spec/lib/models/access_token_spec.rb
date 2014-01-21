@@ -64,5 +64,22 @@ describe AccessToken do
 
   end
 
+  describe '#scopes' do
+
+    context 'when the database is null' do
+      it 'returns an empty set' do
+        token0 = AccessToken.new(scopes: nil)
+        expect(token0.scopes).to be_empty
+      end
+    end
+
+    it 'allows common operators like #append' do
+      token0 = build(:access_token, scopes: nil)
+      token0.scopes.append('test:scope')
+      expect(token0.scopes).to eq(['test:scope'])
+    end
+
+  end
+
 end
 

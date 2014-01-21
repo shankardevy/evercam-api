@@ -1,25 +1,31 @@
 class AccessScope
 
+  attr_reader :type, :right, :id
+
   def initialize(str)
-    @tp, @rt, @id = str.split(':')
+    parts = str.split(':')
+    @type, @right, @id = parts[0].to_sym,
+      parts[1].to_sym, parts[2] if 3 == parts.size
   end
 
   def resource
-    case @tp
-    when /camera/i
-      Camera.by_exid(@id)
-    when /user/i
-      User.by_login(@id)
-    else nil
-    end
+    @resource =
+      case type
+      when :camera
+        Camera.by_exid(id)
+      end
   end
 
-  def right
-    @rt
+  def generic?
+    [:cameras].include?(type)
   end
 
   def valid?
-    nil != resource
+    generic? || nil != resource
+  end
+
+  def to_s
+    [@type, @right, @id].join(':')
   end
 
 end

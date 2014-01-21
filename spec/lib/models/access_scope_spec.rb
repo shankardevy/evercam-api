@@ -4,58 +4,78 @@ describe AccessScope do
 
   subject { AccessScope }
 
-  let(:camera) { create(:camera) }
+  it 'is not valid when there are not three component parts' do
+    scope = subject.new('bad')
+    expect(scope).to_not be_valid
+  end
 
-  let(:user) { create(:user) }
+  it 'is not valid when the type is unknown' do
+    scope = subject.new('xxxx:view:abcd')
+    expect(scope).to_not be_valid
+  end
 
-  describe '#resource' do
+  it 'returns the type as a symbol' do
+    scope = subject.new('camera:view:abcd')
+    expect(scope.type).to eq(:camera)
+  end
 
-    context 'when the type is unknown' do
-      it 'returns nil' do
-        scope = subject.new("xxxx:view:#{camera.exid}")
-        expect(scope.resource).to be_nil
-      end
+  it 'returns the right as a symbol' do
+    scope = subject.new('camera:view:abcd')
+    expect(scope.right).to eq(:view)
+  end
+
+  it 'returns the id as a string' do
+    scope = subject.new('camera:view:abcd')
+    expect(scope.id).to eq('abcd')
+  end
+
+  describe '^camera:' do
+
+    let(:camera0) { create(:camera) }
+
+    it 'is valid if the camera exists' do
+      scope = subject.new("camera:view:#{camera0.exid}")
+      expect(scope).to be_valid
     end
 
-    context 'when it is a camera' do
-      it 'returns the instance of the camera' do
-        scope = subject.new("camera:view:#{camera.exid}")
-        expect(scope.resource).to eq(camera)
-      end
+    it 'returns the camera resource' do
+      scope = subject.new("camera:view:#{camera0.exid}")
+      expect(scope.resource).to eq(camera0)
     end
 
-    context 'when it is a user' do
-      it 'returns the instance of the user' do
-        scope = subject.new("user:view:#{user.username}")
-        expect(scope.resource).to eq(user)
-      end
+    it 'is not a generic scope' do
+      scope = subject.new("camera:view:#{camera0.exid}")
+      expect(scope).to_not be_generic
+    end
+
+    it 'is not valid if the resource does not exist' do
+      scope = subject.new('camera:view:xxxx')
+      expect(scope).to_not be_valid
     end
 
   end
 
-  describe '#valid?' do
+  describe '^cameras:' do
 
-    context 'when the type is unknown' do
-      it 'returns false' do
-        scope = subject.new("xxxx:view:yyyy")
-        expect(scope.valid?).to eq(false)
-      end
+    let(:user0) { create(:user) }
+
+    it 'is valid' do
+      scope = subject.new("cameras:view:all")
+      expect(scope).to be_valid
     end
 
-    context 'when the resource does not exist' do
-      it 'returns false' do
-        scope = subject.new("camera:view:yyyy")
-        expect(scope.valid?).to eq(false)
-      end
+    it 'is generic' do
+      scope = subject.new("cameras:view:all")
+      expect(scope).to be_generic
     end
 
-    context 'when the resource exists' do
-      it 'returns true' do
-        scope = subject.new("camera:view:#{camera.exid}")
-        expect(scope.valid?).to eq(true)
-      end
-    end
+  end
 
+  describe '#to_s' do
+    it 'returns a basic string representation' do
+      scope = subject.new('abcd:view:xxxx')
+      expect(scope.to_s).to eq('abcd:view:xxxx')
+    end
   end
 
 end

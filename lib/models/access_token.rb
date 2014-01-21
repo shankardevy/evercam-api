@@ -26,5 +26,9 @@ class AccessToken < Sequel::Model
       Time.now <= self.expires_at
   end
 
+  def scopes
+    values[:scopes] ||= Sequel.pg_array([])
+  end
+
 end
 
