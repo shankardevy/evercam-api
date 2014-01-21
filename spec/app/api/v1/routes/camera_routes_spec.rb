@@ -55,7 +55,18 @@ describe 'API routes/cameras' do
       expect(response.json['cameras'][0]).to have_keys(
         'id', 'name', 'owner', 'created_at', 'updated_at',
         'polled_at', 'is_public', 'is_online', 'endpoints',
-        'timezone', 'snapshots', 'auth')
+        'vendor', 'model', 'timezone', 'snapshots', 'auth')
+    end
+
+    it 'returns the camera make and model information when available' do
+      model = create(:firmware)
+      camera.update(firmware: model)
+
+      response = get("/cameras/#{camera.exid}")
+      data = response.json['cameras'][0]
+
+      expect(data['vendor']).to eq(model.vendor.exid)
+      expect(data['model']).to eq(model.name)
     end
 
   end
