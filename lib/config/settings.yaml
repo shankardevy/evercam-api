@@ -47,7 +47,7 @@
       :api_version: '1.0'
       :mount_path: swagger
       :hide_documentation_path: true
-      :base_path: https://www.evercam.io/v1
+      :base_path: https://api.evercam.io/v1
   :mail:
     :from: evercam.io <noreply@evercam.io>
     :via: :smtp
