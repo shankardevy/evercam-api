@@ -39,6 +39,7 @@
   :api:
     :ssl:
       :force_secure_cookies: false
+      :redirect_html: false
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
   :swagger:
