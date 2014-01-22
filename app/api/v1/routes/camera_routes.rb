@@ -34,16 +34,12 @@ module Evercam
       present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Updates full or partial data for an existing camera (COMING SOON)', {
-      entity: Evercam::Presenters::Camera
-    }
+    desc 'Updates full or partial data for an existing camera (COMING SOON)'
     put '/cameras/:id' do
       raise ComingSoonError
     end
 
-    desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)', {
-      entity: Evercam::Presenters::Camera
-    }
+    desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)'
     delete '/cameras/:id' do
       raise ComingSoonError
     end
