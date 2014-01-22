@@ -76,8 +76,11 @@ module Evercam
             port: endpoint.port
           })
 
-          DNSUpsertWorker.perform_async(id, endpoint.host)
         end
+
+        # fire off the evr.cm zone update to sidekiq
+        primary = camera.endpoints.first
+        DNSUpsertWorker.perform_async(id, primary.host)
 
         camera
       end
