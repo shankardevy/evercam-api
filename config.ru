@@ -8,12 +8,23 @@ end
 
 map '/v1' do
 
+  # setup ssl requirements
+  use Rack::SslEnforcer,
+    Evercam::Config[:api][:ssl]
+
+  # allow requests from anywhere
   use Rack::Cors do
     allow do
       origins '*'
-      resource '*'
+      resource '*',
+        :headers => :any,
+        :methods => [:get, :post, :put, :options]
     end
   end
+
+  # ensure cookies work across subdomains
+  use Rack::Session::Cookie,
+    Evercam::Config[:cookies]
 
   run Evercam::APIv1
 
