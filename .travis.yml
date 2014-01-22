@@ -1,21 +1,18 @@
 language: ruby
 cache: bundler
-
 rvm:
-  - 2.0.0
-
+- 2.0.0
 addons:
   postgresql: 9.3
-
 before_script:
-  - ./scripts/travis
-
+- ./scripts/travis
 env:
+  matrix:
   - DATABASE_URL="postgres://localhost/evercam_tst"
-
+  global:
+    secure: BTrnsgd5wuCTmOOCsFDZ4+JFUj6bvTmwkYvW3snzLBmA1g58mqA/HdqL50tKdRaCb2/Hw0VfNIRvuEmg3zXY4bwF6OpcLKnnwG78MCQqwkHcMaSIkH8xDSjpwkat/UQIHCGuz5U13nGbb6+7UAjQPufJ5S340y0RnrNSl8ZYUSs=
 branches:
   only: master
-
 deploy:
   provider: heroku
   app:
@@ -23,6 +20,5 @@ deploy:
   api_key:
     secure: ZztBXxYMZxZv65UJCKeLQF0amEy+5HX8/izUlFPD90AIosok7C2IhM0VhWtVlSYS4GvAagbvkZe4OR89vGYJaBzM8akA3J1X7PRm2AD+GEKmpxTkCrVUkR5iCoLDG+10wV50yYPKizR9Noi9DBpZcSnPOSHDHuIIvdWBjz63Nfw=
   run:
-    - rake db:migrate:up
-    - restart
-
+  - rake db:migrate:up
+  - restart
