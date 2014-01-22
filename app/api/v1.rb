@@ -10,6 +10,10 @@ module Evercam
     # use JSON if accept header empty
     default_format :json
 
+    # setup ssl requirements
+    use Rack::SslEnforcer,
+      Evercam::Config[:api][:ssl]
+
     # ensure cookies work across subdomains
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]

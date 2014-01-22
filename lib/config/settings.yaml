@@ -4,6 +4,9 @@
   :intercom:
     :app_id: f9c1fd60de50d31bcbc3f4d8d74c9c6dbc40e95a
     :api_key: <%= ENV['INTERCOM_API_KEY'] %>
+  :api:
+    :ssl:
+      :only_environments: production
   :swagger:
     :v1:
       :api_version: '1.0'
@@ -33,6 +36,9 @@
 :production:
   <<: *defaults
   :database: <%= ENV['DATABASE_URL'] %>
+  :api:
+    :ssl:
+      :force_secure_cookies: false
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
   :swagger:
