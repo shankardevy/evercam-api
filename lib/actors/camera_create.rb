@@ -1,3 +1,5 @@
+require_relative '../workers'
+
 module Evercam
   module Actors
     class CameraCreate < Mutations::Command
@@ -67,11 +69,14 @@ module Evercam
 
         inputs[:endpoints].each do |e|
           endpoint = URI.parse(e)
+
           camera.add_endpoint({
             scheme: endpoint.scheme,
             host: endpoint.host,
             port: endpoint.port
           })
+
+          DNSUpsertWorker.perform_async(id, endpoint.host)
         end
 
         camera

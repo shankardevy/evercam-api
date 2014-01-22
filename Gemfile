@@ -21,6 +21,7 @@ gem 'pg'
 gem 'aws-sdk'
 gem 'intercom'
 gem 'timezone'
+gem 'sidekiq'
 gem 'dotenv'
 
 gem 'newrelic_rpm'
