@@ -27,6 +27,11 @@ module Evercam
         error_response({ status: 404, message: e.message })
       end
 
+      # errors where the endpoint is not implemented yet
+      base.rescue_from ComingSoonError do |e|
+        error_response({ status: 501, message: 'Sorry, this method is not implemented yet' })
+      end
+
       # woops, we broke something, go crazy...
       base.rescue_from :all do |e|
         Grape::API.logger.error e

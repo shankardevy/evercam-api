@@ -5,8 +5,22 @@ module Evercam
 
     include WebErrors
 
-    desc 'Returns all data for a given camera', {
+    desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
+    }
+    post '/cameras' do
+      inputs = params.merge(username: auth.user!.username)
+
+      outcome = Actors::CameraCreate.run(inputs)
+      raise OutcomeError, outcome unless outcome.success?
+      camera = outcome.result
+
+      present Array(camera), with: Presenters::Camera
+    end
+
+    desc 'Returns all data for a given camera', {
+      entity: Evercam::Presenters::Camera,
+      notes: 'Samples camera ID - sdsdsds '
     }
     get '/cameras/:id' do
       camera = ::Camera.by_exid(params[:id])
@@ -20,17 +34,14 @@ module Evercam
       present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Creates a new camera owned by the authenticating user', {
-      entity: Evercam::Presenters::Camera
-    }
-    post '/cameras' do
-      inputs = params.merge(username: auth.user!.username)
+    desc 'Updates full or partial data for an existing camera (COMING SOON)'
+    put '/cameras/:id' do
+      raise ComingSoonError
+    end
 
-      outcome = Actors::CameraCreate.run(inputs)
-      raise OutcomeError, outcome unless outcome.success?
-      camera = outcome.result
-
-      present Array(camera), with: Presenters::Camera
+    desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)'
+    delete '/cameras/:id' do
+      raise ComingSoonError
     end
 
   end

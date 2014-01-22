@@ -29,8 +29,9 @@ module Evercam
     extend GrapeErrorHandlers
 
     # mount actual endpoints
-    mount V1CameraRoutes
     mount V1UserRoutes
+    mount V1CameraRoutes
+    mount V1SnapshotRoutes
     mount V1ModelRoutes
 
     # bring on the swagger

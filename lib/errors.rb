@@ -9,6 +9,9 @@ module Evercam
   class AuthorizationError < EvercamError
   end
 
+  class ComingSoonError < EvercamError
+  end
+
   class OutcomeError < EvercamError
 
     def initialize(outcome)

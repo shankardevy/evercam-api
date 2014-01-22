@@ -17,7 +17,7 @@
 <script type="text/javascript">
   $(function () {
 
-    window.swaggerUi = new SwaggerUi({
+  window.swaggerUi = new SwaggerUi({
     url: "<%= Evercam::Config[:swagger][:v1][:base_path] %><%= Evercam::Config[:swagger][:v1][:mount_point] %>/swagger.json",
     dom_id: "swagger-ui-container",
     supportedSubmitMethods: ['get', 'post', 'put', 'delete'],

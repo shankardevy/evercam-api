@@ -31,6 +31,26 @@ module Evercam
       present cameras, with: Presenters::Camera
     end
 
+    desc 'Returns available information for the user (COMING SOON)'
+    get '/users/:id' do
+      raise ComingSoonError
+    end
+
+    desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'
+    get '/users/:id/rights' do
+      raise ComingSoonError
+    end
+
+    desc 'Updates full or partial data on your existing user account (COMING SOON)'
+    put '/users/:id' do
+      raise ComingSoonError
+    end
+
+    desc 'Delete your account, any cameras you own and all stored media (COMING SOON)'
+    delete '/users/:id' do
+      raise ComingSoonError
+    end
+
   end
 end
 
