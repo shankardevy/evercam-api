@@ -14,6 +14,12 @@ GIT
       grape-entity (~> 0.3.0)
       kramdown
 
+GIT
+  remote: git://github.com/tobmatth/rack-ssl-enforcer.git
+  revision: 790f9f1bb6f3f5667607450094bb61d840ad9891
+  specs:
+    rack-ssl-enforcer (0.2.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -128,7 +134,6 @@ GEM
       rack (>= 1.0.0)
     rack-protection (1.5.1)
       rack
-    rack-ssl-enforcer (0.2.6)
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.1.0)
@@ -219,7 +224,7 @@ DEPENDENCIES
   pony
   rack
   rack-cors
-  rack-ssl-enforcer
+  rack-ssl-enforcer!
   rack-test
   rake
   rspec

@@ -39,7 +39,7 @@
   :api:
     :ssl:
       :force_secure_cookies: false
-      :redirect_html: false
+      :redirect_html: "Sorry, all API calls must be made via https. Redirecting...\n"
   :cookies:
     :secret: <%= ENV['SESSION_COOKIE_SECRET'] %>
   :swagger:

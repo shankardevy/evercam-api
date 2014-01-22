@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'rack'
-gem 'rack-ssl-enforcer'
+gem 'rack-ssl-enforcer',
+  github: 'tobmatth/rack-ssl-enforcer'
 
 gem 'rake'
 gem 'sinatra'
