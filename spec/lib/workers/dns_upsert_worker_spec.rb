@@ -7,9 +7,16 @@ describe Evercam::DNSUpsertWorker do
 
   it 'delegates the update to ZoneManager' do
     Evercam::DNS::ZoneManager.any_instance.
-      expects(:update).with('abcd', '1234')
+      expects(:update).with('abcd', '127.0.0.1')
 
-    subject.new.perform('abcd', '1234')
+    subject.new.perform('abcd', '127.0.0.1')
+  end
+
+  it 'resolves hostnames to ip addresses' do
+    Evercam::DNS::ZoneManager.any_instance.
+      expects(:update).with('abcd', '127.0.0.1')
+
+    subject.new.perform('abcd', 'localhost')
   end
 
 end
