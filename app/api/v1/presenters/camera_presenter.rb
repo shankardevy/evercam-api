@@ -8,7 +8,7 @@ module Evercam
 
       expose :id, documentation: {
         type: 'string',
-        desc: 'Unqiue Evercam identifier for the camera',
+        desc: 'Unique Evercam identifier for the camera',
         required: true
       } do |s,o|
         s.exid
@@ -16,7 +16,7 @@ module Evercam
 
       expose :name, documentation: {
         type: 'string',
-        desc: 'Human readable / friendly name for the camera',
+        desc: 'Human readable or friendly name for the camera',
         required: true
       }
 
