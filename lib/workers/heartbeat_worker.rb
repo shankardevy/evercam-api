@@ -11,6 +11,7 @@ class HeartBeatWorker
 
     camera.endpoints.each do |endpoint|
       begin
+        next unless endpoint.public?
         uri = URI(endpoint.to_s)
         if Net::HTTP.get_response(uri).kind_of? Net::HTTPOK
           updates[:is_online] = true
