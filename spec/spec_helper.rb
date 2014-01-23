@@ -28,3 +28,7 @@ RSpec.configure do |c|
   c.fail_fast = true if ENV['FAIL_FAST']
 end
 
+# fake out sidekiq redis
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+

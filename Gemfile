@@ -6,11 +6,9 @@ gem 'rack-ssl-enforcer',
   github: 'tobmatth/rack-ssl-enforcer'
 
 gem 'rake'
-gem 'sinatra',
-  require: 'sinatra/base'
+gem 'sinatra'
 gem 'pony'
 gem 'json'
-gem 'sidekiq'
 
 gem 'grape'
 gem 'grape-entity'
@@ -23,6 +21,7 @@ gem 'pg'
 gem 'aws-sdk'
 gem 'intercom'
 gem 'timezone'
+gem 'sidekiq'
 gem 'dotenv'
 
 gem 'newrelic_rpm'

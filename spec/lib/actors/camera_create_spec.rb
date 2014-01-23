@@ -10,7 +10,7 @@ module Evercam
           id: 'my-new-camera',
           name: 'My Fancy New Camera',
           username: create(:user).username,
-          endpoints: ['http://localhost:9393'],
+          endpoints: ['http://127.0.0.1:9393'],
           is_public: true,
           snapshots: {
             jpg: '/onvif/snapshot'
@@ -93,6 +93,18 @@ module Evercam
           expect(result.timezone).to eq(timezone)
         end
 
+      end
+
+      context 'when it creates a camera' do
+        it 'fires off a dns upsert worker' do
+          params = valid
+
+          Evercam::DNSUpsertWorker.expects(:perform_async).
+            with('my-new-camera', '127.0.0.1')
+
+          outcome = subject.run(params)
+          expect(outcome).to be_success
+        end
       end
 
     end
