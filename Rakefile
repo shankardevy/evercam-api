@@ -1,5 +1,8 @@
 require 'rake'
+
 require_relative './lib/config'
+require_relative './lib/workers'
+require_relative './lib/models'
 
 if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
@@ -25,19 +28,13 @@ end
 
 namespace :schedule do
 
-  require_relative './lib/workers'
-  require_relative './lib/models'
   db = Sequel::Model.db
 
   task :minute do
-    default_queue = Sidekiq::Queue.new
-    default_queue.clear
-    cameras = db[:cameras]
-    cameras.select(:id).each do |row|
+    db[:cameras].select(:id).each do |row|
       HeartBeatWorker.perform_async(row[:id])
     end
-
-
   end
 
 end
+
