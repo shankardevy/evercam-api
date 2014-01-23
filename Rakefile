@@ -30,9 +30,11 @@ namespace :schedule do
   db = Sequel::Model.db
 
   task :minute do
-    cameras = db[:streams]
-    cameras.select(:name).each do |row|
-      HeartBeatWorker.perform_async(row[:name])
+    default_queue = Sidekiq::Queue.new
+    default_queue.clear
+    cameras = db[:cameras]
+    cameras.select(:id).each do |row|
+      HeartBeatWorker.perform_async(row[:id])
     end
 
 
