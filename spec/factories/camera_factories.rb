@@ -22,5 +22,12 @@ FactoryGirl.define do
     })
 
   end
+
+  factory :camera_endpoint do
+    association :camera, factory: :camera
+    scheme 'http'
+    host 'www.evercam.test'
+    port 80
+  end
 end
 

@@ -32,7 +32,7 @@ namespace :schedule do
 
   task :minute do
     db[:cameras].select(:id).each do |row|
-      HeartBeatWorker.perform_async(row[:id])
+      Evercam::HeartBeatWorker.perform_async(row[:id])
     end
   end
 

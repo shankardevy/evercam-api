@@ -1,29 +1,31 @@
 require 'net/http'
 
-class HeartBeatWorker
+module Evercam
+  class HeartBeatWorker
 
-  include Sidekiq::Worker
-  sidekiq_options retry: false
+    include Sidekiq::Worker
+    sidekiq_options retry: false
 
-  def perform(camera_id)
-    camera = Camera[camera_id]
-    updates = { is_online: false, polled_at: Time.now }
+    def perform(camera_id)
+      camera = Camera[camera_id]
+      updates = { is_online: false, polled_at: Time.now }
 
-    camera.endpoints.each do |endpoint|
-      begin
-        next unless endpoint.public?
-        uri = URI(endpoint.to_s)
-        if Net::HTTP.get_response(uri).kind_of? Net::HTTPOK
-          updates[:is_online] = true
-          break
+      camera.endpoints.each do |endpoint|
+        begin
+          next unless endpoint.public?
+          uri = URI(endpoint.to_s)
+          if Net::HTTP.get_response(uri).kind_of? Net::HTTPOK
+            updates[:is_online] = true
+            break
+          end
+        rescue Exception
+          # offline
         end
-      rescue Exception
-        # offline
-      end
+     end
+
+      camera.update(updates)
     end
 
-    camera.update(updates)
   end
-
 end
 

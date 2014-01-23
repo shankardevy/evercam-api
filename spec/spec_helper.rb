@@ -32,3 +32,5 @@ end
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
+# Stubbed requests
+require 'webmock/rspec'
