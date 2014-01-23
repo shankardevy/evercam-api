@@ -24,5 +24,6 @@ class HeartBeatWorker
     else
       camera.where(:id => id).update(:is_online => false)
     end
+    camera.where(:id => id).update(:polled_at =>  Sequel.function(:NOW))
   end
 end
