@@ -1,4 +1,5 @@
 require 'ipaddr'
+require 'resolv'
 
 class CameraEndpoint < Sequel::Model
 
@@ -13,6 +14,12 @@ class CameraEndpoint < Sequel::Model
   ]
 
   many_to_one :camera
+
+  def ipv4
+    return host if Resolv::IPv4::Regex =~ host
+    addr = Resolv.getaddresses(host).find { |a| Resolv::IPv4::Regex =~ a }
+    addr || (raise Resolv::ResolvError, "no ipv4 address for #{host}")
+  end
 
   def local?
     in_range?(LOCAL_RANGES)
@@ -33,8 +40,7 @@ class CameraEndpoint < Sequel::Model
   private
 
   def in_range?(range)
-    return false unless Resolv::IPv4::Regex =~ host
-    range.any? { |r| r.include?(host) }
+    range.any? { |r| r.include?(ipv4) }
   end
 
 end
