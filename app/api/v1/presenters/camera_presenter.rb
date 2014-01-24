@@ -61,6 +61,11 @@ module Evercam
           desc: 'Unix timestamp at last heartbeat poll'
         }
 
+        expose :last_online_at, documentation: {
+          type: 'integer',
+          desc: 'Unix timestamp of the last successful heartbeat of the camera'
+        }
+
       end
 
       expose :timezone, documentation: {
