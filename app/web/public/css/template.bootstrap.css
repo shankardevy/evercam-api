@@ -498,7 +498,7 @@ header #logo {
   z-index: 1;
   float: none;
   position: relative;
-  min-height: 320px;
+  min-height: 290px;
 }
 
 .slider .camera_wrap img {
@@ -2412,7 +2412,7 @@ width: 100px;
 }
 
 .language{
-  padding-top: 20px;
+  padding-top: 40px;
   height: 140px;
 }
 
@@ -2500,9 +2500,11 @@ width: 100px;
 }
 
 .slider-bg {
-  background: url(../img/oconnell3.jpg) center 0 no-repeat;
+  background: url(../img/camera_only.png) center 0 no-repeat;
   margin-top: 23px;
+  background-size: 100%;
 }
+
 
 .camera_wrap .image h1{
   font-size: 50px;
@@ -2512,11 +2514,20 @@ width: 100px;
   color: #fff;
 }
 
-.image p{
+.camera_wrap .image h4{
   font-size: 1.8em;
   margin: 0;
-  padding: 0 0 0 100px;
-  color: #fff;
+  padding-top: 5px;
+  color: #4D4D4D;
+  text-align: center;
+}
+
+.camera_wrap .image h2{
+  font-size: 52px;
+  color: #579BC3;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 5px;
 }
 
 .image #signup {
@@ -2536,11 +2547,18 @@ width: 100px;
   border-radius: 5px;
 }
 
+.imageButton{
+  padding-top: 20px;
+  padding-bottom: 30px;
+  width: 160px;
+  margin: auto;
+}
+
 .image .btn-lg {
   font-size: 25px;
   line-height: 1em;
-  padding: 10px 20px 20px 100px;
-  margin-top: 20px;
+  padding: 0px;
+  margin: auto;
   text-transform: none;
 }
 
