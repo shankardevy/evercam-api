@@ -790,6 +790,10 @@ ul.list-testimonials li:first-child {
   padding-bottom: 40px;
 }
 
+.border-4 {
+  padding-bottom: 40px;
+}
+
 .thumbnails {
   margin-top: -45px
 }
