@@ -6,8 +6,8 @@ module Evercam
     include Sidekiq::Worker
     sidekiq_options retry: false
 
-    def perform(camera_id)
-      camera = Camera[camera_id]
+    def perform(camera_name)
+      camera = Camera[:exid => camera_name]
       updates = { is_online: false, polled_at: Time.now }
 
       camera.endpoints.each do |endpoint|

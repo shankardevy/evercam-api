@@ -31,8 +31,8 @@ namespace :schedule do
   db = Sequel::Model.db
 
   task :minute do
-    db[:cameras].select(:id).each do |row|
-      Evercam::HeartBeatWorker.perform_async(row[:id])
+    db[:cameras].select(:exid).each do |row|
+      Evercam::HeartBeatWorker.perform_async(row[:exid])
     end
   end
 
