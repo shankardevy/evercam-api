@@ -1,3 +1,5 @@
+require_relative '../workers'
+
 module Evercam
   module Actors
     class CameraCreate < Mutations::Command
@@ -67,12 +69,18 @@ module Evercam
 
         inputs[:endpoints].each do |e|
           endpoint = URI.parse(e)
+
           camera.add_endpoint({
             scheme: endpoint.scheme,
             host: endpoint.host,
             port: endpoint.port
           })
+
         end
+
+        # fire off the evr.cm zone update to sidekiq
+        primary = camera.endpoints.first
+        DNSUpsertWorker.perform_async(id, primary.host)
 
         camera
       end

@@ -8,6 +8,7 @@ SimpleCov.start do
   add_filter '/spec/'
 end
 
+require_relative './matchers'
 require_relative '../lib/config'
 require_relative '../lib/errors'
 
@@ -27,4 +28,11 @@ RSpec.configure do |c|
   c.mock_framework = :mocha
   c.fail_fast = true if ENV['FAIL_FAST']
 end
+
+# fake out sidekiq redis
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
+
+# Stubbed requests
+require 'webmock/rspec'
 

@@ -20,3 +20,9 @@ RSpec::Matchers.define :have_keys do |*keys|
   end
 end
 
+RSpec::Matchers.define :be_around_now do
+  match do |actual|
+    1 >= (actual - Time.now)
+  end
+end
+

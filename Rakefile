@@ -1,5 +1,8 @@
 require 'rake'
+
 require_relative './lib/config'
+require_relative './lib/workers'
+require_relative './lib/models'
 
 if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
@@ -19,6 +22,18 @@ namespace :db do
       Sequel::Migrator.run(db, 'migrations')
     end
 
+  end
+
+end
+
+namespace :schedule do
+
+  db = Sequel::Model.db
+
+  task :minute do
+    db[:cameras].select(:exid).each do |row|
+      Evercam::HeartBeatWorker.perform_async(row[:exid])
+    end
   end
 
 end
