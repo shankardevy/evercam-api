@@ -36,7 +36,7 @@
     :from: evercam.io <noreply@evercam.io>
     :via: :test
 
-:production:
+:production: &production
   <<: *defaults
   :database: <%= ENV['DATABASE_URL'] %>
   :api:
@@ -65,4 +65,11 @@
       :address: 'smtp.sendgrid.net'
       :domain: 'heroku.com'
       :port: 587
+
+:staging:
+  <<: *production
+  :mail:
+    :to: env.staging@evercam.io
+    :from: evercam.io <noreply@evercam.io>
+    :via: :sendmail
 
