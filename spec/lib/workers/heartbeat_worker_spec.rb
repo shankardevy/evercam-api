@@ -1,9 +1,9 @@
 require 'data_helper'
 require_lib 'workers'
 
-describe Evercam::HeartBeatWorker do
+describe Evercam::HeartbeatWorker do
 
-  subject { Evercam::HeartBeatWorker }
+  subject { Evercam::HeartbeatWorker }
 
   let(:camera0) { create(:camera_endpoint, host: 'www.evercam.io', port: 80).camera }
 
@@ -15,6 +15,13 @@ describe Evercam::HeartBeatWorker do
       subject.new.perform(camera0.exid)
 
       assert_not_requested :any, 'localhost'
+    end
+  end
+
+  context 'when a camera endpoint cannot be resolved' do
+    it 'does not raise an error' do
+      camera0.endpoints.first.update(host: 'bad.host')
+      expect{ subject.new.perform(camera0.exid) }.to_not raise_error
     end
   end
 

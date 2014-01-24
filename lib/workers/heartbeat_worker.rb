@@ -1,19 +1,25 @@
 require 'net/http'
 
 module Evercam
-  class HeartBeatWorker
+  class HeartbeatWorker
 
     include Sidekiq::Worker
     sidekiq_options retry: false
 
     TIMEOUT = 5
 
+    def self.run
+      Camera.select(:exid).each do |r|
+        perform_async(r[:exid])
+      end
+    end
+
     def perform(camera_name)
       camera = Camera.by_exid(camera_name)
       updates = { is_online: false, polled_at: Time.now }
 
       camera.endpoints.each do |endpoint|
-        next unless endpoint.public?
+        next unless (endpoint.public? rescue false)
         con = Net::HTTP.new(endpoint.host, endpoint.port)
 
         begin

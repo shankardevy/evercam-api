@@ -2,7 +2,6 @@ require 'rake'
 
 require_relative './lib/config'
 require_relative './lib/workers'
-require_relative './lib/models'
 
 if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
@@ -26,14 +25,18 @@ namespace :db do
 
 end
 
-namespace :schedule do
+namespace :workers do
 
-  db = Sequel::Model.db
+  task :enable do
+    Evercam::ScheduleWorker.enable
+  end
 
-  task :minute do
-    db[:cameras].select(:exid).each do |row|
-      Evercam::HeartBeatWorker.perform_async(row[:exid])
-    end
+  task :disable do
+    Evercam::ScheduleWorker.disable
+  end
+
+  task :heartbeat do
+    Evercam::HeartbeatWorker.run
   end
 
 end

@@ -32,6 +32,7 @@ end
 # fake out sidekiq redis
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
+Sidekiq::Logging.logger = nil
 
 # Stubbed requests
 require 'webmock/rspec'
