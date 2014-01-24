@@ -481,10 +481,11 @@ header #logo {
   position: static !important
 }
 
-.slider-bg {
+/*.slider-bg {
   background: url(../img/slide.jpg) center 0 no-repeat;
   margin-top: 23px;
 }
+*/
 
 .slider {
   border-radius: 0px;
@@ -2499,8 +2500,16 @@ width: 100px;
   font-size: 16px;
 }
 
+/*
 .slider-bg {
-  background: url(../img/camera_only.png) center 0 no-repeat;
+  background: url(../img/Camera2.png) center 0 no-repeat;
+  margin-top: 23px;
+  background-size: 100%;
+}
+*/
+
+.camera_wrap{
+  background: url(../img/Camera5.png) center 0 no-repeat;
   margin-top: 23px;
   background-size: 100%;
 }
@@ -2514,10 +2523,10 @@ width: 100px;
   color: #fff;
 }
 
-.camera_wrap .image h4{
+#beta .camera_wrap .image h4{
   font-size: 1.8em;
-  margin: 0;
-  padding-top: 5px;
+  margin: 0px;
+  padding-top: 1px;
   color: #4D4D4D;
   text-align: center;
 }
