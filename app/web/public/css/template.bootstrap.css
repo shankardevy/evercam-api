@@ -893,6 +893,17 @@ ul.list-testimonials li:first-child {
   box-sizing: border-box;
 }
 
+
+#map-canvas { height: 100% }
+
+
+
+#myMap{
+   width: 640px;
+        height: 480px;
+}
+
+
 .map iframe {
   width: 100%;
   height: 300px;
