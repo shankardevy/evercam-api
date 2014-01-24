@@ -481,12 +481,6 @@ header #logo {
   position: static !important
 }
 
-/*.slider-bg {
-  background: url(../img/slide.jpg) center 0 no-repeat;
-  margin-top: 23px;
-}
-*/
-
 .slider {
   border-radius: 0px;
   position: relative;
@@ -1390,7 +1384,6 @@ footer span a:hover {
     margin-right: auto;
   }
 
-
   .container {
     padding: 0
   }
@@ -1418,7 +1411,6 @@ footer span a:hover {
   }
 
 }
-
 
 @media (max-width: 767px) {
 
@@ -1613,7 +1605,6 @@ footer span a:hover {
     float: none;
   }
 
-
   .nav-tabs {
     margin: -5px 0 0 -5px
   }
@@ -1646,7 +1637,6 @@ footer span a:hover {
   header #logo {
     padding-left: 20px;
   }
-
 
   .slider .camera_wrap {
     min-height: 200px
@@ -1713,7 +1703,6 @@ footer span a:hover {
     margin-bottom: 20px;
     width: 100%;
   }
-
 
 }
 
@@ -1962,8 +1951,6 @@ width: 100px;
   display: inline;
   padding: 15px;
 }
-
-
 
 #marketplace i.active, #marketplace i:hover {
   /*color: #fff;*/
@@ -2513,7 +2500,6 @@ width: 100px;
   margin-top: 23px;
   background-size: 100%;
 }
-
 
 .camera_wrap .image h1{
   font-size: 50px;
