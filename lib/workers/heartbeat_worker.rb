@@ -15,8 +15,10 @@ module Evercam
     end
 
     def perform(camera_name)
+      instant = Time.now
+
       camera = Camera.by_exid(camera_name)
-      updates = { is_online: false, polled_at: Time.now }
+      updates = { is_online: false, polled_at: instant }
 
       camera.endpoints.each do |endpoint|
         next unless (endpoint.public? rescue false)
@@ -25,7 +27,7 @@ module Evercam
         begin
           con.open_timeout = TIMEOUT
           if con.get('/')
-            updates.merge!(is_online: true, last_online_at: Time.now)
+            updates.merge!(is_online: true, last_online_at: instant)
             break
           end
         rescue Net::OpenTimeout
