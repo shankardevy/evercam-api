@@ -16,6 +16,7 @@ module Evercam
           uri = URI(endpoint.to_s)
           if Net::HTTP.get_response(uri).kind_of? Net::HTTPOK
             updates[:is_online] = true
+            updates[:last_online_at] = Time.now
             break
           end
         rescue Exception
