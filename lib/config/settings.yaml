@@ -13,6 +13,9 @@
       :mount_path: swagger
       :hide_documentation_path: true
       :base_path: http://localhost:9393/v1
+  :sidekiq:
+    :url: redis://localhost:6379/0
+    :namespace: sidekiq
   :amazon:
     :access_key_id: AKIAI5S44JBLDLGUKIIA
     :secret_access_key: <%= ENV['AWS_SECRET_KEY'] %>
@@ -48,6 +51,9 @@
       :mount_path: swagger
       :hide_documentation_path: true
       :base_path: https://api.evercam.io/v1
+  :sidekiq:
+    :url: <%= ENV['REDISCLOUD_URL'] %>
+    :namespace: sidekiq
   :mail:
     :from: evercam.io <noreply@evercam.io>
     :via: :smtp
