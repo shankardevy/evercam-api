@@ -19,10 +19,9 @@ describe Evercam::ScheduleWorker do
   describe '#disable' do
     it 'removes all schedule worker jobs from the queue' do
       job0 = mock(:delete)
+      set0 = mock(select: [job0])
 
-      Sidekiq::ScheduledSet.any_instance.
-        expects(:select).returns([job0])
-
+      Sidekiq::ScheduledSet.expects(:new).returns(set0)
       subject.disable
     end
   end
