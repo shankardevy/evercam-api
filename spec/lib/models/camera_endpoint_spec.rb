@@ -11,7 +11,7 @@ describe CameraEndpoint do
     end
   end
 
-  describe 'ipv4' do
+  describe '#ipv4' do
 
     it 'returns the raw host when it is an ip address' do
       endpoint0 = subject.new(host: '192.168.1.1')

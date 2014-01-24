@@ -8,6 +8,7 @@ SimpleCov.start do
   add_filter '/spec/'
 end
 
+require_relative './matchers'
 require_relative '../lib/config'
 require_relative '../lib/errors'
 
@@ -34,3 +35,4 @@ Sidekiq::Testing.fake!
 
 # Stubbed requests
 require 'webmock/rspec'
+

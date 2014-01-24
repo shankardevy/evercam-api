@@ -14,5 +14,4 @@ def env_for(params)
 end
 
 require_relative './rack/mock_response'
-require_relative './rack/matchers'
 

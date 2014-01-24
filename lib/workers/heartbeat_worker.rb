@@ -6,23 +6,30 @@ module Evercam
     include Sidekiq::Worker
     sidekiq_options retry: false
 
+    TIMEOUT = 5
+
     def perform(camera_name)
-      camera = Camera[:exid => camera_name]
+      camera = Camera.by_exid(camera_name)
       updates = { is_online: false, polled_at: Time.now }
 
       camera.endpoints.each do |endpoint|
+        next unless endpoint.public?
+        con = Net::HTTP.new(endpoint.host, endpoint.port)
+
         begin
-          next unless endpoint.public?
-          uri = URI(endpoint.to_s)
-          if Net::HTTP.get_response(uri).kind_of? Net::HTTPOK
-            updates[:is_online] = true
-            updates[:last_online_at] = Time.now
+          con.open_timeout = TIMEOUT
+          if con.get('/')
+            updates.merge!(is_online: true, last_online_at: Time.now)
             break
           end
-        rescue Exception
+        rescue Net::OpenTimeout
           # offline
+        rescue Exception => e
+          # we weren't expecting this (famous last words)
+          logger.warn(e)
         end
-     end
+
+      end
 
       camera.update(updates)
     end
