@@ -92,6 +92,14 @@ module Evercam
         camera.mac_address = mac_address if mac_address
         camera.save
 
+        activity = CameraActivity.new({
+          camera: camera,
+          user: User.by_login(username),
+          action: 'created new camera',
+          done_at: Time.now
+        })
+        activity.save
+
         inputs[:endpoints].each do |e|
           endpoint = URI.parse(e)
 
