@@ -4,133 +4,114 @@ require_app 'api/v1'
 module Evercam
   describe WithAuth do
 
-    subject { WithAuth }
+    subject { WithAuth.new(env) }
 
-    describe '#has_right?' do
+    let!(:user) { create(:user, username: 'x', password: 'y') }
 
-      context 'when no authentication is provided' do
+    context 'when no authentication is provided' do
 
-        let(:env) { { 'rack.session' => {} } }
+      let(:env) { { 'rack.session' => {} } }
 
-        it 'raises an AuthenticationError' do
-          expect { subject.new(env).has_right?('xxxx', nil) }.
-            to raise_error(AuthenticationError, /supported/)
+      describe '#token' do
+        it 'returns nil' do
+          expect(subject.token).to be_nil
+        end
+      end
+
+    end
+
+    context 'when basic authentication is provided' do
+
+      context 'when the credentials are not valid' do
+
+        let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic xxxx' } }
+
+        describe '#token' do
+          it 'raises an AuthenticationError' do
+            expect{ subject.token }.to raise_error(AuthenticationError)
+          end
         end
 
       end
 
-      context 'when basic authentication is provided' do
+      context 'when the credentials are valid' do
 
-        context 'when the user credentials are not valid' do
-          it 'raises an AuthenticationError' do
-            env = { 'HTTP_AUTHORIZATION' => 'Basic zzzz' }
-            expect { subject.new(env).has_right?('xxxx', nil) }.
-              to raise_error(AuthenticationError, /basic/)
+        let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic eDp5' } }
+
+        describe '#token' do
+          it 'returns the users permanent token' do
+            expect(subject.token).to eq(user.token)
           end
-        end
-
-        context 'when the user credentials are valid' do
-
-          before(:each) do
-            create(:user, username: 'xxxx', password: 'yyyy')
-          end
-
-          context 'when the user does not have the right' do
-            it 'return false' do
-              env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
-              resource = mock(:has_right? => false)
-              expect(subject.new(env).has_right?('xxxx', resource)).
-                to eq(false)
-            end
-          end
-
-          context 'when the user does have the right' do
-            it 'return true' do
-              env = { 'HTTP_AUTHORIZATION' => 'Basic eHh4eDp5eXl5' }
-              resource = mock(:has_right? => true)
-              expect(subject.new(env).has_right?('xxxx', resource)).
-                to eq(true)
-            end
-          end
-
         end
 
       end
 
-      context 'when a session cookie is provided' do
+    end
 
-        let(:user) { create(:user) }
+    context 'when a user session cookie is available' do
 
-        context 'when the credentials are not valid' do
+      context 'when the cookie is not valid' do
+
+        let(:env) { env_for(session: { user: '0' }) }
+
+        describe '#token' do
           it 'raises an AuthenticationError' do
-            env = env_for(session: { user: '0' })
-            expect { subject.new(env).has_right?('xxxx', nil) }.
-              to raise_error(AuthenticationError, /session/)
+            expect{ subject.token }.to raise_error(AuthenticationError)
           end
-        end
-
-        context 'when the credentials are valid' do
-
-          context 'when the user does not have the right' do
-            it 'returns false' do
-              env = env_for(session: { user: user.id })
-              resource = mock(:has_right? => false)
-              expect(subject.new(env).has_right?('xxxx', resource) ).
-                to eq(false)
-            end
-          end
-
-          context 'whent he user does have the right' do
-            it 'returns false' do
-              env = env_for(session: { user: user.id })
-              resource = mock(:has_right? => true)
-              expect(subject.new(env).has_right?('xxxx', resource) ).
-                to eq(true)
-            end
-          end
-
         end
 
       end
 
-      context 'when an access token is provided' do
+      context 'when the cookie is valid' do
 
-        let(:env) { { 'HTTP_AUTHORIZATION' => "Bearer #{token.request}" } }
+        let(:env) { env_for(session: { user: user.id }) }
 
-        let(:token) { create(:access_token) }
+        describe '#token' do
+          it 'returns the users permanent token' do
+            expect(subject.token).to eq(user.token)
+          end
+        end
 
-        context 'when the token does not exist' do
+      end
+
+    end
+
+    context 'when an oauth access token is provided' do
+
+      let(:token) { create(:access_token) }
+
+      let(:env) { { 'HTTP_AUTHORIZATION' => "Bearer #{token.request}" } }
+
+      context 'when the token does not exist' do
+
+        before(:each) { token.delete }
+
+        describe '#token' do
           it 'raises an AuthenticationError' do
-            token.delete
-            expect { subject.new(env).has_right?('xxxx', nil) }.
-              to raise_error(AuthenticationError, /token/)
+            expect{ subject.token }.to raise_error(AuthenticationError)
           end
         end
 
-        context 'when the token is invalid' do
+      end
+
+      context 'when the token is invalid' do
+
+        before(:each) { token.update(is_revoked: true) }
+
+        describe '#token' do
           it 'raises an AuthenticationError' do
-            token.update(is_revoked: true).save
-            expect { subject.new(env).has_right?('xxxx', nil) }.
-              to raise_error(AuthenticationError, /token/)
+            expect{ subject.token }.to raise_error(AuthenticationError)
           end
         end
 
-        context 'when the token is valid but does not provide the right' do
-          it 'returns false' do
-            resource = mock(:has_right? => false)
-            expect(subject.new(env).has_right?('xxxx', resource)).
-              to eq(false)
+      end
+
+      context 'when the token is valid' do
+        describe '#token' do
+          it 'it returns the temporary access token' do
+            expect(subject.token).to eq(token)
           end
         end
-
-        context 'when the token is valid and does provide the right' do
-          it 'returns false' do
-            resource = mock(:has_right? => true)
-            expect(subject.new(env).has_right?('xxxx', resource)).
-              to eq(true)
-          end
-        end
-
       end
 
     end
