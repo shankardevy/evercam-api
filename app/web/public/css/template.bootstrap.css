@@ -1893,6 +1893,31 @@ color: #eb5f53;
   border-radius: 5px;
 }
 
+ #joinNewsletter {
+  border: 0;
+  padding: 0;
+  width: 200px;
+  font-size: 20px;
+  font-weight: 800;
+  display: inline-block;
+  background: #EB5F53;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 45px;
+  height: 60px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
 #flash {
   padding: 5px 10px;
   background-color: #EB5F53;
@@ -2532,8 +2557,8 @@ width: 100px;
 .image #signup {
   border: 0;
   padding: 0;
-  width: 160px;
-  font-size: 24px;
+  width: 200px;
+  font-size: 20px;
   font-weight: 800;
   display: inline-block;
   background: #DC4C3F;
@@ -2549,7 +2574,7 @@ width: 100px;
 .imageButton{
   padding-top: 20px;
   padding-bottom: 30px;
-  width: 160px;
+  width: 200px;
   margin: auto;
 }
 
