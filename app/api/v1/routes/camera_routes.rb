@@ -47,7 +47,8 @@ module Evercam
         camera: camera,
         access_token: nil,
         action: 'accessed',
-        done_at: Time.now
+        done_at: Time.now,
+        ip: request.ip
       })
       activity.save
 

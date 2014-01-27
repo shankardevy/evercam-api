@@ -9,6 +9,7 @@ Sequel.migration do
       foreign_key :access_token_id, :users, on_delete: :cascade
       column :action, :text, null: false
       column :done_at, :timestamptz, null: false
+      column :ip, :inet
 
       index [:camera_id, :access_token_id, :done_at], unique: true
 

@@ -30,17 +30,33 @@ describe CameraActivity, :focus => true do
 
   end
 
-  describe 'anonymous camera access' do
+  describe 'public camera access' do
 
     let(:camera0) { create(:camera, is_public: true) }
 
-    it 'creates anonymous access activity' do
-      response = get("/cameras/#{camera0.exid}")
-      expect(response.status).to eq(200)
-      ca = CameraActivity.first
-      expect(ca.camera.exid).to eq(camera0.exid)
-      expect(ca.access_token).to eq(nil)
-      expect(ca.action).to eq('accessed')
+    context 'when the request is unauthorized' do
+      it 'creates anonymous access activity' do
+        response = get("/cameras/#{camera0.exid}")
+        expect(response.status).to eq(200)
+        ca = CameraActivity.first
+        expect(ca.camera.exid).to eq(camera0.exid)
+        expect(ca.access_token).to eq(nil)
+        expect(ca.action).to eq('accessed')
+        expect(ca.ip).to eq('127.0.0.1')
+      end
+    end
+
+    context 'when the request is authorized' do
+      it 'creates access activity' do
+        camera0.update(owner: create(:user, username: 'xxxx', password: 'yyyy'))
+        env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        expect(get("/cameras/#{camera0.exid}", {}, env).status).to eq(200)
+        ca = CameraActivity.first
+        expect(ca.camera.exid).to eq(camera0.exid)
+        expect(ca.access_token).to eq('something')
+        expect(ca.action).to eq('accessed')
+        expect(ca.ip).to eq('127.0.0.1')
+      end
     end
 
   end
