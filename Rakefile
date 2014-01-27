@@ -12,15 +12,16 @@ end
 namespace :db do
 
   require 'sequel'
-  namespace :migrate do
+  Sequel.extension :migration, :pg_json, :pg_array
 
-    Sequel.extension :migration, :pg_json, :pg_array
-
-    task :up do
-      db = Sequel.connect(Evercam::Config[:database])
+  task :migrate do
+    envs = [Evercam::Config.env]
+    envs << :test if :development == envs[0]
+    envs.each do |env|
+      db = Sequel.connect(Evercam::Config.settings[env][:database])
       Sequel::Migrator.run(db, 'migrations')
+      puts "<-- Migrate #{env}"
     end
-
   end
 
 end

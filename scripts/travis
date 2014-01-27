@@ -6,5 +6,5 @@ dropdb --if-exists evercam_tst \
   && createdb evercam_tst \
   && psql evercam_tst < $SCHEMA
 
-bundle exec rake db:migrate:up
+bundle exec rake db:migrate
 
