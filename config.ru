@@ -30,11 +30,6 @@ map '/v1' do
 
 end
 
-require 'sidekiq/web'
-map '/sidekiq' do
-  run Sidekiq::Web
-end
-
 map '/' do
   run Evercam::WebApp
 end
