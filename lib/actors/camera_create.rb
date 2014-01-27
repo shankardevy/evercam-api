@@ -95,7 +95,7 @@ module Evercam
         activity = CameraActivity.new({
           camera: camera,
           user: User.by_login(username),
-          action: 'created new camera',
+          action: 'created',
           done_at: Time.now
         })
         activity.save

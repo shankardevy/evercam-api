@@ -42,6 +42,15 @@ module Evercam
         camera = Camera.by_exid!(params[:id])
         auth.allow? { |r| camera.allow?(:view, r) }
       end
+
+      activity = CameraActivity.new({
+        camera: camera,
+        access_token: nil,
+        action: 'accessed',
+        done_at: Time.now
+      })
+      activity.save
+
       present Array(camera), with: Presenters::Camera
     end
 

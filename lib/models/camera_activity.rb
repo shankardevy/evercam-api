@@ -1,10 +1,14 @@
 class CameraActivity < Sequel::Model
 
-  many_to_one :camera
-  many_to_one :user
+  many_to_one :camera, class: 'Camera'
+  many_to_one :access_token, class: 'AccessToken'
 
   def to_s
-    "[#{camera.name}] #{user.fullname} #{action} #{done_at}"
+    if access_token.nil?
+      "[#{camera.name}] Anonymous #{action} #{done_at}"
+    else
+      "[#{camera.name}] #{access_token.grantor.fullname} #{action} #{done_at}"
+    end
   end
 
 end
