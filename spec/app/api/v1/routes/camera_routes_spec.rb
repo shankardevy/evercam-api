@@ -130,7 +130,7 @@ describe 'API routes/cameras' do
 
   end
 
-  describe 'PUT /cameras', :focus => true do
+  describe 'PUT /cameras' do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
@@ -182,6 +182,27 @@ describe 'API routes/cameras' do
     context 'when no authentication is provided' do
       it 'returns an UNAUTHROZIED status' do
         expect(put("/cameras/#{camera.exid}", params).status).to eq(401)
+      end
+    end
+
+  end
+
+ describe 'DELETE /cameras' do
+
+    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+
+    context 'when params are empty' do
+      it 'returns a OK status' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        delete("/cameras/#{camera.exid}", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(Camera.by_exid(camera.exid)).to eq(nil)
+      end
+    end
+
+    context 'when no authentication is provided' do
+      it 'returns an UNAUTHROZIED status' do
+        expect(delete("/cameras/#{camera.exid}", {}).status).to eq(401)
       end
     end
 
