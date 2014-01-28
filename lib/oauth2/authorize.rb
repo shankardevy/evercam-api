@@ -43,7 +43,7 @@ module Evercam
       def missing
         scopes.select do |s|
           false == client.tokens.any? do |t|
-            t.grantor == @u && t.scopes.include?(s.to_s)
+            t.grantor == @u && t.allow?(s.to_s)
           end
         end
       end
@@ -78,7 +78,7 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.generic? || s.resource.allow?(:share, @u)
+          s.generic? || s.resource.owner == @u
         end
       end
 
@@ -91,11 +91,11 @@ module Evercam
 
       def issue_access_token
         return nil unless valid?
-        @token = AccessToken.create(
-          grantor: @u,
-          grantee: client,
-          scopes: scopes
-        )
+        @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
+          scopes.each do |s|
+            t.add_right(name: s.to_s)
+          end
+        end
       end
 
       def redirect_uri

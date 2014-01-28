@@ -88,31 +88,5 @@ describe User do
 
   end
 
-  describe '#scopes' do
-
-    context 'when the database is null' do
-      it 'returns an empty set' do
-        user0 = User.new(scopes: nil)
-        expect(user0.scopes).to be_empty
-      end
-    end
-
-    it 'allows common operators like #append' do
-      user0 = build(:user, scopes: nil)
-      user0.scopes.append('test:scope')
-      expect(user0.scopes).to eq(['test:scope'])
-    end
-
-    it 'persists scopes across saves' do
-      user0 = build(:user, scopes: nil)
-
-      user0.scopes.append('test:scope')
-      user0.save
-
-      expect(User[user0.pk].scopes).to eq(['test:scope'])
-    end
-
-  end
-
 end
 

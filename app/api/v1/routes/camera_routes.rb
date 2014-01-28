@@ -9,7 +9,8 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     post '/cameras' do
-      inputs = params.merge(username: auth.user!.username)
+      raise AuthenticationError unless auth.token
+      inputs = params.merge(username: auth.token.grantor.username)
 
       outcome = Actors::CameraCreate.run(inputs)
       raise OutcomeError, outcome unless outcome.success?
@@ -19,15 +20,14 @@ module Evercam
     end
 
     desc 'Returns all data for a given camera', {
-      entity: Evercam::Presenters::Camera,
-      notes: 'Samples camera ID - sdsdsds '
+      entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
       camera = ::Camera.by_exid(params[:id])
       raise NotFoundError, 'Camera was not found' unless camera
 
-      unless camera.allow?(:view, auth.seeker)
-        raise AuthenticationError unless auth.seeker
+      unless camera.allow?(:view, auth.token)
+        raise AuthenticationError unless auth.token
         raise AuthorizationError, 'not authorized to view this camera'
       end
 

@@ -64,19 +64,34 @@ describe AccessToken do
 
   end
 
-  describe '#scopes' do
+  describe '#owner' do
 
-    context 'when the database is null' do
-      it 'returns an empty set' do
-        token0 = AccessToken.new(scopes: nil)
-        expect(token0.scopes).to be_empty
+    context 'when it is a user permanent token' do
+      it 'return the grantor (user)' do
+        token = create(:access_token, grantee: nil)
+        expect(token.owner).to eq(token.grantor)
       end
     end
 
-    it 'allows common operators like #append' do
-      token0 = build(:access_token, scopes: nil)
-      token0.scopes.append('test:scope')
-      expect(token0.scopes).to eq(['test:scope'])
+    context 'when it is a client temporary token' do
+      it 'returns the grantee (client)' do
+        token = create(:access_token)
+        expect(token.owner).to eq(token.grantee)
+      end
+    end
+
+  end
+
+  describe '#allow?' do
+
+    it 'returns true when the access right has been granted' do
+      token = create(:access_right, name: 'xxxx').token
+      expect(token.allow?('xxxx')).to eq(true)
+    end
+
+    it 'returns false when the access right has not been granted' do
+      token = create(:access_right, name: 'xxxx').token
+      expect(token.allow?('aaaa')).to eq(false)
     end
 
   end

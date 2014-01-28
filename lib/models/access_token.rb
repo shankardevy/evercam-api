@@ -5,6 +5,9 @@ class AccessToken < Sequel::Model
   many_to_one :grantor, class: 'User'
   many_to_one :grantee, class: 'Client'
 
+  one_to_many :rights, class: 'AccessRight',
+    key: :token_id
+
   def self.by_request(val)
     first(request: val)
   end
@@ -26,8 +29,13 @@ class AccessToken < Sequel::Model
       Time.now <= self.expires_at
   end
 
-  def scopes
-    values[:scopes] ||= Sequel.pg_array([])
+  def owner
+    grantee || grantor
+  end
+
+  def allow?(scope)
+    1 == rights_dataset.
+      where(name: scope).count
   end
 
 end

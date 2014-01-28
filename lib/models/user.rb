@@ -36,10 +36,6 @@ class User < Sequel::Model
     false == self.confirmed_at.nil?
   end
 
-  def scopes
-    values[:scopes] ||= Sequel.pg_array([])
-  end
-
   private
 
   def ensure_token_exists
