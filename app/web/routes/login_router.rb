@@ -18,7 +18,8 @@ module Evercam
 
       unless user && user.password == params[:password]
         session[:user] = nil
-        redirect '/login', error: 'Invalid username or email and password combination'
+        redirect request.referrer || '/login', error:
+          'Invalid username or email and password combination'
       else
         session[:user] = user.id
         cookies.merge!({ name: user.fullname, email: user.email, created_at: user.created_at.to_i })
