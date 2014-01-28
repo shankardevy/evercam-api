@@ -132,8 +132,7 @@ describe 'API routes/cameras' do
 
   describe 'PUT /cameras', :focus => true do
 
-    let(:camera) { create(:camera, is_public: true) }
-    let(:auth) { env_for(session: { user: create(:user).id }) }
+    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
     let(:params) {
       {
@@ -146,6 +145,7 @@ describe 'API routes/cameras' do
     context 'when the params are valid' do
 
       before(:each) do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
         put("/cameras/#{camera.exid}", params, auth)
       end
 
@@ -173,6 +173,7 @@ describe 'API routes/cameras' do
 
     context 'when params are empty' do
       it 'returns a OK status' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
         put("/cameras/#{camera.exid}", params.clear, auth)
         expect(last_response.status).to eq(200)
       end

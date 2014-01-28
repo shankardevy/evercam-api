@@ -38,7 +38,16 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     put '/cameras/:id' do
-      inputs = params.merge(username: auth.user!.username)
+      raise AuthenticationError unless auth.token
+      inputs = params.merge(username: auth.token.grantor.username)
+
+      camera = ::Camera.by_exid(params[:id])
+      raise NotFoundError, 'Camera was not found' unless camera
+
+      unless camera.allow?(:edit, auth.token)
+        raise AuthenticationError unless auth.token
+        raise AuthorizationError, 'not authorized to edit this camera'
+      end
 
       outcome = Actors::CameraUpdate.run(inputs)
       raise OutcomeError, outcome unless outcome.success?
