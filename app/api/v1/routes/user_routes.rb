@@ -25,7 +25,7 @@ module Evercam
       raise NotFoundError, 'user does not exist' unless user
 
       cameras = user.cameras.select do |s|
-        s.allow?(:view, auth.seeker)
+        s.allow?(:view, auth.token)
       end
 
       present cameras, with: Presenters::Camera

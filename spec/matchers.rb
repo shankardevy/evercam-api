@@ -26,3 +26,14 @@ RSpec::Matchers.define :be_around_now do
   end
 end
 
+RSpec::Matchers.define :be_dataset do |expected|
+  match do |actual|
+    expected.all? do |m|
+      actual.include?(m)
+    end &&
+    actual.all? do |m|
+      expected.include?(m)
+    end
+  end
+end
+

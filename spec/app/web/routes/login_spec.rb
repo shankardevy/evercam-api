@@ -53,6 +53,11 @@ describe 'WebApp routes/login_router' do
         expect(last_response.location).to end_with('/login')
       end
 
+      it 'preserves any querystring params' do
+        post('/login', {}, { 'HTTP_REFERER' => '/login?rt=xxxx' })
+        expect(last_response.location).to end_with('/login?rt=xxxx')
+      end
+
       it 'shows an error message' do
         follow_redirect!
         errors = last_response.alerts.css('.alert-error')

@@ -15,6 +15,7 @@ require_relative './models/firmware'
 
 require_relative './models/client'
 require_relative './models/access_token'
+require_relative './models/access_right'
 require_relative './models/access_scope'
 
 require_relative './models/user'

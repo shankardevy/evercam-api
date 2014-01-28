@@ -105,9 +105,10 @@ module Evercam
           create(
             :access_token,
             grantee: client0,
-            grantor: user0,
-            scopes: [params[:scope]]
-          )
+            grantor: user0
+          ).tap do |t|
+            t.add_right(name: params[:scope])
+          end
         end
 
         it 'creates a new access token for the client' do
@@ -115,7 +116,7 @@ module Evercam
         end
 
         it 'adds all the requested scopes to the new token' do
-          expect(subject.token.scopes.count).to eq(1)
+          expect(subject.token.rights.count).to eq(1)
         end
 
         it 'wants to redirect' do
@@ -170,7 +171,8 @@ module Evercam
         end
 
         it 'ignores any grants by other users' do
-          create(:access_token, grantor: create(:user), grantee: client0, scopes: scopes)
+          token = create(:access_token, grantee: client0)
+          scopes.each { |s| token.add_right(name: s) }
           expect(subject.missing.size).to eq(2)
         end
 
@@ -216,7 +218,7 @@ module Evercam
         end
 
         it 'create the new rights for the token' do
-          expect(subject.token.scopes.count).to eq(2)
+          expect(subject.token.rights.count).to eq(2)
         end
 
         it 'wants to redirect the client' do

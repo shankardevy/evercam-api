@@ -5,44 +5,17 @@ module Evercam
       @env = env
     end
 
-    def has_right?(right, resource)
-      resource.has_right?(right, seeker!)
-    end
-
-    def seeker
+    def token
       case auth_type
       when :basic
-        authenticate_with_http_basic
+        auth_with_http_basic
       when :bearer
-        authenticate_with_access_token
+        auth_with_access_token
       when :session
-        authenticate_with_rack_session
+        auth_with_rack_session
       else
         nil
       end
-    end
-
-    def user
-      case s = seeker
-      when User then s
-      when AccessToken then s.grantor
-      else nil
-      end
-    end
-
-    def seeker!
-      demand!
-      seeker
-    end
-
-    def user!
-      demand!
-      user
-    end
-
-    def demand!
-      raise AuthenticationError,
-        'no supported authentication was supplied' unless seeker
     end
 
     private
@@ -64,26 +37,26 @@ module Evercam
       end
     end
 
-    def authenticate_with_http_basic
+    def auth_with_http_basic
       base64 = header.split[1]
       un, ps = Base64.decode64(base64).split(':')
 
       user = User.by_login(un) if un && ps
-      return user if user && user.password == ps
+      return user.token if user && user.password == ps
 
       raise AuthenticationError,
         'invalid basic authentication details'
     end
 
-    def authenticate_with_rack_session
+    def auth_with_rack_session
       user = User[session[:user]]
-      return user if user
+      return user.token if user
 
       raise AuthenticationError,
         'invalid or corrupt user session'
     end
 
-    def authenticate_with_access_token
+    def auth_with_access_token
       request = header.split[1]
       token = AccessToken.by_request(request)
       return token if token && token.is_valid?

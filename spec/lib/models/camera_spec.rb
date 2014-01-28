@@ -7,7 +7,7 @@ describe Camera do
   describe '#allow?' do
 
     it 'is true for all rights when the auth is the owner' do
-      expect(camera.allow?(:view, camera.owner)).to eq(true)
+      expect(camera.allow?(:view, camera.owner.token)).to eq(true)
     end
 
     describe ':view right' do
@@ -28,21 +28,18 @@ describe Camera do
         end
 
         it 'is true when auth includes specific camera scope' do
-          token = build(:access_token)
-          token.scopes.append("camera:view:#{camera.exid}")
-          expect(camera.allow?(:view, token)).to eq(true)
+          right = create(:access_right, name: "camera:view:#{camera.exid}")
+          expect(camera.allow?(:view, right.token)).to eq(true)
         end
 
-        it 'is true when the auth includes a generic all scope' do
-          token = build(:access_token)
-          token.scopes.append("cameras:view:all")
-          expect(camera.allow?(:view, token)).to eq(true)
+        it 'is true when the auth includes an all cameras scope' do
+          right = create(:access_right, name: "cameras:view:#{camera.owner.username}")
+          expect(camera.allow?(:view, right.token)).to eq(true)
         end
 
         it 'is false when the auth has no privisioning scope' do
-          token = build(:access_token)
-          token.scopes.append("camera:view:xxxx")
-          expect(camera.allow?(:view, token)).to eq(false)
+          right = create(:access_right, name: "camera:view:xxxx")
+          expect(camera.allow?(:view, right.token)).to eq(false)
         end
 
       end

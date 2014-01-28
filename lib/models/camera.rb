@@ -8,15 +8,17 @@ class Camera < Sequel::Model
     first(exid: exid)
   end
 
-  def allow?(right, auth)
-    return true if auth == owner
+  def allow?(right, token)
+    return true if token &&
+      token.owner == owner
 
     case right
     when :view
-      is_public? || (nil != auth && (
-        auth.scopes.include?("camera:view:#{exid}") ||
-        auth.scopes.include?("cameras:view:all")
-      ))
+      return true if is_public?
+      nil != token && (
+        token.allow?("camera:view:#{exid}") ||
+        token.allow?("cameras:view:#{owner.username}")
+      )
     end
   end
 
