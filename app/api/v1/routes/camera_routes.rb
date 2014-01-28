@@ -34,14 +34,23 @@ module Evercam
       present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Updates full or partial data for an existing camera (COMING SOON)'
+    desc 'Updates full or partial data for an existing camera', {
+      entity: Evercam::Presenters::Camera
+    }
     put '/cameras/:id' do
-      raise ComingSoonError
+      inputs = params.merge(username: auth.user!.username)
+
+      outcome = Actors::CameraUpdate.run(inputs)
+      raise OutcomeError, outcome unless outcome.success?
+      camera = outcome.result
+
+      present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)'
+    desc 'Deletes a camera from Evercam along with any stored media'
     delete '/cameras/:id' do
-      raise ComingSoonError
+      camera = ::Camera.by_exid(params[:id])
+      camera.delete
     end
 
   end
