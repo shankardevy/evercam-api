@@ -9,14 +9,15 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     post '/cameras' do
-      raise AuthenticationError unless auth.token
-      inputs = params.merge(username: auth.token.grantor.username)
+      auth.demand do |req, usr|
+        inputs = params.merge(username: usr.username)
 
-      outcome = Actors::CameraCreate.run(inputs)
-      raise OutcomeError, outcome unless outcome.success?
-      camera = outcome.result
+        outcome = Actors::CameraCreate.run(inputs)
+        raise OutcomeError, outcome unless outcome.success?
+        camera = outcome.result
 
-      present Array(camera), with: Presenters::Camera
+        present Array(camera), with: Presenters::Camera
+      end
     end
 
     desc 'Returns all data for a given camera', {
@@ -26,9 +27,8 @@ module Evercam
       camera = ::Camera.by_exid(params[:id])
       raise NotFoundError, 'Camera was not found' unless camera
 
-      unless camera.allow?(:view, auth.token)
-        raise AuthenticationError unless auth.token
-        raise AuthorizationError, 'not authorized to view this camera'
+      auth.allow? do |req|
+        camera.allow?(:view, req)
       end
 
       present Array(camera), with: Presenters::Camera
@@ -36,12 +36,11 @@ module Evercam
 
     desc 'Updates full or partial data for an existing camera (COMING SOON)'
     put '/cameras/:id' do
-      raise ComingSoonError
+
     end
 
     desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)'
     delete '/cameras/:id' do
-      raise ComingSoonError
     end
 
   end
