@@ -45,9 +45,9 @@ class AccessToken < Sequel::Model
 
   # Whether or not this token includes a
   # particular right
-  def allow?(right)
+  def allow?(name)
     1 == rights_dataset.
-      where(name: right).count
+      where(name: name).count
   end
 
 end

@@ -85,7 +85,9 @@ module Evercam
       def scopes
         names = @p[:scope] || ''
         names.split(/[\s,]+/).map do |s|
-          AccessScope.new(s)
+          AccessScope.new(s).tap do |a|
+            a.id = @u.username if a.generic?
+          end
         end
       end
 

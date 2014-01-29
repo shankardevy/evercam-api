@@ -1,6 +1,6 @@
 class AccessScope
 
-  attr_reader :type, :right, :id
+  attr_accessor :type, :right, :id
 
   def initialize(str)
     parts = str.split(':')

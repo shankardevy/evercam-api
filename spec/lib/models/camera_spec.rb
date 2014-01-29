@@ -50,7 +50,7 @@ describe Camera do
           expect(camera.allow?(:view, right.token)).to eq(true)
         end
 
-        it 'is false when the auth has no privisioning scope' do
+        it 'is false when the auth has no provisioning scope' do
           right = create(:access_right, name: "camera:view:xxxx")
           expect(camera.allow?(:view, right.token)).to eq(false)
         end
