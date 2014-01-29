@@ -14,9 +14,8 @@ module Evercam
 
         outcome = Actors::CameraCreate.run(inputs)
         raise OutcomeError, outcome unless outcome.success?
-        camera = outcome.result
 
-        present Array(camera), with: Presenters::Camera
+        present Array(outcome.result), with: Presenters::Camera
       end
     end
 
@@ -24,23 +23,32 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
-      camera = ::Camera.by_exid(params[:id])
-      raise NotFoundError, 'Camera was not found' unless camera
-
-      auth.allow? do |req|
-        camera.allow?(:view, req)
-      end
-
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:view, r) }
       present Array(camera), with: Presenters::Camera
     end
 
-    desc 'Updates full or partial data for an existing camera (COMING SOON)'
+    desc 'Updates full or partial data for an existing camera', {
+      entity: Evercam::Presenters::Camera
+    }
     put '/cameras/:id' do
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
 
+      outcome = Actors::CameraUpdate.run(params)
+      raise OutcomeError, outcome unless outcome.success?
+
+      present Array(camera.reload), with: Presenters::Camera
     end
 
-    desc 'Deletes a camera from Evercam along with any stored media (COMING SOON)'
+    desc 'Deletes a camera from Evercam along with any stored media', {
+      entity: Evercam::Presenters::Camera
+    }
     delete '/cameras/:id' do
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
+      camera.destroy
+      {}
     end
 
   end

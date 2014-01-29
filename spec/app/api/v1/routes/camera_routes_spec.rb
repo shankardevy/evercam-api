@@ -130,5 +130,83 @@ describe 'API routes/cameras' do
 
   end
 
+  describe 'PUT /cameras' do
+
+    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+
+    let(:params) {
+      {
+        name: "Garrett's Super New Camera v2",
+        endpoints: ['http://localhost:4321'],
+        is_public: false
+      }
+    }
+
+    context 'when the params are valid' do
+
+      before(:each) do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        put("/cameras/#{camera.exid}", params, auth)
+      end
+
+      it 'returns a OK status' do
+        expect(last_response.status).to eq(200)
+      end
+
+      it 'updates camera in the system' do
+        expect(Camera.by_exid(camera.exid).is_public).
+          to eq(false)
+        expect(Camera.by_exid(camera.exid).name).
+          to eq("Garrett's Super New Camera v2")
+        expect(Camera.by_exid(camera.exid).endpoints.length).
+          to eq(1)
+        expect(Camera.by_exid(camera.exid).endpoints[0][:port]).
+          to eq(4321)
+      end
+
+      it 'returns the updated camera' do
+        expect(last_response.json['cameras'].map{ |s| s['id'] }).
+          to eq([camera.exid])
+      end
+
+    end
+
+    context 'when params are empty' do
+      it 'returns a OK status' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        put("/cameras/#{camera.exid}", params.clear, auth)
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+    context 'when no authentication is provided' do
+      it 'returns an UNAUTHROZIED status' do
+        expect(put("/cameras/#{camera.exid}", params).status).to eq(401)
+      end
+    end
+
+  end
+
+ describe 'DELETE /cameras' do
+
+    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+
+    context 'when params are empty' do
+      it 'returns a OK status' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        delete("/cameras/#{camera.exid}", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(Camera.by_exid(camera.exid)).to eq(nil)
+      end
+    end
+
+    context 'when no authentication is provided' do
+      it 'returns an UNAUTHROZIED status' do
+        expect(delete("/cameras/#{camera.exid}", {}).status).to eq(401)
+      end
+    end
+
+  end
+
 end
 

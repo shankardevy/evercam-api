@@ -1,10 +1,10 @@
 module Evercam
   module WebErrors
 
-    class NotFoundError < EvercamError
+    class BadRequestError < EvercamError
     end
 
-    class BadRequestError < EvercamError
+    class ComingSoonError < EvercamError
     end
 
   end
