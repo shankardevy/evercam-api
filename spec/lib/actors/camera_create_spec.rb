@@ -55,7 +55,17 @@ module Evercam
           errors = outcome.errors.symbolic
 
           expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:size)
+          expect(errors[:endpoints]).to eq(:valid)
+        end
+
+        it 'checks that endpoints is actually an array' do
+          params = valid.merge(endpoints: 'xxxx')
+
+          outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
+          expect(outcome).to_not be_success
+          expect(errors[:endpoints]).to eq(:valid)
         end
 
         it 'checks each endpoint is a valid uri' do

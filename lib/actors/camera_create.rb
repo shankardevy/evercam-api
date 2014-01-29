@@ -37,8 +37,8 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        if nil == endpoints || endpoints.size == 0
-          add_error(:endpoints, :size, 'Endpoints must contain at least one item')
+        if nil == endpoints || endpoints.size == 0 || false == endpoints.kind_of?(Array)
+          add_error(:endpoints, :valid, 'Endpoints must be an array of at least one item')
         else
           endpoints.each do |e|
             unless e =~ URI.regexp
