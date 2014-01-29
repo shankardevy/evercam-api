@@ -1,3 +1,5 @@
+require_relative '../errors'
+
 class Camera < Sequel::Model
 
   many_to_one :firmware
@@ -6,6 +8,11 @@ class Camera < Sequel::Model
 
   def self.by_exid(exid)
     first(exid: exid)
+  end
+
+  def self.by_exid!(exid)
+    by_exid(exid) || (
+      raise Evercam::NotFoundError, 'Camera does not exist')
   end
 
   def allow?(right, token)

@@ -9,7 +9,7 @@ module Evercam
   class AuthorizationError < EvercamError
   end
 
-  class ComingSoonError < EvercamError
+  class NotFoundError < EvercamError
   end
 
   class OutcomeError < EvercamError

@@ -4,6 +4,19 @@ describe Camera do
 
   let(:camera) { create(:camera) }
 
+  describe '::by_exid!' do
+
+    it 'returns the camera when it exists' do
+      expect(Camera.by_exid!(camera.exid)).to eq(camera)
+    end
+
+    it 'raises a NotFoundError when it does not exist' do
+      expect{ Camera.by_exid!('xxxx') }.
+        to raise_error(Evercam::NotFoundError)
+    end
+
+  end
+
   describe '#allow?' do
 
     it 'is true for all rights when the auth is the owner' do
