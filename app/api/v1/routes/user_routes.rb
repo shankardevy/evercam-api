@@ -48,14 +48,23 @@ module Evercam
       raise ComingSoonError
     end
 
-    desc 'Updates full or partial data on your existing user account'
+    desc 'Updates full or partial data on your existing user account', {
+      entity: Evercam::Presenters::User
+    }
     put '/users/:id' do
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
       auth.allow? { |r| user.allow?(:edit, r) }
+
+      outcome = Actors::UserUpdate.run(params)
+      raise OutcomeError, outcome unless outcome.success?
+
+      present Array(user.reload), with: Presenters::User
     end
 
-    desc 'Delete your account, any cameras you own and all stored media'
+    desc 'Delete your account, any cameras you own and all stored media', {
+      entity: Evercam::Presenters::User
+    }
     delete '/users/:id' do
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
