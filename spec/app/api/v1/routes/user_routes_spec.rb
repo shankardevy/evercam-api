@@ -90,5 +90,49 @@ describe 'API routes/users' do
     end
 
   end
+
+  describe 'DELETE /users/:id', :focus => true do
+
+    let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:auth) { env_for(session: { user: user0.id }) }
+
+    context 'when the params are valid' do
+      it 'deletes the user' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        delete("/users/#{user0.username}", {}, auth)
+
+        expect(last_response.status).to eq(200)
+        expect(::User.by_login(user0.username)).to eq(nil)
+
+      end
+    end
+
+    context 'when no valid auth' do
+      it 'returns 401' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('zzz:aaa')}" }
+        delete("/users/#{user0.username}", {}, auth)
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when no auth' do
+      it 'returns 401' do
+        delete("/users/#{user0.username}")
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when the username doesnt exists' do
+      it 'returns a 404 not found status' do
+        delete('/users/notexistingone')
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+  end
 end
 
