@@ -9,6 +9,13 @@ module Evercam
     desc 'Starts the new user signup process', {
       entity: Evercam::Presenters::User
     }
+    params do
+      requires :forename, type: String, desc: "Forename."
+      requires :lastname, type: String, desc: "Lastname."
+      requires :username, type: String, desc: "Username."
+      requires :country, type: String, desc: "Country."
+      requires :email, type: String, desc: "Email."
+    end
     post '/users' do
       outcome = Actors::UserSignup.run(params)
       raise OutcomeError, outcome unless outcome.success?

@@ -8,6 +8,14 @@ module Evercam
     desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
     }
+    params do
+      requires :id, type: String, desc: "Id."
+      requires :name, type: String, desc: "Camera name."
+      requires :endpoints, type: Array, desc: "Endpoints."
+      requires :is_public, type: Boolean, desc: "Is camera public?"
+      requires :snapshots, type: Hash, desc: "Snapshots."
+      requires :auth, type: Hash, desc: "Auth."
+    end
     post '/cameras' do
       auth.demand do |req, usr|
         inputs = params.merge(username: usr.username)
