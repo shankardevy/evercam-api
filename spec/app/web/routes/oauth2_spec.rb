@@ -76,7 +76,7 @@ describe 'WebApp routes/oauth2_router' do
         end
 
         it 'creates a new access token for the client' do
-          expect(client0.reload.tokens.count).to eq(2)
+          expect(client0.tokens(true).count).to eq(2)
         end
 
         it 'redirects back to the redirect_uri' do
@@ -86,8 +86,9 @@ describe 'WebApp routes/oauth2_router' do
         end
 
         it 'includes the new access token in the fragment' do
+          token = client0.tokens(true).order(:id).last
           expect(last_response.location).
-            to have_fragment({ access_token: client0.reload.tokens.last.request })
+            to have_fragment({ access_token: token.request })
         end
 
       end

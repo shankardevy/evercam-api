@@ -196,6 +196,12 @@ module Evercam
           expect(subject.missing.size).to eq(1)
         end
 
+        it 'creates a right with the correct name' do
+          token = subject.approve!
+          allow = token.allow?("cameras:view:#{user0.username}")
+          expect(allow).to eq(true)
+        end
+
       end
 
       context 'when the client approves the missing scopes' do

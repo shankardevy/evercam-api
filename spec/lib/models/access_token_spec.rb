@@ -64,19 +64,21 @@ describe AccessToken do
 
   end
 
-  describe '#owner' do
+  describe '#grantee' do
+
+    let(:client) { create(:client) }
 
     context 'when it is a user permanent token' do
       it 'return the grantor (user)' do
         token = create(:access_token, grantee: nil)
-        expect(token.owner).to eq(token.grantor)
+        expect(token.grantee).to eq(token.grantor)
       end
     end
 
     context 'when it is a client temporary token' do
       it 'returns the grantee (client)' do
-        token = create(:access_token)
-        expect(token.owner).to eq(token.grantee)
+        token = create(:access_token, grantee: client)
+        expect(token.grantee).to eq(client)
       end
     end
 
