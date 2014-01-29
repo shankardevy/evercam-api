@@ -48,10 +48,6 @@ describe User do
       expect(user.token(true)).to_not eq(token)
     end
 
-    it 'is not associated with any client' do
-      expect(token.grantee).to be_nil
-    end
-
     it 'is a valid token' do
       expect(token.is_valid?).to eq(true)
     end
