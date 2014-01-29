@@ -5,42 +5,31 @@ module Evercam
 
     include WebErrors
 
-    helpers do
-      def check_rights(right)
-        if right != :view
-          raise AuthenticationError unless auth.token
-        end
-
-        camera = ::Camera.by_exid(params[:id])
-        raise NotFoundError, 'Camera was not found' unless camera
-
-        unless camera.allow?(right, auth.token)
-          raise AuthenticationError unless auth.token
-          raise AuthorizationError, "not authorized to #{right} this camera"
-        end
-        camera
-      end
-    end
-
     desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
     }
     post '/cameras' do
-      raise AuthenticationError unless auth.token
-      inputs = params.merge(username: auth.token.grantor.username)
+      auth.demand do |req, usr|
+        inputs = params.merge(username: usr.username)
 
-      outcome = Actors::CameraCreate.run(inputs)
-      raise OutcomeError, outcome unless outcome.success?
-      camera = outcome.result
+        outcome = Actors::CameraCreate.run(inputs)
+        raise OutcomeError, outcome unless outcome.success?
+        camera = outcome.result
 
-      present Array(camera), with: Presenters::Camera
+        present Array(camera), with: Presenters::Camera
+      end
     end
 
     desc 'Returns all data for a given camera', {
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
-      camera = check_rights(:view)
+      camera = ::Camera.by_exid(params[:id])
+      raise NotFoundError, 'Camera was not found' unless camera
+
+      auth.allow? do |req|
+        camera.allow?(:view, req)
+      end
 
       present Array(camera), with: Presenters::Camera
     end
@@ -49,12 +38,16 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     put '/cameras/:id' do
-      check_rights(:edit)
-      inputs = params.merge(username: auth.token.grantor.username)
+      camera = ::Camera.by_exid(params[:id])
+      raise NotFoundError, 'Camera was not found' unless camera
 
-      outcome = Actors::CameraUpdate.run(inputs)
+      auth.allow? do |req, usr|
+        camera.allow?(:edit, req)
+      end
+
+      outcome = Actors::CameraUpdate.run(params)
       raise OutcomeError, outcome unless outcome.success?
-      camera = outcome.result
+      camera = camera.reload
 
       present Array(camera), with: Presenters::Camera
     end
@@ -63,8 +56,12 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     delete '/cameras/:id' do
-      camera = check_rights(:edit)
+      camera = ::Camera.by_exid(params[:id])
+      raise NotFoundError, 'Camera was not found' unless camera
+
+      auth.allow? { |r| camera.allow?(:edit, r) }
       camera.destroy
+
       {}
     end
 

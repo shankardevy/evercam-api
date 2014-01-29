@@ -6,16 +6,30 @@ module Evercam
     end
 
     def token
-      case auth_type
+      case authen_type
       when :basic
-        auth_with_http_basic
+        authen_with_http_basic
       when :bearer
-        auth_with_access_token
+        authen_with_access_token
       when :session
-        auth_with_rack_session
+        authen_with_rack_session
       else
         nil
       end
+    end
+
+    def demand(&block)
+      authen_err unless token
+      grantor = token.grantor
+      block.call(token, grantor)
+    end
+
+    def allow?(&block)
+      grantor = token ? token.grantor : nil
+      output = block.call(token, grantor)
+
+      return output if output
+      token ? authoz_err : authen_err
     end
 
     private
@@ -28,7 +42,7 @@ module Evercam
       @env['rack.session'] || {}
     end
 
-    def auth_type
+    def authen_type
       case header.split[0]
       when /basic/i then :basic
       when /bearer/i then :bearer
@@ -37,32 +51,36 @@ module Evercam
       end
     end
 
-    def auth_with_http_basic
+    def authen_with_http_basic
       base64 = header.split[1]
       un, ps = Base64.decode64(base64).split(':')
 
       user = User.by_login(un) if un && ps
       return user.token if user && user.password == ps
-
-      raise AuthenticationError,
-        'invalid basic authentication details'
+      authen_err 'Invalid or incorrect basic authentication'
     end
 
-    def auth_with_rack_session
+    def authen_with_rack_session
       user = User[session[:user]]
       return user.token if user
-
-      raise AuthenticationError,
-        'invalid or corrupt user session'
+      authen_err 'Invalid or corrupt user session credentials'
     end
 
-    def auth_with_access_token
+    def authen_with_access_token
       request = header.split[1]
       token = AccessToken.by_request(request)
       return token if token && token.is_valid?
+      authen_err 'Invalid or incorrect access token'
+    end
 
+    def authen_err(msg=nil)
       raise AuthenticationError,
-        'unknown or invalid access token'
+        msg || 'Required authentication not supplied'
+    end
+
+    def authoz_err(msg=nil)
+      raise AuthorizationError,
+        msg || 'Required authorization not available'
     end
 
   end

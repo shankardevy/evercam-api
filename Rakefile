@@ -1,8 +1,6 @@
 require 'rake'
 
 require_relative './lib/config'
-require_relative './lib/workers'
-
 if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
@@ -20,13 +18,15 @@ namespace :db do
     envs.each do |env|
       db = Sequel.connect(Evercam::Config.settings[env][:database])
       Sequel::Migrator.run(db, 'migrations')
-      puts "<-- Migrate #{env}"
+      puts "migrate: #{env}"
     end
   end
 
 end
 
 namespace :workers do
+
+  require_relative './lib/workers'
 
   task :enable do
     Evercam::ScheduleWorker.enable
