@@ -72,4 +72,10 @@
     :to: env.staging@evercam.io
     :from: evercam.io <noreply@evercam.io>
     :via: :sendmail
+  :swagger:
+    :v1:
+      :api_version: '1.0'
+      :mount_path: swagger
+      :hide_documentation_path: true
+      :base_path: http://qqq.evercam.io/v1
 
