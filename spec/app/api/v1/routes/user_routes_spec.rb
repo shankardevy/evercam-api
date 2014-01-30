@@ -47,6 +47,44 @@ describe 'API routes/users' do
 
   end
 
+  describe 'GET /users/{username}' do
+
+    let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
+
+    context 'when the user does not exist' do
+      it 'returns a NOT FOUND status' do
+        expect(get('/users/notexisitngid').status).to eq(404)
+      end
+    end
+
+    context 'with no authentication information' do
+
+      before(:each) { get("/users/#{user0.username}") }
+
+      it 'returns 401' do
+        expect(last_response.status).to eq(401)
+      end
+
+    end
+
+    context 'when the authenticated user is the owner' do
+
+      let(:auth) { env_for(session: { user: user0.id }) }
+
+      before(:each) {
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        get("/users/#{user0.username}", {}, auth)
+      }
+
+      it 'returns user data' do
+        expect(last_response.json['users'].map{ |s| s['id'] }).
+          to eq([user0.username])
+      end
+
+    end
+
+  end
+
   describe 'GET /users/{username}/cameras' do
 
     let!(:user0) { create(:user) }

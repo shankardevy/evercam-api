@@ -38,9 +38,13 @@ module Evercam
       present cameras, with: Presenters::Camera
     end
 
-    desc 'Returns available information for the user (COMING SOON)'
+    desc 'Returns available information for the user'
     get '/users/:id' do
-      raise ComingSoonError
+      user = ::User.by_login(params[:id])
+      raise NotFoundError, 'user does not exist' unless user
+      auth.allow? { |r| user.allow?(:view, r) }
+
+      present Array(user), with: Presenters::User
     end
 
     desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'

@@ -38,7 +38,7 @@ class User < Sequel::Model
 
   def allow?(right, token)
     return true if token &&
-      token.owner == self
+      token.grantor == self
   end
 
   private
