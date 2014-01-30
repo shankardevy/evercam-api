@@ -36,6 +36,11 @@ class User < Sequel::Model
     false == self.confirmed_at.nil?
   end
 
+  def allow?(right, token)
+    return true if token &&
+      token.grantor == self
+  end
+
   private
 
   def ensure_token_exists

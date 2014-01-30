@@ -8,6 +8,14 @@ module Evercam
     desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
     }
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      requires :name, type: String, desc: "Camera name."
+      requires :endpoints, type: Array, desc: "Endpoints."
+      requires :is_public, type: Boolean, desc: "Is camera public?"
+      requires :snapshots, type: Hash, desc: "Snapshots."
+      requires :auth, type: Hash, desc: "Auth."
+    end
     post '/cameras' do
       auth.demand do |req, usr|
         inputs = params.merge(username: usr.username)
@@ -31,7 +39,15 @@ module Evercam
     desc 'Updates full or partial data for an existing camera', {
       entity: Evercam::Presenters::Camera
     }
-    put '/cameras/:id' do
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      optional :name, type: String, desc: "Camera name."
+      optional :endpoints, type: Array, desc: "Endpoints."
+      optional :is_public, type: Boolean, desc: "Is camera public?"
+      optional :snapshots, type: Hash, desc: "Snapshots."
+      optional :auth, type: Hash, desc: "Auth."
+    end
+    patch '/cameras/:id' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |r| camera.allow?(:edit, r) }
 

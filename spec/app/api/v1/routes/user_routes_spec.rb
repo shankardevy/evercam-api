@@ -47,6 +47,44 @@ describe 'API routes/users' do
 
   end
 
+  describe 'GET /users/{username}' do
+
+    let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
+
+    context 'when the user does not exist' do
+      it 'returns a NOT FOUND status' do
+        expect(get('/users/notexisitngid').status).to eq(404)
+      end
+    end
+
+    context 'with no authentication information' do
+
+      before(:each) { get("/users/#{user0.username}") }
+
+      it 'returns 401' do
+        expect(last_response.status).to eq(401)
+      end
+
+    end
+
+    context 'when the authenticated user is the owner' do
+
+      let(:auth) { env_for(session: { user: user0.id }) }
+
+      before(:each) {
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        get("/users/#{user0.username}", {}, auth)
+      }
+
+      it 'returns user data' do
+        expect(last_response.json['users'].map{ |s| s['id'] }).
+          to eq([user0.username])
+      end
+
+    end
+
+  end
+
   describe 'GET /users/{username}/cameras' do
 
     let!(:user0) { create(:user) }
@@ -90,5 +128,132 @@ describe 'API routes/users' do
     end
 
   end
+
+  describe 'DELETE /users/:id' do
+
+    let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:auth) { env_for(session: { user: user0.id }) }
+
+    context 'when the params are valid' do
+      it 'deletes the user' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        delete("/users/#{user0.username}", {}, auth)
+
+        expect(last_response.status).to eq(200)
+        expect(::User.by_login(user0.username)).to eq(nil)
+
+      end
+    end
+
+    context 'when no valid auth' do
+      it 'returns 401' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('zzz:aaa')}" }
+        delete("/users/#{user0.username}", {}, auth)
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when no auth' do
+      it 'returns 401' do
+        delete("/users/#{user0.username}")
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when the username doesnt exists' do
+      it 'returns a 404 not found status' do
+        delete('/users/notexistingone')
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+  end
+
+  describe 'PATCH /users/:id' do
+
+    let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:auth) { env_for(session: { user: user0.id }) }
+
+    context 'when no params' do
+
+      before do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        patch("/users/#{user0.username}", {}, auth)
+      end
+
+      it 'returns a OK status' do
+        expect(last_response.status).to eq(200)
+      end
+
+      it 'returns same user' do
+        expect(last_response.status).to eq(200)
+        user = User.by_login(user0.username)
+        expect(user.forename).to eq(user0.forename)
+        expect(user.lastname).to eq(user0.lastname)
+        expect(user.email).to eq(user0.email)
+        expect(user.country).to eq(user0.country)
+      end
+    end
+
+    context 'when valid params' do
+
+      before do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        patch("/users/#{user0.username}", params.merge(email: 'gh@evercam.io'), auth)
+      end
+
+      it 'returns a OK status' do
+        expect(last_response.status).to eq(200)
+      end
+
+      it 'updates user in the system' do
+        user = User.by_login(user0.username)
+        expect(user.forename).to eq(params[:forename])
+        expect(user.lastname).to eq(params[:lastname])
+        expect(user.email).to eq('gh@evercam.io')
+        expect(user.country.iso3166_a2).to eq(params[:country])
+      end
+
+      it 'returns the updated user' do
+        expect(last_response.json['users'].map{ |s| s['id'] }).
+          to eq([user0.username])
+      end
+    end
+
+
+
+
+    context 'when no valid auth' do
+      it 'returns 401' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('zzz:aaa')}" }
+        patch("/users/#{user0.username}", params, auth)
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when no auth' do
+      it 'returns 401' do
+        patch("/users/#{user0.username}", params)
+
+        expect(last_response.status).to eq(401)
+
+      end
+    end
+
+    context 'when the username doesnt exists' do
+      it 'returns a 404 not found status' do
+        patch('/users/notexistingone')
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+  end
+
 end
 
