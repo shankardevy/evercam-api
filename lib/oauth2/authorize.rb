@@ -95,7 +95,7 @@ module Evercam
         return nil unless valid?
         @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
           scopes.each do |s|
-            t.add_right(name: s.to_s)
+            t.grant(s.to_s)
           end
         end
       end

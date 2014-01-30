@@ -71,7 +71,7 @@ describe 'WebApp routes/oauth2_router' do
             :access_token,
             grantor: user0,
             grantee: client0
-          ).tap { |t| t.add_right(name: params[:scope]) }
+          ).tap { |t| t.grant(params[:scope]) }
           get('/oauth2/authorize', params, env)
         end
 

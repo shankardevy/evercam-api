@@ -43,11 +43,37 @@ class AccessToken < Sequel::Model
     super || grantor
   end
 
+  # Adds a new access right to this token
+  # if it does not already exist
+  def grant(name)
+    scope = AccessScope.new(name)
+    add_right({
+      group: scope.type.to_s,
+      right: scope.right.to_s,
+      scope: scope.id
+    }) unless allow?(name)
+  end
+
+  # Removes an access right from this token
+  # if it exists otherwise does nothing
+  def revoke(name)
+    scope = AccessScope.new(name)
+    rights_dataset.where({
+      group: scope.type.to_s,
+      right: scope.right.to_s,
+      scope: scope.id
+    }).delete
+  end
+
   # Whether or not this token includes a
-  # particular right
+  # particular access right
   def allow?(name)
-    1 == rights_dataset.
-      where(name: name).count
+    scope = AccessScope.new(name)
+    1 == rights_dataset.where({
+      group: scope.type.to_s,
+      right: scope.right.to_s,
+      scope: scope.id
+    }).count
   end
 
 end

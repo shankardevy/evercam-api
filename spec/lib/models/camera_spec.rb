@@ -41,17 +41,17 @@ describe Camera do
         end
 
         it 'is true when auth includes specific camera scope' do
-          right = create(:access_right, name: "camera:view:#{camera.exid}")
+          right = create(:access_right, group: 'camera', right: 'view', scope: camera.exid)
           expect(camera.allow?(:view, right.token)).to eq(true)
         end
 
         it 'is true when the auth includes an all cameras scope' do
-          right = create(:access_right, name: "cameras:view:#{camera.owner.username}")
+          right = create(:access_right, group: 'cameras', right: 'view', scope: camera.owner.username)
           expect(camera.allow?(:view, right.token)).to eq(true)
         end
 
         it 'is false when the auth has no provisioning scope' do
-          right = create(:access_right, name: "camera:view:xxxx")
+          right = create(:access_right, group: 'camera', right: 'view', scope: 'xxxx')
           expect(camera.allow?(:view, right.token)).to eq(false)
         end
 

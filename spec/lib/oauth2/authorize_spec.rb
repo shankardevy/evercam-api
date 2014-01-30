@@ -107,7 +107,7 @@ module Evercam
             grantee: client0,
             grantor: user0
           ).tap do |t|
-            t.add_right(name: params[:scope])
+            t.grant(params[:scope])
           end
         end
 
@@ -172,7 +172,7 @@ module Evercam
 
         it 'ignores any grants by other users' do
           token = create(:access_token, grantee: client0)
-          scopes.each { |s| token.add_right(name: s) }
+          scopes.each { |s| token.grant(s) }
           expect(subject.missing.size).to eq(2)
         end
 
