@@ -130,7 +130,7 @@ describe 'API routes/cameras' do
 
   end
 
-  describe 'PUT /cameras' do
+  describe 'PATCH /cameras' do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
@@ -146,7 +146,7 @@ describe 'API routes/cameras' do
 
       before(:each) do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        put("/cameras/#{camera.exid}", params, auth)
+        patch("/cameras/#{camera.exid}", params, auth)
       end
 
       it 'returns a OK status' do
@@ -174,14 +174,14 @@ describe 'API routes/cameras' do
     context 'when params are empty' do
       it 'returns a OK status' do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        put("/cameras/#{camera.exid}", params.clear, auth)
+        patch("/cameras/#{camera.exid}", params.clear, auth)
         expect(last_response.status).to eq(200)
       end
     end
 
     context 'when no authentication is provided' do
       it 'returns an UNAUTHROZIED status' do
-        expect(put("/cameras/#{camera.exid}", params).status).to eq(401)
+        expect(patch("/cameras/#{camera.exid}", params).status).to eq(401)
       end
     end
 

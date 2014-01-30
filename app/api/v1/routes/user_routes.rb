@@ -55,7 +55,15 @@ module Evercam
     desc 'Updates full or partial data on your existing user account', {
       entity: Evercam::Presenters::User
     }
-    put '/users/:id' do
+    params do
+      requires :id, type: String, desc: "Username."
+      optional :forename, type: String, desc: "Forename."
+      optional :lastname, type: String, desc: "Lastname."
+      optional :username, type: String, desc: "Username."
+      optional :country, type: String, desc: "Country."
+      optional :email, type: String, desc: "Email."
+    end
+    patch '/users/:id' do
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
       auth.allow? { |r| user.allow?(:edit, r) }

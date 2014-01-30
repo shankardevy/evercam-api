@@ -173,7 +173,7 @@ describe 'API routes/users' do
 
   end
 
-  describe 'PUT /users/:id' do
+  describe 'PATCH /users/:id' do
 
     let!(:user0) { create(:user, username: 'xxxx', password: 'yyyy') }
     let(:auth) { env_for(session: { user: user0.id }) }
@@ -182,7 +182,7 @@ describe 'API routes/users' do
 
       before do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        put("/users/#{user0.username}", {}, auth)
+        patch("/users/#{user0.username}", {}, auth)
       end
 
       it 'returns a OK status' do
@@ -203,7 +203,7 @@ describe 'API routes/users' do
 
       before do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        put("/users/#{user0.username}", params.merge(email: 'gh@evercam.io'), auth)
+        patch("/users/#{user0.username}", params.merge(email: 'gh@evercam.io'), auth)
       end
 
       it 'returns a OK status' do
@@ -230,7 +230,7 @@ describe 'API routes/users' do
     context 'when no valid auth' do
       it 'returns 401' do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('zzz:aaa')}" }
-        put("/users/#{user0.username}", params, auth)
+        patch("/users/#{user0.username}", params, auth)
 
         expect(last_response.status).to eq(401)
 
@@ -239,7 +239,7 @@ describe 'API routes/users' do
 
     context 'when no auth' do
       it 'returns 401' do
-        put("/users/#{user0.username}", params)
+        patch("/users/#{user0.username}", params)
 
         expect(last_response.status).to eq(401)
 
@@ -248,7 +248,7 @@ describe 'API routes/users' do
 
     context 'when the username doesnt exists' do
       it 'returns a 404 not found status' do
-        put('/users/notexistingone')
+        patch('/users/notexistingone')
         expect(last_response.status).to eq(404)
       end
     end
