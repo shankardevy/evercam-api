@@ -198,7 +198,7 @@ module Evercam
 
         it 'creates a right with the correct name' do
           token = subject.approve!
-          allow = token.allow?("cameras:view:#{user0.username}")
+          allow = token.includes?("cameras:view:#{user0.username}")
           expect(allow).to eq(true)
         end
 

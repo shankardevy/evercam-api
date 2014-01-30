@@ -90,7 +90,7 @@ describe AccessToken do
 
     it 'adds an access right to the token' do
       token.grant('a:b:c')
-      expect(token.allow?('a:b:c')).to eq(true)
+      expect(token.includes?('a:b:c')).to eq(true)
     end
 
     it 'does not attempt to add the same scope twice' do
@@ -105,21 +105,21 @@ describe AccessToken do
 
     it 'removes an existing right from the token' do
       token.revoke('a:b:c')
-      expect(token.allow?('a:b:c')).to eq(false)
+      expect(token.includes?('a:b:c')).to eq(false)
     end
 
   end
 
-  describe '#allow?' do
+  describe '#includes?' do
 
     it 'returns true when the access right has been granted' do
       token.grant('a:b:c')
-      expect(token.allow?('a:b:c')).to eq(true)
+      expect(token.includes?('a:b:c')).to eq(true)
     end
 
     it 'returns false when the access right has not been granted' do
       token.grant('a:b:c')
-      expect(token.allow?('x:y:z')).to eq(false)
+      expect(token.includes?('x:y:z')).to eq(false)
     end
 
   end

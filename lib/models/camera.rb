@@ -44,8 +44,8 @@ class Camera < Sequel::Model
     when :view
       return true if is_public?
       nil != token && (
-        token.allow?("camera:view:#{exid}") ||
-        token.allow?("cameras:view:#{owner.username}")
+        token.includes?("camera:view:#{exid}") ||
+        token.includes?("cameras:view:#{owner.username}")
       )
     end
   end

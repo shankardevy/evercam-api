@@ -43,7 +43,7 @@ module Evercam
       def missing
         scopes.select do |s|
           false == client.tokens.any? do |t|
-            t.grantor == @u && t.allow?(s.to_s)
+            t.grantor == @u && t.includes?(s.to_s)
           end
         end
       end
