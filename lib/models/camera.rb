@@ -2,6 +2,7 @@ require_relative '../errors'
 
 class Camera < Sequel::Model
 
+  require 'georuby'
   include GeoRuby::SimpleFeatures
 
   many_to_one :firmware
