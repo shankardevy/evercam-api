@@ -5,9 +5,37 @@ describe 'API routes/cameras' do
 
   let(:app) { Evercam::APIv1 }
 
-  describe 'GET /cameras/:id' do
+  let(:camera) { create(:camera, is_public: true) }
 
-    let(:camera) { create(:camera, is_public: true) }
+  describe 'presented fields' do
+
+    let(:json) { get("/cameras/#{camera.exid}").json['cameras'][0] }
+
+    it 'returns all the camera main data keys' do
+      expect(json).to have_keys(
+        'id', 'name', 'owner', 'created_at', 'updated_at',
+        'last_polled_at', 'is_public', 'is_online', 'last_online_at',
+        'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
+        'location')
+    end
+
+    context 'when location is nil' do
+      it 'returns location as nil' do
+        camera.update(location: nil)
+        expect(json['location']).to be_nil
+      end
+    end
+
+    context 'when location is not nil' do
+      it 'returns location as lng lat object' do
+        camera.update(location: { lng: 10, lat: 20 })
+        expect(json['location']).to have_keys('lng', 'lat')
+      end
+    end
+
+  end
+
+  describe 'GET /cameras/:id' do
 
     context 'when the camera does not exist' do
       it 'returns a NOT FOUND status' do
@@ -48,14 +76,6 @@ describe 'API routes/cameras' do
         end
       end
 
-    end
-
-    it 'returns all the camera data keys' do
-      response = get("/cameras/#{camera.exid}")
-      expect(response.json['cameras'][0]).to have_keys(
-        'id', 'name', 'owner', 'created_at', 'updated_at',
-        'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-        'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth')
     end
 
     it 'returns the camera make and model information when available' do

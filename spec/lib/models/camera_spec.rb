@@ -125,6 +125,11 @@ describe Camera do
       expect(camera.values[:location]).to eq(point)
     end
 
+    it 'sets the location when passed a lng lat hash' do
+      camera.location = { lng: 10, lat: 20 }
+      expect(camera.values[:location]).to eq(point)
+    end
+
   end
 
 end

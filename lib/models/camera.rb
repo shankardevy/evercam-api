@@ -44,26 +44,37 @@ class Camera < Sequel::Model
       (values[:timezone] || 'Etc/UTC')
   end
 
+  # Returns a deep merge of any config values set for this
+  # camera with the config of any associated firmware
+  def config
+    fconf = firmware ? firmware.config : {}
+    fconf.deep_merge(values[:config] || {})
+  end
+
   # Returns the location for the camera as a GeoRuby
   # Point if it exists otherwise nil
   def location
-    if values[:location]
-      Point.from_hex_ewkb(values[:location])
+    if super
+      Point.from_hex_ewkb(super)
     end
   end
 
   # Sets the cameras location as a GeoRuby Point
   # instance or call with nil to unset
   def location=(val)
-    values[:location] =
-      val ? val.as_hex_ewkb : nil
-  end
+    hex_ewkb =
+      case val
+      when Hash
+        Point.from_x_y(
+          val[:lng], val[:lat]
+        ).as_hex_ewkb
+      when Point
+        val.as_hex_ewkb
+      when nil
+        nil
+      end
 
-  # Returns a deep merge of any config values set for this
-  # camera with the config of any associated firmware
-  def config
-    fconf = firmware ? firmware.config : {}
-    fconf.deep_merge(values[:config] || {})
+    super(hex_ewkb)
   end
 
 end

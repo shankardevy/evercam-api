@@ -87,6 +87,15 @@ module Evercam
         required: true
       }
 
+      expose :location, documentation: {
+        type: 'hash',
+        desc: 'GPS lng and lat coordinates of the camera location'
+      } do |c,o|
+        if c.location
+          { lng: c.location.x, lat: c.location.y }
+        end
+      end
+
       expose :endpoints, documentation: {
         type: 'array',
         desc: 'String array of all available camera endpoints',
