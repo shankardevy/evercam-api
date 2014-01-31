@@ -135,7 +135,8 @@ module Evercam
           expect(subject.redirect_to).to have_fragment({
             access_token: subject.token.request,
             expires_in: subject.token.expires_in,
-            token_type: :bearer
+            token_type: :bearer,
+            username: user0.username
           })
         end
 
@@ -235,7 +236,8 @@ module Evercam
           expect(subject.redirect_to).to have_fragment({
             access_token: subject.token.request,
             expires_in: subject.token.expires_in,
-            token_type: :bearer
+            token_type: :bearer,
+            username: user0.username
           })
         end
 

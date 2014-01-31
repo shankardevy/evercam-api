@@ -139,6 +139,7 @@ module Evercam
           {
             access_token: @token.request,
             expires_in: @token.expires_in,
+            username: @u.username,
             token_type: :bearer
           }
         else
