@@ -68,12 +68,7 @@ class AccessToken < Sequel::Model
   private
 
   def where_right(name)
-    scope = AccessScope.new(name)
-    {
-      group: scope.type.to_s,
-      right: scope.right.to_s,
-      scope: scope.id
-    }
+    AccessRight.split(name).values
   end
 
 end
