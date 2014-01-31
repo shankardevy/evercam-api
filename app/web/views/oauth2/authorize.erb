@@ -5,9 +5,9 @@
   <li>
   <% @req.missing.each do |s| %>
     <% if s.generic? %>
-      permission to <strong><%= s.right %> <%= s.id %> <%= s.type %></strong>
+      Permission to <strong><%= s.right %> all <%= s.group %></strong>
     <% else %>
-      permission to <strong><%= s.right %> <%= s.resource.name %></strong>
+      Permission to <strong><%= s.right %> <%= s.resource.name %></strong>
     <% end %>
   <% end %>
   </li>

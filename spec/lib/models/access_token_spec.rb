@@ -2,6 +2,8 @@ require 'data_helper'
 
 describe AccessToken do
 
+  let(:token) { create(:access_token) }
+
   describe 'after_initialize' do
 
     it 'generates a 32 char random #request' do
@@ -84,16 +86,40 @@ describe AccessToken do
 
   end
 
-  describe '#allow?' do
+  describe '#grant' do
+
+    it 'adds an access right to the token' do
+      token.grant('a:b:c')
+      expect(token.includes?('a:b:c')).to eq(true)
+    end
+
+    it 'does not attempt to add the same scope twice' do
+      expect{ 2.times { token.grant('a:b:c') } }.to_not raise_error
+    end
+
+  end
+
+  describe '#revoke' do
+
+    before(:each) { token.grant('a:b:c') }
+
+    it 'removes an existing right from the token' do
+      token.revoke('a:b:c')
+      expect(token.includes?('a:b:c')).to eq(false)
+    end
+
+  end
+
+  describe '#includes?' do
 
     it 'returns true when the access right has been granted' do
-      token = create(:access_right, name: 'xxxx').token
-      expect(token.allow?('xxxx')).to eq(true)
+      token.grant('a:b:c')
+      expect(token.includes?('a:b:c')).to eq(true)
     end
 
     it 'returns false when the access right has not been granted' do
-      token = create(:access_right, name: 'xxxx').token
-      expect(token.allow?('aaaa')).to eq(false)
+      token.grant('a:b:c')
+      expect(token.includes?('x:y:z')).to eq(false)
     end
 
   end

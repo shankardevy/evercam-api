@@ -43,11 +43,32 @@ class AccessToken < Sequel::Model
     super || grantor
   end
 
+  # Adds a new access right to this token
+  # if it does not already exist
+  def grant(name)
+    add_right(
+      where_right(name)
+    ) unless includes?(name)
+  end
+
+  # Removes an access right from this token
+  # if it exists otherwise does nothing
+  def revoke(name)
+    rights_dataset.where(
+      where_right(name)).delete
+  end
+
   # Whether or not this token includes a
-  # particular right
-  def allow?(name)
-    1 == rights_dataset.
-      where(name: name).count
+  # particular access right
+  def includes?(name)
+    1 == rights_dataset.where(
+      where_right(name)).count
+  end
+
+  private
+
+  def where_right(name)
+    AccessRight.split(name).values
   end
 
 end

@@ -43,7 +43,7 @@ module Evercam
       def missing
         scopes.select do |s|
           false == client.tokens.any? do |t|
-            t.grantor == @u && t.allow?(s.to_s)
+            t.grantor == @u && t.includes?(s.to_s)
           end
         end
       end
@@ -78,15 +78,15 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.generic? || s.resource.owner == @u
+          s.generic? || s.resource.allow?(:share, @u.token)
         end
       end
 
       def scopes
         names = @p[:scope] || ''
         names.split(/[\s,]+/).map do |s|
-          AccessScope.new(s).tap do |a|
-            a.id = @u.username if a.generic?
+          AccessRight.split(s).tap do |a|
+            a.scope = @u.username if a.generic?
           end
         end
       end
@@ -95,7 +95,7 @@ module Evercam
         return nil unless valid?
         @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
           scopes.each do |s|
-            t.add_right(name: s.to_s)
+            t.grant(s.to_s)
           end
         end
       end
@@ -139,6 +139,7 @@ module Evercam
           {
             access_token: @token.request,
             expires_in: @token.expires_in,
+            username: @u.username,
             token_type: :bearer
           }
         else

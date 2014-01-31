@@ -107,7 +107,7 @@ module Evercam
             grantee: client0,
             grantor: user0
           ).tap do |t|
-            t.add_right(name: params[:scope])
+            t.grant(params[:scope])
           end
         end
 
@@ -135,7 +135,8 @@ module Evercam
           expect(subject.redirect_to).to have_fragment({
             access_token: subject.token.request,
             expires_in: subject.token.expires_in,
-            token_type: :bearer
+            token_type: :bearer,
+            username: user0.username
           })
         end
 
@@ -172,7 +173,7 @@ module Evercam
 
         it 'ignores any grants by other users' do
           token = create(:access_token, grantee: client0)
-          scopes.each { |s| token.add_right(name: s) }
+          scopes.each { |s| token.grant(s) }
           expect(subject.missing.size).to eq(2)
         end
 
@@ -198,7 +199,7 @@ module Evercam
 
         it 'creates a right with the correct name' do
           token = subject.approve!
-          allow = token.allow?("cameras:view:#{user0.username}")
+          allow = token.includes?("cameras:view:#{user0.username}")
           expect(allow).to eq(true)
         end
 
@@ -235,7 +236,8 @@ module Evercam
           expect(subject.redirect_to).to have_fragment({
             access_token: subject.token.request,
             expires_in: subject.token.expires_in,
-            token_type: :bearer
+            token_type: :bearer,
+            username: user0.username
           })
         end
 
