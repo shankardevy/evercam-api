@@ -108,6 +108,13 @@ describe 'API routes/cameras' do
 
     end
 
+    context 'when required keys are missing' do
+      it 'returns a BAD REQUEST status' do
+        post('/cameras', { id: '' }, auth)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
     context 'when is_public is null' do
       it 'returns a BAD REQUEST status' do
         post('/cameras', params.merge(is_public: nil), auth)
@@ -187,7 +194,7 @@ describe 'API routes/cameras' do
 
   end
 
- describe 'DELETE /cameras' do
+  describe 'DELETE /cameras' do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 

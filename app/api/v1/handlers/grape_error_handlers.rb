@@ -8,7 +8,8 @@ module Evercam
     def self.extended(base)
 
       # errors where the user has made a mistake
-      base.rescue_from BadRequestError, OutcomeError do |e|
+      base.rescue_from BadRequestError, OutcomeError,
+        Grape::Exceptions::ValidationErrors do |e|
         error_response({ status: 400, message: e.message })
       end
 
