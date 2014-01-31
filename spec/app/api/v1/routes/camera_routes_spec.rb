@@ -54,7 +54,7 @@ describe 'API routes/cameras' do
       response = get("/cameras/#{camera.exid}")
       expect(response.json['cameras'][0]).to have_keys(
         'id', 'name', 'owner', 'created_at', 'updated_at',
-        'polled_at', 'is_public', 'is_online', 'last_online_at',
+        'last_polled_at', 'is_public', 'is_online', 'last_online_at',
         'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth')
     end
 

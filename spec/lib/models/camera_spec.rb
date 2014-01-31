@@ -102,5 +102,30 @@ describe Camera do
 
   end
 
+  describe '#location' do
+
+    let(:point) { '0101000020E610000000000000000024400000000000003440' }
+
+    it 'returns nil when no location set' do
+      expect(camera.location).to be_nil
+    end
+
+    it 'returns a GeoRuby Point when location is set' do
+      camera.values[:location] = point
+      expect(camera.location.x).to be(10.0)
+    end
+
+    it 'sets the location to nil when nil passed' do
+      camera.location = nil
+      expect(camera.values[:location]).to be_nil
+    end
+
+    it 'sets the location value from a GeoRuby Point' do
+      camera.location = GeoRuby::SimpleFeatures::Point.from_hex_ewkb(point)
+      expect(camera.values[:location]).to eq(point)
+    end
+
+  end
+
 end
 

@@ -2,6 +2,8 @@ require_relative '../errors'
 
 class Camera < Sequel::Model
 
+  include GeoRuby::SimpleFeatures
+
   many_to_one :firmware
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
@@ -40,6 +42,21 @@ class Camera < Sequel::Model
   def timezone
     Timezone::Zone.new zone:
       (values[:timezone] || 'Etc/UTC')
+  end
+
+  # Returns the location for the camera as a GeoRuby
+  # Point if it exists otherwise nil
+  def location
+    if values[:location]
+      Point.from_hex_ewkb(values[:location])
+    end
+  end
+
+  # Sets the cameras location as a GeoRuby Point
+  # instance or call with nil to unset
+  def location=(val)
+    values[:location] =
+      val ? val.as_hex_ewkb : nil
   end
 
   # Returns a deep merge of any config values set for this
