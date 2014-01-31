@@ -90,5 +90,9 @@ class Camera < Sequel::Model
     super(hex_ewkb)
   end
 
+  def url
+    "/users/#{owner.username}/cameras/#{exid}"
+  end
+
 end
 

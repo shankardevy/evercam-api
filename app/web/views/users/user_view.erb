@@ -19,12 +19,12 @@
     <div class="streamContainer">
       <div class="row">
         <div class="col-md-4 col-sm-12">
-          <a href="#"><img class="img-responsive" src="/img/rememberance.jpg" width="265px"></a>
+          <a href="<%= c.url -%>"><img class="img-responsive" src="/img/rememberance.jpg" width="265px"></a>
         </div>
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
             <div>
-              <h4><a href="#"><%= c.name -%></a></h4>
+              <h4><a href="<%= c.url -%>"><%= c.name -%></a></h4>
               <div class="positionTest">
                 <% if c.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>

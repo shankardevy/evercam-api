@@ -15,6 +15,11 @@ module Evercam
     end
 
     get '/users/:username/cameras/:camera' do |username, camera|
+      @user = User.by_login(username)
+      raise NotFoundError, 'Username does not exist' unless @user
+
+      @camera = Camera.by_exid(camera)
+      raise NotFoundError, 'Camera does not exist' unless @camera
       erb 'users/cameras/view'.to_sym
     end
 
