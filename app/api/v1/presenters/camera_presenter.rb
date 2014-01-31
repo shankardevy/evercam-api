@@ -56,7 +56,7 @@ module Evercam
           required: true
         }
 
-        expose :polled_at, documentation: {
+        expose :last_polled_at, documentation: {
           type: 'integer',
           desc: 'Unix timestamp at last heartbeat poll'
         }
@@ -87,6 +87,15 @@ module Evercam
         required: true
       }
 
+      expose :location, documentation: {
+        type: 'hash',
+        desc: 'GPS lng and lat coordinates of the camera location'
+      } do |c,o|
+        if c.location
+          { lng: c.location.x, lat: c.location.y }
+        end
+      end
+
       expose :endpoints, documentation: {
         type: 'array',
         desc: 'String array of all available camera endpoints',
@@ -97,6 +106,11 @@ module Evercam
       } do |s,o|
         s.endpoints.map(&:to_s)
       end
+
+      expose :mac_address, documentation: {
+        type: 'string',
+        desc: 'The physical network MAC address of the camera'
+      }
 
       expose :snapshots, documentation: {
         type: 'hash',

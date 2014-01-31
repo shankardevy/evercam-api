@@ -37,8 +37,8 @@ describe Evercam::HeartbeatWorker do
       expect(camera0.is_online).to eq(true)
     end
 
-    it 'updates the polled_at timestamp' do
-      expect(camera0.polled_at).to be_around_now
+    it 'updates the last_polled_at timestamp' do
+      expect(camera0.last_polled_at).to be_around_now
     end
 
     it 'updates the last_online_at timestamp' do
@@ -60,8 +60,8 @@ describe Evercam::HeartbeatWorker do
       expect(camera0.is_online).to eq(false)
     end
 
-    it 'updates the polled_at timestamp' do
-      expect(camera0.polled_at).to be_around_now
+    it 'updates the last_polled_at timestamp' do
+      expect(camera0.last_polled_at).to be_around_now
     end
 
     it 'does not update the last_online_at timestamp' do

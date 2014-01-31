@@ -18,7 +18,7 @@ module Evercam
       instant = Time.now
 
       camera = Camera.by_exid(camera_name)
-      updates = { is_online: false, polled_at: instant }
+      updates = { is_online: false, last_polled_at: instant }
 
       camera.endpoints.each do |endpoint|
         next unless (endpoint.public? rescue false)

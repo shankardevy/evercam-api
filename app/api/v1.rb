@@ -16,6 +16,9 @@ module Evercam
       end
     end
 
+    # disable annoying I18n message
+    I18n.enforce_available_locales = false
+
     # configure the api
     extend GrapeJSONFormatters
     extend GrapeErrorHandlers

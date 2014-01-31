@@ -62,6 +62,12 @@ describe Vendor do
       expect(vendor1).to eq([vendor0])
     end
 
+    it 'matches vendors only on the first three octets' do
+      vendor0 = create(:vendor, known_macs: ['0A:0B:0C'])
+      vendor1 = subject.by_mac('0a:0b:0C:00:00:00').all
+      expect(vendor1).to eq([vendor0])
+    end
+
   end
 
 end

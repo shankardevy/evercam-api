@@ -11,7 +11,7 @@ class Vendor < Sequel::Model
     end
 
     def by_mac(val)
-      where(%("known_macs" @> ARRAY[?]), val.upcase)
+      where(%("known_macs" @> ARRAY[?]), val.upcase[0,8])
     end
 
     def supported
@@ -31,6 +31,12 @@ class Vendor < Sequel::Model
     match_firmware(val) || default_firmware
   end
 
+  def default_firmware
+    firmwares.find do |f|
+      f.known_models.include?('*')
+    end
+  end
+
   private
 
   def match_firmware(val)
@@ -38,12 +44,6 @@ class Vendor < Sequel::Model
       f.known_models.any? do |m|
         '*' != m && nil != val.upcase.match(m.upcase)
       end
-    end
-  end
-
-  def default_firmware
-    firmwares.find do |f|
-      f.known_models.include?('*')
     end
   end
 

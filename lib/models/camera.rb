@@ -2,6 +2,9 @@ require_relative '../errors'
 
 class Camera < Sequel::Model
 
+  require 'georuby'
+  include GeoRuby::SimpleFeatures
+
   many_to_one :firmware
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
@@ -17,6 +20,18 @@ class Camera < Sequel::Model
   def self.by_exid!(exid)
     by_exid(exid) || (
       raise Evercam::NotFoundError, 'Camera does not exist')
+  end
+
+  # Returns the firmware for this camera using any specifically
+  # set before trying to infer vendor from the mac address
+  def firmware
+    definite = super
+    return definite if definite
+    if mac_address
+      if vendor = Vendor.by_mac(mac_address).first
+        vendor.default_firmware
+      end
+    end
   end
 
   # Determines if the presented token should be allowed
@@ -47,6 +62,32 @@ class Camera < Sequel::Model
   def config
     fconf = firmware ? firmware.config : {}
     fconf.deep_merge(values[:config] || {})
+  end
+
+  # Returns the location for the camera as a GeoRuby
+  # Point if it exists otherwise nil
+  def location
+    if super
+      Point.from_hex_ewkb(super)
+    end
+  end
+
+  # Sets the cameras location as a GeoRuby Point
+  # instance or call with nil to unset
+  def location=(val)
+    hex_ewkb =
+      case val
+      when Hash
+        Point.from_x_y(
+          val[:lng], val[:lat]
+        ).as_hex_ewkb
+      when Point
+        val.as_hex_ewkb
+      when nil
+        nil
+      end
+
+    super(hex_ewkb)
   end
 
 end

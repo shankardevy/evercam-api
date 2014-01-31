@@ -16,6 +16,7 @@ gem 'grape-swagger',
   github: 'tim-vandecasteele/grape-swagger'
 
 gem 'sequel'
+gem 'georuby'
 gem 'pg'
 
 gem 'aws-sdk'

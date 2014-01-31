@@ -60,6 +60,7 @@ GEM
     ffi (1.9.3)
     ffi (1.9.3-x86-mingw32)
     formatador (0.2.4)
+    georuby (2.2.1)
     grape (0.6.1)
       activesupport
       builder
@@ -219,6 +220,7 @@ DEPENDENCIES
   bcrypt-ruby
   dotenv
   factory_girl
+  georuby
   grape
   grape-entity
   grape-swagger!

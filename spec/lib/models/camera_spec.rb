@@ -102,5 +102,75 @@ describe Camera do
 
   end
 
+  describe '#location' do
+
+    let(:point) { '0101000020E610000000000000000024400000000000003440' }
+
+    it 'returns nil when no location set' do
+      expect(camera.location).to be_nil
+    end
+
+    it 'returns a GeoRuby Point when location is set' do
+      camera.values[:location] = point
+      expect(camera.location.x).to be(10.0)
+    end
+
+    it 'sets the location to nil when nil passed' do
+      camera.location = nil
+      expect(camera.values[:location]).to be_nil
+    end
+
+    it 'sets the location value from a GeoRuby Point' do
+      camera.location = GeoRuby::SimpleFeatures::Point.from_hex_ewkb(point)
+      expect(camera.values[:location]).to eq(point)
+    end
+
+    it 'sets the location when passed a lng lat hash' do
+      camera.location = { lng: 10, lat: 20 }
+      expect(camera.values[:location]).to eq(point)
+    end
+
+  end
+
+  describe '#firmware' do
+
+    context 'when a firmware is specifically set' do
+      it 'returns that specific firmware' do
+        firmware = create(:firmware)
+        camera.update(firmware: firmware)
+        expect(camera.firmware).to eq(firmware)
+      end
+    end
+
+    context 'when a firmware is not specifically set' do
+
+      context 'when the mac address matches a supported vendor' do
+        it 'returns the default firmware' do
+          vendor = create(:vendor, known_macs: ['8C:E7:48'])
+          firmware = create(:firmware, vendor: vendor, name: '*')
+
+          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.firmware).to eq(firmware)
+        end
+      end
+
+      context 'when the mac address does not match a supported vendor' do
+        it 'return nil' do
+          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.firmware).to be_nil
+        end
+      end
+
+      context 'when the mac address is nil' do
+        it 'return nil' do
+          camera.update(firmware: nil, mac_address: nil)
+          expect(camera.firmware).to be_nil
+        end
+      end
+
+    end
+
+  end
+
 end
 
