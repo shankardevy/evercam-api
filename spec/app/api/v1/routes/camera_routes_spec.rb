@@ -16,7 +16,7 @@ describe 'API routes/cameras' do
         'id', 'name', 'owner', 'created_at', 'updated_at',
         'last_polled_at', 'is_public', 'is_online', 'last_online_at',
         'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
-        'location')
+        'location', 'mac_address')
     end
 
     context 'when location is nil' do

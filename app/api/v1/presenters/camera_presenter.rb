@@ -107,6 +107,11 @@ module Evercam
         s.endpoints.map(&:to_s)
       end
 
+      expose :mac_address, documentation: {
+        type: 'string',
+        desc: 'The physical network MAC address of the camera'
+      }
+
       expose :snapshots, documentation: {
         type: 'hash',
         desc: 'Hash of image types and paths which return snapshots',

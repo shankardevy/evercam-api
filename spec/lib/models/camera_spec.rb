@@ -132,5 +132,45 @@ describe Camera do
 
   end
 
+  describe '#firmware' do
+
+    context 'when a firmware is specifically set' do
+      it 'returns that specific firmware' do
+        firmware = create(:firmware)
+        camera.update(firmware: firmware)
+        expect(camera.firmware).to eq(firmware)
+      end
+    end
+
+    context 'when a firmware is not specifically set' do
+
+      context 'when the mac address matches a supported vendor' do
+        it 'returns the default firmware' do
+          vendor = create(:vendor, known_macs: ['8C:E7:48'])
+          firmware = create(:firmware, vendor: vendor, name: '*')
+
+          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.firmware).to eq(firmware)
+        end
+      end
+
+      context 'when the mac address does not match a supported vendor' do
+        it 'return nil' do
+          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.firmware).to be_nil
+        end
+      end
+
+      context 'when the mac address is nil' do
+        it 'return nil' do
+          camera.update(firmware: nil, mac_address: nil)
+          expect(camera.firmware).to be_nil
+        end
+      end
+
+    end
+
+  end
+
 end
 
