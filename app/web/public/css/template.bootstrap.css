@@ -2870,6 +2870,11 @@ font-weight: normal;
   color: #e86060;
 }
 
+.unknown i{
+  padding-right: 5px;
+  color: #e8680b;
+}
+
 .lineTest h4{
   width: 500px;
   margin-bottom: 3px;

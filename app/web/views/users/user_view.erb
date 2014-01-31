@@ -11,38 +11,8 @@
       </div>
     </div>
   </div>
-  
-  <div class="border-1"></div>
-  
-  <div class="streamList">
-    <div class="streamContainer">
-      <div class="row">
-        <div class="col-md-4 col-sm-12">
-          <a href="tjama/cameras/test"><img class="img-responsive" src="/img/rememberance.jpg" width="265px"></a>
-        </div>
-        <div class="col-md-8 col-sm-12">
-          <div class="right_container">
-            <div class="offline">
-              <h4><a href="#">Remembrance Cam</a></h4>
-              <div class="positionTest">
-                <p><i class="fa fa-1x fa-minus-circle icon-align-center"></i>Offline</p>
-              </div>
-            </div>
-            <div class="camAddress">
-              <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
-            </div>
-            <div class="url">
-              <p>Internal URL: 89.101.225.151</p>
-              <p>External URL: 24.192.38.337</p>
-            </div>
-            <h5>Accessed by:</h5>
-            <p class="userInfo">Marco Herbst</p>
-          </div>
-        </div> 
-      </div>
-    </div>
-  </div>
 
+  <% @cameras.each  do |c| -%>
   <div class="border-1"></div>
 
   <div class="streamList">
@@ -53,57 +23,41 @@
         </div>
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
-            <div class="online">
-              <h4><a href="#">Remembrance Cam</a></h4>
+            <div>
+              <h4><a href="#"><%= c.name -%></a></h4>
               <div class="positionTest">
-                <p><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
+                <% if c.is_online == true %>
+                  <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
+                <% elsif c.is_online == false %>
+                  <p class="offline"><i class="fa fa-1x fa-minus-circle icon-align-center"></i>Offline</p>
+                <% else %>
+                  <p class="unknown"><i class="fa fa-1x fa-adjust icon-align-center"></i>Unknown</p>
+                <% end %>
               </div>
             </div>
-            <div class="camAddress">
+            <div class="camAddress" style="display: none">
               <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
             </div>
             <div class="url">
-              <p>Internal URL: 89.101.225.151</p>
-              <p>External URL: 24.192.38.337</p>
+              <% c.endpoints.each  do |e| -%>
+              <p>
+                <% if e.public? %>
+                External URL:
+                <% else %>
+                Internal URL:
+                <% end %>
+                <%= e.to_s -%>
+              </p>
+              <% end %>
             </div>
-            <h5>Accessed by:</h5>
-            <p class="userInfo">Marco Herbst</p>
+            <h5>Owned by:</h5>
+            <p class="userInfo"><%= c.owner.fullname -%></p>
           </div>
         </div> 
       </div>
     </div>
   </div>
-
-  <div class="border-1"></div>
-  
-  <div class="streamList">
-    <div class="streamContainer">
-      <div class="row">
-        <div class="col-md-4 col-sm-12">
-          <a href="#"><img class="img-responsive" src="/img/rememberance.jpg" width="265px"></a>
-        </div>
-        <div class="col-md-8 col-sm-12">
-          <div class="right_container">
-            <div class="online">
-              <h4><a href="#">Remembrance Cam</a></h4>
-              <div class="positionTest">
-                <p><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
-              </div>
-            </div>
-            <div class="camAddress">
-              <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
-            </div>
-            <div class="url">
-              <p>Internal URL: 89.101.225.151</p>
-              <p>External URL: 24.192.38.337</p>
-            </div>
-            <h5>Accessed by:</h5>
-            <p class="userInfo">Marco Herbst</p>
-          </div>
-        </div> 
-      </div>
-    </div>
-  </div>
+  <% end -%>
 
   <div class="border-1"></div>
         
@@ -201,7 +155,10 @@
               </div>
 
           </div>
-          
+
+          <div id="cameraErrors" class="alert alert-danger" style="display: none">
+            <strong>Error!</strong> <span class="alert-content">Change a few things up and try submitting again.</span>
+          </div>
         </div>
           
         <div class="modal-footer">
@@ -221,20 +178,21 @@
   $(function() {
     $('#addCameraForm').on('submit', function(e) {
       e.preventDefault();
+      $('#cameraErrors').hide();
       Evercam.Camera.create({
         id: $('#cameraId').val(),
         name: $('#cameraName').val(),
         is_public: $('#isPublic').is(':checked'),
-        endpoints: [$('#cameraURL').val()]
+        endpoints: [ $('#cameraURL').val() ]
       })
       .done(function() {
         console.log( "success" );
+        $('#myModal').modal('hide');
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
-      })
-      .always(function() {
-        console.log( "complete" );
+        $('#cameraErrors .alert-content').text(jqXHR.responseJSON.message);
+        $('#cameraErrors').show();
       });
     });
   });
