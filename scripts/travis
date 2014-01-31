@@ -4,7 +4,8 @@ SCHEMA="./migrations/20140117140552.dump"
 
 dropdb --if-exists evercam_tst \
   && createdb evercam_tst \
-  && psql evercam_tst < $SCHEMA
+  && psql evercam_tst < $SCHEMA \
+  && psql evercam_tst -c "CREATE EXTENSION postgis;"
 
 bundle exec rake db:migrate
 
