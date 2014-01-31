@@ -78,15 +78,15 @@ module Evercam
 
       def validate_user_can_authorize
         scopes.all? do |s|
-          s.generic? || s.resource.owner == @u
+          s.generic? || s.resource.allow?(:share, @u.token)
         end
       end
 
       def scopes
         names = @p[:scope] || ''
         names.split(/[\s,]+/).map do |s|
-          AccessScope.new(s).tap do |a|
-            a.id = @u.username if a.generic?
+          AccessRight.split(s).tap do |a|
+            a.scope = @u.username if a.generic?
           end
         end
       end
