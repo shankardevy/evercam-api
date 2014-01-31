@@ -1,4 +1,5 @@
 require_relative "./web_router"
+require_relative "../../../lib/models"
 
 module Evercam
   class WebUserRouter < WebRouter
@@ -7,7 +8,8 @@ module Evercam
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user
 
-      erb 'users/view'.to_sym
+      @models = Firmware.to_hash(:id, :name)
+      erb 'users/user_view'.to_sym
 
     end
 

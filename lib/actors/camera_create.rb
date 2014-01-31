@@ -11,6 +11,10 @@ module Evercam
         string :username
         array :endpoints, class: String
         boolean :is_public
+      end
+
+      optional do
+        string :timezone
 
         hash :snapshots do
           string :jpg
@@ -22,10 +26,6 @@ module Evercam
             string :password
           end
         end
-      end
-
-      optional do
-        string :timezone
       end
 
       def validate
