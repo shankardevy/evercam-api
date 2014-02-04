@@ -18,9 +18,10 @@ module Evercam
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user
 
+      @models = Firmware.to_hash(:id, :name)
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera
-      erb 'users/cameras/view'.to_sym
+      erb 'users/cameras/camera_view'.to_sym
     end
 
   end

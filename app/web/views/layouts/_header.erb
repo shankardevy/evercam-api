@@ -32,6 +32,7 @@
               <li><a href='/marketplace'>Marketplace</a></li>
 
               <% if curr_user %>
+                <li><a href="/users/<%= curr_user.username -%>"><%= curr_user.fullname -%></a></li>
                 <li><a href="/logout">Sign Out</a></li>
               <% else %>
                 <li><a href="/login">Sign In</a></li>

@@ -19,7 +19,7 @@
     <div class="streamContainer">
       <div class="row">
         <div class="col-md-4 col-sm-12">
-          <a href="<%= c.url -%>"><img class="img-responsive" src="/img/rememberance.jpg" width="265px"></a>
+          <a href="<%= c.url -%>"><img evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
         </div>
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
@@ -64,111 +64,8 @@
   <br/><br/><!-- Temp Line Breaks -->
 
     <!-- Add Camera Form -->
-  
-  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form id="addCameraForm" class="form-horizontal" role="form" method="POST">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Add Camera:</h4>
-        </div>
-        
-        <div class="modal-body">
 
-          <div class="addCamera_container">
-
-              <div class="form-group">
-                <label for="cameraName" class="col-sm-3 control-label">Camera Name:</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" id="cameraName" name="cameraName" placeholder="Camera Name">
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label for="cameraId" class="col-sm-3 control-label">Camera ID:</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" id="cameraId" name="cameraId" placeholder="Camera ID">
-                  <p>This must be unique to Evercam</p>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="cameraModel" class="col-sm-3 control-label">Camera Model:</label>
-                <div class="col-sm-8" >
-                  <select id="cameraModel" name="cameraModel" class="form-control">
-                    <% @models.each_with_index  do |m, index| -%>
-                      <% if index == 0 %>
-                        <option selected="selected"><%= m[0] -%></option>
-                      <% else %>
-                        <option ><%= m[0] -%></option>
-                      <% end %>
-                    <% end -%>
-                  </select>
-                </div>
-              </div>
-                
-              <div class="form-group">
-                <label for="cameraURL" class="col-sm-3 control-label">URL or IP:</label>
-                <div class="col-sm-8">
-                  <input type="text" class="form-control" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
-                  <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-sm-3 control-label">Visibilty:</label>
-                <div class="col-sm-8">
-                  <label>
-                    <input type="checkbox" id="isPublic" name="isPublic" value="true">
-                    Make this camera public
-                  </label>
-                </div>
-              </div>
-              
-              <div class="form-group" style="display: none">
-                <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
-                <div class="col-sm-8">
-                  <%= partial 'layouts/_timezones'.to_sym %>
-                </div>
-              </div>
-           
-              <div class="form-group" style="display: none">
-                <label for="inputPassword3" class="col-sm-3 control-label">Credentials:</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputArea" placeholder="Username">
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="Password" class="form-control" id="inputArea" placeholder="Password">
-                  </div>
-              </div>
-              
-              <div class="form-group" style="display: none">
-                <label for="inputPassword3" class="col-sm-3 control-label">Camera Ports:</label>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">
-                  <p>Default: 80</p>
-                </div>
-                <div class="col-sm-4">
-                  <input type="text" class="form-control" id="inputArea" placeholder="RTSP Port">
-                  <p>Default: 554</p>
-                </div>
-              </div>
-
-          </div>
-
-          <div id="cameraErrors" class="alert alert-danger" style="display: none">
-            <strong>Error!</strong> <span class="alert-content">Change a few things up and try submitting again.</span>
-          </div>
-        </div>
-          
-        <div class="modal-footer">
-          <input id="addCamera" type="submit" value="ADD" class="btn btn-primary">
-        </div>
-
-        </form>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+    <%= partial 'users/cameras/camera_modal'.to_sym %>
 </div>
 </div>
 </div>
@@ -188,6 +85,7 @@
       .done(function() {
         console.log( "success" );
         $('#myModal').modal('hide');
+        location.reload();
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
@@ -195,6 +93,7 @@
         $('#cameraErrors').show();
       });
     });
+
   });
 </script>
 <% end %>
