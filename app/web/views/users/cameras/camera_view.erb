@@ -1,4 +1,4 @@
-<div class="addCamera">
+<div class="">
   
   <br/><!-- Temp Line Breaks -->
 
@@ -10,13 +10,25 @@
           <div class="streamList">
             <img evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
           </div>
+          <div class="Refresh">
+            <a href="#"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
+          </div>
         </div>
         <div class="col-lg-6">
           <div class="stream">
           
             <div class="right_container">
               <div class="online">
-                <h4><%= @camera.name -%></h4>
+                <h3>Name</h3>
+                <form class="form" role="form" id="rename">
+                  <div class="form-group">
+                    <label class="sr-only" for="name">Camera Name</label>
+                    <input type="text" class="form-control" value="<%= @camera.name -%>" id="name" placeholder="Enter camera name">
+                  </div>
+                  <div></div>
+                  <button type="submit" class="btn btn-default">Rename</button>
+                </form>
+
                 <div class="positionTest">
                   <% if @camera.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
@@ -27,19 +39,41 @@
                   <% end %>
                 </div>
               </div>
-              <div class="camAddress" style="display: none">
+              <div class="camAddress hidden">
                 <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
               </div>
-              <div class="Refresh">
-                <a href="#"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
-              </div>
-              <div class="settingsButton">
-                <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">SETTINGS</button>
+
+              <h3>Unique ID</h3>
+              <div>
+                <%= @camera.exid -%>
               </div>
 
-              <div class="urls">
-
+              <h3>URLs</h3>
+              <div class="endpoints">
+                <% @camera.endpoints.each_with_index  do |e, i| -%>
+                <div>
+                  <% if e.public? %>
+                  External URL:
+                  <% else %>
+                  Internal URL:
+                  <% end %>
+                  <span class="endpoint_string"><%= e.to_s -%></span>
+                  <% if i > 0 %>
+                  <i index="<%= i -%>" class="fa fa-1x fa-times-circle-o icon-align-center pull-right delete-endpoint"></i>
+                  <% end %>
+                </div>
+                <% end %>
+                <br/>
+                <form class="form" role="form" id="addEndpoint">
+                  <div class="form-group">
+                    <label class="sr-only" for="url">Camera URL</label>
+                    <input type="text" class="form-control" id="url" placeholder="http://www.mycamera.com:8005">
+                  </div>
+                  <button type="submit" class="btn btn-default">Add</button>
+                </form>
               </div>
+              <h5>Owned by:</h5>
+              <p class="userInfo"><%= @camera.owner.fullname -%></p>
             </div>
 
           </div>
@@ -47,63 +81,77 @@
       </div>
 
       <div class="border-1"></div>
-      
-      <div class="row">
-        <div class="col-sm-6">
-          <h4>Permissions</h4>
-          <div class="permissions">
-            <table class="table table-condensed table-hover">
-              <tr>
-                <th>User</th>
-                <th>App</th>
-                <th>Permission</th>
-                <th></th>
-              </tr>
-              <tr>
-                <td>Marco</td>
-                <td>Timelapse</td>
-                <td>Read-only</td>
-                <td width="10%"><a class="vanish" href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
-              </tr>
-              <tr>
-                <td> - </td>
-                <td> - </td>
-                <td>Full</td>
-                <td width="10%"><a class="vanish" href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
-              </tr>
-              <tr>
-                <td>Paddy</td>
-                <td>MMS</td>
-                <td>Write</td>
-                <td width="10%"><a class="vanish" href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <div class="col-sm-6">
-          <h4>Activity</h4>
-          <div class="activityBox">
-            <p>API Requests to this camera: 4837432 </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-            <p>Last request logged: 13th January 2013 14:12 GMT </p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="border-3"></div>
-        
+
       <br/><br/><br/><!-- Temp Line Breaks -->
       
     </div>
   </div>
 
-  <!-- Add Camera Form -->
-
-  <%= partial 'users/cameras/camera_modal'.to_sym %>
 </div>
+
+<% content_for :scripts do %>
+<script>
+  $(function() {
+    var camera = new Evercam.Camera('<%= @camera.exid -%>');
+    Evercam.Camera.by_id('<%= @camera.exid -%>')
+      .then(function(camera) {
+
+        $('#rename').on('submit', function(e) {
+          e.preventDefault();
+          $('#renameErrors').hide();
+            camera.data.name = $('#name').val();
+            camera.update('name')
+            .done(function() {
+              console.log('updated');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#renameErrors').show();
+            });
+        });
+
+        $('#addEndpoint').on('submit', function(e) {
+          e.preventDefault();
+          $('#urlErrors').hide();
+            camera.data.endpoints.push($('#url').val());
+            camera.update('endpoints')
+            .done(function() {
+              location.reload();
+              console.log('updated');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+        $('.delete-endpoint').on('click', function(e) {
+          var ep_index = $(this).attr('index');
+          camera.data.endpoints.splice(ep_index, 1);
+          camera.update('endpoints')
+            .done(function() {
+              location.reload();
+              console.log('deleted');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+        $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
+        $('#renameErrors').show();
+      });
+
+
+
+
+  });
+</script>
+<% end %>

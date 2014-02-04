@@ -157,7 +157,7 @@ describe 'API routes/cameras' do
 
   end
 
-  describe 'PATCH /cameras', :focus => true do
+  describe 'PATCH /cameras' do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 

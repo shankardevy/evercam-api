@@ -114,9 +114,11 @@
     return window.Evercam.apiUrl + '/cameras' + ext;
   };
 
-  Evercam.Camera.by_id = function (id, callback) {
-    $.getJSON(this.url(id), function (data) {
-      callback(data.cameras[0]);
+  Evercam.Camera.by_id = function (id) {
+    var camera = new Evercam.Camera(id);
+    return $.getJSON(this.url(id)).then(function (data) {
+      camera.data = data.cameras[0]
+      return camera;
     });
   };
 
@@ -128,6 +130,21 @@
       data: params
     });
   }
+
+  Evercam.Camera.prototype.update = function (field) {
+    var self = this,
+      newdata = self.data;
+    if (typeof(field) !== 'undefined') {
+      newdata = {};
+      newdata[field] = self.data[field];
+    }
+    return $.ajax({
+      type: 'PATCH',
+      url: Evercam.Camera.url(self.data.id),
+      dataType: 'json',
+      data: newdata
+    });
+  };
 
   Evercam.Camera.prototype.fetchSnapshotData = function () {
     var self = this;

@@ -42,19 +42,19 @@ h2 {
   letter-spacing: -1px;
 }
 
-h3 {
+h3.ec {
   font-size: 30px;
   letter-spacing: -1px;
   margin: 43px 0 34px 0;
 }
 
-h3 span {
+h3.ec span {
   display: inline-block;
   position: relative;
   padding-bottom: 12px;
 }
 
-h3 span:after {
+h3.ec span:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -166,7 +166,7 @@ p.text-info2 {
   color: #c54d48;
 }
 
-.btn {
+.btn-ec {
   font-size: 12px;
   line-height: 1em;
   color: #fff;
@@ -181,7 +181,7 @@ p.text-info2 {
   box-shadow: none;
 }
 
-a.btn:focus {
+a.btn-ec:focus {
   background: #eb5f53;
   color: #fff;
   -webkit-box-shadow: none;
@@ -3076,3 +3076,15 @@ table.table tr:hover td .vanish { display:inline-block;}
 
 table.table tr td div.btn-group { display:none;}
 table.table tr:hover td div.btn-group { display:inline-block;}
+
+.endpoints {
+  padding: 0 0 15px 0;
+  width: 290px;
+}
+
+.endpoints i {
+  font-size: 1.4em;
+}
+.endpoints i:hover {
+  color: red;
+}

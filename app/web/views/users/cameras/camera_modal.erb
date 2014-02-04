@@ -14,14 +14,14 @@
             <div class="form-group">
               <label for="cameraName" class="col-sm-3 control-label">Camera Name:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" value="<%= @camera.name rescue '' -%>" id="cameraName" name="cameraName" placeholder="Camera Name">
+                <input type="text" class="form-control" value="" id="cameraName" name="cameraName" placeholder="Camera Name">
               </div>
             </div>
 
             <div class="form-group">
               <label for="cameraId" class="col-sm-3 control-label">Camera ID:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" value="<%= @camera.exid rescue '' -%>" id="cameraId" name="cameraId" placeholder="Camera ID">
+                <input type="text" class="form-control" value="" id="cameraId" name="cameraId" placeholder="Camera ID">
                 <p>This must be unique to Evercam</p>
               </div>
             </div>
@@ -30,9 +30,7 @@
               <div class="col-sm-8" >
                 <select id="cameraModel" name="cameraModel" class="form-control">
                   <% @models.each_with_index  do |m, index| -%>
-                  <% if @camera.nil? && index == 0 %>
-                  <option selected="selected"><%= m[0] -%></option>
-                  <% elsif !@camera.nil? && !@camera.firmware.nil? && index == @camera.firmware.id %>
+                  <% if index == 0 %>
                   <option selected="selected"><%= m[0] -%></option>
                   <% else %>
                   <option ><%= m[0] -%></option>
@@ -45,7 +43,7 @@
             <div class="form-group">
               <label for="cameraURL" class="col-sm-3 control-label">URL or IP:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" value="<%= @camera.name rescue '' -%>" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
+                <input type="text" class="form-control" value="" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
                 <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
               </div>
             </div>
