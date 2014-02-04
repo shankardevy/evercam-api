@@ -157,21 +157,26 @@ describe 'API routes/cameras' do
 
   end
 
-  describe 'PATCH /cameras' do
+  describe 'PATCH /cameras', :focus => true do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
     let(:params) {
       {
         name: "Garrett's Super New Camera v2",
-        endpoints: ['http://localhost:4321'],
+        endpoints: ['http://www.evercam.io', 'http://localhost:4321'],
         is_public: false
       }
     }
 
     context 'when the params are valid' do
 
-      before(:each) do
+      before do
+        camera.add_endpoint({
+          scheme: 'http',
+          host: 'www.evercam.io',
+          port: 80
+        })
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
         patch("/cameras/#{camera.exid}", params, auth)
       end
@@ -186,8 +191,8 @@ describe 'API routes/cameras' do
         expect(Camera.by_exid(camera.exid).name).
           to eq("Garrett's Super New Camera v2")
         expect(Camera.by_exid(camera.exid).endpoints.length).
-          to eq(1)
-        expect(Camera.by_exid(camera.exid).endpoints[0][:port]).
+          to eq(2)
+        expect(Camera.by_exid(camera.exid).endpoints[1][:port]).
           to eq(4321)
       end
 
