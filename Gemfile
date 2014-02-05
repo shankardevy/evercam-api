@@ -55,8 +55,6 @@ gem 'bcrypt-ruby',
 group :development do
   gem 'sqlite3'
   gem 'shotgun'
-  
-  require "sinatra/reloader"
 end
 
 group :test do
