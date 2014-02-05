@@ -13,7 +13,7 @@
 
   window.Evercam = {
 
-    apiUrl: 'http://127.0.0.1:9393/v1',
+    apiUrl: 'http://qqq.evercam.io/v1',
     proxyUrl: 'http://cors.evr.cm/',
     refresh: 0,
 
