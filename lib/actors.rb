@@ -4,4 +4,7 @@ require_relative './actors/user_reset'
 require_relative './actors/user_update'
 require_relative './actors/camera_create'
 require_relative './actors/camera_update'
+require_relative './actors/camera_update'
+require_relative './actors/token_set'
+require_relative './actors/password_reset'
 
