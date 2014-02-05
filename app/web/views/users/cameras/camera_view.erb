@@ -1,0 +1,157 @@
+<div class="">
+  
+  <br/><!-- Temp Line Breaks -->
+
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="streamList">
+            <img evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
+          </div>
+          <div class="Refresh">
+            <a href="#"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="stream">
+          
+            <div class="right_container">
+              <div class="online">
+                <h3>Name</h3>
+                <form class="form" role="form" id="rename">
+                  <div class="form-group">
+                    <label class="sr-only" for="name">Camera Name</label>
+                    <input type="text" class="form-control" value="<%= @camera.name -%>" id="name" placeholder="Enter camera name">
+                  </div>
+                  <div></div>
+                  <button type="submit" class="btn btn-default">Rename</button>
+                </form>
+
+                <div class="positionTest">
+                  <% if @camera.is_online == true %>
+                  <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
+                  <% elsif @camera.is_online == false %>
+                  <p class="offline"><i class="fa fa-1x fa-minus-circle icon-align-center"></i>Offline</p>
+                  <% else %>
+                  <p class="unknown"><i class="fa fa-1x fa-adjust icon-align-center"></i>Unknown</p>
+                  <% end %>
+                </div>
+              </div>
+              <div class="camAddress hidden">
+                <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
+              </div>
+
+              <h3>Unique ID</h3>
+              <div>
+                <%= @camera.exid -%>
+              </div>
+
+              <h3>URLs</h3>
+              <div class="endpoints">
+                <% @camera.endpoints.each_with_index  do |e, i| -%>
+                <div>
+                  <% if e.public? %>
+                  External URL:
+                  <% else %>
+                  Internal URL:
+                  <% end %>
+                  <span class="endpoint_string"><%= e.to_s -%></span>
+                  <% if i > 0 %>
+                  <i index="<%= i -%>" class="fa fa-1x fa-times-circle-o icon-align-center pull-right delete-endpoint"></i>
+                  <% end %>
+                </div>
+                <% end %>
+                <br/>
+                <form class="form" role="form" id="addEndpoint">
+                  <div class="form-group">
+                    <label class="sr-only" for="url">Camera URL</label>
+                    <input type="text" class="form-control" id="url" placeholder="http://www.mycamera.com:8005">
+                  </div>
+                  <button type="submit" class="btn btn-default">Add</button>
+                </form>
+              </div>
+              <h5>Owned by:</h5>
+              <p class="userInfo"><%= @camera.owner.fullname -%></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="border-1"></div>
+
+      <br/><br/><br/><!-- Temp Line Breaks -->
+      
+    </div>
+  </div>
+
+</div>
+
+<% content_for :scripts do %>
+<script>
+  $(function() {
+    var camera = new Evercam.Camera('<%= @camera.exid -%>');
+    Evercam.Camera.by_id('<%= @camera.exid -%>')
+      .then(function(camera) {
+
+        $('#rename').on('submit', function(e) {
+          e.preventDefault();
+          $('#renameErrors').hide();
+            camera.data.name = $('#name').val();
+            camera.update('name')
+            .done(function() {
+              console.log('updated');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#renameErrors').show();
+            });
+        });
+
+        $('#addEndpoint').on('submit', function(e) {
+          e.preventDefault();
+          $('#urlErrors').hide();
+            camera.data.endpoints.push($('#url').val());
+            camera.update('endpoints')
+            .done(function() {
+              location.reload();
+              console.log('updated');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+        $('.delete-endpoint').on('click', function(e) {
+          var ep_index = $(this).attr('index');
+          camera.data.endpoints.splice(ep_index, 1);
+          camera.update('endpoints')
+            .done(function() {
+              location.reload();
+              console.log('deleted');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+        $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
+        $('#renameErrors').show();
+      });
+
+
+
+
+  });
+</script>
+<% end %>

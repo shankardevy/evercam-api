@@ -62,14 +62,14 @@ module Evercam
         camera.save
 
         if inputs[:endpoints]
+          camera.remove_all_endpoints
           inputs[:endpoints].each do |e|
             endpoint = URI.parse(e)
-
             camera.add_endpoint({
-                                  scheme: endpoint.scheme,
-                                  host: endpoint.host,
-                                  port: endpoint.port
-                                })
+              scheme: endpoint.scheme,
+              host: endpoint.host,
+              port: endpoint.port
+            })
 
           end
           # fire off the evr.cm zone update to sidekiq

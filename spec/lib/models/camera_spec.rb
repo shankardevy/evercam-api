@@ -112,7 +112,7 @@ describe Camera do
 
     it 'returns a GeoRuby Point when location is set' do
       camera.values[:location] = point
-      expect(camera.location.x).to be(10.0)
+      expect(camera.location.x).to eq(10.0)
     end
 
     it 'sets the location to nil when nil passed' do

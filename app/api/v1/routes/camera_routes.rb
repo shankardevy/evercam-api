@@ -13,8 +13,8 @@ module Evercam
       requires :name, type: String, desc: "Camera name."
       requires :endpoints, type: Array, desc: "Endpoints."
       requires :is_public, type: Boolean, desc: "Is camera public?"
-      requires :snapshots, type: Hash, desc: "Snapshots."
-      requires :auth, type: Hash, desc: "Auth."
+      optional :snapshots, type: Hash, desc: "Snapshots."
+      optional :auth, type: Hash, desc: "Auth."
     end
     post '/cameras' do
       auth.demand do |req, usr|

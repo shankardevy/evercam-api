@@ -100,6 +100,11 @@ describe CameraEndpoint do
       expect(endpoint0).to be_public
     end
 
+    it 'returns true for all named addresses, even not existing' do
+      endpoint0 = subject.new(host: 'www.ofjkdmjgkldjoajgfkljg.io')
+      expect(endpoint0).to be_public
+    end
+
   end
 
 end

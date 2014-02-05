@@ -1,0 +1,107 @@
+<div class="addCamera">
+  
+  <div class="row">
+  <div class="col-xs-10 col-xs-offset-1">
+    
+  <!-- Button trigger modal -->
+  <div class="row">
+    <div class="col-xs-3 col-xs-offset-9">
+      <div class="addButton">
+        <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">Add Camera</button>
+      </div>
+    </div>
+  </div>
+
+  <% @cameras.each  do |c| -%>
+  <div class="border-1"></div>
+
+  <div class="streamList"><div class="streamContainer">
+      <div class="row">
+        <div class="col-md-4 col-sm-12">
+          <a href="<%= c.url -%>"><img evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
+        </div>
+        <div class="col-md-8 col-sm-12">
+          <div class="right_container">
+            <div>
+              <h4><a href="<%= c.url -%>"><%= c.name -%></a></h4>
+              <div class="positionTest">
+                <% if c.is_online == true %>
+                  <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
+                <% elsif c.is_online == false %>
+                  <p class="offline"><i class="fa fa-1x fa-minus-circle icon-align-center"></i>Offline</p>
+                <% else %>
+                  <p class="unknown"><i class="fa fa-1x fa-adjust icon-align-center"></i>Unknown</p>
+                <% end %>
+              </div>
+            </div>
+            <div class="camAddress hidden">
+              <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
+            </div>
+            <div class="url">
+              <% c.endpoints.each  do |e| -%>
+              <p>
+                <% if e.public? %>
+                External URL:
+                <% else %>
+                Internal URL:
+                <% end %>
+                <%= e.to_s -%>
+              </p>
+              <% end %>
+            </div>
+            <h5>Owned by:</h5>
+            <p class="userInfo"><%= c.owner.fullname -%></p>
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>
+  <% end -%>
+
+  <div class="border-1"></div>
+        
+  <br/><br/><!-- Temp Line Breaks -->
+
+    <!-- Add Camera Form -->
+    <%= partial 'users/cameras/camera_modal'.to_sym %>
+</div>
+</div>
+</div>
+
+<% content_for :scripts do %>
+<script>
+  $(function() {
+    $('#addCameraForm').on('submit', function(e) {
+      e.preventDefault();
+      $('#cameraErrors').hide();
+      Evercam.Camera.create({
+        id: $('#cameraId').val(),
+        name: $('#cameraName').val(),
+        is_public: $('#isPublic').is(':checked'),
+        model:  $('#cameraModel' +$('#cameraVendor').val()).val(),
+        endpoints: [ $('#cameraURL').val() ]
+      })
+      .done(function() {
+        console.log( "success" );
+        $('#myModal').modal('hide');
+        location.reload();
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+        $('#cameraErrors .alert-content').text(jqXHR.responseJSON.message);
+        $('#cameraErrors').show();
+      });
+    });
+
+    var previous;
+    $('#cameraVendor').one('focus', function() {
+      previous = this.value;
+    }).on('change', function() {
+      $('#cameraModel' + previous).addClass('hidden');
+      $('#cameraModel' + this.value).removeClass('hidden');
+      previous = this.value;
+    });
+
+  });
+</script>
+<% end %>

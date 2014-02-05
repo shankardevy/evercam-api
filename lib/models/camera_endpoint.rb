@@ -40,7 +40,11 @@ class CameraEndpoint < Sequel::Model
   private
 
   def in_range?(range)
-    range.any? { |r| r.include?(ipv4) }
+    begin
+      range.any? { |r| r.include?(ipv4) }
+    rescue
+      false
+    end
   end
 
 end
