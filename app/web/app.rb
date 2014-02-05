@@ -15,7 +15,8 @@
  'routes/signup_router',
  'routes/login_router',
  'routes/oauth2_router',
- 'routes/marketplace_router'
+ 'routes/marketplace_router',
+ 'routes/account_router'
 ].each { |f| require_relative "./#{f}" }
 
 module Evercam
@@ -29,6 +30,7 @@ module Evercam
     use Evercam::WebLoginRouter
     use Evercam::WebOAuth2Router
     use Evercam::WebMarketPlaceRouter
+    use Evercam::WebAccountRouter
 
   end
 end
