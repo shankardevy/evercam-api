@@ -25,18 +25,33 @@
                 <p>This must be unique to Evercam</p>
               </div>
             </div>
+
             <div class="form-group">
-              <label for="cameraModel" class="col-sm-3 control-label">Camera Model:</label>
+              <label for="cameraVendor" class="col-sm-3 control-label">Camera Vendor:</label>
               <div class="col-sm-8" >
-                <select id="cameraModel" name="cameraModel" class="form-control">
-                  <% @models.each_with_index  do |m, index| -%>
-                  <% if index == 0 %>
-                  <option selected="selected"><%= m[0] -%></option>
-                  <% else %>
-                  <option ><%= m[0] -%></option>
+                <select id="cameraVendor" name="cameraVendor" class="form-control">
+                  <option selected="selected" value="-1">-- select model --</option>
+                  <% @vendors.each_with_index  do |v, index| -%>
+                    <option value="<%= v[0] -%>"><%= v[1] -%></option>
                   <% end %>
-                  <% end -%>
                 </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Camera Model:</label>
+              <div class="col-sm-8" >
+                <% @vendors.each do |v| -%>
+                  <select id="cameraModel<%= v[0] -%>" name="cameraModel" class="form-control hidden">
+                    <% @models.where(:vendor_id => v[0]).to_hash(:id, :name).each_with_index  do |m, index| -%>
+                      <% if index == 0 %>
+                      <option selected="selected" value="<%= m[0] -%>"><%= m[1] -%></option>
+                      <% else %>
+                      <option value="<%= m[0] -%>" ><%= m[1] -%></option>
+                      <% end %>
+                    <% end -%>
+                  </select>
+                <% end %>
               </div>
             </div>
 
@@ -58,14 +73,14 @@
               </div>
             </div>
 
-            <div class="form-group" style="display: none">
+            <div class="form-group hidden" >
               <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
               <div class="col-sm-8">
                 <%= partial 'layouts/_timezones'.to_sym %>
               </div>
             </div>
 
-            <div class="form-group" style="display: none">
+            <div class="form-group hidden">
               <label for="inputPassword3" class="col-sm-3 control-label">Credentials:</label>
               <div class="col-sm-4">
                 <input type="text" class="form-control" id="inputArea" placeholder="Username">
@@ -75,7 +90,7 @@
               </div>
             </div>
 
-            <div class="form-group" style="display: none">
+            <div class="form-group hidden">
               <label for="inputPassword3" class="col-sm-3 control-label">Camera Ports:</label>
               <div class="col-sm-4">
                 <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">

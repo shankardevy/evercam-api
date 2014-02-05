@@ -8,7 +8,8 @@ module Evercam
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user
 
-      @models = Firmware.to_hash(:id, :name)
+      @vendors = Vendor.order(:name).to_hash(:id, :name)
+      @models = Firmware
       @cameras = Camera.where(:owner_id => @user.id)
       erb 'users/user_view'.to_sym
 

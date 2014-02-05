@@ -15,6 +15,7 @@ module Evercam
 
       optional do
         string :timezone
+        string :model
 
         hash :snapshots do
           string :jpg
@@ -58,6 +59,7 @@ module Evercam
           name: name,
           owner: User.by_login(username),
           is_public: is_public,
+          firmware_id: model,
           config: {
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]

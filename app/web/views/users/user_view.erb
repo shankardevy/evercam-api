@@ -15,8 +15,7 @@
   <% @cameras.each  do |c| -%>
   <div class="border-1"></div>
 
-  <div class="streamList">
-    <div class="streamContainer">
+  <div class="streamList"><div class="streamContainer">
       <div class="row">
         <div class="col-md-4 col-sm-12">
           <a href="<%= c.url -%>"><img evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
@@ -79,6 +78,7 @@
         id: $('#cameraId').val(),
         name: $('#cameraName').val(),
         is_public: $('#isPublic').is(':checked'),
+        model:  $('#cameraModel' +$('#cameraVendor').val()).val(),
         endpoints: [ $('#cameraURL').val() ]
       })
       .done(function() {
@@ -91,6 +91,15 @@
         $('#cameraErrors .alert-content').text(jqXHR.responseJSON.message);
         $('#cameraErrors').show();
       });
+    });
+
+    var previous;
+    $('#cameraVendor').one('focus', function() {
+      previous = this.value;
+    }).on('change', function() {
+      $('#cameraModel' + previous).addClass('hidden');
+      $('#cameraModel' + this.value).removeClass('hidden');
+      previous = this.value;
     });
 
   });
