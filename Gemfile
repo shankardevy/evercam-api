@@ -12,7 +12,7 @@ gem 'json'
 
 gem 'grape'
 gem 'grape-entity'
-gem 'grape-swagger',
+gem 'grape-swagger', '0.7.2',
   github: 'tim-vandecasteele/grape-swagger'
 
 gem 'sequel'

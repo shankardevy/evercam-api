@@ -3077,14 +3077,14 @@ table.table tr:hover td .vanish { display:inline-block;}
 table.table tr td div.btn-group { display:none;}
 table.table tr:hover td div.btn-group { display:inline-block;}
 
-.endpoints {
+.cam-endpoints {
   padding: 0 0 15px 0;
   width: 290px;
 }
 
-.endpoints i {
+.cam-endpoints  i {
   font-size: 1.4em;
 }
-.endpoints i:hover {
+.cam-endpoints  i:hover {
   color: red;
 }
