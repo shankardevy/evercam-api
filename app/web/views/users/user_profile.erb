@@ -1,0 +1,38 @@
+<div class="row user-profile">
+  <div class="col-xs-10 col-xs-offset-1">
+    <form id="userProfile" role="form" class="center-block">
+
+      <div class="form-group">
+        <label for="userForename">Forename</label>
+        <input type="text" value="<%= @user.forename -%>" class="form-control" id="userForename" placeholder="Enter forename">
+      </div>
+
+      <div class="form-group">
+        <label for="userLastname">Lastname</label>
+        <input type="text" value="<%= @user.lastname -%>" class="form-control" id="userLastname" placeholder="Enter lastname">
+      </div>
+
+      <div class="form-group">
+        <label for="userEmail">Email address</label>
+        <input type="email" value="<%= @user.email -%>" class="form-control" id="userEmail" placeholder="Enter email">
+      </div>
+
+      <button type="submit" class="btn btn-default">Save</button>
+    </form>
+
+  </div>
+</div>
+
+
+<% content_for :scripts do %>
+<script>
+  $(function() {
+    $('#userProfile').on('submit', function(e) {
+      e.preventDefault();
+      $('#userProfileErrors').hide();
+
+    });
+
+  });
+</script>
+<% end %>

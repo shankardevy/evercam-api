@@ -15,6 +15,14 @@ module Evercam
 
     end
 
+    get '/users/:username/profile' do |username|
+      @user = User.by_login(username)
+      raise NotFoundError, 'Username does not exist' unless @user
+
+      erb 'users/user_profile'.to_sym
+
+    end
+
     get '/users/:username/cameras/:camera' do |username, camera|
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user

@@ -3088,3 +3088,7 @@ table.table tr:hover td div.btn-group { display:inline-block;}
 .cam-endpoints  i:hover {
   color: red;
 }
+
+.user-profile form {
+  max-width: 500px;
+}
