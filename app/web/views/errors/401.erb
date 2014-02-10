@@ -1,0 +1,15 @@
+<h1>Woops! - 401 Not Authorized</h1>
+
+<div>
+  <p>
+    You are not authorized to view this page!
+  </p>
+  <% case @error
+       when Sinatra::NotFound %>
+  <% else %>
+    <div class='alert alert-danger'>
+      <%= @error.message %>
+    </div>
+  <% end %>
+</div>
+

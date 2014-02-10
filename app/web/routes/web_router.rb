@@ -42,6 +42,11 @@ module Evercam
       error_response(400)
     end
 
+    # handle a 401 with a nice error
+    error AuthenticationError, AuthorizationError do
+      error_response(401)
+    end
+
     helpers do
       def error_response(code)
         status code

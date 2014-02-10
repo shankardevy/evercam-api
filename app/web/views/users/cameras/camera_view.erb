@@ -49,7 +49,7 @@
               </div>
 
               <h3>URLs</h3>
-              <div class="camera-endpoints">
+              <div class="cam-endpoints">
                 <% @camera.endpoints.each_with_index  do |e, i| -%>
                 <div>
                   <% if e.public? %>
@@ -92,7 +92,6 @@
 <% content_for :scripts do %>
 <script>
   $(function() {
-    var camera = new Evercam.Camera('<%= @camera.exid -%>');
     Evercam.Camera.by_id('<%= @camera.exid -%>')
       .then(function(camera) {
 
