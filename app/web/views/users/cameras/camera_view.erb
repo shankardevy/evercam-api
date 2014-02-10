@@ -92,7 +92,6 @@
 <% content_for :scripts do %>
 <script>
   $(function() {
-    var camera = new Evercam.Camera('<%= @camera.exid -%>');
     Evercam.Camera.by_id('<%= @camera.exid -%>')
       .then(function(camera) {
 

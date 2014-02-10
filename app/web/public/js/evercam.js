@@ -55,26 +55,6 @@
       }
     },
 
-    User: {
-      url: function(ext){
-        if (typeof(ext) === 'undefined') ext = '';
-        else ext = '/' + ext;
-        return window.Evercam.apiUrl + '/users' + ext;
-      },
-
-      create: function (params, callback) {
-        $.post(this.url(), params, function(data) {
-          callback(data.users[0]);
-        });
-      },
-
-      cameras: function (uid, callback) {
-        $.getJSON(this.url(uid + '/cameras'), function(data) {
-          callback(data.cameras);
-        });
-      }
-    },
-
     Vendor: {
       url: function(ext){
         if (typeof(ext) === 'undefined') ext = '';
@@ -101,11 +81,62 @@
       this.endpoint = null;
       this.name = name;
       this.useProxy = false;
+    },
+
+    User: function (login) {
+      this.data = null;
+      this.login = login;
     }
 
   };
 
-  // STREAM PLUGIN DEFINITION
+  // USER DEFINITION
+  // ====
+
+  Evercam.User.url = function(ext){
+    if (typeof(ext) === 'undefined') ext = '';
+    else ext = '/' + ext;
+    return Evercam.apiUrl + '/users' + ext;
+  };
+
+  Evercam.User.create = function (params, callback) {
+    $.post(this.url(), params, function(data) {
+      callback(data.users[0]);
+    });
+  };
+
+  Evercam.User.cameras = function (uid, callback) {
+    $.getJSON(this.url(uid + '/cameras'), function(data) {
+      callback(data.cameras);
+    });
+  };
+
+  Evercam.User.by_login = function (login) {
+    var user = new Evercam.User(login)
+    return $.getJSON(this.url(login)).then(function (data) {
+      user.data = data.users[0]
+      return user;
+    })
+  };
+
+  Evercam.User.prototype.update = function (fields) {
+    var self = this,
+        newdata = self.data;
+    if (typeof(fields) !== 'undefined') {
+      newdata = {};
+      $.each(fields, function(i, val) {
+        newdata[val] = self.data[val];
+      })
+    }
+    return $.ajax({
+      type: 'PATCH',
+      url: Evercam.User.url(self.login),
+      dataType: 'json',
+      data: newdata
+    });
+  };
+
+  // CAMERA DEFINITION
   // =======================
 
   Evercam.Camera.url = function (ext) {
