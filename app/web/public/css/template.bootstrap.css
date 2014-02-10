@@ -3092,3 +3092,9 @@ table.table tr:hover td div.btn-group { display:inline-block;}
 .user-profile form {
   max-width: 500px;
 }
+
+.img-loader {
+  position: absolute;
+  left: 50%;
+  top: 49%;
+}

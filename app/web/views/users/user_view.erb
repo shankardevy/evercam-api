@@ -23,7 +23,8 @@
   <div class="streamList"><div class="streamContainer">
       <div class="row">
         <div class="col-md-4 col-sm-12">
-          <a href="<%= c.url -%>"><img evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
+          <img class="img-loader" src="/img/ajax-loader.gif" >
+          <a href="<%= c.url -%>"><img class="preview" evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
         </div>
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
@@ -106,6 +107,10 @@
       $('#cameraModel' + this.value).removeClass('hidden');
       previous = this.value;
     });
+
+    $('.preview').on('load', function() {
+      $(this).parent().siblings('.img-loader').hide();
+    })
 
   });
 </script>

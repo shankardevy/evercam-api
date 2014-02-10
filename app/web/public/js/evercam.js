@@ -179,18 +179,26 @@
 
   Evercam.Camera.prototype.fetchSnapshotData = function () {
     var self = this;
-    Evercam.Camera.by_id(this.name, function(camera) {
-      self.data = camera;
+    Evercam.Camera.by_id(this.name)
+    .then(function(camera) {
+      self.data = camera.data;
       self.selectEndpoint();
     })
   };
 
   Evercam.Camera.prototype.selectEndpoint = function () {
     var self = this;
-    testForAuth(this.data.endpoints[0] + this.data.snapshots.jpg, this.data.auth.basic, function(needed) {
+    // TODO - temp fix, clean this up!
+    testForAuth(self.data.endpoints[0] + self.data.snapshots.jpg, self.data.auth.basic, function(needed) {
       self.endpoint = self.data.endpoints[0];
       self.useProxy = needed;
-      self.onUp();
+      if (needed) {
+        testForAuth(self.data.endpoints[1] + self.data.snapshots.jpg, self.data.auth.basic, function(needed) {
+          self.endpoint = self.data.endpoints[1];
+          self.useProxy = needed;
+          self.onUp();
+        });
+      }
     });
   };
 
