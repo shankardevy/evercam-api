@@ -6,7 +6,9 @@ module Evercam
     get '/signup' do
       @countries = Country.all
 
-      erb 'signup'.to_sym
+      session[:signup] = {} if !session.include?(:signup)
+
+      erb :signup
     end
 
     post '/signup' do
@@ -14,6 +16,9 @@ module Evercam
         redirect '/login', success:
           %(Congratulations, we've sent you a confirmation email to complete the next step in the process)
       else
+
+        session[:signup] = { forename: params[:forename], lastname: params[:lastname], country: params[:country], username: params[:username], email: params[:email] }
+
         redirect '/signup', error:
           outcome.errors
       end

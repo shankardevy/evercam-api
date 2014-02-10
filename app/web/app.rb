@@ -19,6 +19,7 @@
  'routes/account_router'
 ].each { |f| require_relative "./#{f}" }
 
+
 module Evercam
   class WebApp < Sinatra::Base
 
@@ -31,7 +32,7 @@ module Evercam
     use Evercam::WebOAuth2Router
     use Evercam::WebMarketPlaceRouter
     use Evercam::WebAccountRouter
-
+   
   end
 end
 

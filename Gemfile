@@ -41,7 +41,7 @@ gem 'sinatra-flash',
   require: 'sinatra/flash'
 
 gem 'sinatra-contrib',
-  require: 'sinatra/contrib'
+  require: 'sinatra/contrib'  
 
 gem 'sinatra-redirect-with-flash',
   require: 'sinatra/redirect_with_flash'
@@ -55,6 +55,7 @@ gem 'bcrypt-ruby',
 group :development do
   gem 'sqlite3'
   gem 'shotgun'
+  gem 'thin'
 end
 
 group :test do
