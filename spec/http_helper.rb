@@ -5,6 +5,7 @@ VCR.configure do |c|
   c.default_cassette_options = { :record => :new_episodes }
   c.configure_rspec_metadata!
   c.hook_into :webmock
+  c.ignore_host 'bad.host'
 end
 
 RSpec.configure do |c|

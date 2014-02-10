@@ -1,6 +1,10 @@
 require 'data_helper'
 require_lib 'workers'
 
+# Switch off Sidekiq logging to stop logging output from tests that cause exceptions.
+require 'sidekiq/testing'
+Sidekiq::Logging.logger = nil
+
 describe Evercam::HeartbeatWorker do
 
   subject { Evercam::HeartbeatWorker }
