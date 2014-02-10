@@ -1,7 +1,7 @@
 require 'data_helper'
 require_lib 'workers'
 
-# Switch off Siidekiq logging to stop logging output from tests that cause exceptions.
+# Switch off Sidekiq logging to stop logging output from tests that cause exceptions.
 require 'sidekiq/testing'
 Sidekiq::Logging.logger = nil
 
