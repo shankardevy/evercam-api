@@ -22,6 +22,23 @@ namespace :db do
     end
   end
 
+  task :rollback do
+    envs = [Evercam::Config.env]
+    envs << :test if :development == envs[0]
+    envs.each do |env|
+      db = Sequel.connect(Evercam::Config.settings[env][:database])
+      migrations = db[:schema_migrations].order(:filename).to_a
+      migration  = 0
+      if migrations.length > 1
+        match = /^(\d+).+$/.match(migrations[-2][:filename])
+        migration = match[1].to_i if match
+      end
+
+      Sequel::Migrator.run(db, 'migrations', target: migration)
+      puts "migrate: #{env}, ('#{migration}')"
+    end
+  end
+
 end
 
 namespace :workers do

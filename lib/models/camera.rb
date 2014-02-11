@@ -9,6 +9,8 @@ class Camera < Sequel::Model
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
 
+  MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
+
   # Finds the camera with a matching external id
   # (exid) string or nil if none exists
   def self.by_exid(exid)
@@ -92,6 +94,11 @@ class Camera < Sequel::Model
 
   def url
     "/users/#{owner.username}/cameras/#{exid}"
+  end
+
+  # Utility method to check whether a string is a potential MAC address.
+  def self.is_mac_address?(text)
+    !(MAC_ADDRESS_PATTERN =~ text).nil?
   end
 
 end

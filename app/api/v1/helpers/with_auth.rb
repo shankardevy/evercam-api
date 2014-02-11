@@ -32,6 +32,11 @@ module Evercam
       token ? authoz_err : authen_err
     end
 
+    def first_allowed(list)
+      grantor = token ? token.grantor : nil
+      list.find {|entry| yield entry, token, grantor}
+    end
+
     private
 
     def header

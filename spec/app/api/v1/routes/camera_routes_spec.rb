@@ -89,6 +89,14 @@ describe 'API routes/cameras' do
       expect(data['model']).to eq(model.name)
     end
 
+    it 'can fetch details for a camera via MAC address' do
+      response = get("/cameras/#{camera.mac_address}")
+      data     = response.json['cameras'][0]
+
+      expect(data['id']).to eq(camera.exid)
+      expect(data['mac_address']).to eq(camera.mac_address)
+    end
+
   end
 
   describe 'POST /cameras' do
