@@ -31,7 +31,14 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
-      camera = ::Camera.by_exid!(params[:id])
+      query = ::Camera.where(exid: params[:id])
+      if Camera.is_mac_address?(params[:id])
+        query.or!(mac_address: params[:id])
+      end
+      camera = query.first
+      if camera.nil?
+        raise Evercam::NotFoundError, "Camera not found"
+      end
       auth.allow? { |r| camera.allow?(:view, r) }
       present Array(camera), with: Presenters::Camera
     end
