@@ -41,9 +41,7 @@ class Vendor < Sequel::Model
 
   def match_firmware(val)
     firmwares.find do |f|
-      f.known_models.any? do |m|
-        '*' != m && nil != val.upcase.match(m.upcase)
-      end
+      '*' != f.name && nil != val.upcase.match(f.name.upcase)
     end
   end
 

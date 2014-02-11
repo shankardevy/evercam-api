@@ -112,6 +112,23 @@
       $(this).parent().siblings('.img-loader').hide();
     })
 
+    $('#cameraPreview').click(function() {
+      var camera = new Evercam.Camera($('#cameraId').val());
+      camera.data = {endpoints: [$('#cameraURL').val()]};
+      Evercam.Model.by_model($('#cameraVendor').val(), $('#cameraModel' +$('#cameraVendor').val()).val())
+      .done(function(model) {
+        console.log(model);
+        if (typeof(model.defaults.snapshots.jpg) === 'undefined') {
+          // Show adv options
+        }
+        camera.data.snapshots = {jpg: model.defaults.snapshots.jpg}
+        camera.selectEndpoint();
+        console.log(camera.imgUrl());
+
+      });
+
+    })
+
   });
 </script>
 <% end %>

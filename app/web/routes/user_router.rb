@@ -22,7 +22,7 @@ module Evercam
         @cameras = Camera.where(:owner_id => @user.id, :is_public => true)
       end
 
-      @vendors = Vendor.order(:name).to_hash(:id, :name)
+      @vendors = Vendor.order(:name)
       @models = Firmware
       erb 'users/user_view'.to_sym
 

@@ -13,7 +13,7 @@
 
   window.Evercam = {
 
-    apiUrl: 'https://www.evercam.io/v1',
+    apiUrl: 'https://api.evercam.io/v1',
     proxyUrl: 'http://cors.evr.cm/',
     refresh: 0,
 
@@ -42,15 +42,15 @@
         });
       },
 
-      by_vendor: function (vid, callback) {
-        $.getJSON(this.url(vid), function(data) {
-          callback(data.vendors[0]);
+      by_vendor: function (vid) {
+        return $.getJSON(this.url(vid)).then(function(data) {
+          return data.vendors[0];
         });
       },
 
       by_model: function (vid, mid, callback) {
-        $.getJSON(this.url(vid + '/' + mid), function(data) {
-          callback(data.models[0]);
+        return $.getJSON(this.url(vid + '/' + mid)).then(function(data) {
+          return data.models[0];
         });
       }
     },
@@ -187,26 +187,31 @@
   };
 
   Evercam.Camera.prototype.selectEndpoint = function () {
-    var self = this;
-    // TODO - temp fix, clean this up!
-    testForAuth(self.data.endpoints[0] + self.data.snapshots.jpg, self.data.auth.basic, function(needed) {
-      self.endpoint = self.data.endpoints[0];
-      self.useProxy = needed;
-      if (needed) {
-        testForAuth(self.data.endpoints[1] + self.data.snapshots.jpg, self.data.auth.basic, function(needed) {
-          self.endpoint = self.data.endpoints[1];
-          self.useProxy = needed;
-          self.onUp();
-        });
-      }
+    var self = this,
+      tests = [];
+    $.each(self.data.endpoints, function(i, val) {
+      tests.push(testForAuth(val + self.data.snapshots.jpg, self.data.auth.basic))
+    });
+    $.when.apply($, tests).then(function() {
+      var objects = arguments;
+      self.useProxy = true;
+      $.each(objects, function(i, val) {
+        if (self.useProxy) self.endpoint = self.data.endpoints[i];
+        if (val === false && self.useProxy) {
+          self.endpoint = self.data.endpoints[i];
+          self.useProxy = false;
+        }
+      });
+      self.onUp();
     });
   };
 
-  function testForAuth(url, auth, callback) {
+  function testForAuth(url, auth) {
+    var d = new $.Deferred();
     if (navigator.userAgent.indexOf('Chrome') === -1 && navigator.userAgent.indexOf('Firefox') === -1) {
       // url basic auth only for chrome and firefox
-      callback(true);
-      return;
+      d.resolve(true);
+      return d.promise();
     }
 
     // Create iframe with url auth
@@ -216,27 +221,35 @@
 
     if (iframe.attachEvent){
       iframe.attachEvent("onload", function(){
-        loadImg(url, callback);
+        loadImg(url)
+        .done(function(result) {
+          d.resolve(result);
+        });
       });
     } else {
       iframe.onload = function(){
-        loadImg(url, callback);
+        loadImg(url)
+        .done(function(result) {
+          d.resolve(result);
+        });
       };
     }
     $(iframe).hide();
     document.body.appendChild(iframe);
-
+    return d.promise();
   };
 
-  function loadImg(url, callback) {
+  function loadImg(url) {
+    var d = new $.Deferred();
     $("<img/>")
       .load(function() {
-        callback(false);
+        d.resolve(false);
       })
       .error(function() {
-        callback(true);
+        d.resolve(true);
       })
       .attr("src", url);
+    return d.promise();
   }
 
   Evercam.Camera.prototype.isUp = function (callback) {
