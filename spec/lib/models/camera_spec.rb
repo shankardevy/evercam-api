@@ -17,22 +17,6 @@ describe Camera do
 
   end
 
-  describe '::by_mac_address' do
-
-    it 'returns nil for an unknown MAC address' do
-      expect(Camera.by_mac_address(camera.mac_address)).to eq(nil)
-    end
-
-  end
-
-  describe '::by_mac_address!' do
-
-    it 'raises a NotFoundError when it does not exist' do
-      expect{ Camera.by_mac_address!('xxxx') }.to raise_error(Evercam::NotFoundError)
-    end
-
-  end
-
   describe '#allow?' do
 
     it 'is true for all rights when the auth is the owner' do
