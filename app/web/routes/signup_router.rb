@@ -6,8 +6,7 @@ module Evercam
     get '/signup' do
       @countries = Country.all
 
-      session[:signup] = {} if !session.include?(:signup)      
-      signup = session[:signup]      
+      signup = session[:signup] || {}     
       session[:signup] = {}
 
       erb :signup, :locals => {:signup => signup}
