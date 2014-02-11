@@ -9,25 +9,25 @@
 							<div class="form-inline">
 								<div class="form-group col-xs-6">
 									  <label for="forename">Forename</label>
-									  <%= input(:forename, :text, :required, placeholder: 'Forename', value: session[:signup][:forename]) %>
+									  <%= input(:forename, :text, :required, placeholder: 'Forename', value: signup[:forename]) %>
 								</div>
 								<div class="form-group col-xs-6">
 									<label for="lastname">Lastname</label>
-									<%= input(:lastname, :text, :required, placeholder: 'Lastname', value: session[:signup][:lastname]) %>
+									<%= input(:lastname, :text, :required, placeholder: 'Lastname', value: signup[:lastname]) %>
 								</div>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="country">Country</label>
-							<%= select(:country, @countries.map { |c| [c.iso3166_a2, c.name] }, :required, value: session[:signup][:country]) %>
+							<%= select(:country, @countries.map { |c| [c.iso3166_a2, c.name] }, :required, value: signup[:country]) %>
 						</div>
 						<div class="form-group">
 						  <label for="username">Username</label>
-						  <%= input(:username, :text, :required, placeholder: 'Username', value: session[:signup][:username]) %>
+						  <%= input(:username, :text, :required, placeholder: 'Username', value: signup[:username]) %>
 						</div>
 						<div class="form-group">
 						  <label for="email">Email</label>
-						  <%= input(:email, :text, :required, placeholder: 'Email', value: session[:signup][:email]) %>
+						  <%= input(:email, :text, :required, placeholder: 'Email', value: signup[:email]) %>
 						</div>
 						<input class="btn btn-primary pull-right" type="submit" value="Sign up" id="submit"></input>
 					</form>
