@@ -9,6 +9,8 @@ class Camera < Sequel::Model
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
 
+  MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
+
   # Finds the camera with a matching external id
   # (exid) string or nil if none exists
   def self.by_exid(exid)
@@ -20,17 +22,6 @@ class Camera < Sequel::Model
   def self.by_exid!(exid)
     by_exid(exid) || (
       raise Evercam::NotFoundError, 'Camera does not exist')
-  end
-
-  # Find a camera by its MAC address, return nil if not found.
-  def self.by_mac_address(mac_address)
-    /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i.match(mac_address) ? first(mac_address: mac_address) : nil
-  end
-
-  # Find camera by MAC address, raise exception if not found.
-  def self.by_mac_address!(mac_address)
-    by_mac_address(mac_address) ||
-      (raise Evercam::NotFoundError, 'Camera does not exist')
   end
 
   # Returns the firmware for this camera using any specifically
@@ -103,6 +94,11 @@ class Camera < Sequel::Model
 
   def url
     "/users/#{owner.username}/cameras/#{exid}"
+  end
+
+  # Utility method to check whether a string is a potential MAC address.
+  def self.is_mac_address?(text)
+    !(MAC_ADDRESS_PATTERN =~ text).nil?
   end
 
 end
