@@ -37,7 +37,7 @@ module Evercam
         end
         raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
       else
-        camera = Camera.by_exid(params[:id])
+        camera = Camera.by_exid!(params[:id])
         auth.allow? { |r| camera.allow?(:view, r) }
       end
       present Array(camera), with: Presenters::Camera
