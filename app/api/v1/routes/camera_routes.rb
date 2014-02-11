@@ -31,15 +31,15 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
-      query = ::Camera.where(exid: params[:id])
       if Camera.is_mac_address?(params[:id])
-        query.or!(mac_address: params[:id])
+        camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
+          record.allow?(:view, token)
+        end
+        raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
+      else
+        camera = Camera.by_exid(params[:id])
+        auth.allow? { |r| camera.allow?(:view, r) }
       end
-      camera = query.first
-      if camera.nil?
-        raise Evercam::NotFoundError, "Camera not found"
-      end
-      auth.allow? { |r| camera.allow?(:view, r) }
       present Array(camera), with: Presenters::Camera
     end
 
