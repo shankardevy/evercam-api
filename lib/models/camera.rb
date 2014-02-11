@@ -22,6 +22,17 @@ class Camera < Sequel::Model
       raise Evercam::NotFoundError, 'Camera does not exist')
   end
 
+  # Find a camera by its MAC address, return nil if not found.
+  def self.by_mac_address(mac_address)
+    /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i.match(mac_address) ? first(mac_address: mac_address) : nil
+  end
+
+  # Find camera by MAC address, raise exception if not found.
+  def self.by_mac_address!(mac_address)
+    by_mac_address(mac_address) ||
+      (raise Evercam::NotFoundError, 'Camera does not exist')
+  end
+
   # Returns the firmware for this camera using any specifically
   # set before trying to infer vendor from the mac address
   def firmware
