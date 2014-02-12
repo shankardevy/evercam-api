@@ -7,12 +7,22 @@ Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).
 module Evercam
   class APIv1 < Grape::API
 
+    $client = ThreeScale::Client.new(:provider_key => 'b25bc9166b8805fc26a96f1130578d2b' )
+
     # use JSON if accept header empty
     default_format :json
 
     helpers do
       def auth
         WithAuth.new(env)
+      end
+
+      def authreport!(method_name='hits', usage_value=1)
+        response = $client.authrep( :app_id => 'b74e101b' ,
+                                   :app_key => 'cfa0c7bcc31dabf74487ef8d266edef1',
+                                   :usage => {method_name => usage_value})
+        puts response.error_message
+        error!('505 Reporting Error', 505) unless response.success?
       end
     end
 

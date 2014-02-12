@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true # TODO: Record 3space later
   c.cassette_library_dir = 'spec/cassettes'
   c.default_cassette_options = { :record => :new_episodes }
   c.configure_rspec_metadata!

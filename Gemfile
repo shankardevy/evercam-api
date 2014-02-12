@@ -28,6 +28,8 @@ gem 'dotenv'
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
 
+gem '3scale_client'
+
 gem 'activesupport',
   require: 'active_support'
 

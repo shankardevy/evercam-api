@@ -18,6 +18,7 @@ module Evercam
     end
     post '/cameras' do
       auth.demand do |req, usr|
+        authreport!('cameras/post')
         inputs = params.merge(username: usr.username)
 
         outcome = Actors::CameraCreate.run(inputs)
@@ -31,6 +32,7 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/cameras/:id' do
+      authreport!('cameras/get')
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
           record.allow?(:view, token)
@@ -55,6 +57,7 @@ module Evercam
       optional :auth, type: Hash, desc: "Auth."
     end
     patch '/cameras/:id' do
+      authreport!('cameras/patch')
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |r| camera.allow?(:edit, r) }
 
@@ -68,6 +71,7 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     delete '/cameras/:id' do
+      authreport!('cameras/delete')
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |r| camera.allow?(:edit, r) }
       camera.destroy

@@ -17,6 +17,7 @@ module Evercam
       requires :email, type: String, desc: "Email."
     end
     post '/users' do
+      authreport!('users/post')
       outcome = Actors::UserSignup.run(params)
       raise OutcomeError, outcome unless outcome.success?
 
@@ -28,6 +29,7 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     get '/users/:id/cameras' do
+      authreport!('users/cameras/get')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
 
@@ -40,6 +42,7 @@ module Evercam
 
     desc 'Returns available information for the user'
     get '/users/:id' do
+      authreport!('users/get')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
       auth.allow? { |r| user.allow?(:view, r) }
@@ -64,6 +67,7 @@ module Evercam
       optional :email, type: String, desc: "Email."
     end
     patch '/users/:id' do
+      authreport!('users/patch')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
       auth.allow? { |r| user.allow?(:edit, r) }
@@ -78,6 +82,7 @@ module Evercam
       entity: Evercam::Presenters::User
     }
     delete '/users/:id' do
+      authreport!('users/delete')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
       auth.allow? { |r| user.allow?(:edit, r) }
