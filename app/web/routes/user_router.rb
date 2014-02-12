@@ -24,6 +24,7 @@ module Evercam
 
       @vendors = Vendor.order(:name)
       @models = Firmware
+      @timezones = Timezone::Zone.names
       erb 'users/user_view'.to_sym
 
     end

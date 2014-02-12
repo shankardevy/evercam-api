@@ -86,36 +86,39 @@
               <label class="col-sm-3 control-label"></label>
               <div class="col-sm-8">
                 <label>
-                  Show advanced options
+                  <a id="showAdv" href="">Show advanced options <i class="fa fa-caret-square-o-down"></i></a>
                 </label>
               </div>
             </div>
 
-            <div class="form-group adv" >
+            <div class="form-group adv" style="display: none">
               <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
               <div class="col-sm-8">
-                <%= partial 'layouts/_timezones'.to_sym %>
+                <select type="text" class="form-control" id="timezone" name="timezone" placeholder="Time Zone">
+                <% @timezones.each do |tz| %>
+                  <option><%= tz -%></option>
+                <% end %>
+                </select>
               </div>
             </div>
 
-            <div class="form-group adv">
-              <label for="inputPassword3" class="col-sm-3 control-label">Credentials:</label>
+            <div class="form-group adv" style="display: none">
+              <label for="username" class="col-sm-3 control-label">Credentials:</label>
               <div class="col-sm-4">
-                <input type="text" class="form-control" id="inputArea" placeholder="Username">
+                <input type="text" class="form-control" id="username" placeholder="Username">
               </div>
               <div class="col-sm-4">
-                <input type="Password" class="form-control" id="inputArea" placeholder="Password">
+                <input type="Password" class="form-control" id="password" placeholder="Password">
               </div>
             </div>
 
-            <div class="form-group adv">
-              <label for="cameraURL" class="col-sm-3 control-label">Snapshot path:</label>
+            <div class="form-group adv" style="display: none">
+              <label for="snapshotPath" class="col-sm-3 control-label">Snapshot path:</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" value="" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
-                <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
+                <input type="text" class="form-control" value="" id="snapshotPath" name="cameraURL" placeholder="/onvif/snapshot">
+                <p>e.g. /Streaming/channels/1/picture</p>
               </div>
             </div>
-
 
           </div>
 

@@ -80,13 +80,14 @@
     $('#addCameraForm').on('submit', function(e) {
       e.preventDefault();
       $('#cameraErrors').hide();
-      Evercam.Camera.create({
+      var data = {
         id: $('#cameraId').val(),
         name: $('#cameraName').val(),
         is_public: $('#isPublic').is(':checked'),
         model:  $('#cameraModel' +$('#cameraVendor').val()).val(),
         endpoints: [ $('#cameraURL').val() ]
-      })
+      };
+      Evercam.Camera.create(data)
       .done(function() {
         console.log( "success" );
         $('#myModal').modal('hide');
@@ -112,22 +113,36 @@
       $(this).parent().siblings('.img-loader').hide();
     })
 
+    function toggleAdv() {
+      if ($('.adv').is(':visible')) {
+        $('#showAdv').html('Show advanced options <i class="fa fa-caret-square-o-down"></i>');
+      } else {
+        $('#showAdv').html('Hide advanced options <i class="fa fa-caret-square-o-up"></i>');
+      }
+      $('.adv').toggle();
+
+    }
+
     $('#cameraPreview').click(function() {
+      if ($('#cameraVendor').val() == -1) return;
       var camera = new Evercam.Camera($('#cameraId').val());
       camera.data = {endpoints: [$('#cameraURL').val()]};
       Evercam.Model.by_model($('#cameraVendor').val(), $('#cameraModel' +$('#cameraVendor').val()).val())
       .done(function(model) {
         console.log(model);
-        if (typeof(model.defaults.snapshots.jpg) === 'undefined') {
-          // Show adv options
+        if (typeof(model.defaults.snapshots.jpg) === 'undefined' && !$('.adv').is(':visible')) {
+          toggleAdv()
         }
         camera.data.snapshots = {jpg: model.defaults.snapshots.jpg}
         camera.selectEndpoint();
         console.log(camera.imgUrl());
-
       });
+    });
 
-    })
+    $('#showAdv').click(function(e) {
+      e.preventDefault();
+      toggleAdv();
+    });
 
   });
 </script>
