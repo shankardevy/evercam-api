@@ -17,6 +17,7 @@ module Evercam
         string :timezone
         string :mac_address
         string :model
+        string :vendor
 
         hash :snapshots do
           string :jpg
@@ -51,6 +52,18 @@ module Evercam
 
         if timezone && false == Timezone::Zone.names.include?(timezone)
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
+        end
+
+        if vendor && !Vendor.by_exid(vendor)
+          add_error(:username, :exists, 'Vendor does not exist')
+        end
+
+        if model && !vendor
+          add_error(:model, :valid, 'If you provide model you must also provide vendor')
+        end
+
+        if model && vendor && !Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+          add_error(:model, :exists, 'Model does not exist')
         end
         
         if mac_address && !(mac_address =~ /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/)

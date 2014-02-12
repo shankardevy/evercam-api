@@ -85,8 +85,37 @@
         name: $('#cameraName').val(),
         is_public: $('#isPublic').is(':checked'),
         model:  $('#cameraModel' +$('#cameraVendor').val()).val(),
-        endpoints: [ $('#cameraURL').val() ]
+        vendor:  $('#cameraVendor').val(),
+        endpoints: [ $('#scheme').val() + $('#cameraURL').val() ]
       };
+      var username = $('#username').val(),
+          timezone = $('#timezone :selected').text(),
+          password = $('#password').val(),
+          snapshot = $('#snapshotPath').val(),
+          config = {};
+      if (username && password) {
+        config.auth = {
+          basic: {
+            username: username,
+            password: password
+          }
+        }
+      }
+      if (snapshot) {
+        config.snapshots = {
+          jpg: snapshot
+        }
+      }
+      if (config) {
+        data.config = config
+      }
+
+      // TODO - Dirty hack, fix if we won't move to rails
+      if (timezone.indexOf('(UTC)') !== -1) {
+        data.timezone = 'Etc/GMT0';
+      } else if (timezone.indexOf('(UTC') !== -1) {
+        data.timezone = 'Etc/GMT' + timezone.substr(4,1) + parseInt(timezone.substr(5,2));
+      }
       Evercam.Camera.create(data)
       .done(function() {
         console.log( "success" );

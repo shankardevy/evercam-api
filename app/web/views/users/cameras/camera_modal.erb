@@ -58,6 +58,10 @@
             <div class="form-group">
               <label for="cameraURL" class="col-sm-3 control-label">URL or IP:</label>
               <div class="col-sm-8">
+                <select id="scheme" class="form-control">
+                  <option>http://</option>
+                  <option>rtsp://</option>
+                </select>
                 <input type="text" class="form-control" value="" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
                 <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
               </div>
@@ -94,11 +98,7 @@
             <div class="form-group adv" style="display: none">
               <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
               <div class="col-sm-8">
-                <select type="text" class="form-control" id="timezone" name="timezone" placeholder="Time Zone">
-                <% @timezones.each do |tz| %>
-                  <option><%= tz -%></option>
-                <% end %>
-                </select>
+                <%= partial 'layouts/_timezones'.to_sym %>
               </div>
             </div>
 

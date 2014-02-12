@@ -3098,3 +3098,16 @@ table.table tr:hover td div.btn-group { display:inline-block;}
   left: 50%;
   top: 49%;
 }
+
+#scheme {
+  width: 22%;
+  display: inline;
+  padding: 4px;
+  margin-right: 0px;
+}
+
+#cameraURL {
+  width: 75%;
+  display: inline;
+  margin-right: 0px;
+}
