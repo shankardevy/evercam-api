@@ -88,6 +88,16 @@ module Evercam
           expect(errors[:timezone]).to eq(:valid)
         end
 
+        it 'checks any provided mac is valid' do
+          params = valid.merge(mac_address: 'BADMAC')
+
+          outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
+          expect(outcome).to_not be_success
+          expect(errors[:mac_address]).to eq(:valid)
+        end
+
       end
 
       describe 'optional params' do
@@ -101,6 +111,17 @@ module Evercam
 
           expect(outcome).to be_success
           expect(result.timezone).to eq(timezone)
+        end
+
+        it 'sets the mac value when provided' do
+          mac = '3d:f2:c9:a6:b3:4f'
+          params = valid.merge(mac_address: mac)
+
+          outcome = subject.run(params)
+          result = outcome.result
+
+          expect(outcome).to be_success
+          expect(result.mac_address).to eq(mac)
         end
 
       end

@@ -15,6 +15,7 @@ module Evercam
 
       optional do
         string :timezone
+        string :mac_address
         string :model
 
         hash :snapshots do
@@ -51,6 +52,10 @@ module Evercam
         if timezone && false == Timezone::Zone.names.include?(timezone)
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
         end
+        
+        if mac_address && !(mac_address =~ /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/)
+          add_error(:mac_address, :valid, 'Mac address is invalid')
+        end
       end
 
       def execute
@@ -67,6 +72,7 @@ module Evercam
         })
 
         camera.timezone = timezone if timezone
+        camera.mac_address = mac_address if mac_address
         camera.save
 
         inputs[:endpoints].each do |e|
