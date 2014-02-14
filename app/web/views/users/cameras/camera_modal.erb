@@ -43,7 +43,7 @@
               <div class="col-sm-8" >
                 <% @vendors.each do |v| -%>
                   <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control hidden">
-                    <% @models.where(:vendor_id => v.id).to_hash(:name).each_with_index  do |m, index| -%>
+                    <% v.firmwares.to_hash(:name).each_with_index  do |m, index| -%>
                       <% if index == 0 %>
                       <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
                       <% else %>

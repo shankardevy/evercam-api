@@ -23,7 +23,6 @@ module Evercam
       end
 
       @vendors = Vendor.order(:name)
-      @models = Firmware
       @timezones = Timezone::Zone.names
       erb 'users/user_view'.to_sym
 
@@ -45,7 +44,6 @@ module Evercam
 
       auth.allow? { |r| @user.allow?(:view, r) }
 
-      @models = Firmware.to_hash(:id, :name)
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera
       erb 'users/cameras/camera_view'.to_sym
