@@ -29,7 +29,7 @@
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
             <div>
-              <h4><a href="<%= c.url -%>"><%= c.name -%></a></h4>
+              <h4><a href="<%= c.url -%>"><%= c.name -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
               <div class="positionTest">
                 <% if c.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
@@ -185,6 +185,18 @@
     $('#showAdv').click(function(e) {
       e.preventDefault();
       toggleAdv();
+    });
+
+    $('.delete-camera').click(function(e) {
+      e.preventDefault();
+      var cam_exid = $(this).attr('exid');
+      Evercam.Camera.delete(cam_exid)
+      .done(function() {
+        location.reload();
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown);
+      });
     });
 
   });

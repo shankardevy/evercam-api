@@ -153,6 +153,15 @@
     });
   };
 
+  Evercam.Camera.delete = function (id) {
+    return $.ajax({
+      type: 'DELETE',
+      url: Evercam.Camera.url(id),
+      dataType: 'json',
+      data: {}
+    });
+  };
+
   Evercam.Camera.create = function (params) {
     return $.ajax({
       type: 'POST',
@@ -160,7 +169,7 @@
       dataType: 'json',
       data: params
     });
-  }
+  };
 
   Evercam.Camera.prototype.update = function (field) {
     var self = this,
