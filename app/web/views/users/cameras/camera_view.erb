@@ -16,7 +16,7 @@
         </div>
         <div class="col-lg-6">
           <div class="stream">
-          
+
             <div class="right_container">
               <div class="online">
                 <form class="form" role="form" id="cameraForm">
@@ -128,8 +128,16 @@
 
       <div class="border-1"></div>
 
-      <br/><br/><br/><!-- Temp Line Breaks -->
-      
+      <div class="activity">
+        <h3>Activity</h3>
+
+        <% @camera.activities.each do |a| %>
+          <div>
+            <%= a.action %> <b><%= @camera.exid -%></b> at <%= a.done_at -%> from <%= a.ip -%>
+          </div>
+        <% end %>
+      </div>
+
     </div>
   </div>
 

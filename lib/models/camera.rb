@@ -8,6 +8,7 @@ class Camera < Sequel::Model
   many_to_one :firmware
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User'
+  one_to_many :activities, class: 'CameraActivity'
 
   MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
 
