@@ -15,7 +15,7 @@ class Vendor < Sequel::Model
     end
 
     def supported
-      join(:firmwares, :vendor_id => :id).
+      join(:firmwares, :vendor_id => :id).distinct(:id).
         select_all(:vendors)
     end
 
@@ -33,7 +33,7 @@ class Vendor < Sequel::Model
 
   def default_firmware
     firmwares.find do |f|
-      f.known_models.include?('*')
+      '*' == f.name 
     end
   end
 

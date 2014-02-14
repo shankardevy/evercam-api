@@ -77,7 +77,7 @@ module Evercam
           name: name,
           owner: User.by_login(username),
           is_public: is_public,
-          firmware_id: model,
+          firmware_id: Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id).id,
           config: {
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]
