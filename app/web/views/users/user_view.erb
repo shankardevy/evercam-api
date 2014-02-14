@@ -23,12 +23,13 @@
   <div class="streamList"><div class="streamContainer">
       <div class="row">
         <div class="col-md-4 col-sm-12">
-          <a href="<%= c.url -%>"><img evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
+          <img class="img-loader" src="/img/ajax-loader.gif" >
+          <a href="<%= c.url -%>"><img class="preview" evercam="<%= c.exid -%>" src="" width="265px" height="175px"></a>
         </div>
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
             <div>
-              <h4><a href="<%= c.url -%>"><%= c.name -%></a></h4>
+              <h4><a href="<%= c.url -%>"><%= c.name -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
               <div class="positionTest">
                 <% if c.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
@@ -79,13 +80,39 @@
     $('#addCameraForm').on('submit', function(e) {
       e.preventDefault();
       $('#cameraErrors').hide();
-      Evercam.Camera.create({
+      var data = {
         id: $('#cameraId').val(),
         name: $('#cameraName').val(),
         is_public: $('#isPublic').is(':checked'),
         model:  $('#cameraModel' +$('#cameraVendor').val()).val(),
-        endpoints: [ $('#cameraURL').val() ]
-      })
+        vendor:  $('#cameraVendor').val(),
+        endpoints: [ $('#scheme').val() + $('#cameraURL').val() ]
+      };
+      var username = $('#username').val(),
+          timezone = $('#timezone :selected').text(),
+          password = $('#password').val(),
+          snapshot = $('#snapshotPath').val();
+      if (username && password) {
+        data.auth = {
+          basic: {
+            username: username,
+            password: password
+          }
+        }
+      }
+      if (snapshot) {
+        data.snapshots = {
+          jpg: snapshot
+        }
+      }
+
+      // TODO - Dirty hack, fix if we won't move to rails
+      if (timezone.indexOf('(UTC)') !== -1) {
+        data.timezone = 'Etc/GMT0';
+      } else if (timezone.indexOf('(UTC') !== -1) {
+        data.timezone = 'Etc/GMT' + timezone.substr(4,1) + parseInt(timezone.substr(5,2));
+      }
+      Evercam.Camera.create(data)
       .done(function() {
         console.log( "success" );
         $('#myModal').modal('hide');
@@ -105,6 +132,71 @@
       $('#cameraModel' + previous).addClass('hidden');
       $('#cameraModel' + this.value).removeClass('hidden');
       previous = this.value;
+    });
+
+    $('.preview').on('load', function() {
+      $(this).parent().siblings('.img-loader').hide();
+    })
+
+    setTimeout(function() {
+      $('.img-loader').hide();
+    }, 5000);
+
+    function toggleAdv() {
+      if ($('.adv').is(':visible')) {
+        $('#showAdv').html('Show advanced options <i class="fa fa-caret-square-o-down"></i>');
+      } else {
+        $('#showAdv').html('Hide advanced options <i class="fa fa-caret-square-o-up"></i>');
+      }
+      $('.adv').toggle();
+    }
+
+    $('#cameraPreview').click(function() {
+      if ($('#cameraVendor').val() == -1) return;
+      var camera = new Evercam.Camera($('#cameraId').val());
+      $('#previewError').hide();
+      camera.data = {endpoints: [$('#scheme').val() + $('#cameraURL').val()]};
+      Evercam.Model.by_model($('#cameraVendor').val(), $('#cameraModel' +$('#cameraVendor').val()).val())
+      .done(function(model) {
+        if (typeof(model.defaults.snapshots.jpg) === 'undefined' && !$('.adv').is(':visible')) {
+          toggleAdv();
+        }
+        camera.data.snapshots = {jpg: model.defaults.snapshots.jpg};
+        var snap = $('#snapshotPath').val();
+        if (snap) camera.data.snapshots.jpg = snap;
+        camera.data.auth = model.defaults.auth;
+        camera.selectEndpoint();
+        camera.isUp(function() {
+          camera.useProxy = true;
+          $.get(camera.imgUrl())
+          .done(function() {
+            $('#cameraPreview').attr('src', camera.imgUrl());
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            $('#previewError').show();
+            if (!$('.adv').is(':visible')) {
+              toggleAdv();
+            }
+          });
+        })
+      });
+    });
+
+    $('#showAdv').click(function(e) {
+      e.preventDefault();
+      toggleAdv();
+    });
+
+    $('.delete-camera').click(function(e) {
+      e.preventDefault();
+      var cam_exid = $(this).attr('exid');
+      Evercam.Camera.delete(cam_exid)
+      .done(function() {
+        location.reload();
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown);
+      });
     });
 
   });

@@ -31,6 +31,10 @@ map '/v1' do
 end
 
 map '/' do
+  # setup ssl requirements
+  use Rack::SslEnforcer,
+      Evercam::Config[:api][:ssl]
+
   run Evercam::WebApp
 end
 

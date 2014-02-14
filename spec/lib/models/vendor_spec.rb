@@ -27,8 +27,8 @@ describe Vendor do
 
   describe '#get_firmware_for' do
 
-    let!(:firmware0) { create(:firmware, known_models: ['*']) }
-    let!(:firmware1) { create(:firmware, vendor: firmware0.vendor, known_models: ['abcd']) }
+    let!(:firmware0) { create(:firmware, name: '*') }
+    let!(:firmware1) { create(:firmware, vendor: firmware0.vendor, name: 'abcd') }
 
     subject { firmware0.vendor }
 

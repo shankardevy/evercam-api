@@ -22,8 +22,8 @@ module Evercam
         @cameras = Camera.where(:owner_id => @user.id, :is_public => true)
       end
 
-      @vendors = Vendor.order(:name).to_hash(:id, :name)
-      @models = Firmware
+      @vendors = Vendor.order(:name)
+      @timezones = Timezone::Zone.names
       erb 'users/user_view'.to_sym
 
     end
@@ -44,7 +44,6 @@ module Evercam
 
       auth.allow? { |r| @user.allow?(:view, r) }
 
-      @models = Firmware.to_hash(:id, :name)
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera
       erb 'users/cameras/camera_view'.to_sym

@@ -8,10 +8,10 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="streamList">
-            <img evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
+            <img class="preview" evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
           </div>
           <div class="Refresh">
-            <a href="#"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
+            <a href="#" class="refresh"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
           </div>
         </div>
         <div class="col-lg-6">
@@ -63,17 +63,27 @@
                   <% end %>
                 </div>
                 <% end %>
+
                 <br/>
+
                 <form class="form" role="form" id="addEndpoint">
+
                   <div class="form-group">
                     <label class="sr-only" for="url">Camera URL</label>
                     <input type="text" class="form-control" id="url" placeholder="http://www.mycamera.com:8005">
                   </div>
+
+                  <div class="alert alert-danger" id="urlErrors" style="display: none">
+                    <strong>Error!</strong> <span class="alert-content"></span>
+                  </div>
+
                   <button type="submit" class="btn btn-default">Add</button>
                 </form>
               </div>
+
               <h5>Owned by:</h5>
               <p class="userInfo"><%= @camera.owner.fullname -%></p>
+
             </div>
 
           </div>
@@ -148,8 +158,10 @@
         $('#renameErrors').show();
       });
 
-
-
+    $('.refresh').click(function() {
+      var a = $('.preview')[0];
+      a.src = a.src.split('?')[0] + '?' + new Date().getTime();
+    });
 
   });
 </script>

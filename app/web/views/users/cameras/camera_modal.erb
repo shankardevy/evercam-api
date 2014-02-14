@@ -32,7 +32,7 @@
                 <select id="cameraVendor" name="cameraVendor" class="form-control">
                   <option selected="selected" value="-1">-- select model --</option>
                   <% @vendors.each_with_index  do |v, index| -%>
-                    <option value="<%= v[0] -%>"><%= v[1] -%></option>
+                    <option value="<%= v.exid -%>"><%= v.name -%></option>
                   <% end %>
                 </select>
               </div>
@@ -42,12 +42,12 @@
               <label class="col-sm-3 control-label">Camera Model:</label>
               <div class="col-sm-8" >
                 <% @vendors.each do |v| -%>
-                  <select id="cameraModel<%= v[0] -%>" name="cameraModel" class="form-control hidden">
-                    <% @models.where(:vendor_id => v[0]).to_hash(:id, :name).each_with_index  do |m, index| -%>
+                  <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control hidden">
+                    <% v.firmwares.to_hash(:name).each_with_index  do |m, index| -%>
                       <% if index == 0 %>
-                      <option selected="selected" value="<%= m[0] -%>"><%= m[1] -%></option>
+                      <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
                       <% else %>
-                      <option value="<%= m[0] -%>" ><%= m[1] -%></option>
+                      <option value="<%= m[0] -%>" ><%= m[0] -%></option>
                       <% end %>
                     <% end -%>
                   </select>
@@ -58,6 +58,10 @@
             <div class="form-group">
               <label for="cameraURL" class="col-sm-3 control-label">URL or IP:</label>
               <div class="col-sm-8">
+                <select id="scheme" class="form-control">
+                  <option>http://</option>
+                  <option>rtsp://</option>
+                </select>
                 <input type="text" class="form-control" value="" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
                 <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
               </div>
@@ -73,32 +77,47 @@
               </div>
             </div>
 
-            <div class="form-group hidden" >
+            <div class="form-group">
+              <label class="col-sm-3 control-label">Preview:</label>
+              <div class="col-sm-8">
+                <img id="cameraPreview" class="preview" src="" width="265px" height="175px">
+                <label>Click on preview area above to refresh</label>
+                <p id="previewError" class="text-danger" style="display: none">Can't connect to camera, please check advanced options.</p>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label"></label>
+              <div class="col-sm-8">
+                <label>
+                  <a id="showAdv" href="">Show advanced options <i class="fa fa-caret-square-o-down"></i></a>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group adv" style="display: none">
               <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
               <div class="col-sm-8">
                 <%= partial 'layouts/_timezones'.to_sym %>
               </div>
             </div>
 
-            <div class="form-group hidden">
-              <label for="inputPassword3" class="col-sm-3 control-label">Credentials:</label>
+            <div class="form-group adv" style="display: none">
+              <label for="username" class="col-sm-3 control-label">Credentials:</label>
               <div class="col-sm-4">
-                <input type="text" class="form-control" id="inputArea" placeholder="Username">
+                <input type="text" class="form-control" id="username" placeholder="Username">
               </div>
               <div class="col-sm-4">
-                <input type="Password" class="form-control" id="inputArea" placeholder="Password">
+                <input type="Password" class="form-control" id="password" placeholder="Password">
               </div>
             </div>
 
-            <div class="form-group hidden">
-              <label for="inputPassword3" class="col-sm-3 control-label">Camera Ports:</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="inputArea" placeholder="HTTP Port">
-                <p>Default: 80</p>
-              </div>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="inputArea" placeholder="RTSP Port">
-                <p>Default: 554</p>
+            <div class="form-group adv" style="display: none">
+              <label for="snapshotPath" class="col-sm-3 control-label">Snapshot path:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" value="" id="snapshotPath" name="cameraURL" placeholder="/onvif/snapshot">
+                <p>e.g. /Streaming/channels/1/picture</p>
               </div>
             </div>
 
@@ -107,6 +126,8 @@
           <div id="cameraErrors" class="alert alert-danger" style="display: none">
             <strong>Error!</strong> <span class="alert-content">Change a few things up and try submitting again.</span>
           </div>
+
+
         </div>
 
         <div class="modal-footer">

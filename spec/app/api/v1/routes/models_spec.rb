@@ -5,8 +5,9 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:firmware0) { create(:firmware) }
+  let!(:firmware0) { create(:firmware, name: '*', config: {username:'aaa', password: 'xxx'}) }
   let!(:vendor0) { firmware0.vendor }
+  let!(:firmware1) { create(:firmware, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
   let!(:vendor1) { create(:vendor) }
 
   describe 'GET /models' do
@@ -66,7 +67,7 @@ describe 'API routes/models' do
 
     context 'when the model exists' do
 
-      before(:each) { get("/models/#{vendor0.exid}/#{firmware0.known_models[0]}") }
+      before(:each) { get("/models/#{vendor0.exid}/#{firmware1.name}") }
 
       it 'returns an OK status' do
         expect(last_response.status).to eq(200)
@@ -75,6 +76,10 @@ describe 'API routes/models' do
       it 'returns the model data' do
         expect(last_response.json['models'][0]).to have_keys(
           'vendor', 'name', 'known_models', 'defaults')
+      end
+
+      it 'returns correct defaults' do
+        expect(last_response.json['models'][0]['defaults']).to eq({'jpg' => '/aaa/snap', 'username' => 'aaa', 'password' => 'yyy'})
       end
 
     end
@@ -88,7 +93,7 @@ describe 'API routes/models' do
       end
 
       it 'returns the default model data' do
-        expect(last_response.json['models'][0]['known_models']).to eq(['*'])
+        expect(last_response.json['models'][0]['name']).to eq('*')
       end
 
     end
