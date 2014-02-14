@@ -77,7 +77,6 @@ module Evercam
           name: name,
           owner: User.by_login(username),
           is_public: is_public,
-          firmware_id: Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id).id,
           config: {
             snapshots: inputs[:snapshots],
             auth: inputs[:auth]
@@ -85,6 +84,7 @@ module Evercam
         })
 
         camera.timezone = timezone if timezone
+        camera.firmware_id =  Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id).id if model
         camera.mac_address = mac_address if mac_address
         camera.save
 

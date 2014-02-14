@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'api/v1'
 
-describe 'API routes/models', :focus => true do
+describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
@@ -79,7 +79,6 @@ describe 'API routes/models', :focus => true do
       end
 
       it 'returns correct defaults' do
-        puts firmware1.config
         expect(last_response.json['models'][0]['defaults']).to eq({'jpg' => '/aaa/snap', 'username' => 'aaa', 'password' => 'yyy'})
       end
 
