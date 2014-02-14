@@ -91,10 +91,9 @@
       var username = $('#username').val(),
           timezone = $('#timezone :selected').text(),
           password = $('#password').val(),
-          snapshot = $('#snapshotPath').val(),
-          config = {};
+          snapshot = $('#snapshotPath').val();
       if (username && password) {
-        config.auth = {
+        data.auth = {
           basic: {
             username: username,
             password: password
@@ -102,12 +101,9 @@
         }
       }
       if (snapshot) {
-        config.snapshots = {
+        data.snapshots = {
           jpg: snapshot
         }
-      }
-      if (config) {
-        data.config = config
       }
 
       // TODO - Dirty hack, fix if we won't move to rails
@@ -142,6 +138,10 @@
       $(this).parent().siblings('.img-loader').hide();
     })
 
+    setTimeout(function() {
+      $('.img-loader').hide();
+    }, 5000);
+
     function toggleAdv() {
       if ($('.adv').is(':visible')) {
         $('#showAdv').html('Show advanced options <i class="fa fa-caret-square-o-down"></i>');
@@ -149,22 +149,36 @@
         $('#showAdv').html('Hide advanced options <i class="fa fa-caret-square-o-up"></i>');
       }
       $('.adv').toggle();
-
     }
 
     $('#cameraPreview').click(function() {
       if ($('#cameraVendor').val() == -1) return;
       var camera = new Evercam.Camera($('#cameraId').val());
-      camera.data = {endpoints: [$('#cameraURL').val()]};
+      $('#previewError').hide();
+      camera.data = {endpoints: [$('#scheme').val() + $('#cameraURL').val()]};
       Evercam.Model.by_model($('#cameraVendor').val(), $('#cameraModel' +$('#cameraVendor').val()).val())
       .done(function(model) {
-        console.log(model);
         if (typeof(model.defaults.snapshots.jpg) === 'undefined' && !$('.adv').is(':visible')) {
-          toggleAdv()
+          toggleAdv();
         }
-        camera.data.snapshots = {jpg: model.defaults.snapshots.jpg}
+        camera.data.snapshots = {jpg: model.defaults.snapshots.jpg};
+        var snap = $('#snapshotPath').val();
+        if (snap) camera.data.snapshots.jpg = snap;
+        camera.data.auth = model.defaults.auth;
         camera.selectEndpoint();
-        console.log(camera.imgUrl());
+        camera.isUp(function() {
+          camera.useProxy = true;
+          $.get(camera.imgUrl())
+          .done(function() {
+            $('#cameraPreview').attr('src', camera.imgUrl());
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            $('#previewError').show();
+            if (!$('.adv').is(':visible')) {
+              toggleAdv();
+            }
+          });
+        })
       });
     });
 

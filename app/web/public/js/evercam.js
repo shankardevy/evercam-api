@@ -13,7 +13,7 @@
 
   window.Evercam = {
 
-    apiUrl: 'https://api.evercam.io/v1',
+    apiUrl: 'https://www.evercam.io/v1',
     proxyUrl: 'http://cors.evr.cm/',
     refresh: 0,
 
@@ -190,7 +190,9 @@
     var self = this,
       tests = [];
     $.each(self.data.endpoints, function(i, val) {
-      tests.push(testForAuth(val + self.data.snapshots.jpg, self.data.auth.basic))
+      if (self.data.snapshots && self.data.auth) {
+        tests.push(testForAuth(val + self.data.snapshots.jpg, self.data.auth.basic))
+      }
     });
     $.when.apply($, tests).then(function() {
       var objects = arguments;
@@ -265,12 +267,19 @@
   }
 
   Evercam.Camera.prototype.imgUrl = function () {
-    var uri = '';
+    var uri = '',
+      baseUrl = this.endpoint;
+    if (!baseUrl) return '';
+    if (baseUrl.indexOf('/', baseUrl.length - 1) !== -1 || this.data.snapshots.jpg.indexOf('/') === 0) {
+      baseUrl = baseUrl + this.data.snapshots.jpg;
+    } else {
+      baseUrl = baseUrl + '/' + this.data.snapshots.jpg;
+    }
     this.timestamp = new Date().getTime();
     if (this.useProxy) {
-      uri = Evercam.proxyUrl + '?url=' +  this.endpoint + this.data.snapshots.jpg + '&auth=' + base64Encode(this.data.auth.basic.username + ":" + this.data.auth.basic.password);
+      uri = Evercam.proxyUrl + '?url=' +  baseUrl + '&auth=' + base64Encode(this.data.auth.basic.username + ":" + this.data.auth.basic.password);
     } else {
-      uri = this.endpoint + this.data.snapshots.jpg;
+      uri = baseUrl;
     }
     return uri;
   };
