@@ -34,6 +34,7 @@ module Evercam
 
       auth.allow? { |r| @user.allow?(:view, r) }
 
+      @countries = Country.all
       erb 'users/user_profile'.to_sym
 
     end
