@@ -74,7 +74,7 @@
         .done(function() {
           console.log('updated');
           $('#success').fadeIn().delay(2000).fadeOut('slow');
-            })
+        })
         .fail(function(jqXHR, textStatus, errorThrown) {
           console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
           $('#userProfileErrors').find('.alert-content').text(jqXHR.responseJSON.message);

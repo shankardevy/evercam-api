@@ -47,6 +47,9 @@ module Evercam
 
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera
+
+      @vendors = Vendor.order(:name)
+      @timezones = Timezone::Zone.names
       erb 'users/cameras/camera_view'.to_sym
     end
 

@@ -11,6 +11,9 @@ module Evercam
       optional do
         string :timezone
         string :name
+        string :mac_address
+        string :model
+        string :vendor
 
         string :username
         array :endpoints, class: String
@@ -50,6 +53,22 @@ module Evercam
         if timezone && false == Timezone::Zone.names.include?(timezone)
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
         end
+
+        if vendor && !Vendor.by_exid(vendor)
+          add_error(:username, :exists, 'Vendor does not exist')
+        end
+
+        if model && !vendor
+          add_error(:model, :valid, 'If you provide model you must also provide vendor')
+        end
+
+        if model && vendor && !Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+          add_error(:model, :exists, 'Model does not exist')
+        end
+
+        if mac_address && !(mac_address =~ /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/)
+          add_error(:mac_address, :valid, 'Mac address is invalid')
+        end
       end
 
       def execute
@@ -57,8 +76,11 @@ module Evercam
         camera.name = name if name
         camera.owner = User.by_login(username) if username
         camera.is_public = is_public unless is_public.nil?
-        camera.config.snapshots = inputs[:snapshots] if inputs[:snapshots]
+        camera.values[:config][:snapshots] = inputs[:snapshots] if inputs[:snapshots]
+        camera.values[:config][:auth] = inputs[:auth] if inputs[:auth]
         camera.timezone = timezone if timezone
+        camera.firmware =  Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        camera.mac_address = mac_address if mac_address
         camera.save
 
         if inputs[:endpoints]
