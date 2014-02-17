@@ -37,7 +37,7 @@ module Evercam
         end
 
         unless id =~ /^[a-z0-9\-_]+$/
-          add_error(:id, :valid, 'Id can only contain letters, numbers, hyphens and underscore')
+          add_error(:id, :valid, 'It can only contain lower case letters, numbers, hyphens and underscore')
         end
 
         if Camera.by_exid(id)
