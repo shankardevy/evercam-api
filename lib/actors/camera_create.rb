@@ -94,7 +94,7 @@ module Evercam
 
         activity = CameraActivity.new({
           camera: camera,
-          user: User.by_login(username),
+          access_token: camera.owner.token,
           action: 'created',
           done_at: Time.now
         })
