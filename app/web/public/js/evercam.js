@@ -171,12 +171,14 @@
     });
   };
 
-  Evercam.Camera.prototype.update = function (field) {
+  Evercam.Camera.prototype.update = function (fields) {
     var self = this,
       newdata = self.data;
-    if (typeof(field) !== 'undefined') {
+    if (typeof(fields) !== 'undefined') {
       newdata = {};
-      newdata[field] = self.data[field];
+      $.each(fields, function(i, val) {
+        newdata[val] = self.data[val];
+      })
     }
     return $.ajax({
       type: 'PATCH',
