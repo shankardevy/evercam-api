@@ -5,7 +5,7 @@ Bundler.require(:default)
 use Rack::Rewrite do
   if Sinatra::Base.production?
     r301 %r{.*}, 'https://www.evercam.io$&', :if => Proc.new {|rack_env|
-      rack_env['SERVER_NAME'] != 'www.evercam.io'
+      rack_env['SERVER_NAME'] != 'www.evercam.io' and rack_env['SERVER_NAME'] != 'api.evercam.io'
     }
   end
 end
