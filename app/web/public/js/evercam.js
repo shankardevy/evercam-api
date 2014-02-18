@@ -227,6 +227,12 @@
       return d.promise();
     }
 
+    // Always use proxy on https
+    if (location.protocol === 'https:') {
+      d.resolve(true);
+      return d.promise();
+    }
+
     // Create iframe with url auth
     var authurl = url.slice(0, 7) + auth.username + ':' + auth.password + '@' + url.slice(7),
       iframe = document.createElement("iframe");
