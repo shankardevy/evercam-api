@@ -4,7 +4,7 @@
 
   <div class="row">
     <div class="col-xs-10 col-xs-offset-1">
-
+      <h3><%= @camera.exid -%></h3>
       <div class="row">
         <div class="col-lg-6">
           <div class="streamList">
@@ -19,14 +19,55 @@
           
             <div class="right_container">
               <div class="online">
-                <h3>Name</h3>
-                <form class="form" role="form" id="rename">
+                <form class="form" role="form" id="cameraForm">
+
                   <div class="form-group">
-                    <label class="sr-only" for="name">Camera Name</label>
+                    <label for="name">Camera Name</label>
                     <input type="text" class="form-control" value="<%= @camera.name -%>" id="name" placeholder="Enter camera name">
                   </div>
+
+                  <div class="form-group">
+                    <label for="name">Camera MAC address</label>
+                    <input type="text" class="form-control" value="<%= @camera.mac_address -%>" id="mac" placeholder="Enter camera MAC address">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="cameraVendor">Camera Vendor</label>
+                    <select id="cameraVendor" name="cameraVendor" class="form-control">
+                      <option selected="selected" value="-1">-- select model --</option>
+                      <% @vendors.each_with_index  do |v, index| -%>
+                      <option value="<%= v.exid -%>" <% if v == @camera.firmware.vendor %>selected="selected"<% end %>>
+                        <%= v.name -%>
+                      </option>
+                      <% end %>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Camera Model</label>
+                    <% @vendors.each do |v| -%>
+                    <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control <% if v != @camera.firmware.vendor %>hidden<% end %>">
+                      <% v.firmwares.to_hash(:name).each_with_index  do |m, index| -%>
+                      <% if index == 0 %>
+                      <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
+                      <% else %>
+                      <option value="<%= m[0] -%>" <% if m == @camera.firmware %>selected="selected"<% end %>>
+                        <%= m[0] -%>
+                      </option>
+                      <% end %>
+                      <% end -%>
+                    </select>
+                    <% end %>
+                  </div>
+
+                  <div class="alert alert-danger" id="cameraFormErrors" style="display: none">
+                    <strong>Error!</strong> <span class="alert-content"></span>
+                  </div>
+
                   <div></div>
-                  <button type="submit" class="btn btn-default">Rename</button>
+                  <button type="submit" class="btn btn-default">Save</button>
+                  <img src="/img/ajax-loader.gif" id="cameraFormLoader" style="display: none">
+                  <span class="label label-success" id="cameraFormSuccess" style="display: none">Success</span>
                 </form>
 
                 <div class="positionTest">
@@ -41,11 +82,6 @@
               </div>
               <div class="camAddress hidden">
                 <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
-              </div>
-
-              <h3>Unique ID</h3>
-              <div>
-                <%= @camera.exid -%>
               </div>
 
               <h3>URLs</h3>
@@ -102,22 +138,46 @@
 <% content_for :scripts do %>
 <script>
   $(function() {
+
     Evercam.Camera.by_id('<%= @camera.exid -%>')
       .then(function(camera) {
 
-        $('#rename').on('submit', function(e) {
+        $('#cameraForm').on('submit', function(e) {
           e.preventDefault();
-          $('#renameErrors').hide();
+          $('#cameraFormErrors').hide();
+          $('#cameraFormLoader').show();
+
+          var toUpdate= [];
+          if (camera.data.name !== $('#name').val()) {
             camera.data.name = $('#name').val();
-            camera.update('name')
-            .done(function() {
-              console.log('updated');
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
-              $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
-              $('#renameErrors').show();
-            });
+            toUpdate.push('name');
+          }
+          if (camera.data.mac_address !== $('#mac').val() && (camera.data.mac_address || $('#mac').val())) {
+            camera.data.mac_address = $('#mac').val();
+            toUpdate.push('mac_address');
+          }
+          if (camera.data.vendor !== $('#cameraVendor').val()) {
+            camera.data.vendor = $('#cameraVendor').val();
+            toUpdate.push('vendor');
+          }
+          if (camera.data.model !== $('#cameraModel' + $('#cameraVendor').val()).val()) {
+            camera.data.model = $('#cameraModel' + $('#cameraVendor').val()).val();
+            toUpdate.push('model');
+          }
+
+          camera.update(toUpdate)
+          .done(function() {
+            console.log('updated');
+            $('#cameraFormSuccess').fadeIn().delay(2000).fadeOut('slow');
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+            $('#cameraFormErrors .alert-content').text(jqXHR.responseJSON.message);
+            $('#cameraFormErrors').show();
+          })
+          .always(function() {
+            $('#cameraFormLoader').hide();
+          });
         });
 
         $('#addEndpoint').on('submit', function(e) {
@@ -161,6 +221,15 @@
     $('.refresh').click(function() {
       var a = $('.preview')[0];
       a.src = a.src.split('?')[0] + '?' + new Date().getTime();
+    });
+
+    var previous;
+    $('#cameraVendor').one('focus', function() {
+      previous = this.value;
+    }).on('change', function() {
+      $('#cameraModel' + previous).addClass('hidden');
+      $('#cameraModel' + this.value).removeClass('hidden');
+      previous = this.value;
     });
 
   });

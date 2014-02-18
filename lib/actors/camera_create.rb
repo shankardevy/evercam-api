@@ -36,6 +36,10 @@ module Evercam
           add_error(:username, :exists, 'Username does not exist')
         end
 
+        unless id =~ /^[a-z0-9\-_]+$/
+          add_error(:id, :valid, 'It can only contain lower case letters, numbers, hyphens and underscore')
+        end
+
         if Camera.by_exid(id)
           add_error(:camera, :exists, 'Camera already exists')
         end
@@ -84,7 +88,7 @@ module Evercam
         })
 
         camera.timezone = timezone if timezone
-        camera.firmware_id =  Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id).id if model
+        camera.firmware =  Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
         camera.save
 

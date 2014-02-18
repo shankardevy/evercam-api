@@ -29,7 +29,8 @@
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
             <div>
-              <h4><a href="<%= c.url -%>"><%= c.name -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
+              <h4><a href="<%= c.url -%>"><%= c.exid -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
+              <small class="text-muted"><%= c.name -%></small>
               <div class="positionTest">
                 <% if c.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
@@ -44,7 +45,7 @@
               <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
             </div>
             <div class="url">
-              <% c.endpoints.each  do |e| -%>
+              <% c.endpoints.each do |e| -%>
               <p>
                 <% if e.public? %>
                 External URL:
@@ -190,7 +191,7 @@
     $('.delete-camera').click(function(e) {
       e.preventDefault();
       var cam_exid = $(this).attr('exid');
-      Evercam.Camera.delete(cam_exid)
+      Evercam.Camera.remove(cam_exid)
       .done(function() {
         location.reload();
       })

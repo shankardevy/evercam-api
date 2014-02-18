@@ -168,12 +168,19 @@ describe 'API routes/cameras' do
   describe 'PATCH /cameras' do
 
     let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:model) { create(:firmware) }
 
     let(:params) {
       {
         name: "Garrett's Super New Camera v2",
         endpoints: ['http://www.evercam.io', 'http://localhost:4321'],
-        is_public: false
+        is_public: false,
+        mac_address: 'aa:aa:aa:aa:aa:aa',
+        vendor: model.vendor.exid,
+        model: model.name,
+        timezone: 'Etc/GMT+1',
+        snapshots: { 'jpg' => '/snap'},
+        auth: { 'basic' => {'username' => 'zzz', 'password' => 'qqq'}}
       }
     }
 
@@ -194,14 +201,16 @@ describe 'API routes/cameras' do
       end
 
       it 'updates camera in the system' do
-        expect(Camera.by_exid(camera.exid).is_public).
-          to eq(false)
-        expect(Camera.by_exid(camera.exid).name).
-          to eq("Garrett's Super New Camera v2")
-        expect(Camera.by_exid(camera.exid).endpoints.length).
-          to eq(2)
-        expect(Camera.by_exid(camera.exid).endpoints[1][:port]).
-          to eq(4321)
+        cam = Camera.by_exid(camera.exid)
+        expect(cam.is_public).to eq(false)
+        expect(cam.name).to eq("Garrett's Super New Camera v2")
+        expect(cam.firmware).to eq(model)
+        expect(cam.mac_address).to eq('aa:aa:aa:aa:aa:aa')
+        expect(cam.timezone.zone).to eq('Etc/GMT+1')
+        expect(cam.config['snapshots']).to eq({ 'jpg' => '/snap'})
+        expect(cam.config['auth']).to eq({ 'basic' => {'username' => 'zzz', 'password' => 'qqq'}})
+        expect(cam.endpoints.length).to eq(2)
+        expect(cam.endpoints[1][:port]).to eq(4321)
       end
 
       it 'returns the updated camera' do

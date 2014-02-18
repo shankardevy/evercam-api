@@ -34,6 +34,7 @@ module Evercam
 
       auth.allow? { |r| @user.allow?(:view, r) }
 
+      @countries = Country.all
       erb 'users/user_profile'.to_sym
 
     end
@@ -46,6 +47,9 @@ module Evercam
 
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera
+
+      @vendors = Vendor.order(:name)
+      @timezones = Timezone::Zone.names
       erb 'users/cameras/camera_view'.to_sym
     end
 
