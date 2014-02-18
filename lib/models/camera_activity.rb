@@ -5,9 +5,9 @@ class CameraActivity < Sequel::Model
 
   def to_s
     if access_token.nil?
-      "[#{camera.name}] Anonymous #{action} at #{done_at} from #{ip}"
+      "[#{camera.exid}] Anonymous #{action} at #{done_at} from #{ip}"
     else
-      "[#{camera.name}] #{access_token.grantor.fullname} #{action} at #{done_at} from #{ip}"
+      "[#{camera.exid}] #{access_token.grantor.fullname} #{action} at #{done_at} from #{ip}"
     end
   end
 

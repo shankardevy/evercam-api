@@ -73,10 +73,22 @@ module Evercam
     patch '/cameras/:id' do
       authreport!('cameras/patch')
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      a_token = nil
+      auth.allow? do |r|
+        a_token = r
+        camera.allow?(:edit, r)
+      end
 
       outcome = Actors::CameraUpdate.run(params)
       raise OutcomeError, outcome unless outcome.success?
+
+      CameraActivity.create(
+        camera: camera,
+        access_token: a_token,
+        action: 'edited',
+        done_at: Time.now,
+        ip: request.ip
+      )
 
       present Array(camera.reload), with: Presenters::Camera
     end

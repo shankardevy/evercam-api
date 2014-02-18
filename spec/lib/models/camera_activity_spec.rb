@@ -19,13 +19,13 @@ describe CameraActivity do
     it 'returns human readable string for normal user' do
       activity0 = subject.new(camera: camera0, access_token: at0,
                               action: 'Test', done_at: time, ip: '1.1.1.1')
-      expect(activity0.to_s).to eq('[Test Camera] Tomasz Jama Test at ' + time.to_s + ' from ' + activity0.ip)
+      expect(activity0.to_s).to eq("[#{camera0.exid}] Tomasz Jama Test at #{time.to_s} from #{activity0.ip}")
     end
 
     it 'returns human readable string for anonymous user' do
       activity0 = subject.new(camera: camera0, access_token: nil,
                               action: 'Test', done_at: time, ip: '1.1.1.1')
-      expect(activity0.to_s).to eq('[Test Camera] Anonymous Test at ' + time.to_s + ' from ' + activity0.ip)
+      expect(activity0.to_s).to eq("[#{camera0.exid}] Anonymous Test at #{time.to_s} from #{activity0.ip}")
     end
 
   end
@@ -61,29 +61,26 @@ describe CameraActivity do
 
   end
 
-  describe 'camera creation' do
+  describe 'camera edit' do
 
-    let(:auth) { env_for(session: { user: create(:user).id }) }
+    let(:camera) { create(:camera, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
     let(:params) {
       {
-        id: 'my-new-camera',
-        name: "Garrett's Super New Camera",
-        endpoints: ['http://localhost:1234'],
+        name: "Garrett's Super New Camera v2",
         is_public: true
-      }.merge(
-        build(:camera).config
-      )
+      }
     }
 
     context 'when new camera is created' do
       it 'creates create activity' do
-        response = post('/cameras', params, auth)
-        expect(response.status).to eq(201)
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        response = patch("/cameras/#{camera.exid}", params, auth)
+        expect(response.status).to eq(200)
         ca = CameraActivity.first
         expect(ca.camera.exid).to eq(Camera.first.exid)
         expect(ca.access_token).to eq(Camera.first.owner.token)
-        expect(ca.action).to eq('created')
+        expect(ca.action).to eq('edited')
       end
     end
 
