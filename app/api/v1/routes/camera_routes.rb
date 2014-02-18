@@ -48,14 +48,13 @@ module Evercam
         end
       end
 
-      activity = CameraActivity.new({
+      CameraActivity.create(
         camera: camera,
         access_token: a_token,
         action: 'accessed',
         done_at: Time.now,
         ip: request.ip
-      })
-      activity.save
+      )
 
       present Array(camera), with: Presenters::Camera
     end

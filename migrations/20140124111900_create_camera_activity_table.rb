@@ -11,7 +11,7 @@ Sequel.migration do
       column :done_at, :timestamptz, null: false
       column :ip, :inet
 
-      index [:camera_id, :access_token_id, :done_at], unique: true
+      index [:camera_id, :done_at], unique: true
 
     end
 
