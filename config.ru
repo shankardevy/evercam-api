@@ -1,5 +1,14 @@
 require 'bundler'
+require 'rack/rewrite'
 Bundler.require(:default)
+
+use Rack::Rewrite do
+  if Sinatra::Base.production?
+    r301 %r{.*}, 'https://www.evercam.io$&', :if => Proc.new {|rack_env|
+      rack_env['SERVER_NAME'] != 'www.evercam.io'
+    }
+  end
+end
 
 base = File.dirname(__FILE__)
 ['api/v1', 'web/app'].each do |app|
