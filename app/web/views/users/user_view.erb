@@ -191,7 +191,7 @@
     $('.delete-camera').click(function(e) {
       e.preventDefault();
       var cam_exid = $(this).attr('exid');
-      Evercam.Camera.delete(cam_exid)
+      Evercam.Camera.remove(cam_exid)
       .done(function() {
         location.reload();
       })

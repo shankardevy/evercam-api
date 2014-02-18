@@ -30,8 +30,8 @@
     },
 
     Model: {
-      url: function(ext){
-        if (typeof(ext) === 'undefined') ext = '';
+      url: function(ext) {
+        if (ext === undefined) ext = '';
         else ext = '/' + ext;
         return window.Evercam.apiUrl + '/models' + ext;
       },
@@ -56,8 +56,8 @@
     },
 
     Vendor: {
-      url: function(ext){
-        if (typeof(ext) === 'undefined') ext = '';
+      url: function(ext) {
+        if (ext === undefined) ext = '';
         else ext = '/' + ext;
         return window.Evercam.apiUrl + '/vendors' + ext;
       },
@@ -93,8 +93,8 @@
   // USER DEFINITION
   // ====
 
-  Evercam.User.url = function(ext){
-    if (typeof(ext) === 'undefined') ext = '';
+  Evercam.User.url = function(ext) {
+    if (ext === undefined) ext = '';
     else ext = '/' + ext;
     return Evercam.apiUrl + '/users' + ext;
   };
@@ -112,21 +112,21 @@
   };
 
   Evercam.User.by_login = function (login) {
-    var user = new Evercam.User(login)
+    var user = new Evercam.User(login);
     return $.getJSON(this.url(login)).then(function (data) {
-      user.data = data.users[0]
+      user.data = data.users[0];
       return user;
-    })
+    });
   };
 
   Evercam.User.prototype.update = function (fields) {
     var self = this,
-        newdata = self.data;
-    if (typeof(fields) !== 'undefined') {
+      newdata = self.data;
+    if (fields !== undefined) {
       newdata = {};
       $.each(fields, function(i, val) {
         newdata[val] = self.data[val];
-      })
+      });
     }
     return $.ajax({
       type: 'PATCH',
@@ -140,7 +140,7 @@
   // =======================
 
   Evercam.Camera.url = function (ext) {
-    if (typeof(ext) === 'undefined') ext = '';
+    if (ext === undefined) ext = '';
     else ext = '/' + ext;
     return window.Evercam.apiUrl + '/cameras' + ext;
   };
@@ -148,12 +148,12 @@
   Evercam.Camera.by_id = function (id) {
     var camera = new Evercam.Camera(id);
     return $.getJSON(this.url(id)).then(function (data) {
-      camera.data = data.cameras[0]
+      camera.data = data.cameras[0];
       return camera;
     });
   };
 
-  Evercam.Camera.delete = function (id) {
+  Evercam.Camera.remove = function (id) {
     return $.ajax({
       type: 'DELETE',
       url: Evercam.Camera.url(id),
@@ -174,11 +174,11 @@
   Evercam.Camera.prototype.update = function (fields) {
     var self = this,
       newdata = self.data;
-    if (typeof(fields) !== 'undefined') {
+    if (fields !== undefined) {
       newdata = {};
       $.each(fields, function(i, val) {
         newdata[val] = self.data[val];
-      })
+      });
     }
     return $.ajax({
       type: 'PATCH',
@@ -194,7 +194,7 @@
     .then(function(camera) {
       self.data = camera.data;
       self.selectEndpoint();
-    })
+    });
   };
 
   Evercam.Camera.prototype.selectEndpoint = function () {
@@ -228,19 +228,19 @@
     }
 
     // Create iframe with url auth
-    var authurl = url.slice(0,7) + auth.username + ':' + auth.password + '@' + url.slice(7);
-    var iframe = document.createElement("iframe");
+    var authurl = url.slice(0, 7) + auth.username + ':' + auth.password + '@' + url.slice(7),
+      iframe = document.createElement("iframe");
     iframe.src = authurl;
 
-    if (iframe.attachEvent){
-      iframe.attachEvent("onload", function(){
+    if (iframe.attachEvent) {
+      iframe.attachEvent("onload", function() {
         loadImg(url)
         .done(function(result) {
           d.resolve(result);
         });
       });
     } else {
-      iframe.onload = function(){
+      iframe.onload = function() {
         loadImg(url)
         .done(function(result) {
           d.resolve(result);
@@ -250,7 +250,7 @@
     $(iframe).hide();
     document.body.appendChild(iframe);
     return d.promise();
-  };
+  }
 
   function loadImg(url) {
     var d = new $.Deferred();
@@ -275,7 +275,7 @@
 
   Evercam.Camera.prototype.run = function () {
     this.fetchSnapshotData();
-  }
+  };
 
   Evercam.Camera.prototype.imgUrl = function () {
     var uri = '',
@@ -333,7 +333,7 @@
       refresh: Evercam.refresh
     }, opts);
 
-    if (typeof(settings.name) === 'undefined') {
+    if (settings.name === undefined) {
       throw "Camera name can't be empty";
     }
 
@@ -347,13 +347,13 @@
       }
       $("<img />").attr('src', camera.imgUrl())
         .load(function() {
-          if (!this.complete || typeof this.naturalWidth == 'undefined' || this.naturalWidth == 0) {
+          if (!this.complete || this.naturalWidth === undefined || this.naturalWidth === 0) {
             console.log('broken image!');
           } else {
             $img.attr('src', camera.imgUrl());
           }
         });
-    }
+    };
 
     // check img auto refresh
     $img.on('abort', function() {
@@ -381,7 +381,7 @@
       var refresh = Number($img.attr('refresh'));
 
       // ensure number
-      if(isNaN(refresh)) {
+      if (isNaN(refresh)) {
         refresh = Evercam.refresh;
       }
 
@@ -390,7 +390,7 @@
         refresh: refresh
       });
     });
-  };
+  }
 
   $(window).load(enableEvercam);
 
