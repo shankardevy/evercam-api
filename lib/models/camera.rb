@@ -37,6 +37,12 @@ class Camera < Sequel::Model
     end
   end
 
+  def vendor
+    if firmware
+      firmware.vendor
+    end
+  end
+
   # Determines if the presented token should be allowed
   # to conduct a particular action on this camera
   def allow?(right, token)

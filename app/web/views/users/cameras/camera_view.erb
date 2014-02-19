@@ -36,7 +36,7 @@
                     <select id="cameraVendor" name="cameraVendor" class="form-control">
                       <option selected="selected" value="-1">-- select model --</option>
                       <% @vendors.each_with_index  do |v, index| -%>
-                      <option value="<%= v.exid -%>" <% if v == @camera.firmware.vendor %>selected="selected"<% end %>>
+                      <option value="<%= v.exid -%>" <% if v == @camera.vendor %>selected="selected"<% end %>>
                         <%= v.name -%>
                       </option>
                       <% end %>
@@ -46,7 +46,7 @@
                   <div class="form-group">
                     <label for="name">Camera Model</label>
                     <% @vendors.each do |v| -%>
-                    <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control <% if v != @camera.firmware.vendor %>hidden<% end %>">
+                    <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control <% if v != @camera.vendor %>hidden<% end %>">
                       <% v.firmwares.to_hash(:name).each_with_index  do |m, index| -%>
                       <% if index == 0 %>
                       <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
