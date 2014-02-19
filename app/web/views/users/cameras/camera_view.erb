@@ -170,7 +170,9 @@
           }
           if (camera.data.model !== $('#cameraModel' + $('#cameraVendor').val()).val()) {
             camera.data.model = $('#cameraModel' + $('#cameraVendor').val()).val();
+            camera.data.vendor = $('#cameraVendor').val();
             toUpdate.push('model');
+            toUpdate.push('vendor');
           }
 
           camera.update(toUpdate)
