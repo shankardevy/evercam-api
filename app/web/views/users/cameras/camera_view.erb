@@ -51,7 +51,7 @@
                       <% if index == 0 %>
                       <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
                       <% else %>
-                      <option value="<%= m[0] -%>" <% if m == @camera.firmware %>selected="selected"<% end %>>
+                      <option value="<%= m[0] -%>" <% if m[0] == @camera.firmware.name %>selected="selected"<% end %>>
                         <%= m[0] -%>
                       </option>
                       <% end %>
