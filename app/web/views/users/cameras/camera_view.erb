@@ -8,10 +8,12 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="streamList">
+            <img class="img-loader" src="/img/ajax-loader.gif" >
             <img class="preview" evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
           </div>
           <div class="Refresh">
-            <a href="#" class="refresh"><p><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</p></a>
+            <a href="#" class="refresh"><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</a>
+            <img class="refresh-loader" src="/img/ajax-loader.gif" style="display: none;">
           </div>
         </div>
         <div class="col-lg-6">
@@ -51,7 +53,7 @@
                       <% if index == 0 %>
                       <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
                       <% else %>
-                      <option value="<%= m[0] -%>" <% if m[0] == @camera.firmware.name %>selected="selected"<% end %>>
+                      <option value="<%= m[0] -%>" <% if @camera.firmware && m[0] == @camera.firmware.name %>selected="selected"<% end %>>
                         <%= m[0] -%>
                       </option>
                       <% end %>
@@ -229,9 +231,23 @@
       });
 
     $('.refresh').click(function() {
-      var a = $('.preview')[0];
-      a.src = a.src.split('?')[0] + '?' + new Date().getTime();
+      $('.refresh-loader').show();
+      setTimeout(function() {
+        $('.refresh-loader').hide();
+      }, 5000);
+      $('.preview').attr('src', $('.preview').attr('src'))
+      .load(function() {
+        $('.refresh-loader').hide();
+      });
     });
+
+    $('.preview').on('load', function() {
+      $(this).parent().siblings('.img-loader').hide();
+    })
+
+    setTimeout(function() {
+      $('.img-loader').hide();
+    }, 5000);
 
     var previous;
     $('#cameraVendor').one('focus', function() {

@@ -80,9 +80,12 @@
             <div class="form-group">
               <label class="col-sm-3 control-label">Preview:</label>
               <div class="col-sm-8">
-                <img id="cameraPreview" class="preview" src="" width="265px" height="175px">
+                <div class="add-preview">
+                  <img class="img-loader" src="/img/ajax-loader.gif" style="display: none;">
+                  <img id="cameraPreview" class="preview" src="">
+                </div>
                 <label>Click on preview area above to refresh</label>
-                <p id="previewError" class="text-danger" style="display: none">Can't connect to camera, please check advanced options.</p>
+                <p id="previewError" class="text-danger" style="display: none"><span class="alert-content">Can't connect to camera, please check advanced options.</span></p>
               </div>
             </div>
 
