@@ -1,4 +1,5 @@
 require_relative './presenter'
+require 'base64'
 
 module Evercam
   module Presenters
@@ -26,6 +27,16 @@ module Evercam
         required: false
       } do |s,o|
         s.created_at.to_i
+      end
+
+      expose :data, documentation: {
+        type: 'file',
+        desc: 'Image data',
+        required: false
+      } do |s,o|
+        data = Base64.encode64(s.data).gsub("\n", '')
+        "data:image/jpeg;base64,#{data}"
+        ''
       end
 
     end

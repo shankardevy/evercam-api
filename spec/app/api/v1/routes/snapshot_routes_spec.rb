@@ -8,6 +8,37 @@ describe 'API routes/snapshots', :focus => true do
 
   let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8101).camera }
 
+
+  describe 'GET /cameras/:id/snapshots' do
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots for given camera are returned' do
+        snap1
+        get("/cameras/#{snap.camera.exid}/snapshots", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(2)
+      end
+    end
+
+  end
+  describe 'GET /cameras/:id/snapshots/:timestamp' do
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:snap) { create(:snapshot, camera: camera0) }
+
+    context 'when snapshot request is correct' do
+      it 'snapshot is returned' do
+        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+  end
+
   describe 'POST /cameras/:id/snapshots' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }

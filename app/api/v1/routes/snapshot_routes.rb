@@ -1,16 +1,28 @@
+require_relative '../presenters/snapshot_presenter'
+
 module Evercam
   class V1SnapshotRoutes < Grape::API
 
     include WebErrors
 
-    desc 'Returns the list of all snapshots currently stored for this camera (COMING SOON)'
+    desc 'Returns the list of all snapshots currently stored for this camera'
     get '/cameras/:id/snapshots' do
-      raise ComingSoonError
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
+
+      present camera.snapshots, with: Presenters::Snapshot, models: true
     end
 
-    desc 'Returns the snapshot stored for this camera closest to the given timestamp (COMING SOON)'
+    desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
+      entity: Evercam::Presenters::Snapshot
+    }
     get '/cameras/:id/snapshots/:timestamp' do
-      raise ComingSoonError
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
+
+      snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i))
+
+      present Array(snap), with: Presenters::Snapshot
     end
 
     desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
