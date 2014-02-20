@@ -25,6 +25,7 @@ describe 'API routes/snapshots', :focus => true do
           expect(last_response.status).to eq(201)
           snap = Snapshot.first
           expect(snap.notes).to eq('Snap note')
+          expect(snap.created_at).to be_around_now
           expect(snap.camera).to eq(camera0)
         end
       end
