@@ -1,10 +1,12 @@
 require 'sequel'
+require 'logger'
 require_relative './config'
 
 db = Sequel.connect(Evercam::Config[:database])
 Sequel::Model.plugin :boolean_readers
 Sequel::Model.plugin :association_proxies
 Sequel::Model.plugin :timestamps, update_on_create: true
+#db.loggers << Logger.new($stdout)
 
 if :postgres == db.adapter_scheme
   db.extension :pg_array, :pg_json

@@ -25,13 +25,23 @@ module Evercam
     end
 
     desc 'Stores the supplied snapshot image data for the given timestamp'
-    put '/cameras/:id/snapshots/:timestamp' do
-      raise ComingSoonError
+    post '/cameras/:id/snapshots/:timestamp' do
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
+
+      outcome = Actors::SnapshotCreate.run(params)
+      raise OutcomeError, outcome unless outcome.success?
+
+      present Array(outcome.result), with: Presenters::Snapshot
     end
 
-    desc 'Deletes any snapshot for this camera which exactly matches the timestamp (COMING SOON)'
+    desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
     delete '/cameras/:id/snapshots/:timestamp' do
-      raise ComingSoonError
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? { |r| camera.allow?(:edit, r) }
+
+      Snapshot.by_ts!(Time.at(params[:timestamp].to_i)).destroy
+      {}
     end
 
   end

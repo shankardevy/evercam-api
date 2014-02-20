@@ -24,7 +24,9 @@ module Evercam
         type: 'string',
         desc: 'Snapshot timestamp',
         required: false
-      }
+      } do |s,o|
+        s.created_at.to_i
+      end
 
     end
   end
