@@ -14,7 +14,7 @@
   window.Evercam = {
 
     apiUrl: 'https://www.evercam.io/v1',
-    proxyUrl: 'http://cors.evr.cm/',
+    proxyUrl: 'https://cors.evercam.io/',
     refresh: 0,
 
     setApiUrl: function(url) {
@@ -223,6 +223,12 @@
     var d = new $.Deferred();
     if (navigator.userAgent.indexOf('Chrome') === -1 && navigator.userAgent.indexOf('Firefox') === -1) {
       // url basic auth only for chrome and firefox
+      d.resolve(true);
+      return d.promise();
+    }
+
+    // Always use proxy on https
+    if (location.protocol === 'https:') {
       d.resolve(true);
       return d.promise();
     }

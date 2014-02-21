@@ -81,16 +81,22 @@ module Evercam
           name: name,
           owner: User.by_login(username),
           is_public: is_public,
-          config: {
-            snapshots: inputs[:snapshots],
-            auth: inputs[:auth]
-          }
+          config: {}
         })
 
+        camera.values[:config][:snapshots] = inputs[:snapshots] if inputs[:snapshots]
+        camera.values[:config][:auth] = inputs[:auth] if inputs[:auth]
         camera.timezone = timezone if timezone
-        camera.firmware =  Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
         camera.save
+
+        CameraActivity.create(
+          camera: camera,
+          access_token: camera.owner.token,
+          action: 'created',
+          done_at: Time.now
+        )
 
         inputs[:endpoints].each do |e|
           endpoint = URI.parse(e)

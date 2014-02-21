@@ -2946,7 +2946,7 @@ font-weight: normal;
 }
 
 .Refresh{
-  width: 80px;
+  width: 95px;
 }
 
 .Refresh p{
@@ -3110,4 +3110,17 @@ table.table tr:hover td div.btn-group { display:inline-block;}
   width: 75%;
   display: inline;
   margin-right: 0px;
+}
+
+img.img-loader {
+  border: none;
+}
+
+.add-preview {
+  position: relative;
+}
+
+.add-preview, .add-preview .preview {
+  width: 256px;
+  height: 175px;
 }

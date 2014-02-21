@@ -153,33 +153,56 @@
     }
 
     $('#cameraPreview').click(function() {
-      if ($('#cameraVendor').val() == -1) return;
+      if ($('#cameraVendor').val() == -1) {
+        $('#previewError .alert-content').text('Please select camera vendor');
+        $('#previewError').show();
+        return;
+      }
+      if ($('#cameraURL').val() === '') {
+        $('#previewError .alert-content').text('Please fill in camera url');
+        $('#previewError').show();
+        return;
+      }
       var camera = new Evercam.Camera($('#cameraId').val());
       $('#previewError').hide();
+      $('.add-preview .img-loader').show();
       camera.data = {endpoints: [$('#scheme').val() + $('#cameraURL').val()]};
       Evercam.Model.by_model($('#cameraVendor').val(), $('#cameraModel' +$('#cameraVendor').val()).val())
       .done(function(model) {
-        if (typeof(model.defaults.snapshots.jpg) === 'undefined' && !$('.adv').is(':visible')) {
+        if ((model.defaults.auth === undefined || model.defaults.snapshots === undefined || model.defaults.snapshots.jpg === undefined) && !$('.adv').is(':visible')) {
+          $('#previewError .alert-content').text("Can't connect to camera, please check advanced options.");
+          $('#previewError').show();
           toggleAdv();
+          $('.add-preview .img-loader').hide();
+          return;
         }
         camera.data.snapshots = {jpg: model.defaults.snapshots.jpg};
         var snap = $('#snapshotPath').val();
         if (snap) camera.data.snapshots.jpg = snap;
         camera.data.auth = model.defaults.auth;
-        camera.selectEndpoint();
         camera.isUp(function() {
           camera.useProxy = true;
-          $.get(camera.imgUrl())
-          .done(function() {
-            $('#cameraPreview').attr('src', camera.imgUrl());
-          })
-          .fail(function(jqXHR, textStatus, errorThrown) {
-            $('#previewError').show();
-            if (!$('.adv').is(':visible')) {
-              toggleAdv();
-            }
-          });
-        })
+          var url = camera.imgUrl();
+          if (url) {
+            $.get(camera.imgUrl())
+            .done(function() {
+              $('#cameraPreview').attr('src', camera.imgUrl());
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              $('#previewError .alert-content').text("Can't connect to camera, please check advanced options.");
+              $('#previewError').show();
+              if (!$('.adv').is(':visible')) {
+                toggleAdv();
+              }
+            })
+            .always(function() {
+              $('.add-preview .img-loader').hide();
+            });
+          } else {
+            $('.add-preview .img-loader').hide();
+          }
+        });
+        camera.selectEndpoint();
       });
     });
 

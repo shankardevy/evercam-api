@@ -23,4 +23,4 @@ require_relative './models/country'
 
 require_relative './models/camera'
 require_relative './models/camera_endpoint'
-
+require_relative './models/camera_activity'

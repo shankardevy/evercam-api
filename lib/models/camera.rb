@@ -7,7 +7,12 @@ class Camera < Sequel::Model
 
   many_to_one :firmware
   one_to_many :endpoints, class: 'CameraEndpoint'
+<<<<<<< HEAD
   many_to_one :owner, class: 'User', key: :owner_id
+=======
+  many_to_one :owner, class: 'User'
+  one_to_many :activities, class: 'CameraActivity'
+>>>>>>> master
 
   MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
 
@@ -33,6 +38,12 @@ class Camera < Sequel::Model
       if vendor = Vendor.by_mac(mac_address).first
         vendor.default_firmware
       end
+    end
+  end
+
+  def vendor
+    if firmware
+      firmware.vendor
     end
   end
 
