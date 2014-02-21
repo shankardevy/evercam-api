@@ -13,7 +13,7 @@ describe CameraActivity do
 
     let(:camera0) { create(:camera, name: 'Test Camera') }
     let(:user0) { create(:user, forename: 'Tomasz', lastname: 'Jama') }
-    let(:at0) { create(:access_token, grantor: user0) }
+    let(:at0) { create(:access_token, user: user0) }
     let(:time) {Time.now}
 
     it 'returns human readable string for normal user' do

@@ -36,24 +36,12 @@ module Evercam
       a_token = nil
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
-<<<<<<< HEAD
           record.allow?(AccessRight::SNAPSHOT, token)
-=======
-          a_token = token
-          record.allow?(:view, token)
->>>>>>> master
         end
         raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
       else
         camera = Camera.by_exid!(params[:id])
-<<<<<<< HEAD
         auth.allow? { |r| camera.allow?(AccessRight::SNAPSHOT, r) }
-=======
-        auth.allow? do |r|
-          a_token = r
-          camera.allow?(:view, r)
-        end
->>>>>>> master
       end
 
       CameraActivity.create(
