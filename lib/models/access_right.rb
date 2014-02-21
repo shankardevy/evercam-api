@@ -1,43 +1,56 @@
 class AccessRight < Sequel::Model
 
-  PARTS = [:group, :right, :scope]
+  # Right constants.
+  SNAPSHOT                   = 'snapshot'.freeze
+  VIEW                       = 'view'.freeze
+  EDIT                       = 'edit'.freeze
+  DELETE                     = 'delete'.freeze
+  GRANT                      = 'grant'.freeze
+  BASE_RIGHTS                = [SNAPSHOT, VIEW, EDIT, DELETE]
+  ALL_RIGHTS                 = BASE_RIGHTS + [GRANT]
+
+  # Status constants.
+  ACTIVE                     = 1
+  DELETED                    = -1
+  ALL_STATUSES               = [ACTIVE, DELETED]
 
   many_to_one :token, class: 'AccessToken'
+  many_to_one :camera
+  many_to_one :grantor, class: 'User', key: :grantor_id
 
-  # Splits a string representation of an
-  # access right into a new instance
-  def self.split(val)
-    self.new(Hash[PARTS.zip(val.split(':'))])
-  end
-
-  # Returns the resource which is represented
-  # by the scope parameter of this right
-  def resource
-    @resource =
-      case group
-      when /^camera$/i
-        Camera.by_exid(scope)
-      end
-  end
-
-  # Whether or not the group this access right
-  # represents is specific to a single resource
-  # or covers all resources owned by a user
-  def generic?
-    ['cameras'].include?(group)
-  end
-
-  # Whether or not this right is valid, true
-  # only when generic or the resource exists
-  def valid?
-    super && (generic? || resource)
-  end
-
-  # Returns a basic string representation of this
-  # right in the format group:right:scope
+  # Returns a basic string representation of an AccessRight.
   def to_s
-    [group, right, scope].join(':')
+    [camera_id, token_id, right].join(':')
   end
 
+  # Validates the objects values. Implicitly called before save.
+  def validate
+    super
+    errors.add(:token_id, "is not set") if !token_id
+    errors.add(:camera_id, "is not set") if !camera_id
+    errors.add(:status, "is invalid") if !ALL_STATUSES.include?(status)
+    if !BASE_RIGHTS.include?(right)
+      match = /^grant~(.+)$/.match(right)
+      if match
+        errors.add(:right, "is invalid") if !BASE_RIGHTS.include?(match[1])
+      else
+        errors.add(:right, "is invalid")
+      end
+    end
+  end
+
+  # Returns an AccessRightSet for a given resource and token combination.
+  def self.rights_for(resource, token)
+    AccessRightSet.new(resource, token.target)
+  end
+
+  def self.valid_right_name?(name)
+    result = BASE_RIGHTS.include?(name)
+    if !result
+      match = /^grant~(.+)$/.match(name)
+      result = BASE_RIGHTS.include?(match[1]) if match
+    end
+    result
+  end
 end
 

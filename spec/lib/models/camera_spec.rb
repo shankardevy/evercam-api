@@ -20,39 +20,43 @@ describe Camera do
   describe '#allow?' do
 
     it 'is true for all rights when the auth is the owner' do
-      expect(camera.allow?(:view, camera.owner.token)).to eq(true)
+      owner = camera.owner
+      token = owner.token
+      expect(camera.allow?(AccessRight::VIEW, camera.owner.token)).to eq(true)
     end
 
-    describe ':view right' do
+    describe 'snapshot right' do
 
       it 'is true when the camera is public' do
         camera.update(is_public: true)
-        expect(camera.allow?(:view, nil)).to eq(true)
+        expect(camera.allow?(AccessRight::SNAPSHOT, nil)).to eq(true)
       end
 
+    end
+
+    describe 'view right' do
+
       context 'when the camera is not public' do
+
+        let(:user) { create(:user) }
+        let(:access_token) { create(:access_token, user_id: user.id) }
 
         before(:each) do
           camera.update(is_public: false)
         end
 
         it 'is false when auth is nil' do
-          expect(camera.allow?(:view, nil)).to eq(false)
+          expect(camera.allow?(AccessRight::VIEW, nil)).to eq(false)
         end
 
         it 'is true when auth includes specific camera scope' do
-          right = create(:access_right, group: 'camera', right: 'view', scope: camera.exid)
-          expect(camera.allow?(:view, right.token)).to eq(true)
+          expect(camera.allow?(AccessRight::VIEW, access_token)).to eq(false)
+          AccessRightSet.new(camera, user).grant(AccessRight::VIEW)
+          expect(camera.allow?(AccessRight::VIEW, access_token)).to eq(true)
         end
 
-        it 'is true when the auth includes an all cameras scope' do
-          right = create(:access_right, group: 'cameras', right: 'view', scope: camera.owner.username)
-          expect(camera.allow?(:view, right.token)).to eq(true)
-        end
-
-        it 'is false when the auth has no provisioning scope' do
-          right = create(:access_right, group: 'camera', right: 'view', scope: 'xxxx')
-          expect(camera.allow?(:view, right.token)).to eq(false)
+        it 'is false when no token is provided' do
+          expect(camera.allow?(AccessRight::VIEW, nil)).to eq(false)
         end
 
       end

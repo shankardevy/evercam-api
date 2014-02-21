@@ -44,7 +44,7 @@ describe User do
     end
 
     it 'only returns the permanent token' do
-      token.update(grantee: create(:client))
+      token.update(client: create(:client))
       expect(user.token(true)).to_not eq(token)
     end
 
@@ -56,7 +56,7 @@ describe User do
 
   describe '#grants' do
 
-    let(:grant0) { create(:access_token, grantor: user) }
+    let(:grant0) { create(:access_token, user: user) }
 
     it 'returns only granted tokens' do
       expect(user.grants(true)).to be_dataset([grant0])

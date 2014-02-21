@@ -5,7 +5,7 @@ describe 'WebApp routes/oauth2_router' do
 
   let(:app) { Evercam::WebApp }
 
-  let(:camera0) { create(:camera) }
+  let(:camera0) { create(:camera, is_public: false) }
 
   let(:user0) { camera0.owner }
 
@@ -67,11 +67,8 @@ describe 'WebApp routes/oauth2_router' do
         let(:params) { valid }
 
         before(:each) do
-          create(
-            :access_token,
-            grantor: user0,
-            grantee: client0
-          ).tap { |t| t.grant(params[:scope]) }
+          create(:access_token, client: client0)
+          AccessRightSet.new(camera0, client0).grant(*AccessRight::BASE_RIGHTS)
           get('/oauth2/authorize', params, env)
         end
 
@@ -95,7 +92,9 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'with the user needing to approve one or more scopes' do
 
-        let(:camera1) { create(:camera, owner: user0) }
+        let(:access_token) { create(:access_token, client: client0) }
+
+        let(:camera1) { create(:camera, owner: user0, is_public: false) }
 
         let(:params) { valid.merge(scope: "camera:view:#{camera1.exid}") }
 
@@ -115,7 +114,7 @@ describe 'WebApp routes/oauth2_router' do
 
     let(:camera1) { create(:camera, owner: user0) }
 
-    let(:params) { valid.merge(scope: "camera:view:#{camera1.exid}") }
+    let(:params) { valid.merge(scope: "camera:snapshot:#{camera1.exid}") }
 
     context 'when the user approves the authorization' do
       it 'issues an access token and redirect the user agent' do

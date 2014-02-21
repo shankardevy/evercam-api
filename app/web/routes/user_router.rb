@@ -16,7 +16,7 @@ module Evercam
       raise NotFoundError, 'Username does not exist' unless @user
 
       begin
-        auth.allow? { |r| @user.allow?(:view, r) }
+        auth.allow? { |r| @user.allow?(AccessRight::SNAPSHOT, r) }
         @cameras = Camera.where(:owner_id => @user.id)
       rescue AuthenticationError, AuthorizationError
         @cameras = Camera.where(:owner_id => @user.id, :is_public => true)
@@ -32,7 +32,7 @@ module Evercam
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user
 
-      auth.allow? { |r| @user.allow?(:view, r) }
+      auth.allow? { |r| @user.allow?(AccessRight::SNAPSHOT, r) }
 
       @countries = Country.all
       erb 'users/user_profile'.to_sym
@@ -43,7 +43,7 @@ module Evercam
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user
 
-      auth.allow? { |r| @user.allow?(:view, r) }
+      auth.allow? { |r| @user.allow?(AccessRight::SNAPSHOT, r) }
 
       @camera = Camera.by_exid(camera)
       raise NotFoundError, 'Camera does not exist' unless @camera

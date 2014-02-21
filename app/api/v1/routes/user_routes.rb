@@ -34,7 +34,7 @@ module Evercam
       raise NotFoundError, 'user does not exist' unless user
 
       cameras = user.cameras.select do |s|
-        s.allow?(:view, auth.token)
+        s.allow?(AccessRight::SNAPSHOT, auth.token)
       end
 
       present cameras, with: Presenters::Camera
@@ -45,7 +45,7 @@ module Evercam
       authreport!('users/get')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
-      auth.allow? { |r| user.allow?(:view, r) }
+      auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
 
       present Array(user), with: Presenters::User
     end

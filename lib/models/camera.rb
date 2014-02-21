@@ -7,7 +7,7 @@ class Camera < Sequel::Model
 
   many_to_one :firmware
   one_to_many :endpoints, class: 'CameraEndpoint'
-  many_to_one :owner, class: 'User'
+  many_to_one :owner, class: 'User', key: :owner_id
 
   MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
 
@@ -39,17 +39,7 @@ class Camera < Sequel::Model
   # Determines if the presented token should be allowed
   # to conduct a particular action on this camera
   def allow?(right, token)
-    return true if token &&
-      token.grantee == owner
-
-    case right
-    when :view
-      return true if is_public?
-      nil != token && (
-        token.includes?("camera:view:#{exid}") ||
-        token.includes?("cameras:view:#{owner.username}")
-      )
-    end
+    AccessRightSet.new(self, token.nil? ? nil : token.target).allow?(right)
   end
 
   # The IANA standard timezone for this camera

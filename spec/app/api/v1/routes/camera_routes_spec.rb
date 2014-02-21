@@ -7,9 +7,16 @@ describe 'API routes/cameras' do
 
   let(:camera) { create(:camera, is_public: true) }
 
+  let(:token) { create(:access_token) }
+
+  let(:access_right) { create(:access_right, token: token) }
+
   describe 'presented fields' do
 
-    let(:json) { get("/cameras/#{camera.exid}").json['cameras'][0] }
+    let(:json) {
+      output = get("/cameras/#{camera.exid}").json
+      output['cameras'] ? output['cameras'][0] : {}
+    }
 
     it 'returns all the camera main data keys' do
       expect(json).to have_keys(
@@ -167,7 +174,8 @@ describe 'API routes/cameras' do
 
   describe 'PATCH /cameras' do
 
-    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    #let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
     let(:model) { create(:firmware) }
 
     let(:params) {
@@ -238,7 +246,7 @@ describe 'API routes/cameras' do
 
   describe 'DELETE /cameras' do
 
-    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
     context 'when params are empty' do
       it 'returns a OK status' do
