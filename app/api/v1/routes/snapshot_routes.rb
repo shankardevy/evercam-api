@@ -22,7 +22,7 @@ module Evercam
 
       snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i))
 
-      present Array(snap), with: Presenters::Snapshot
+      present Array(snap), with: Presenters::Snapshot, type: params[:type]
     end
 
     desc 'Fetches a snapshot from the camera and stores it using the current timestamp'

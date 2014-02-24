@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'api/v1'
 
-describe 'API routes/snapshots', :focus => true do
+describe 'API routes/snapshots' do
 
 
   let(:app) { Evercam::APIv1 }
@@ -30,9 +30,18 @@ describe 'API routes/snapshots', :focus => true do
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
 
-    context 'when snapshot request is correct' do
-      it 'snapshot is returned' do
+    context 'when snapshot request is correct and type is not specified' do
+      it 'snapshot without image data is returned' do
         get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+        expect(last_response.json['snapshots'][0]['data']).to be_nil
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+    context 'when snapshot request is correct and type is full' do
+      it 'snapshot without image data is returned' do
+        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {type: 'full'}, auth)
+        expect(last_response.json['snapshots'][0]['data']).not_to be_nil
         expect(last_response.status).to eq(200)
       end
     end
