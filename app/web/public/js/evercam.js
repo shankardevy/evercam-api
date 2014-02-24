@@ -13,7 +13,7 @@
 
   window.Evercam = {
 
-    apiUrl: 'https://www.evercam.io/v1',
+    apiUrl: 'https://dashboard.evercam.io/v1',
     proxyUrl: 'https://cors.evercam.io/',
     refresh: 0,
 
