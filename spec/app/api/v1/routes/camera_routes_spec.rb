@@ -26,6 +26,8 @@ describe 'API routes/cameras' do
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
             'timezone', 'location')
+          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+                                        'auth', 'mac_address')
         end
 
       end
@@ -45,6 +47,28 @@ describe 'API routes/cameras' do
             'last_polled_at', 'is_public', 'is_online', 'last_online_at',
             'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
             'location', 'mac_address')
+        end
+      end
+
+      describe "when queried by someone that is not the camera owner" do
+        let(:user1) { create(:user, username: 'aaaa', password: 'bbbb') }
+        let(:user2) { create(:user, username: 'xxxx', password: 'yyyy') }
+        let(:camera) { create(:camera, is_public: true, owner: user2) }
+        let(:json) {
+          user1.save
+          user2.save
+          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('aaaa:bbbb')}" }
+          output = get("/cameras/#{camera.exid}", {}, env).json
+          output['cameras'] ? output['cameras'][0] : {}
+        }
+
+        it 'returns s subset of the cameras details' do
+          expect(json).to have_keys(
+            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
+            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
+            'timezone', 'location')
+          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+                                        'auth', 'mac_address')
         end
       end
     end
