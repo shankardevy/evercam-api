@@ -36,12 +36,16 @@ module Evercam
       a_token = nil
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
+          a_token = token
           record.allow?(AccessRight::VIEW, token)
         end
         raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
       else
         camera = Camera.by_exid!(params[:id])
-        auth.allow? { |r| camera.allow?(AccessRight::VIEW, r) }
+        auth.allow? do |token|
+          a_token = token
+          camera.allow?(AccessRight::VIEW, token)
+        end
       end
 
       CameraActivity.create(
@@ -70,9 +74,9 @@ module Evercam
       authreport!('cameras/patch')
       camera = ::Camera.by_exid!(params[:id])
       a_token = nil
-      auth.allow? do |r|
-        a_token = r
-        camera.allow?(:edit, r)
+      auth.allow? do |token|
+        a_token = token
+        camera.allow?(:edit, token)
       end
 
       outcome = Actors::CameraUpdate.run(params)
