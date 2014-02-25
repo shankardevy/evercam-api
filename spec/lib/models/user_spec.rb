@@ -84,5 +84,23 @@ describe User do
 
   end
 
+  describe '#shares' do
+    let(:owner) { create(:user) }
+    let(:private_camera) { create(:camera, owner: owner, is_public: false) }
+    let(:public_camera) { create(:camera, owner: owner, is_public: true) }
+    let(:private_camera_share) { create(:private_camera_share, camera: private_camera, sharer: owner, user: user) }
+    let(:public_camera_share) { create(:public_camera_share, camera: public_camera, sharer: owner, user: user) }
+
+    before(:each) {private_camera_share.save; public_camera_share.save}
+
+    it 'returns only granted camera shares' do
+      shares = user.camera_shares
+      expect(shares.length).to eq(2)
+      shares.each do |share|
+        [public_camera_share.id, private_camera_share.id].include?(share.id)
+      end
+    end
+  end
+
 end
 

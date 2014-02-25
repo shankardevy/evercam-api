@@ -10,6 +10,7 @@ class Camera < Sequel::Model
   many_to_one :owner, class: 'User', key: :owner_id
   one_to_many :activities, class: 'CameraActivity'
   one_to_many :snapshots, class: 'Snapshot'
+  one_to_many :shares, class: 'CameraShare'
 
   MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
 
