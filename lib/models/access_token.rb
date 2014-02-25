@@ -1,9 +1,11 @@
+require 'securerandom'
+
 class AccessToken < Sequel::Model
 
   plugin :after_initialize
 
-  many_to_one :grantor, class: 'User'
-  many_to_one :grantee, class: 'Client'
+  many_to_one :user
+  many_to_one :client
 
   one_to_many :rights, class: 'AccessRight',
     key: :token_id
@@ -39,36 +41,14 @@ class AccessToken < Sequel::Model
 
   # Determines who the beneficiary of the
   # rights associated with this token is
-  def grantee
-    super || grantor
+  def client
+    super || user
   end
 
-  # Adds a new access right to this token
-  # if it does not already exist
-  def grant(name)
-    add_right(
-      where_right(name)
-    ) unless includes?(name)
-  end
-
-  # Removes an access right from this token
-  # if it exists otherwise does nothing
-  def revoke(name)
-    rights_dataset.where(
-      where_right(name)).delete
-  end
-
-  # Whether or not this token includes a
-  # particular access right
-  def includes?(name)
-    1 == rights_dataset.where(
-      where_right(name)).count
-  end
-
-  private
-
-  def where_right(name)
-    AccessRight.split(name).values
+  # A convenience method that returns either the user or client associated
+  # with an access token depending on which applies.
+  def target
+    user_id ? user : client
   end
 
 end

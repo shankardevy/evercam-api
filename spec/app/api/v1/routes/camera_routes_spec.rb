@@ -7,31 +7,92 @@ describe 'API routes/cameras' do
 
   let(:camera) { create(:camera, is_public: true) }
 
+  let(:token) { create(:access_token) }
+
+  let(:access_right) { create(:access_right, token: token) }
+
   describe 'presented fields' do
 
-    let(:json) { get("/cameras/#{camera.exid}").json['cameras'][0] }
+    describe "for public cameras" do
+      describe "when not the camera owner" do
 
-    it 'returns all the camera main data keys' do
-      expect(json).to have_keys(
-        'id', 'name', 'owner', 'created_at', 'updated_at',
-        'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-        'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
-        'location', 'mac_address')
-    end
+        let(:json) {
+          output = get("/cameras/#{camera.exid}").json
+          output['cameras'] ? output['cameras'][0] : {}
+        }
 
-    context 'when location is nil' do
-      it 'returns location as nil' do
-        camera.update(location: nil)
-        expect(json['location']).to be_nil
+        it 'returns a subset the cameras details' do
+          expect(json).to have_keys(
+            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
+            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
+            'timezone', 'location')
+          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+                                        'auth', 'mac_address')
+        end
+
+      end
+
+      describe "when queried by the camera owner" do
+        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
+        let(:camera) { create(:camera, is_public: true, owner: user) }
+        let(:json) {
+          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+          output = get("/cameras/#{camera.exid}", {}, env).json
+          output['cameras'] ? output['cameras'][0] : {}
+        }
+
+        it 'returns the full camera details' do
+          expect(json).to have_keys(
+            'id', 'name', 'owner', 'created_at', 'updated_at',
+            'last_polled_at', 'is_public', 'is_online', 'last_online_at',
+            'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
+            'location', 'mac_address')
+        end
+      end
+
+      describe "when queried by someone that is not the camera owner" do
+        let(:user1) { create(:user, username: 'aaaa', password: 'bbbb') }
+        let(:user2) { create(:user, username: 'xxxx', password: 'yyyy') }
+        let(:camera) { create(:camera, is_public: true, owner: user2) }
+        let(:json) {
+          user1.save
+          user2.save
+          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('aaaa:bbbb')}" }
+          output = get("/cameras/#{camera.exid}", {}, env).json
+          output['cameras'] ? output['cameras'][0] : {}
+        }
+
+        it 'returns s subset of the cameras details' do
+          expect(json).to have_keys(
+            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
+            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
+            'timezone', 'location')
+          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+                                        'auth', 'mac_address')
+        end
       end
     end
 
-    context 'when location is not nil' do
-      it 'returns location as lng lat object' do
-        camera.update(location: { lng: 10, lat: 20 })
-        expect(json['location']).to have_keys('lng', 'lat')
+    describe "when location"
+
+      let(:json) {
+        output = get("/cameras/#{camera.exid}").json
+        output['cameras'] ? output['cameras'][0] : {}
+      }
+
+      context 'is nil' do
+        it 'returns location as nil' do
+          camera.update(location: nil)
+          expect(json['location']).to be_nil
+        end
       end
-    end
+
+      context 'is not nil' do
+        it 'returns location as lng lat object' do
+          camera.update(location: { lng: 10, lat: 20 })
+          expect(json['location']).to have_keys('lng', 'lat')
+        end
+      end
 
   end
 
@@ -90,7 +151,9 @@ describe 'API routes/cameras' do
     end
 
     it 'can fetch details for a camera via MAC address' do
-      response = get("/cameras/#{camera.mac_address}")
+      camera.update(owner: create(:user, username: 'xxxx', password: 'yyyy'))
+      env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+      response = get("/cameras/#{camera.mac_address}", {}, env)
       data     = response.json['cameras'][0]
 
       expect(data['id']).to eq(camera.exid)
@@ -167,7 +230,8 @@ describe 'API routes/cameras' do
 
   describe 'PATCH /cameras' do
 
-    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    #let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
     let(:model) { create(:firmware) }
 
     let(:params) {
@@ -238,7 +302,7 @@ describe 'API routes/cameras' do
 
   describe 'DELETE /cameras' do
 
-    let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
 
     context 'when params are empty' do
       it 'returns a OK status' do

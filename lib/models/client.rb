@@ -2,7 +2,7 @@ class Client < Sequel::Model
 
   plugin :after_initialize
 
-  one_to_many :tokens, class: 'AccessToken', key: :grantee_id
+  one_to_many :tokens, class: 'AccessToken', key: :client_id
 
   def self.by_exid(val)
     first(exid: val)
@@ -19,9 +19,7 @@ class Client < Sequel::Model
   end
 
   def allow_callback_uri?(val)
-    callback_uris.any? do |uri|
-      val[0, uri.length] == uri
-    end
+    val.nil? ? false : callback_uris.any? {|uri| val[0, uri.length] == uri}
   end
 
 end

@@ -20,21 +20,21 @@ module Evercam
 
     def demand(&block)
       authen_err unless token
-      grantor = token.grantor
-      block.call(token, grantor)
+      user = token.user
+      block.call(token, user)
     end
 
     def allow?(&block)
-      grantor = token ? token.grantor : nil
-      output = block.call(token, grantor)
+      user = token ? token.user : nil
+      output = block.call(token, user)
 
       return output if output
       token ? authoz_err : authen_err
     end
 
     def first_allowed(list)
-      grantor = token ? token.grantor : nil
-      list.find {|entry| yield entry, token, grantor}
+      user = token ? token.user : nil
+      list.find {|entry| yield entry, token, user}
     end
 
     private

@@ -2,28 +2,31 @@ module Evercam
   module OAuth2
     class Authorize
 
+      Right = Struct.new(:right, :resource, :token)
+
       attr_reader :token
 
       def initialize(user, params)
-        @u, @p = user, params
+        @user, @params = user, params
+        @token = AccessToken.new(client: client)
         issue_access_token if valid? && missing.empty?
       end
 
       def valid?
         validate_client &&
-          validate_redirect &&
-          validate_type &&
-          validate_scopes &&
-          validate_user_can_authorize
+        validate_redirect &&
+        validate_type &&
+        validate_scopes &&
+        validate_user_can_authorize
       end
 
       def redirect?
-        nil != redirect_to
+        !redirect_to.nil?
       end
 
       def redirect_to
         return nil unless validate_client && validate_redirect
-        return nil if valid? && false == missing.empty? && @decline.nil?
+        return nil if valid? && !missing.empty? && @decline.nil?
         return redirect_uri unless fragment
 
         encoded = URI.encode_www_form(fragment)
@@ -37,14 +40,17 @@ module Evercam
       end
 
       def client
-        Client.by_exid(@p[:client_id])
+        Client.by_exid(@params[:client_id])
       end
 
       def missing
-        scopes.select do |s|
-          false == client.tokens.any? do |t|
-            t.grantor == @u && t.includes?(s.to_s)
+        scopes.inject([]) do |list, scope|
+          group, right, resource_id = scope.split(":")
+          set = right_sets(client, scope).find do |rights|
+            !rights.allow?(right)
           end
+          list << Right.new(right, set.resource, @token) if !set.nil?
+          list
         end
       end
 
@@ -58,50 +64,63 @@ module Evercam
 
       private
 
+      def scopes
+        (@params[:scope] || '').split(/[\s,]+/)
+      end
+
       def validate_client
-        nil != client
+        !client.nil?
       end
 
       def validate_redirect
-        uri = @p[:redirect_uri]
-        nil == uri || (client && client.allow_callback_uri?(uri))
+        uri = @params[:redirect_uri]
+        uri.nil? || (client && client.allow_callback_uri?(uri))
       end
 
       def validate_type
-        @p[:response_type] == 'token'
+        @params[:response_type] == 'token'
       end
 
       def validate_scopes
-        false == scopes.empty? &&
-          scopes.all? { |s| s.valid? }
+        result = ![nil, ''].include?(@params[:scope])
+        if result
+          result = scopes.find do |scope|
+            group, right, resource_id = scope.split(":")
+            AccessRight.valid_right_name?(right)
+          end
+        end
+        result
       end
 
       def validate_user_can_authorize
-        scopes.all? do |s|
-          s.generic? || s.resource.allow?(:share, @u.token)
-        end
+        scopes.find do |entry|
+          group, right, resource_id = entry.split(":")
+          right_sets(@user, entry).find do |rights|
+            rights.allow?(right) == false
+          end
+        end.nil?
       end
 
-      def scopes
-        names = @p[:scope] || ''
-        names.split(/[\s,]+/).map do |s|
-          AccessRight.split(s).tap do |a|
-            a.scope = @u.username if a.generic?
-          end
-        end
+      def right_sets(target, definition)
+        resources = get_resources(definition, token.user)
+        resources.nil? ? [] : resources.inject([]) {|list, resource| list << AccessRightSet.new(resource, target)}
       end
 
       def issue_access_token
         return nil unless valid?
-        @token = AccessToken.create(grantor: @u, grantee: client).tap do |t|
-          scopes.each do |s|
-            t.grant(s.to_s)
+        AccessToken.db.transaction do
+          @token.save
+          scopes.each do |entry|
+            group, right, resource_id = entry.split(":")
+            right_sets(client, entry).each do |rights|
+              rights.grant(right)
+            end
           end
         end
       end
 
       def redirect_uri
-        @p[:redirect_uri] || client.default_callback_uri
+        @params[:redirect_uri] || client.default_callback_uri
       end
 
       def fragment
@@ -139,11 +158,23 @@ module Evercam
           {
             access_token: @token.request,
             expires_in: @token.expires_in,
-            username: @u.username,
+            username: @user.username,
             token_type: :bearer
           }
         else
           nil
+        end
+      end
+
+      def get_resources(definition, user=nil)
+        group, right, resource_id = definition.split(":")
+        case group
+          when 'cameras'
+            @user.nil? ? [] : Camera.where(owner_id: @user.id)
+
+          when 'camera'
+            camera = Camera.where(exid: resource_id).first
+            camera.nil? ? [] : [camera]
         end
       end
 

@@ -34,17 +34,24 @@ module Evercam
     get '/cameras/:id' do
       authreport!('cameras/get')
       a_token = nil
+      strip   = false
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
           a_token = token
-          record.allow?(:view, token)
+          rights  = AccessRightSet.new(record, (token.nil? ? nil : token.target))
+          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
+          strip   = (allowed && !rights.is_owner?)
+          allowed
         end
         raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
       else
         camera = Camera.by_exid!(params[:id])
-        auth.allow? do |r|
-          a_token = r
-          camera.allow?(:view, r)
+        auth.allow? do |token|
+          a_token = token
+          rights  = AccessRightSet.new(camera, (token.nil? ? nil : token.target))
+          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
+          strip   = (allowed && !rights.is_owner?)
+          allowed
         end
       end
 
@@ -56,7 +63,7 @@ module Evercam
         ip: request.ip
       )
 
-      present Array(camera), with: Presenters::Camera
+      present Array(camera), with: Presenters::Camera, minimal: strip
     end
 
     desc 'Updates full or partial data for an existing camera', {
@@ -74,9 +81,9 @@ module Evercam
       authreport!('cameras/patch')
       camera = ::Camera.by_exid!(params[:id])
       a_token = nil
-      auth.allow? do |r|
-        a_token = r
-        camera.allow?(:edit, r)
+      auth.allow? do |token|
+        a_token = token
+        camera.allow?(:edit, token)
       end
 
       outcome = Actors::CameraUpdate.run(params)

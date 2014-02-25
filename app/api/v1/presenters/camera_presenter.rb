@@ -20,7 +20,8 @@ module Evercam
         required: true
       }
 
-      expose :owner, documentation: {
+      expose :owner, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
         type: 'string',
         desc: 'Username of camera owner',
         required: true
@@ -96,7 +97,8 @@ module Evercam
         end
       end
 
-      expose :endpoints, documentation: {
+      expose :endpoints, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
         type: 'array',
         desc: 'String array of all available camera endpoints',
         required: true,
@@ -107,12 +109,14 @@ module Evercam
         s.endpoints.map(&:to_s)
       end
 
-      expose :mac_address, documentation: {
+      expose :mac_address, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
         type: 'string',
         desc: 'The physical network MAC address of the camera'
       }
 
-      expose :snapshots, documentation: {
+      expose :snapshots, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
         type: 'hash',
         desc: 'Hash of image types and paths which return snapshots',
         required: true
@@ -120,7 +124,8 @@ module Evercam
         s.config['snapshots']
       end
 
-      expose :auth, documentation: {
+      expose :auth, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
         type: 'hash',
         desc: 'Hash of authentication mechanisms and login details',
         required: true

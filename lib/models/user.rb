@@ -8,13 +8,13 @@ class User < Sequel::Model
   one_to_many :cameras, key: :owner_id
 
   one_to_many :grants, class: 'AccessToken',
-    conditions: Sequel.negate(grantee_id: nil),
-    key: :grantor_id
+    conditions: Sequel.negate(client_id: nil),
+    key: :user_id
 
   one_to_one :token, class: 'AccessToken',
-    conditions: { grantee_id: nil },
+    conditions: { client_id: nil },
     after_load: proc { |u| u.send(:ensure_token_exists) },
-    key: :grantor_id
+    key: :user_id
 
   def self.by_login(val)
     where(username: val).or(email: val).first
@@ -38,7 +38,7 @@ class User < Sequel::Model
 
   def allow?(right, token)
     return true if token &&
-      token.grantor == self
+      token.user == self
   end
 
   private

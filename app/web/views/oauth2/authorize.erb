@@ -4,11 +4,7 @@
 <ol>
   <li>
   <% @req.missing.each do |s| %>
-    <% if s.generic? %>
-      Permission to <strong><%= s.right %> all <%= s.group %></strong>
-    <% else %>
-      Permission to <strong><%= s.right %> <%= s.resource.name %></strong>
-    <% end %>
+    Permission to <strong><%= s.right %> <%= s.resource.name %></strong>
   <% end %>
   </li>
 </ol>

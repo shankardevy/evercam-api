@@ -20,6 +20,12 @@ RSpec::Matchers.define :have_keys do |*keys|
   end
 end
 
+RSpec::Matchers.define :not_have_keys do |*keys|
+  match do |actual|
+    keys.inject(0) {|total, key| total += 1 if actual.include?(key); total} == 0
+  end
+end
+
 RSpec::Matchers.define :be_around_now do
   match do |actual|
     1 >= (actual - Time.now)

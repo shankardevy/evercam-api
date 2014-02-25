@@ -88,7 +88,10 @@ module Evercam
 
       context 'when the user is not authorized to grant all scopes' do
 
-        subject { Authorize.new(create(:user), valid) }
+        subject {
+          params = valid.merge(scope: "camera:edit:#{camera0.exid}")
+          Authorize.new(create(:user), params)
+        }
 
         its(:valid?) { should eq(false) }
         its(:redirect?) { should eq(true) }
@@ -102,21 +105,13 @@ module Evercam
         let(:params) { valid }
 
         before(:each) do
-          create(
-            :access_token,
-            grantee: client0,
-            grantor: user0
-          ).tap do |t|
-            t.grant(params[:scope])
+          create(:access_token, client: client0).tap do |t|
+            AccessRightSet.new(camera0, client0).grant(AccessRight::VIEW)
           end
         end
 
         it 'creates a new access token for the client' do
           expect(subject.client.reload.tokens.count).to eq(2)
-        end
-
-        it 'adds all the requested scopes to the new token' do
-          expect(subject.token.rights.count).to eq(1)
         end
 
         it 'wants to redirect' do
@@ -155,6 +150,12 @@ module Evercam
           ]
         end
 
+        let(:access_token) {
+          token = AccessToken.create(client: client0)
+          AccessRightSet.new(camera0, client0).grant(AccessRight::VIEW)
+          AccessRightSet.new(camera1, client0).grant(AccessRight::VIEW)
+        }
+
         let(:params) do
           valid.merge(scope: scopes.join(','))
         end
@@ -172,8 +173,6 @@ module Evercam
         end
 
         it 'ignores any grants by other users' do
-          token = create(:access_token, grantee: client0)
-          scopes.each { |s| token.grant(s) }
           expect(subject.missing.size).to eq(2)
         end
 
@@ -199,7 +198,7 @@ module Evercam
 
         it 'creates a right with the correct name' do
           token = subject.approve!
-          allow = token.includes?("cameras:view:#{user0.username}")
+          allow = AccessRightSet.new(camera0, client0).allow?(AccessRight::VIEW)
           expect(allow).to eq(true)
         end
 
@@ -225,7 +224,8 @@ module Evercam
         end
 
         it 'create the new rights for the token' do
-          expect(subject.token.rights.count).to eq(2)
+          AccessRightSet.new(camera0, client0).allow?(AccessRight::VIEW)
+          AccessRightSet.new(camera1, client0).allow?(AccessRight::VIEW)
         end
 
         it 'wants to redirect the client' do
