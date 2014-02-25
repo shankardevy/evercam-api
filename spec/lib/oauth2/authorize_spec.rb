@@ -88,7 +88,10 @@ module Evercam
 
       context 'when the user is not authorized to grant all scopes' do
 
-        subject { Authorize.new(create(:user), valid) }
+        subject {
+          params = valid.merge(scope: "camera:edit:#{camera0.exid}")
+          Authorize.new(create(:user), params)
+        }
 
         its(:valid?) { should eq(false) }
         its(:redirect?) { should eq(true) }

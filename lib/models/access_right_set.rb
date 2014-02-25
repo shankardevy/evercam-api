@@ -51,7 +51,7 @@ class AccessRightSet
    private
 
    def user_allowed?(right)
-      result = is_resource_public? && right == AccessRight::SNAPSHOT
+      result = is_resource_public? && AccessRight::PUBLIC_RIGHTS.include?(right)
       if !result && !@requester.nil? && !@resource.nil?
          result = is_owner?
          if !result && @token.valid?

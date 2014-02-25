@@ -8,6 +8,7 @@ class AccessRight < Sequel::Model
   GRANT                      = 'grant'.freeze
   BASE_RIGHTS                = [SNAPSHOT, VIEW, EDIT, DELETE]
   ALL_RIGHTS                 = BASE_RIGHTS + [GRANT]
+  PUBLIC_RIGHTS              = [SNAPSHOT, VIEW]
 
   # Status constants.
   ACTIVE                     = 1

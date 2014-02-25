@@ -53,11 +53,11 @@ describe AccessRightSet do
 			context "and the user is not the resource owner" do
 				let(:user) { create(:user, id: -100) }
 
-				it "returns true only for the snapshot right" do
+				it "returns true only for the snapshot and view rights" do
 					rights = AccessRightSet.new(camera, user)
 
 					expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(true)
-					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
+					expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
