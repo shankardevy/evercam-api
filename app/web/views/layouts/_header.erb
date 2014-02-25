@@ -26,7 +26,7 @@
             <ul class='nav navbar-nav tm-navbar'>
               <% if curr_user %>
                 <li><a href="https://evercam.3scale.net/login">API Keys</a></li>
-                <li><a href="/docs">Documentation</a></li>
+                <!--<li><a href="https://dashboard.evercam.io/docs">Documentation</a></li>-->
                 <li><a href="/users/<%= curr_user.username -%>">Dashboard</a></li>
                 <li><a href="/users/<%= curr_user.username -%>/profile"><%= curr_user.fullname -%></a></li>
                 <li><a href="/logout">Sign Out</a></li>
