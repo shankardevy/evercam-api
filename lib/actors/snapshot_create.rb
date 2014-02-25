@@ -20,8 +20,6 @@ module Evercam
 
       def execute
         camera = ::Camera.by_exid!(id)
-        puts 'DATA:'
-        puts data[0,4]
 
         Snapshot.create(
           camera: camera,

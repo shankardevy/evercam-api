@@ -8,7 +8,7 @@ module Evercam
     desc 'Returns the list of all snapshots currently stored for this camera'
     get '/cameras/:id/snapshots' do
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
       present camera.snapshots, with: Presenters::Snapshot, models: true
     end
@@ -18,7 +18,7 @@ module Evercam
     }
     get '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
       snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i))
 
@@ -28,7 +28,7 @@ module Evercam
     desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
     post '/cameras/:id/snapshots' do
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
       outcome = Actors::SnapshotFetch.run(params)
       raise OutcomeError, outcome unless outcome.success?
@@ -39,7 +39,7 @@ module Evercam
     desc 'Stores the supplied snapshot image data for the given timestamp'
     post '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
       outcome = Actors::SnapshotCreate.run(params)
       raise OutcomeError, outcome unless outcome.success?
@@ -50,7 +50,7 @@ module Evercam
     desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
     delete '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
       Snapshot.by_ts!(Time.at(params[:timestamp].to_i)).destroy
       {}
