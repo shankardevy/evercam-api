@@ -18,10 +18,6 @@ module Evercam
       end
 
       def authreport!(method_name='hits', usage_value=1)
-        # response = $client.authrep(:app_id  => 'b74e101b' ,
-        #                            :app_key => 'cfa0c7bcc31dabf74487ef8d266edef1',
-        #                            :usage   => {method_name => usage_value})
-        # error!('505 Reporting Error', 505) unless response.success?
       end
     end
 
