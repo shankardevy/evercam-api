@@ -16,6 +16,8 @@ class User < Sequel::Model
     after_load: proc { |u| u.send(:ensure_token_exists) },
     key: :user_id
 
+  one_to_many :camera_shares
+
   def self.by_login(val)
     where(username: val).or(email: val).first
   end
