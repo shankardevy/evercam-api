@@ -7,4 +7,6 @@ require_relative './actors/camera_update'
 require_relative './actors/camera_update'
 require_relative './actors/token_set'
 require_relative './actors/password_reset'
+require_relative './actors/snapshot_fetch'
+require_relative './actors/snapshot_create'
 

@@ -12,7 +12,7 @@
       :api_version: '1.0'
       :mount_path: swagger
       :hide_documentation_path: true
-      :base_path: http://localhost:9393/v1
+      :base_path: http://localhost:9292/v1
   :sidekiq:
     :url: redis://localhost:6379/0
     :namespace: sidekiq
