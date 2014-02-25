@@ -18,6 +18,9 @@ module Evercam
       end
 
       def authreport!(method_name='hits', usage_value=1)
+        $client.authrep( :app_id =>  params['app_id'],
+                        :app_key => params['app_key'],
+                        :usage => {method_name => usage_value})
       end
     end
 
