@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://evercam-admin.3scale.net/admin/api/signup.xml
+    body:
+      encoding: US-ASCII
+      string: provider_key=b25bc9166b8805fc26a96f1130578d2b&org_name=x&username=garrettheaver&email=garrett%40evercam.io&password=09dba60ec38d19e859ab540eee9aae82
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Host:
+      - evercam-admin.3scale.net
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/xml; charset=utf-8
+      Date:
+      - Tue, 25 Feb 2014 15:09:44 GMT
+      Etag:
+      - '"bf20cbce5efcbb2f48274430c3229b9a"'
+      Location:
+      - https://evercam-admin.3scale.net/admin/api/signup?id=2445580758792
+      Server:
+      - Apache
+      Set-Cookie:
+      - JSESSIONID=1; path=/
+      - _system_session=BAh7BkkiD3Nlc3Npb25faWQGOgZFRkkiJTk1NGNiZTdkYmVhOGUxNmI4NzYxNDgwOTAxMTIwOTkzBjsAVA%3D%3D--6c0fc98080a1056f5990619386d97c3d375ef6ad;
+        path=/; HttpOnly
+      Status:
+      - '201'
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Rack-Cache:
+      - invalidate, pass
+      X-Request-Id:
+      - 32237fb7bd5648c0ca5694026b4116b0
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Content-Length:
+      - '646'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><account><id>2445580758792</id><created_at>2014-02-25T15:09:44Z</created_at><updated_at>2014-02-25T15:09:45Z</updated_at><state>approved</state><org_name>x</org_name><extra_fields></extra_fields><credit_card_stored>false</credit_card_stored><plans><plan
+        default="true"><id>2357355660562</id><name>Default</name><type>account_plan</type><state>hidden</state><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><plan
+        default="true"><id>2357355660552</id><name>Default</name><type>service_plan</type><state>hidden</state><service_id>2555417692712</service_id><approval_required>false</approval_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><plan
+        custom="false" default="true"><id>2357355660572</id><name>Pay As You Go ($20
+        for 10,000 hits)</name><type>application_plan</type><state>published</state><service_id>2555417692712</service_id><end_user_required>false</end_user_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan></plans><users><user><id>2445580894842</id><created_at>2014-02-25T15:09:44Z</created_at><updated_at>2014-02-25T15:09:45Z</updated_at><account_id>2445580758792</account_id><state>active</state><role>admin</role><username>garrettheaver</username><email>garrett@evercam.io</email><extra_fields></extra_fields></user></users><applications><application><id>1409610094342</id><created_at>2014-02-25T15:09:45Z</created_at><updated_at>2014-02-25T15:09:45Z</updated_at><state>live</state><user_account_id>2445580758792</user_account_id><end_user_required>false</end_user_required><application_id>a1c9b8ee</application_id><keys><key>a2943ec0a0996530b7926f7eee172c5c</key></keys><plan
+        custom="false" default="true"><id>2357355660572</id><name>Pay As You Go ($20
+        for 10,000 hits)</name><type>application_plan</type><state>published</state><service_id>2555417692712</service_id><end_user_required>false</end_user_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><name>API
+        signup</name><description>API signup</description><extra_fields></extra_fields></application></applications></account>
+    http_version: 
+  recorded_at: Tue, 25 Feb 2014 15:09:40 GMT
+recorded_with: VCR 2.8.0
