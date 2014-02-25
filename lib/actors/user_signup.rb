@@ -28,8 +28,26 @@ module Evercam
         country = Country.by_iso3166(inputs[:country])
         password = SecureRandom.hex(16)
 
-        User.create(inputs.merge(password: password, country: country)).tap do |user|
-          Mailers::UserMailer.confirm(user: user, password: password)
+        User.db.transaction do
+          User.create(inputs.merge(password: password, country: country)).tap do |user|
+            share_remembrance_camera(user)
+            Mailers::UserMailer.confirm(user: user, password: password)
+          end
+        end
+      end
+
+      private
+
+      def share_remembrance_camera(user)
+        evercam_user = User[username: 'evercam']
+        if !evercam_user.nil?
+          camera = Camera.where(owner_id: evercam_user.id,
+                                exid:     'evercam-remembrance-camera').first
+          if !camera.nil?
+            CameraShare.create(user: user, camera: camera,
+                               kind: CameraShare::PUBLIC,
+                               sharer: evercam_user)
+          end
         end
       end
 
