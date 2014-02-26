@@ -23,7 +23,7 @@
     :route53:
       :evr.cm: Z15MY0AN5PFWCW
   :threescale:
-    :provider_key: <%= ENV['3SCALE_PROVIDER_KEY'] %>
+    :provider_key: <%= ENV['THREESCALE_PROVIDER_KEY'] %>
 
 :development:
   <<: *defaults
