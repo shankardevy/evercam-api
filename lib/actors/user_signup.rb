@@ -56,7 +56,7 @@ module Evercam
       end
 
       def three_scale(user, password)
-        uri = URI('https://evercam-admin.3scale.net/admin/api/signup.xml')
+        uri = URI(Evercam::Config[:threescale][:url] + 'admin/api/signup.xml')
         res = Net::HTTP.post_form(uri,
                                   'provider_key' => Evercam::Config[:threescale][:provider_key],
                                   'org_name' => user.fullname,
@@ -64,12 +64,9 @@ module Evercam
                                   'email' => user.email,
                                   'password' => password,
         )
-        xml_doc  = Nokogiri::XML(res.body)
         unless res.is_a?(Net::HTTPSuccess)
           raise Evercam::WebErrors::BadRequestError, 'Failed to create 3scale account'
         end
-        user.three_scale = {'app_id' => xml_doc.css('application_id').text, 'app_key' => xml_doc.css('key').text}
-        user.save
       end
 
     end
