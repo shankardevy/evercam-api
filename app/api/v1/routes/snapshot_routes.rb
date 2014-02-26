@@ -24,7 +24,7 @@ module Evercam
         con = Net::HTTP.new(endpoint.host, endpoint.port)
 
         begin
-          con.open_timeout = 5
+          con.open_timeout =  Evercam::Config[:api][:timeout]
           response = con.get(camera.config['snapshots']['jpg'])
           if response.is_a?(Net::HTTPSuccess)
             break

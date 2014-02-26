@@ -6,7 +6,7 @@ describe 'API routes/snapshots' do
 
   let(:app) { Evercam::APIv1 }
 
-  let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8101).camera }
+  let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
 
 
   describe 'GET /cameras/:id/snapshots' do
@@ -26,7 +26,7 @@ describe 'API routes/snapshots' do
 
   end
 
-  describe 'GET /cameras/:id/snapshot.jpg', :focus => true do
+  describe 'GET /cameras/:id/snapshot.jpg' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
