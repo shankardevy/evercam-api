@@ -1,0 +1,104 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://evercam-admin.3scale.net/admin/api/signup.xml
+    body:
+      encoding: US-ASCII
+      string: provider_key=b25bc9166b8805fc26a96f1130578d2b&org_name=forename3+lastname3&username=garrettheaver&email=garrett%40evercam.io&password=bdf2ef2c752591339ac4c1d5c487b37a
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Host:
+      - evercam-admin.3scale.net
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 201
+      message: Created
+    headers:
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Content-Type:
+      - application/xml; charset=utf-8
+      Date:
+      - Tue, 25 Feb 2014 15:26:52 GMT
+      Etag:
+      - '"a449e42f799b567b09208924cb050d68"'
+      Location:
+      - https://evercam-admin.3scale.net/admin/api/signup?id=2445580758862
+      Server:
+      - Apache
+      Set-Cookie:
+      - JSESSIONID=1; path=/
+      - _system_session=BAh7BkkiD3Nlc3Npb25faWQGOgZFRkkiJWU2ZGExYWFlNDljZDcyNjE3MWNjZWI0NWY4Mjk0NTE5BjsAVA%3D%3D--2e2fb65be6bc6ad4691d7f984e990e39b61babcf;
+        path=/; HttpOnly
+      Status:
+      - '201'
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Rack-Cache:
+      - invalidate, pass
+      X-Request-Id:
+      - 74319a0f7ea51fb39561f77c662c77b6
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Content-Length:
+      - '666'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><account><id>2445580758862</id><created_at>2014-02-25T15:26:52Z</created_at><updated_at>2014-02-25T15:26:53Z</updated_at><state>approved</state><org_name>forename3
+        lastname3</org_name><extra_fields></extra_fields><credit_card_stored>false</credit_card_stored><plans><plan
+        default="true"><id>2357355660562</id><name>Default</name><type>account_plan</type><state>hidden</state><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><plan
+        default="true"><id>2357355660552</id><name>Default</name><type>service_plan</type><state>hidden</state><service_id>2555417692712</service_id><approval_required>false</approval_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><plan
+        custom="false" default="true"><id>2357355660572</id><name>Pay As You Go ($20
+        for 10,000 hits)</name><type>application_plan</type><state>published</state><service_id>2555417692712</service_id><end_user_required>false</end_user_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan></plans><users><user><id>2445580894922</id><created_at>2014-02-25T15:26:53Z</created_at><updated_at>2014-02-25T15:26:54Z</updated_at><account_id>2445580758862</account_id><state>active</state><role>admin</role><username>garrettheaver</username><email>garrett@evercam.io</email><extra_fields></extra_fields></user></users><applications><application><id>1409610094562</id><created_at>2014-02-25T15:26:53Z</created_at><updated_at>2014-02-25T15:26:53Z</updated_at><state>live</state><user_account_id>2445580758862</user_account_id><end_user_required>false</end_user_required><application_id>57334cf0</application_id><keys><key>6a52f4b56d37d1c258f41367fb05c1b4</key></keys><plan
+        custom="false" default="true"><id>2357355660572</id><name>Pay As You Go ($20
+        for 10,000 hits)</name><type>application_plan</type><state>published</state><service_id>2555417692712</service_id><end_user_required>false</end_user_required><setup_fee>0.0</setup_fee><cost_per_month>0.0</cost_per_month><trial_period_days/><cancellation_period>0</cancellation_period></plan><name>API
+        signup</name><description>API signup</description><extra_fields></extra_fields></application></applications></account>
+    http_version: 
+  recorded_at: Tue, 25 Feb 2014 15:26:48 GMT
+- request:
+    method: get
+    uri: http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Busers/post%5D=1&app_id=&app_key=&provider_key=b25bc9166b8805fc26a96f1130578d2b
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Host:
+      - su1.3scale.net
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 26 Feb 2014 10:08:53 GMT
+      Content-Type:
+      - application/vnd.3scale-v2.0+xml
+      Content-Length:
+      - '118'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><error code="application_not_found">application
+        with id="" was not found</error>
+    http_version: 
+  recorded_at: Wed, 26 Feb 2014 10:08:50 GMT
+recorded_with: VCR 2.8.0

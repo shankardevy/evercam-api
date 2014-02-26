@@ -21,12 +21,14 @@ describe 'WebApp routes/signup_router' do
 
     context 'when it creates the user' do
       it 'redirects to /login and displays a success message' do
-        post('/signup', params)
+        VCR.use_cassette('API_users/account_creation') do
+          post('/signup', params)
 
-        expect(last_response.location).to end_with('/login')
-        follow_redirect!
+          expect(last_response.location).to end_with('/login')
+          follow_redirect!
 
-        expect(last_response.body).to match(/congratulations/i)
+          expect(last_response.body).to match(/congratulations/i)
+        end
       end
     end
 

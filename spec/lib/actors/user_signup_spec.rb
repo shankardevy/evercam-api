@@ -57,27 +57,33 @@ module Evercam
       describe 'account creation' do
 
         it 'creates a user with a 32 char password' do
-          double = User.expects(:create).with do |inputs|
-            expect(inputs[:password].size).to eq(32)
-          end
+          VCR.use_cassette('API_users/account_creation') do
+            double = User.expects(:create).with do |inputs|
+              expect(inputs[:password].size).to eq(32)
+            end
 
-          double.returns(create(:user))
-          UserSignup.run(valid)
+            double.returns(create(:user))
+            UserSignup.run(valid)
+          end
         end
 
         it 'sends an email confirmation message to the user' do
-          double = Mailers::UserMailer.expects(:confirm).with do |inputs|
-            expect(inputs[:user]).to be_a(User)
-            expect(inputs[:password]).to be_a(String)
-          end
+          VCR.use_cassette('API_users/account_creation') do
+            double = Mailers::UserMailer.expects(:confirm).with do |inputs|
+              expect(inputs[:user]).to be_a(User)
+              expect(inputs[:password]).to be_a(String)
+            end
 
-          double.returns(nil)
-          UserSignup.run(valid)
+            double.returns(nil)
+            UserSignup.run(valid)
+          end
         end
 
         it 'returns the created user' do
-          user = UserSignup.run(valid).result
-          expect(user).to eq(User.first)
+          VCR.use_cassette('API_users/account_creation') do
+            user = UserSignup.run(valid).result
+            expect(user.id).to eq(User.first.id)
+          end
         end
 
       end

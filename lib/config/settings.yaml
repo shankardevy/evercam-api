@@ -22,6 +22,9 @@
     :secret_access_key: <%= ENV['AWS_SECRET_KEY'] %>
     :route53:
       :evr.cm: Z15MY0AN5PFWCW
+  :threescale:
+    :url: https://evercam-admin.3scale.net/
+    :provider_key: <%= ENV['THREESCALE_PROVIDER_KEY'] %>
 
 :development:
   <<: *defaults
