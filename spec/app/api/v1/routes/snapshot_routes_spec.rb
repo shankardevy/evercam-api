@@ -6,7 +6,7 @@ describe 'API routes/snapshots' do
 
   let(:app) { Evercam::APIv1 }
 
-  let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8101).camera }
+  let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
 
 
   describe 'GET /cameras/:id/snapshots' do
@@ -25,6 +25,45 @@ describe 'API routes/snapshots' do
     end
 
   end
+
+  describe 'GET /cameras/:id/snapshot.jpg' do
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
+
+    context 'when snapshot request is correct' do
+
+      context 'and camera is online' do
+        it 'snapshot jpg is returned' do
+          VCR.use_cassette('API_snapshots/jpg_get') do
+            get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+            expect(last_response.status).to eq(200)
+          end
+        end
+      end
+
+      context 'and camera is offline' do
+        it '503 error is returned' do
+          stub_request(:any, /#{camera0.endpoints[0].host}/).to_raise(Net::OpenTimeout)
+          get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+          expect(last_response.status).to eq(503)
+        end
+      end
+
+    end
+
+    context 'when snapshot request is not authenticated' do
+      it 'request is not authorized' do
+        camera0.is_public = false
+        camera0.save
+        get("/cameras/#{snap.camera.exid}/snapshot.jpg")
+        expect(last_response.status).to eq(401)
+      end
+    end
+
+  end
+
   describe 'GET /cameras/:id/snapshots/:timestamp' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }

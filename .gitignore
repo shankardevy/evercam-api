@@ -5,7 +5,6 @@
 
 *.dump
 
-spec/cassettes
 coverage/
 tmp/
 log/
