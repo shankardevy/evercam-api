@@ -1,6 +1,52 @@
 require_relative '../presenters/snapshot_presenter'
 
 module Evercam
+  class V1SnapshotSinatraRoutes < Sinatra::Base
+
+    get '/cameras/:id/snapshot.jpg' do
+      begin
+        camera = ::Camera.by_exid!(params[:id])
+      rescue NotFoundError => e
+        halt 404, e.message
+      end
+
+      begin
+        auth = WithAuth.new(env)
+        auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+      rescue AuthenticationError => e
+        halt 401, e.message
+      end
+
+      response = nil
+
+      camera.endpoints.each do |endpoint|
+        next unless (endpoint.public? rescue false)
+        con = Net::HTTP.new(endpoint.host, endpoint.port)
+
+        begin
+          con.open_timeout = 5
+          response = con.get(camera.config['snapshots']['jpg'])
+          if response.is_a?(Net::HTTPSuccess)
+            break
+          end
+        rescue Net::OpenTimeout
+          # offline
+        rescue Exception => e
+          # we weren't expecting this (famous last words)
+          puts e
+        end
+      end
+      if response.is_a?(Net::HTTPSuccess)
+        headers 'Content-Type' => 'image/jpg; charset=utf8'
+        response.body
+      else
+        status 503
+        'Camera offline'
+      end
+    end
+
+  end
+
   class V1SnapshotRoutes < Grape::API
 
     include WebErrors

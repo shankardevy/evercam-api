@@ -35,6 +35,7 @@ module Evercam
     mount V1UserRoutes
     mount V1CameraRoutes
     mount V1SnapshotRoutes
+    mount V1SnapshotSinatraRoutes
     mount V1ModelRoutes
 
     # bring on the swagger
