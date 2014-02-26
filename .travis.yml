@@ -15,7 +15,8 @@ env:
   matrix:
   - DATABASE_URL="postgres://localhost/evercam_tst"
   global:
-    secure: BTrnsgd5wuCTmOOCsFDZ4+JFUj6bvTmwkYvW3snzLBmA1g58mqA/HdqL50tKdRaCb2/Hw0VfNIRvuEmg3zXY4bwF6OpcLKnnwG78MCQqwkHcMaSIkH8xDSjpwkat/UQIHCGuz5U13nGbb6+7UAjQPufJ5S340y0RnrNSl8ZYUSs=
+  - secure: BTrnsgd5wuCTmOOCsFDZ4+JFUj6bvTmwkYvW3snzLBmA1g58mqA/HdqL50tKdRaCb2/Hw0VfNIRvuEmg3zXY4bwF6OpcLKnnwG78MCQqwkHcMaSIkH8xDSjpwkat/UQIHCGuz5U13nGbb6+7UAjQPufJ5S340y0RnrNSl8ZYUSs=
+  - secure: lhJxEDoWEEbpg6j69WrOkiQupnOKMyPPK2bLTaEtHsaYBU9c5pAOvBeE7MSd2f5WTz1+ZhE//GMPtlkzGn/xrsxFTQvnhEqv0H1kfpAdoeRyt2ySxZX7H5lThscvVEUfNFmYr7MESYzUNkPQOgVBtIuS6eCtXxyJ15aLEKcSXzE=
 
 branches:
   only: master
@@ -29,4 +30,3 @@ deploy:
   run:
   - rake db:migrate
   - restart
-
