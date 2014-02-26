@@ -1,3 +1,6 @@
+require 'nokogiri'
+require_relative '../errors/web'
+
 module Evercam
   module Actors
     class UserSignup < Mutations::Command
@@ -31,6 +34,7 @@ module Evercam
         User.db.transaction do
           User.create(inputs.merge(password: password, country: country)).tap do |user|
             share_remembrance_camera(user)
+            three_scale(user, password)
             Mailers::UserMailer.confirm(user: user, password: password)
           end
         end
@@ -49,6 +53,23 @@ module Evercam
                                sharer: evercam_user)
           end
         end
+      end
+
+      def three_scale(user, password)
+        uri = URI('https://evercam-admin.3scale.net/admin/api/signup.xml')
+        res = Net::HTTP.post_form(uri,
+                                  'provider_key' => Evercam::Config[:threescale][:provider_key],
+                                  'org_name' => user.fullname,
+                                  'username' => user.username,
+                                  'email' => user.email,
+                                  'password' => password,
+        )
+        xml_doc  = Nokogiri::XML(res.body)
+        unless res.is_a?(Net::HTTPSuccess)
+          raise Evercam::WebErrors::BadRequestError, 'Failed to create 3scale account'
+        end
+        user.three_scale = {'app_id' => xml_doc.css('application_id').text, 'app_key' => xml_doc.css('key').text}
+        user.save
       end
 
     end

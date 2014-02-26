@@ -65,4 +65,40 @@ http_interactions:
         signup</name><description>API signup</description><extra_fields></extra_fields></application></applications></account>
     http_version: 
   recorded_at: Tue, 25 Feb 2014 15:26:48 GMT
+- request:
+    method: get
+    uri: http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Busers/post%5D=1&app_id=&app_key=&provider_key=b25bc9166b8805fc26a96f1130578d2b
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+      User-Agent:
+      - Ruby
+      Host:
+      - su1.3scale.net
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Wed, 26 Feb 2014 10:08:53 GMT
+      Content-Type:
+      - application/vnd.3scale-v2.0+xml
+      Content-Length:
+      - '118'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: <?xml version="1.0" encoding="UTF-8"?><error code="application_not_found">application
+        with id="" was not found</error>
+    http_version: 
+  recorded_at: Wed, 26 Feb 2014 10:08:50 GMT
 recorded_with: VCR 2.8.0
