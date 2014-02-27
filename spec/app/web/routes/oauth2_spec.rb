@@ -198,9 +198,7 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context "when given a code for a revoked access token" do
-      let(:revoked_token) { create(:access_token, is_revoked: true, refresh: 'abcdef', client: client0).save }
-      
+    context "for requests that hit 3Scale" do
       before(:each) do
         stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=abcdefgh&provider_key=b25bc9166b8805fc26a96f1130578d2b").
            with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
@@ -209,28 +207,24 @@ describe 'WebApp routes/oauth2_router' do
                      :headers => {})
       end
 
-      it "generates a bad request response" do
-        post_parameters[:code] = revoked_token.refresh_code
-        post("/oauth2/authorize", post_parameters, env)
-        expect(last_response.status).to eq(400)
-      end
-    end
+      context "when given a code for a revoked access token" do
+        let(:revoked_token) { create(:access_token, is_revoked: true, refresh: 'abcdef', client: client0).save }
 
-    context "called for a proper access token" do
-      let(:proper_token) { create(:access_token, is_revoked: false, refresh: 'abcdef', client: client0).save }
-      
-      before(:each) do
-        stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=abcdefgh&provider_key=b25bc9166b8805fc26a96f1130578d2b").
-           with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
-           to_return(:status => 200,
-                     :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
-                     :headers => {})
+        it "generates a bad request response" do
+          post_parameters[:code] = revoked_token.refresh_code
+          post("/oauth2/authorize", post_parameters, env)
+          expect(last_response.status).to eq(400)
+        end
       end
 
-      it "redirects to the redirect URI with appropriate parameters" do
-        post_parameters[:code] = proper_token.refresh_code
-        post("/oauth2/authorize", post_parameters, env)
-        expect(last_response.status).to eq(302)
+      context "called for a proper access token" do
+        let(:proper_token) { create(:access_token, is_revoked: false, refresh: 'abcdef', client: client0).save }
+
+        it "redirects to the redirect URI with appropriate parameters" do
+          post_parameters[:code] = proper_token.refresh_code
+          post("/oauth2/authorize", post_parameters, env)
+          expect(last_response.status).to eq(302)
+        end
       end
     end
 
