@@ -44,7 +44,7 @@ module Evercam
         client = Client.where(exid: params[:client_id]).first
         raise BadRequestError if client.nil?
 
-        three_scale = ::ThreeScale::Client.new(:provider_key => Evercam::Config[:threescale][:provider_id])
+        three_scale = ::ThreeScale::Client.new(:provider_key => Evercam::Config[:threescale][:provider_key])
         response    = three_scale.authrep(app_id: params[:client_id],
                                           app_key: params[:client_secret])
         raise BadRequestError if !response.success?
