@@ -35,8 +35,11 @@ class AccessToken < Sequel::Model
   # Whether or not this token is still valid
   # (i.e. neither expired nor revoked)
   def is_valid?
-    false == is_revoked? &&
-      Time.now <= self.expires_at
+    false == is_revoked? && !is_expired?
+  end
+
+  def is_expired?
+    Time.now > self.expires_at
   end
 
   # Determines who the beneficiary of the
@@ -49,6 +52,11 @@ class AccessToken < Sequel::Model
   # with an access token depending on which applies.
   def target
     user_id ? user : client
+  end
+
+  # This method is needed as 'refresh' seems to be already taken.
+  def refresh_code
+    self[:refresh]
   end
 
 end
