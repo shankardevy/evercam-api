@@ -69,20 +69,53 @@ describe 'API routes/snapshots' do
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
 
-    context 'when snapshot request is correct and type is not specified' do
-      it 'snapshot without image data is returned' do
-        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
-        expect(last_response.json['snapshots'][0]['data']).to be_nil
-        expect(last_response.status).to eq(200)
-      end
-    end
+    context 'when snapshot request is correct' do
 
-    context 'when snapshot request is correct and type is full' do
-      it 'snapshot without image data is returned' do
-        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {type: 'full'}, auth)
-        expect(last_response.json['snapshots'][0]['data']).not_to be_nil
-        expect(last_response.status).to eq(200)
+      let(:instant) { Time.now }
+      let(:s0) { create(:snapshot, camera: camera0, created_at: instant, data: 'xxx') }
+      let(:s1) { create(:snapshot, camera: camera0, created_at: instant+1, data: 'xxx') }
+      let(:s2) { create(:snapshot, camera: camera0, created_at: instant+2, data: 'xxx') }
+
+      before do
+        s0
+        s1
+        s2
       end
+
+      context 'range is specified' do
+        it 'latest snapshot is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.json['snapshots'][0]['created_at']).to eq(s2.created_at.to_i)
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'range is not specified' do
+        it 'specific snapshot is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", {}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.json['snapshots'][0]['created_at']).to eq(s1.created_at.to_i)
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'type is not specified' do
+        it 'snapshot without image data is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'type is full' do
+        it 'snapshot without image data is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {with_data: 'true'}, auth)
+          expect(last_response.json['snapshots'][0]['data']).not_to be_nil
+          expect(last_response.status).to eq(200)
+        end
+      end
+
     end
 
   end

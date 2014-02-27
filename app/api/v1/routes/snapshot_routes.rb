@@ -52,6 +52,9 @@ module Evercam
     include WebErrors
 
     desc 'Returns the list of all snapshots currently stored for this camera'
+    params do
+      requires :id, type: String, desc: "Camera Id."
+    end
     get '/cameras/:id/snapshots' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
@@ -62,16 +65,26 @@ module Evercam
     desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
       entity: Evercam::Presenters::Snapshot
     }
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+      optional :with_data, type: Boolean, desc: "Should it send image data?"
+      optional :range, type: Integer, desc: "Time range in seconds around specified timestamp"
+    end
     get '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
-      snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i))
+      snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
 
-      present Array(snap), with: Presenters::Snapshot, type: params[:type]
+      present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
     end
 
     desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      optional :notes, type: String, desc: "Optional text note for this snapshot"
+    end
     post '/cameras/:id/snapshots' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
@@ -83,6 +96,12 @@ module Evercam
     end
 
     desc 'Stores the supplied snapshot image data for the given timestamp'
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+      requires :data, type: File, desc: "Image file."
+      optional :notes, type: String, desc: "Optional text note for this snapshot"
+    end
     post '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
@@ -94,6 +113,10 @@ module Evercam
     end
 
     desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+    end
     delete '/cameras/:id/snapshots/:timestamp' do
       camera = ::Camera.by_exid!(params[:id])
       auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
