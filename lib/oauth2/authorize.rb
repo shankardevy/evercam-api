@@ -33,7 +33,7 @@ module Evercam
         return redirect_uri unless fragment
 
         encoded = URI.encode_www_form(fragment)
-        URI.join(redirect_uri, "##{encoded}").to_s
+        URI.join(redirect_uri, "?#{encoded}").to_s
       end
 
       def error

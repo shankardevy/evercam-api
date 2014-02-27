@@ -1,4 +1,8 @@
 require 'rack_helper'
+require 'cgi'
+require 'uri'
+require '3scale_client'
+require 'webmock/rspec'
 require_app 'web/app'
 
 describe 'WebApp routes/oauth2_router' do
@@ -9,7 +13,7 @@ describe 'WebApp routes/oauth2_router' do
 
   let(:user0) { camera0.owner }
 
-  let(:client0) { create(:client) }
+  let(:client0) { create(:client, exid: 'client0', callback_uris: nil) }
 
   let(:env) { env_for(session: { user: user0.id }) }
 
@@ -22,117 +26,211 @@ describe 'WebApp routes/oauth2_router' do
     }
   end
 
+  let(:get_parameters) do
+    {client_id: 'client0',
+     redirect_uri: 'https://www.google.com',
+     response_type: 'code',
+     scope: 'cameras:view'}
+  end
+
+  let(:post_parameters) do
+    {client_id: 'client0',
+     client_secret: 'abcdefgh',
+     redirect_uri: 'https://www.google.com',
+     grant_type: 'authorization_code'}
+  end
+
   describe 'GET /oauth2/authorize' do
+
+    context 'when client id is not specified' do
+      it 'generates a bad request response' do
+        get_parameters.delete(:client_id)
+        get('/oauth2/authorize', get_parameters, {})
+        rt = CGI.escape('/oauth2/authorize')
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when a redirect URI is not specified' do
+      it 'generates a bad request response' do
+        get_parameters.delete(:redirect_uri)
+        get('/oauth2/authorize', get_parameters, {})
+        rt = CGI.escape('/oauth2/authorize')
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when a response type is not specified' do
+      it 'generates a bad request response' do
+        get_parameters.delete(:response_type)
+        get('/oauth2/authorize', get_parameters, {})
+        rt = CGI.escape('/oauth2/authorize')
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when an invalid response type is specified' do
+      it 'generates a bad request response' do
+        get_parameters[:response_type] = 'xxxx'
+        get('/oauth2/authorize', get_parameters, {})
+        rt = CGI.escape('/oauth2/authorize')
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when a scope is not specified' do
+      it 'generates a bad request response' do
+        get_parameters.delete(:scope)
+        get('/oauth2/authorize', get_parameters, {})
+        rt = CGI.escape('/oauth2/authorize')
+
+        expect(last_response.status).to eq(400)
+      end
+    end
 
     context 'when the user is not logged in' do
       it 'redirects the visitor to the login page' do
-        get('/oauth2/authorize', {}, {})
+        get('/oauth2/authorize', get_parameters, {})
         rt = CGI.escape('/oauth2/authorize')
 
         expect(last_response.status).to eq(302)
-        expect(last_response.location).
-          to end_with("/login?rt=#{rt}")
+        uri = URI.parse(last_response.location)
+        expect(uri.path).to eq("/login")
       end
     end
 
-    context 'when the request is invalid' do
+    context "when the user is logged in" do
+      context "and the requester does not have the required permissions" do
+        it "shows the grant permissions page" do
+            get('/oauth2/authorize', get_parameters, env)
+            rt = CGI.escape('/oauth2/authorize')
 
-      context 'with an unknown client or an illegal redirect_uri' do
-        it 'redirects the error to the local error page' do
-          params = valid.merge(client_id: 'xxxx')
-          get('/oauth2/authorize', params, env)
-
-          expect(last_response.status).to eq(400)
-          expect(last_response.alerts).to_not be_empty
+            expect(last_response.status).to eq(200)
         end
       end
 
-      context 'with an error not related to the redirect_uri' do
-        it 'redirects the error to the redirect_uri' do
-          params = valid.merge(response_type: 'xxxx')
-          get('/oauth2/authorize', params, env)
-
-          expect(last_response.status).to eq(302)
-          expect(last_response.location).
-            to start_with(client0.default_callback_uri)
-        end
-      end
-
-    end
-
-    context 'when the request is valid' do
-
-      context 'with the user having previously approved all scopes' do
-
-        let(:params) { valid }
-
+      context "and the requester has all the need permissions" do
         before(:each) do
-          create(:access_token, client: client0)
-          AccessRightSet.new(camera0, client0).grant(*AccessRight::BASE_RIGHTS)
-          get('/oauth2/authorize', params, env)
+          token = create(:access_token, client: client0)
+          AccessRightSet.new(camera0, client0).grant(AccessRight::VIEW)
+          token.save
         end
 
-        it 'creates a new access token for the client' do
-          expect(client0.tokens(true).count).to eq(2)
-        end
+        context 'and the request is valid' do
+          it "redirects to the callers redirect URI passing in the authorization code" do
+            get('/oauth2/authorize', get_parameters, env)
+            rt = CGI.escape('/oauth2/authorize')
 
-        it 'redirects back to the redirect_uri' do
-          expect(last_response.status).to eq(302)
-          expect(last_response.location).
-            to start_with(params[:redirect_uri])
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            parameters = CGI::parse(uri.query)
+            expect(uri.host).to eq("www.google.com")
+            expect(uri.scheme).to eq("https")
+            expect(parameters.empty?).to eq(false)
+            expect(parameters.include?("code")).to eq(true)
+          end
         end
-
-        it 'includes the new access token in the fragment' do
-          token = client0.tokens(true).order(:id).last
-          expect(last_response.location).
-            to have_fragment({ access_token: token.request })
-        end
-
       end
-
-      context 'with the user needing to approve one or more scopes' do
-
-        let(:access_token) { create(:access_token, client: client0) }
-
-        let(:camera1) { create(:camera, owner: user0, is_public: false) }
-
-        let(:params) { valid.merge(scope: "camera:view:#{camera1.exid}") }
-
-        before(:each) { get('/oauth2/authorize', params, env) }
-
-        it 'displays the approval request to the user' do
-          expect(last_response.status).to eq(200)
-        end
-
-      end
-
     end
 
   end
 
   describe 'POST /oauth2/authorize' do
+    before(:each) { client0.save }
 
-    let(:camera1) { create(:camera, owner: user0) }
-
-    let(:params) { valid.merge(scope: "camera:snapshot:#{camera1.exid}") }
-
-    context 'when the user approves the authorization' do
-      it 'issues an access token and redirect the user agent' do
-        post('/oauth2/authorize', params.merge(action: 'approve'), env)
-
-        expect(last_response.status).to eq(302)
-        expect(last_response.location).
-          to have_fragment({ access_token: client0.reload.tokens.last.request })
+    context "when given not given a code parameter" do
+      it "generates a bad request response" do
+        post_parameters.delete(:code)
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
       end
     end
 
-    context 'when the user declines the authorization' do
-      it 'redirects the user agent with an :access_denied error' do
-        post('/oauth2/authorize', params.merge(action: 'decline'), env)
+    context "when given not given a client id parameter" do
+      it "generates a bad request response" do
+        post_parameters.delete(:client_id)
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
 
+    context "when given not given a client secret parameter" do
+      it "generates a bad request response" do
+        post_parameters.delete(:client_secret)
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when given not given a redirect URI parameter" do
+      it "generates a bad request response" do
+        post_parameters.delete(:redirect_uri)
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when given not given a grant type parameter" do
+      it "generates a bad request response" do
+        post_parameters.delete(:grant_type)
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when given an invalid grant type parameter" do
+      it "generates a bad request response" do
+        post_parameters[:grant_type] = "bbbb"
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when given non-existent client id parameter" do
+      it "generates a bad request response" do
+        post_parameters[:client_id] = "ningy"
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when given a code for a revoked access token" do
+      let(:revoked_token) { create(:access_token, is_revoked: true, refresh: 'abcdef', client: client0).save }
+      
+      before(:each) do
+        stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=abcdefgh&provider_key=b25bc9166b8805fc26a96f1130578d2b").
+           with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
+           to_return(:status => 200,
+                     :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
+                     :headers => {})
+      end
+
+      it "generates a bad request response" do
+        post_parameters[:code] = revoked_token.refresh_code
+        post("/oauth2/authorize", post_parameters, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "called for a proper access token" do
+      let(:proper_token) { create(:access_token, is_revoked: false, refresh: 'abcdef', client: client0).save }
+      
+      before(:each) do
+        stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=abcdefgh&provider_key=b25bc9166b8805fc26a96f1130578d2b").
+           with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
+           to_return(:status => 200,
+                     :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
+                     :headers => {})
+      end
+
+      it "redirects to the redirect URI with appropriate parameters" do
+        post_parameters[:code] = proper_token.refresh_code
+        post("/oauth2/authorize", post_parameters, env)
         expect(last_response.status).to eq(302)
-        expect(last_response.location).
-          to have_fragment({ error: :access_denied })
       end
     end
 
