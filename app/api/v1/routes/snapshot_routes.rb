@@ -1,5 +1,21 @@
 require_relative '../presenters/snapshot_presenter'
 
+# Disable File validation, it doesn't work
+module Grape
+  module Validations
+    class CoerceValidator < SingleOptionValidator
+      alias_method :validate_param_old!, :validate_param!
+
+      def validate_param!(attr_name, params)
+        unless @option.to_s == 'File'
+          validate_param_old!(attr_name, params)
+        end
+
+      end
+    end
+  end
+end
+
 module Evercam
   class V1SnapshotSinatraRoutes < Sinatra::Base
 
@@ -51,78 +67,81 @@ module Evercam
 
     include WebErrors
 
-    desc 'Returns the list of all snapshots currently stored for this camera'
-    params do
-      requires :id, type: String, desc: "Camera Id."
-    end
-    get '/cameras/:id/snapshots' do
-      camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+    namespace :cameras do
+      params do
+        requires :id, type: String, desc: "Camera Id."
+      end
+      route_param :id do
 
-      present camera.snapshots, with: Presenters::Snapshot, models: true
-    end
+        desc 'Returns the list of all snapshots currently stored for this camera'
+        get 'snapshots' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
-    desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
-      entity: Evercam::Presenters::Snapshot
-    }
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
-      optional :with_data, type: Boolean, desc: "Should it send image data?"
-      optional :range, type: Integer, desc: "Time range in seconds around specified timestamp"
-    end
-    get '/cameras/:id/snapshots/:timestamp' do
-      camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          present camera.snapshots, with: Presenters::Snapshot, models: true
+        end
 
-      snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
+        desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
+          entity: Evercam::Presenters::Snapshot
+        }
+        params do
+          requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+          optional :with_data, type: Boolean, desc: "Should it send image data?"
+          optional :range, type: Integer, desc: "Time range in seconds around specified timestamp"
+        end
+        get 'snapshots/:timestamp' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
-      present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
-    end
+          snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
+          puts params[:with_data]
 
-    desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      optional :notes, type: String, desc: "Optional text note for this snapshot"
-    end
-    post '/cameras/:id/snapshots' do
-      camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+        end
 
-      outcome = Actors::SnapshotFetch.run(params)
-      raise OutcomeError, outcome unless outcome.success?
+        desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
+        params do
+          optional :notes, type: String, desc: "Optional text note for this snapshot"
+        end
+        post 'snapshots' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
-      present Array(outcome.result), with: Presenters::Snapshot
-    end
+          outcome = Actors::SnapshotFetch.run(params)
+          raise OutcomeError, outcome unless outcome.success?
 
-    desc 'Stores the supplied snapshot image data for the given timestamp'
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
-      requires :data, type: File, desc: "Image file."
-      optional :notes, type: String, desc: "Optional text note for this snapshot"
-    end
-    post '/cameras/:id/snapshots/:timestamp' do
-      camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+          present Array(outcome.result), with: Presenters::Snapshot
+        end
 
-      outcome = Actors::SnapshotCreate.run(params)
-      raise OutcomeError, outcome unless outcome.success?
+        desc 'Stores the supplied snapshot image data for the given timestamp'
+        params do
+          requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+          requires :data, type: File, desc: "Image file."
+          optional :notes, type: String, desc: "Optional text note for this snapshot"
+        end
+        post 'snapshots/:timestamp' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
-      present Array(outcome.result), with: Presenters::Snapshot
-    end
+          outcome = Actors::SnapshotCreate.run(params)
+          raise OutcomeError, outcome unless outcome.success?
 
-    desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
-    end
-    delete '/cameras/:id/snapshots/:timestamp' do
-      camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+          present Array(outcome.result), with: Presenters::Snapshot
+        end
 
-      Snapshot.by_ts!(Time.at(params[:timestamp].to_i)).destroy
-      {}
+        desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
+        params do
+          requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+        end
+        delete 'snapshots/:timestamp' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+
+          Snapshot.by_ts!(Time.at(params[:timestamp].to_i)).destroy
+          {}
+        end
+
+      end
     end
 
   end

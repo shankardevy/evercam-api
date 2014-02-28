@@ -173,14 +173,21 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'snapshot is saved to database' do
-        # TODO - file upload test
-        #post("/cameras/#{camera0.exid}/snapshots/12345678", params, auth)
-        #puts last_response.body
-        #expect(last_response.status).to eq(201)
-        #snap = Snapshot.first
-        #expect(snap.notes).to eq('Snap note')
-        #expect(snap.created_at).to be_around_now
-        #expect(snap.camera).to eq(camera0)
+        post("/cameras/#{camera0.exid}/snapshots/12345678", params, auth)
+        expect(last_response.status).to eq(201)
+        snap = Snapshot.first
+        expect(snap.notes).to eq('Snap note')
+        expect(snap.created_at).to be_around_now
+        expect(snap.camera).to eq(camera0)
+        expect(snap.data).not_to be_nil
+      end
+    end
+
+    context 'when data has incorrect file format' do
+      it 'error is returned' do
+        post("/cameras/#{camera0.exid}/snapshots/12345678",
+             params.merge(data: Rack::Test::UploadedFile.new('.gitignore', 'text/plain')), auth)
+        expect(last_response.status).to eq(400)
       end
     end
 
