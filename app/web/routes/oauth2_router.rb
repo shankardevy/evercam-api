@@ -25,6 +25,9 @@ module Evercam
           redirect @req.redirect_to if @req.redirect?
           raise BadRequestError, @req.error unless @req.valid?
 
+          @client_id    = params[:client_id]
+          @redirect_uri = params[:redirect_uri]
+          @scope        = params[:scope]
           erb 'oauth2/authorize'.to_sym
         end
       rescue => error
@@ -33,21 +36,27 @@ module Evercam
       end
     end
 
-    post '/oauth/authorize' do
-      with_user do |user|
-        @req = OAuth2::Authorize.new(user, params)
+    post '/oauth2/authorize' do
+      begin
+        with_user do |user|
+          params[:response_type] = 'code'
+          @req = OAuth2::Authorize.new(user, params)
 
-        redirect @req.redirect_to if @req.redirect?
-        raise BadRequestError, @req.error unless @req.valid?
+          redirect @req.redirect_to if @req.redirect?
+          raise BadRequestError, @req.error unless @req.valid?
 
-        case params[:action]
-          when /approve/i
-            @req.approve!
-          else
-            @req.decline! 
+          case params[:action]
+            when /approve/i
+              @req.approve!
+            else
+              @req.decline! 
+          end
+
+          redirect @req.redirect_to
         end
-
-        redirect @req.redirect_to
+      rescue => error
+        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        raise error
       end
     end
 
