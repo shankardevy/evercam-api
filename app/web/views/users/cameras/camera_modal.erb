@@ -1,7 +1,7 @@
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form id="addCameraForm" class="form-horizontal" role="form" method="POST">
+      <form id="addCameraForm" class="form-horizontal" role="form" method="POST" autocomplete="off">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Add Camera:</h4>
@@ -27,35 +27,6 @@
             </div>
 
             <div class="form-group">
-              <label for="cameraVendor" class="col-sm-3 control-label">Camera Vendor:</label>
-              <div class="col-sm-8" >
-                <select id="cameraVendor" name="cameraVendor" class="form-control">
-                  <option selected="selected" value="-1">-- select model --</option>
-                  <% @vendors.each_with_index  do |v, index| -%>
-                    <option value="<%= v.exid -%>"><%= v.name -%></option>
-                  <% end %>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Camera Model:</label>
-              <div class="col-sm-8" >
-                <% @vendors.each do |v| -%>
-                  <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control hidden">
-                    <% v.firmwares.to_hash(:name).each_with_index  do |m, index| -%>
-                      <% if index == 0 %>
-                      <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
-                      <% else %>
-                      <option value="<%= m[0] -%>" ><%= m[0] -%></option>
-                      <% end %>
-                    <% end -%>
-                  </select>
-                <% end %>
-              </div>
-            </div>
-
-            <div class="form-group">
               <label for="cameraURL" class="col-sm-3 control-label">URL or IP:</label>
               <div class="col-sm-8">
                 <select id="scheme" class="form-control">
@@ -64,6 +35,32 @@
                 </select>
                 <input type="text" class="form-control" value="" id="cameraURL" name="cameraURL" placeholder="Public IP / Dydns">
                 <p>e.g. 149.237.190.68 - or - test.dydns.com</p>
+              </div>
+            </div>
+
+            <div class="form-group adv">
+              <label for="port" class="col-sm-3 control-label">Port:</label>
+              <div class="col-sm-3">
+                <input type="text" class="form-control" value="" id="port" name="port" placeholder="8105">
+              </div>
+            </div>
+
+            <div class="form-group adv">
+              <label for="snapshotPath" class="col-sm-3 control-label">Snapshot path:</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" value="" id="snapshotPath" name="cameraURL" placeholder="/onvif/snapshot">
+                <p>e.g. /Streaming/channels/1/picture</p>
+              </div>
+            </div>
+
+
+            <div class="form-group adv">
+              <label for="username" class="col-sm-3 control-label">Credentials:</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="username" placeholder="Camera Username">
+              </div>
+              <div class="col-sm-4">
+                <input type="Password" class="form-control" id="password" placeholder="Camera Password">
               </div>
             </div>
 
@@ -77,50 +74,10 @@
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="col-sm-3 control-label">Preview:</label>
-              <div class="col-sm-8">
-                <div class="add-preview">
-                  <img class="img-loader" src="/img/ajax-loader.gif" style="display: none;">
-                  <img id="cameraPreview" class="preview" src="">
-                </div>
-                <label>Click on preview area above to refresh</label>
-                <p id="previewError" class="text-danger" style="display: none"><span class="alert-content">Can't connect to camera, please check advanced options.</span></p>
-              </div>
-            </div>
-
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label"></label>
-              <div class="col-sm-8">
-                <label>
-                  <a id="showAdv" href="">Show advanced options <i class="fa fa-caret-square-o-down"></i></a>
-                </label>
-              </div>
-            </div>
-
             <div class="form-group adv" style="display: none">
               <label for="timezone" class="col-sm-3 control-label">Time Zone:</label>
               <div class="col-sm-8">
                 <%= partial 'layouts/_timezones'.to_sym %>
-              </div>
-            </div>
-
-            <div class="form-group adv" style="display: none">
-              <label for="username" class="col-sm-3 control-label">Credentials:</label>
-              <div class="col-sm-4">
-                <input type="text" class="form-control" id="username" placeholder="Username">
-              </div>
-              <div class="col-sm-4">
-                <input type="Password" class="form-control" id="password" placeholder="Password">
-              </div>
-            </div>
-
-            <div class="form-group adv" style="display: none">
-              <label for="snapshotPath" class="col-sm-3 control-label">Snapshot path:</label>
-              <div class="col-sm-8">
-                <input type="text" class="form-control" value="" id="snapshotPath" name="cameraURL" placeholder="/onvif/snapshot">
-                <p>e.g. /Streaming/channels/1/picture</p>
               </div>
             </div>
 

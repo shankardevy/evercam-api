@@ -21,7 +21,7 @@
 
             <div class="right_container">
               <div class="online">
-                <form class="form" role="form" id="cameraForm">
+                <form class="form" role="form" id="cameraForm" autocomplete="off">
 
                   <div class="form-group">
                     <label for="name">Camera Name</label>
@@ -31,6 +31,17 @@
                   <div class="form-group">
                     <label for="name">Camera MAC address</label>
                     <input type="text" class="form-control" value="<%= @camera.mac_address -%>" id="mac" placeholder="Enter camera MAC address">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Snapshot URL</label>
+                    <input type="text" class="form-control" value="<%= @camera.config['snapshots']['jpg'] unless @camera.config['snapshots'].nil? -%>" id="snapshot" placeholder="/onvif/snapshot">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="username">Credentials:</label>
+                    <input type="text" class="form-control" id="username" value="<%= @camera.config['auth']['basic']['username'] unless @camera.config['auth'].nil? -%>" placeholder="Camera Username">
+                    <input type="Password" class="form-control" id="password" value="<%= @camera.config['auth']['basic']['password'] unless @camera.config['auth'].nil? -%>" placeholder="Camera Password">
                   </div>
 
                   <div class="form-group">
@@ -96,7 +107,7 @@
                   Internal URL:
                   <% end %>
                   <span class="endpoint_string"><%= e.to_s -%></span>
-                  <% if i > 0 %>
+                  <% if @camera.endpoints.length > 1 %>
                   <i index="<%= i -%>" class="fa fa-1x fa-times-circle-o icon-align-center pull-right delete-endpoint"></i>
                   <% end %>
                 </div>
@@ -162,6 +173,16 @@
             camera.data.name = $('#name').val();
             toUpdate.push('name');
           }
+          if ((camera.data.snapshots &&  camera.data.snapshots.jpg !== $('#snapshot').val()) ||
+            (camera.data.snapshots === null && $('#snapshot').val())) {
+            camera.data.snapshots = { jpg: $('#snapshot').val() };
+            toUpdate.push('snapshots');
+          }
+          if ((camera.data.auth &&  (camera.data.auth.basic.username !== $('#username').val() || camera.data.auth.basic.password !== $('#password').val())) ||
+            (camera.data.auth === null && $('#username').val() && $('#password').val())) {
+            camera.data.auth = { basic: {username: $('#username').val(), password: $('#password').val() } };
+            toUpdate.push('auth');
+          }
           if (camera.data.mac_address !== $('#mac').val() && (camera.data.mac_address || $('#mac').val())) {
             camera.data.mac_address = $('#mac').val();
             toUpdate.push('mac_address');
@@ -196,7 +217,7 @@
           e.preventDefault();
           $('#urlErrors').hide();
             camera.data.endpoints.push($('#url').val());
-            camera.update('endpoints')
+            camera.update(['endpoints'])
             .done(function() {
               location.reload();
               console.log('updated');
@@ -211,7 +232,7 @@
         $('.delete-endpoint').on('click', function(e) {
           var ep_index = $(this).attr('index');
           camera.data.endpoints.splice(ep_index, 1);
-          camera.update('endpoints')
+          camera.update(['endpoints'])
             .done(function() {
               location.reload();
               console.log('deleted');

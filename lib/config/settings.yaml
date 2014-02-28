@@ -56,6 +56,7 @@
       :mount_path: swagger
       :hide_documentation_path: true
       :base_path: https://dashboard.evercam.io/v1
+      :hide_format: true
   :sidekiq:
     :url: <%= ENV['REDISCLOUD_URL'] %>
     :namespace: sidekiq
