@@ -116,7 +116,7 @@ module Evercam
       entity: Evercam::Presenters::CameraShare
     }
     params do
-      requires :id, type: String, desc: "The unique identifier for a camera"
+      requires :id, type: String, desc: "The unique identifier for a camera."
     end
     get '/cameras/:id/shares' do
       authreport!('shares/get')
@@ -144,6 +144,21 @@ module Evercam
 
       outcome = Actors::ShareCreate.run(params)
       present [outcome.result], with: Presenters::CameraShare
+    end
+
+    desc 'Delete an existing camera share', {}
+    params do
+      requires :id, type: String, desc: "The unique identifier for a camera."
+      requires :share_id, type: Integer, desc: "The unique identifier of the share to be deleted."
+    end
+    delete '/cameras/:id/share' do
+      authreport!('share/delete')
+      camera = ::Camera.by_exid!(params[:id])
+
+      auth.allow? {|token, user| camera.owner_id == (user ? user.id : nil)}
+
+      Actors::ShareDelete.run(params)
+      {}
     end
 
   end
