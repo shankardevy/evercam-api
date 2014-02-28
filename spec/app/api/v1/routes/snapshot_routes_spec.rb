@@ -26,11 +26,104 @@ describe 'API routes/snapshots' do
 
   end
 
+  describe 'GET /cameras/:id/snapshots/range' do
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.at(12345)) }
+    let(:snap2) { create(:snapshot, camera: camera0, created_at: Time.at(123)) }
+
+    before do
+      snap1
+      snap2
+      data = File.read('spec/resources/snapshot.jpg')
+      (1..100).each do |n|
+        Snapshot.create(camera: camera0, created_at: Time.at(n), data: data)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, default no data limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(100)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(15)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, default data limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(10)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(5)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(2)
+      end
+    end
+
+  end
+
+  describe 'GET /cameras/:id/snapshots/latest' do
+
+    let(:camera1) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
+    let(:auth) { env_for(session: { user: camera1.owner.id }) }
+
+    context 'when snapshot request is correct but there are no snapshots' do
+      it 'empty list is returned' do
+        get("/cameras/#{camera1.exid}/snapshots/latest", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(0)
+      end
+    end
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:instant) { Time.now }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: instant) }
+    let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
+    let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
+
+    context 'when snapshot request is correct' do
+      it 'latest snapshot for given camera is returned' do
+        snap1
+        snap2
+        snap3
+        get("/cameras/#{snap.camera.exid}/snapshots/latest", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
+        expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
+        expect(last_response.json['snapshots'][0]['timezone']).to eq('Etc/UTC')
+      end
+    end
+
+
+  end
+
   describe 'GET /cameras/:id/snapshot.jpg' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
-    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
 
     context 'when snapshot request is correct' do
 
@@ -69,20 +162,54 @@ describe 'API routes/snapshots' do
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
 
-    context 'when snapshot request is correct and type is not specified' do
-      it 'snapshot without image data is returned' do
-        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
-        expect(last_response.json['snapshots'][0]['data']).to be_nil
-        expect(last_response.status).to eq(200)
-      end
-    end
+    context 'when snapshot request is correct' do
 
-    context 'when snapshot request is correct and type is full' do
-      it 'snapshot without image data is returned' do
-        get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {type: 'full'}, auth)
-        expect(last_response.json['snapshots'][0]['data']).not_to be_nil
-        expect(last_response.status).to eq(200)
+      let(:instant) { Time.now }
+      let(:s0) { create(:snapshot, camera: camera0, created_at: instant, data: 'xxx') }
+      let(:s1) { create(:snapshot, camera: camera0, created_at: instant+1, data: 'xxx') }
+      let(:s2) { create(:snapshot, camera: camera0, created_at: instant+2, data: 'xxx') }
+
+      before do
+        s0
+        s1
+        s2
       end
+
+      context 'range is specified' do
+        it 'latest snapshot is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.json['snapshots'][0]['created_at']).to eq(s2.created_at.to_i)
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'range is not specified' do
+        it 'specific snapshot is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", {}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.json['snapshots'][0]['created_at']).to eq(s1.created_at.to_i)
+          expect(last_response.json['snapshots'][0]['camera']).to eq(s1.camera.exid)
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'type is not specified' do
+        it 'snapshot without image data is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+          expect(last_response.json['snapshots'][0]['data']).to be_nil
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'type is full' do
+        it 'snapshot without image data is returned' do
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {with_data: 'true'}, auth)
+          expect(last_response.json['snapshots'][0]['data']).not_to be_nil
+          expect(last_response.status).to eq(200)
+        end
+      end
+
     end
 
   end
@@ -140,14 +267,21 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'snapshot is saved to database' do
-        # TODO - file upload test
-        #post("/cameras/#{camera0.exid}/snapshots/12345678", params, auth)
-        #puts last_response.body
-        #expect(last_response.status).to eq(201)
-        #snap = Snapshot.first
-        #expect(snap.notes).to eq('Snap note')
-        #expect(snap.created_at).to be_around_now
-        #expect(snap.camera).to eq(camera0)
+        post("/cameras/#{camera0.exid}/snapshots/12345678", params, auth)
+        expect(last_response.status).to eq(201)
+        snap = Snapshot.first
+        expect(snap.notes).to eq('Snap note')
+        expect(snap.created_at).to be_around_now
+        expect(snap.camera).to eq(camera0)
+        expect(snap.data).not_to be_nil
+      end
+    end
+
+    context 'when data has incorrect file format' do
+      it 'error is returned' do
+        post("/cameras/#{camera0.exid}/snapshots/12345678",
+             params.merge(data: Rack::Test::UploadedFile.new('.gitignore', 'text/plain')), auth)
+        expect(last_response.status).to eq(400)
       end
     end
 

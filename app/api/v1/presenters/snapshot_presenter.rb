@@ -22,14 +22,22 @@ module Evercam
       }
 
       expose :created_at, documentation: {
-        type: 'string',
+        type: 'integer',
         desc: 'Snapshot timestamp',
         required: false
       } do |s,o|
         s.created_at.to_i
       end
 
-      expose :data, if: { type: 'full' }, documentation: {
+      expose :timezone, documentation: {
+        type: 'string',
+        desc: 'Name of the IANA/tz timezone where this camera is located',
+        required: true
+      } do |s,o|
+        s.camera.timezone.zone
+      end
+
+      expose :data, if: { with_data: true }, documentation: {
         type: 'file',
         desc: 'Image data',
         required: false

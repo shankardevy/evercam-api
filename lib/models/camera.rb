@@ -13,6 +13,7 @@ class Camera < Sequel::Model
   one_to_many :shares, class: 'CameraShare'
 
   MAC_ADDRESS_PATTERN = /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/i
+  DEFAULT_RANGE = 1
 
   # Finds the camera with a matching external id
   # (exid) string or nil if none exists
@@ -71,6 +72,17 @@ class Camera < Sequel::Model
     if super
       Point.from_hex_ewkb(super)
     end
+  end
+
+  def snapshot_by_ts(timestamp, range=nil)
+    range ||= DEFAULT_RANGE
+    if range < DEFAULT_RANGE then range = DEFAULT_RANGE end
+    snapshots.order(:created_at).last(:created_at => (timestamp - range + 1).to_s...(timestamp + range).to_s)
+  end
+
+  def snapshot_by_ts!(timestamp, range=nil)
+    snapshot_by_ts(timestamp, range)  || (
+    raise Evercam::NotFoundError, 'Snapshot does not exist')
   end
 
   # Sets the cameras location as a GeoRuby Point

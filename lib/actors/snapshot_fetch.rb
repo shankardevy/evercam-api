@@ -2,8 +2,6 @@ module Evercam
   module Actors
     class SnapshotFetch < Mutations::Command
 
-      TIMEOUT = 5
-
       required do
         string :id
       end
@@ -22,7 +20,7 @@ module Evercam
           con = Net::HTTP.new(endpoint.host, endpoint.port)
 
           begin
-            con.open_timeout = TIMEOUT
+            con.open_timeout = Evercam::Config[:api][:timeout]
             response = con.get(camera.config['snapshots']['jpg'])
             if response.is_a?(Net::HTTPSuccess)
               snapshot = Snapshot.create(
@@ -39,6 +37,10 @@ module Evercam
             # we weren't expecting this (famous last words)
             puts e
           end
+        end
+
+        if snapshot.nil?
+          add_error(:camera, :offline, 'Camera is offline')
         end
 
         snapshot

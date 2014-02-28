@@ -12,6 +12,9 @@ module Evercam
   class NotFoundError < EvercamError
   end
 
+  class CameraOfflineError < EvercamError
+  end
+
   class OutcomeError < EvercamError
 
     def initialize(outcome)

@@ -28,6 +28,11 @@ module Evercam
         error_response({ status: 404, message: e.message })
       end
 
+      # errors where camera is offline
+      base.rescue_from CameraOfflineError do |e|
+        error_response({ status: 503, message: e.message })
+      end
+
       # errors where the endpoint is not implemented yet
       base.rescue_from ComingSoonError do |e|
         error_response({ status: 501, message: 'Sorry, this method is not implemented yet' })
