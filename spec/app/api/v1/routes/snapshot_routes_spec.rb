@@ -55,6 +55,7 @@ describe 'API routes/snapshots' do
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
         expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
+        expect(last_response.json['snapshots'][0]['timezone']).to eq('Etc/UTC')
       end
     end
 

@@ -57,7 +57,7 @@ module Evercam
           if response.is_a?(Net::HTTPSuccess)
             response
           else
-            raise CameraOfflineError.new('Camera offline')
+            raise CameraOfflineError, 'Camera offline'
           end
         end
       end

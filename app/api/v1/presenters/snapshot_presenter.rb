@@ -29,6 +29,14 @@ module Evercam
         s.created_at.to_i
       end
 
+      expose :timezone, documentation: {
+        type: 'string',
+        desc: 'Name of the IANA/tz timezone where this camera is located',
+        required: true
+      } do |s,o|
+        s.camera.timezone.zone
+      end
+
       expose :data, if: { with_data: true }, documentation: {
         type: 'file',
         desc: 'Image data',

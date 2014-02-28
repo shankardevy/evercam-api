@@ -24,7 +24,7 @@ module Evercam
       end
 
       def validate
-        if Snapshot.by_ts(Time.at(timestamp.to_i))
+        if ::Camera.by_exid!(id).snapshot_by_ts(Time.at(timestamp.to_i))
           add_error(:snapshot, :exists, 'Snapshot for this timestamp already exists')
         end
       end
