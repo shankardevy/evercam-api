@@ -17,49 +17,52 @@ module Grape
 end
 
 module Evercam
-  class V1SnapshotSinatraRoutes < Sinatra::Base
+  class V1SnapshotJpgRoutes < Grape::API
+    content_type :img, "image/jpg"
+    formatter :img, lambda { |object, env| object.body }
+    format :img
 
-    get '/cameras/:id/snapshot.jpg' do
-      begin
-        camera = ::Camera.by_exid!(params[:id])
-      rescue NotFoundError => e
-        halt 404, e.message
+    include WebErrors
+
+    namespace :cameras do
+      params do
+        requires :id, type: String, desc: "Camera Id."
       end
+      route_param :id do
+        desc 'Returns jpg from the camera'
+        get 'snapshot.jpg' do
+          camera = ::Camera.by_exid!(params[:id])
 
-      begin
-        auth = WithAuth.new(env)
-        auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
-      rescue AuthenticationError => e
-        halt 401, e.message
-      end
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
-      response = nil
+          response = nil
 
-      camera.endpoints.each do |endpoint|
-        next unless (endpoint.public? rescue false)
-        con = Net::HTTP.new(endpoint.host, endpoint.port)
+          camera.endpoints.each do |endpoint|
+            next unless (endpoint.public? rescue false)
+            con = Net::HTTP.new(endpoint.host, endpoint.port)
 
-        begin
-          con.open_timeout =  Evercam::Config[:api][:timeout]
-          response = con.get(camera.config['snapshots']['jpg'])
-          if response.is_a?(Net::HTTPSuccess)
-            break
+            begin
+              con.open_timeout =  Evercam::Config[:api][:timeout]
+              response = con.get(camera.config['snapshots']['jpg'])
+              if response.is_a?(Net::HTTPSuccess)
+                break
+              end
+            rescue Net::OpenTimeout
+              # offline
+            rescue Exception => e
+              # we weren't expecting this (famous last words)
+              puts e
+            end
           end
-        rescue Net::OpenTimeout
-          # offline
-        rescue Exception => e
-          # we weren't expecting this (famous last words)
-          puts e
+          if response.is_a?(Net::HTTPSuccess)
+            response
+          else
+            raise CameraOfflineError.new('Camera offline')
+          end
         end
       end
-      if response.is_a?(Net::HTTPSuccess)
-        headers 'Content-Type' => 'image/jpg; charset=utf8'
-        response.body
-      else
-        status 503
-        'Camera offline'
-      end
     end
+
 
   end
 
@@ -94,7 +97,6 @@ module Evercam
           auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
           snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
-          puts params[:with_data]
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end

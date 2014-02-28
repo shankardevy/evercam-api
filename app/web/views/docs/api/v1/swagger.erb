@@ -23,6 +23,7 @@
     supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
     onComplete: function(swaggerApi, swaggerUi){
       $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+      $('#resources h2').each( function() { $(this).next('ul').find('li:last').remove(); } );
     },
     onFailure: function(data) {
     },
