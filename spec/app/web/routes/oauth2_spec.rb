@@ -139,13 +139,42 @@ describe 'WebApp routes/oauth2_router' do
 
   end
 
-  describe 'POST /oauth2/authorize' do
+  describe 'POST /oauth/authorize' do
+    context "when the rights grant is declined" do
+      it "redirects to the callback URI with an error" do
+        parameters = {action: 'decline', redirect_uri: 'https://www.google.com',
+                      client_id: client0.exid, scope: 'cameras:view'}
+        post("/oauth2/authorize", parameters, env)
+        expect(last_response.status).to eq(302)
+        uri = URI.parse(last_response.location)
+        values = CGI.parse(uri.query)
+        expect(uri.host).to eq("www.google.com")
+        expect(values.include?("error")).to eq(true)
+        expect(values["error"]).to eq(["access_denied"])
+      end
+    end
+
+    context "when the rights grant is approved" do
+      it "redirects to the callback URI with a code" do
+        parameters = {action: 'approve', redirect_uri: 'https://www.google.com',
+                      client_id: client0.exid, scope: 'cameras:view'}
+        post("/oauth2/authorize", parameters, env)
+        expect(last_response.status).to eq(302)
+        uri = URI.parse(last_response.location)
+        values = CGI.parse(uri.query)
+        expect(uri.host).to eq("www.google.com")
+        expect(values.include?("code")).to eq(true)
+      end
+    end
+  end
+
+  describe 'POST /oauth2/token' do
     before(:each) { client0.save }
 
     context "when given not given a code parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:code)
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -153,7 +182,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given not given a client id parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:client_id)
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -161,7 +190,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given not given a client secret parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:client_secret)
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -169,7 +198,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given not given a redirect URI parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:redirect_uri)
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -177,7 +206,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given not given a grant type parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:grant_type)
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -185,7 +214,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given an invalid grant type parameter" do
       it "generates a bad request response" do
         post_parameters[:grant_type] = "bbbb"
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -193,7 +222,7 @@ describe 'WebApp routes/oauth2_router' do
     context "when given non-existent client id parameter" do
       it "generates a bad request response" do
         post_parameters[:client_id] = "ningy"
-        post("/oauth2/authorize", post_parameters, env)
+        post("/oauth2/token", post_parameters, env)
         expect(last_response.status).to eq(400)
       end
     end
@@ -212,7 +241,7 @@ describe 'WebApp routes/oauth2_router' do
 
         it "generates a bad request response" do
           post_parameters[:code] = revoked_token.refresh_code
-          post("/oauth2/authorize", post_parameters, env)
+          post("/oauth2/token", post_parameters, env)
           expect(last_response.status).to eq(400)
         end
       end
@@ -222,7 +251,7 @@ describe 'WebApp routes/oauth2_router' do
 
         it "redirects to the redirect URI with appropriate parameters" do
           post_parameters[:code] = proper_token.refresh_code
-          post("/oauth2/authorize", post_parameters, env)
+          post("/oauth2/token", post_parameters, env)
           expect(last_response.status).to eq(302)
         end
       end

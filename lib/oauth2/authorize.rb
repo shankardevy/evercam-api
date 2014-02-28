@@ -65,6 +65,10 @@ module Evercam
         @decline = true
       end
 
+      def redirect_uri
+        @params[:redirect_uri] || client.default_callback_uri
+      end
+
       private
 
       def scopes
@@ -120,10 +124,6 @@ module Evercam
             end
           end
         end
-      end
-
-      def redirect_uri
-        @params[:redirect_uri] || client.default_callback_uri
       end
 
       def fragment
