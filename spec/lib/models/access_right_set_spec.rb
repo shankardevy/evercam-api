@@ -36,6 +36,7 @@ describe AccessRightSet do
 					rights = AccessRightSet.new(camera, user)
 
 					expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
+					expect(rights.allow?(AccessRight::LIST)).to eq(false)
 					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
@@ -53,11 +54,12 @@ describe AccessRightSet do
 			context "and the user is not the resource owner" do
 				let(:user) { create(:user, id: -100) }
 
-				it "returns true only for the snapshot and view rights" do
+				it "returns true only for the snapshot and list rights" do
 					rights = AccessRightSet.new(camera, user)
 
 					expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(true)
-					expect(rights.allow?(AccessRight::VIEW)).to eq(true)
+					expect(rights.allow?(AccessRight::LIST)).to eq(true)
+					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
@@ -76,6 +78,7 @@ describe AccessRightSet do
 				rights = AccessRightSet.new(camera, user)
 
 				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(true)
+				expect(rights.allow?(AccessRight::LIST)).to eq(true)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(true)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(true)
@@ -96,6 +99,7 @@ describe AccessRightSet do
 				rights = AccessRightSet.new(camera, client)
 
 				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
+				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)
@@ -120,6 +124,7 @@ describe AccessRightSet do
 			it "doesn't grant rights that aren't explcitly specified" do
 				rights.grant(AccessRight::VIEW)
 				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
+				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)
@@ -151,6 +156,7 @@ describe AccessRightSet do
 			it "doesn't grant rights that aren't explcitly specified" do
 				rights.grant(AccessRight::VIEW)
 				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
+				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)

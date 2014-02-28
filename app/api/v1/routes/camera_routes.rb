@@ -1,4 +1,5 @@
 require_relative '../presenters/camera_presenter'
+require_relative '../presenters/camera_share_presenter'
 
 module Evercam
   class V1CameraRoutes < Grape::API
@@ -109,6 +110,40 @@ module Evercam
       auth.allow? { |r| camera.allow?(:edit, r) }
       camera.destroy
       {}
+    end
+
+    desc 'Get the list of shares for a specified camera', {
+      entity: Evercam::Presenters::CameraShare
+    }
+    params do
+      requires :id, type: String, desc: "The unique identifier for a camera"
+    end
+    get '/cameras/:id/shares' do
+      authreport!('shares/get')
+      camera = ::Camera.by_exid!(params[:id])
+      auth.allow? {|token| camera.allow?(AccessRight::VIEW, token)}
+
+      shares = CameraShare.where(camera_id: camera.id).to_a
+      present shares, with: Presenters::CameraShare
+    end
+
+    desc 'Create a new camera share', {
+      entity: Evercam::Presenters::CameraShare
+    }
+    params do
+      requires :email, type: String, desc: "Email address of user to share the camera with."
+      requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
+      optional :message, String, desc: "Not currently used."
+      optional :notify, type: Boolean, desc: "Not currently used."
+    end
+    post '/cameras/:id/share' do
+      authreport!('share/post')
+      camera = ::Camera.by_exid!(params[:id])
+
+      auth.allow? {|token, user| camera.owner_id == (user ? user.id : nil)}
+
+      outcome = Actors::ShareCreate.run(params)
+      present [outcome.result], with: Presenters::CameraShare
     end
 
   end
