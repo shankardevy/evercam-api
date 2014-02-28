@@ -15,7 +15,7 @@ module Evercam
 
       let(:valid) do
         {
-          response_type: 'token',
+          response_type: 'code',
           client_id: client0.exid,
           redirect_uri: client0.default_callback_uri,
           scope: "camera:view:#{camera0.exid}"
@@ -72,7 +72,7 @@ module Evercam
           let(:params) { valid.merge(response_type: 'xxxx') }
 
           its(:redirect?) { should eq(true) }
-          its(:redirect_to) { should have_fragment({ error: :unsupported_response_type }) }
+          its(:redirect_to) { should have_parameter({ error: :unsupported_response_type }) }
           its(:error) { should match(/response_type/) }
         end
 
@@ -80,7 +80,7 @@ module Evercam
           let(:params) { valid.merge(scope: 'a:b:c') }
 
           its(:redirect?) { should eq(true) }
-          its(:redirect_to) { should have_fragment({ error: :invalid_scope }) }
+          its(:redirect_to) { should have_parameter({ error: :invalid_scope }) }
           its(:error) { should match(/scope/) }
         end
 
@@ -95,7 +95,7 @@ module Evercam
 
         its(:valid?) { should eq(false) }
         its(:redirect?) { should eq(true) }
-        its(:redirect_to) { should have_fragment({ error: :access_denied }) }
+        its(:redirect_to) { should have_parameter({ error: :access_denied }) }
         its(:error) { should match(/cannot grant/) }
 
       end
@@ -127,12 +127,8 @@ module Evercam
         end
 
         it 'includes the token in the redirect fragment' do
-          expect(subject.redirect_to).to have_fragment({
-            access_token: subject.token.request,
-            expires_in: subject.token.expires_in,
-            token_type: :bearer,
-            username: user0.username
-          })
+          expect(subject.redirect_to).to have_parameter({
+            code: subject.token.refresh_code})
         end
 
       end
@@ -233,12 +229,8 @@ module Evercam
         end
 
         it 'includes the token in the redirect fragment' do
-          expect(subject.redirect_to).to have_fragment({
-            access_token: subject.token.request,
-            expires_in: subject.token.expires_in,
-            token_type: :bearer,
-            username: user0.username
-          })
+          expect(subject.redirect_to).to have_parameter({
+            code: subject.token.refresh_code})
         end
 
       end
@@ -258,7 +250,7 @@ module Evercam
         before(:each) { subject.decline! }
 
         its(:redirect?) { should eq(true) }
-        its(:redirect_to) { should have_fragment({ error: :access_denied }) }
+        its(:redirect_to) { should have_parameter({ error: :access_denied }) }
         its(:error) { should match(/denied/) }
 
       end

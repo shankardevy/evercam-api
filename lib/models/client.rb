@@ -15,11 +15,19 @@ class Client < Sequel::Model
   end
 
   def default_callback_uri
-    callback_uris.first
+    callback_uris ? callback_uris.first : nil
   end
 
   def allow_callback_uri?(val)
-    val.nil? ? false : callback_uris.any? {|uri| val[0, uri.length] == uri}
+    result = false
+    if !val.nil?
+      if !callback_uris.nil?
+        result = callback_uris.any? {|uri| val[0, uri.length] == uri}
+      else
+        result = true
+      end
+    end
+    result
   end
 
 end

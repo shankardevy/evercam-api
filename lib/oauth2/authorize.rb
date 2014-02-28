@@ -7,8 +7,11 @@ module Evercam
       attr_reader :token
 
       def initialize(user, params)
+        require 'pp'
+        PP.pp params
         @user, @params = user, params
-        @token = AccessToken.new(client: client)
+        @token = AccessToken.new(client: client,
+                                 refresh: SecureRandom.base64(24))
         issue_access_token if valid? && missing.empty?
       end
 
@@ -30,7 +33,7 @@ module Evercam
         return redirect_uri unless fragment
 
         encoded = URI.encode_www_form(fragment)
-        URI.join(redirect_uri, "##{encoded}").to_s
+        URI.join(redirect_uri, "?#{encoded}").to_s
       end
 
       def error
@@ -78,7 +81,7 @@ module Evercam
       end
 
       def validate_type
-        @params[:response_type] == 'token'
+        @params[:response_type] == 'code'
       end
 
       def validate_scopes
@@ -156,10 +159,7 @@ module Evercam
           }
         elsif @token
           {
-            access_token: @token.request,
-            expires_in: @token.expires_in,
-            username: @user.username,
-            token_type: :bearer
+            code: @token.refresh_code
           }
         else
           nil
