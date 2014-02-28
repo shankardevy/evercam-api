@@ -39,11 +39,14 @@ module Evercam
 
           camera.endpoints.each do |endpoint|
             next unless (endpoint.public? rescue false)
-            con = Net::HTTP.new(endpoint.host, endpoint.port)
+            uri = URI(endpoint.to_s + camera.config['snapshots']['jpg'])
+            req = Net::HTTP::Get.new(uri)
+            req.basic_auth camera.config['auth']['basic']['username'], camera.config['auth']['basic']['password'] unless camera.config['auth'].nil?
 
             begin
-              con.open_timeout =  Evercam::Config[:api][:timeout]
-              response = con.get(camera.config['snapshots']['jpg'])
+              response = Net::HTTP.start(uri.hostname, uri.port) {|http|
+                http.request(req)
+              }
               if response.is_a?(Net::HTTPSuccess)
                 break
               end
