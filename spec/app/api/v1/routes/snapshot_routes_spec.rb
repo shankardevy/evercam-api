@@ -26,6 +26,64 @@ describe 'API routes/snapshots' do
 
   end
 
+  describe 'GET /cameras/:id/snapshots/range' do
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.at(12345)) }
+    let(:snap2) { create(:snapshot, camera: camera0, created_at: Time.at(123)) }
+
+    before do
+      snap1
+      snap2
+      data = File.read('spec/resources/snapshot.jpg')
+      (1..100).each do |n|
+        Snapshot.create(camera: camera0, created_at: Time.at(n), data: data)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, default no data limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(100)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(15)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, default data limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(10)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned, limit is applied' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(5)
+      end
+    end
+
+    context 'when snapshot request is correct' do
+      it 'all snapshots within given range are returned' do
+        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(2)
+      end
+    end
+
+  end
+
   describe 'GET /cameras/:id/snapshots/latest' do
 
     let(:camera1) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }

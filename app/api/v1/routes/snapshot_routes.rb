@@ -70,6 +70,9 @@ module Evercam
 
     include WebErrors
 
+    DEFAULT_LIMIT_WITH_DATA = 10
+    DEFAULT_LIMIT_NO_DATA = 100
+
     namespace :cameras do
       params do
         requires :id, type: String, desc: "Camera Id."
@@ -95,6 +98,31 @@ module Evercam
           auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
           snap = camera.snapshots.order(:created_at).last
+
+          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+        end
+
+        desc 'Returns list of snapshots between two timestamps'
+        params do
+          requires :from, type: Integer, desc: "From Unix timestamp."
+          requires :to, type: Integer, desc: "To Unix timestamp."
+          optional :with_data, type: Boolean, desc: "Should it send image data?"
+          optional :limit, type: Integer, desc: "Limit number of results, default 100 with no data, 10 with data"
+        end
+        get 'snapshots/range' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          from = Time.at(params[:from].to_i).to_s
+          to = Time.at(params[:to].to_i).to_s
+
+          limit = params[:limit]
+          if params[:with_data]
+            limit ||= DEFAULT_LIMIT_WITH_DATA
+          else
+            limit ||= DEFAULT_LIMIT_NO_DATA
+          end
+
+          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit)
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
