@@ -26,11 +26,45 @@ describe 'API routes/snapshots' do
 
   end
 
+  describe 'GET /cameras/:id/snapshots/latest' do
+
+    let(:camera1) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
+    let(:auth) { env_for(session: { user: camera1.owner.id }) }
+
+    context 'when snapshot request is correct but there are no snapshots' do
+      it 'empty list is returned' do
+        get("/cameras/#{camera1.exid}/snapshots/latest", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'].length).to eq(0)
+      end
+    end
+
+    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:instant) { Time.now }
+    let(:snap) { create(:snapshot, camera: camera0) }
+    let(:snap1) { create(:snapshot, camera: camera0, created_at: instant) }
+    let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
+    let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
+
+    context 'when snapshot request is correct' do
+      it 'latest snapshot for given camera is returned' do
+        snap1
+        snap2
+        snap3
+        get("/cameras/#{snap.camera.exid}/snapshots/latest", {}, auth)
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
+        expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
+      end
+    end
+
+
+  end
+
   describe 'GET /cameras/:id/snapshot.jpg' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:snap) { create(:snapshot, camera: camera0) }
-    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
 
     context 'when snapshot request is correct' do
 
@@ -96,6 +130,7 @@ describe 'API routes/snapshots' do
           get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", {}, auth)
           expect(last_response.json['snapshots'][0]['data']).to be_nil
           expect(last_response.json['snapshots'][0]['created_at']).to eq(s1.created_at.to_i)
+          expect(last_response.json['snapshots'][0]['camera']).to eq(s1.camera.exid)
           expect(last_response.status).to eq(200)
         end
       end

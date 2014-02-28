@@ -84,6 +84,21 @@ module Evercam
           present camera.snapshots, with: Presenters::Snapshot, models: true
         end
 
+        desc 'Returns latest snapshot stored for this camera', {
+          entity: Evercam::Presenters::Snapshot
+        }
+        params do
+          optional :with_data, type: Boolean, desc: "Should it send image data?"
+        end
+        get 'snapshots/latest' do
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          snap = camera.snapshots.order(:created_at).last
+
+          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+        end
+
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
         }
@@ -96,7 +111,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
           auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
 
-          snap = Snapshot.by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
+          snap = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
@@ -139,7 +154,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
           auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
 
-          Snapshot.by_ts!(Time.at(params[:timestamp].to_i)).destroy
+          camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i)).destroy
           {}
         end
 
