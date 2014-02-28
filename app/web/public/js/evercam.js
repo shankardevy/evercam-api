@@ -168,7 +168,7 @@
     }
     return $.ajax({
       type: 'PATCH',
-      url: url(this.base, self.data.id),
+      url: url(Evercam.Camera.base, self.data.id),
       dataType: 'json',
       data: newdata
     });
