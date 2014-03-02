@@ -11,9 +11,9 @@
 <br />
 <div>
   <form method='POST'>
-    <input type="hidden" name="redirect_uri" value="@redirect_uri"></input>
-    <input type="hidden" name="redirect_uri" value="@client_id"></input>
-    <input type="hidden" name="scope" value="@scope"></input>
+    <input type="hidden" name="redirect_uri" value="<%= @redirect_uri %>"></input>
+    <input type="hidden" name="client_id" value="<%= @client_id %>"></input>
+    <input type="hidden" name="scope" value="<%= @scope %>"></input>
     <button type='submit' name='action' value='approve' class='btn btn-success'>
       Approve
     </button>

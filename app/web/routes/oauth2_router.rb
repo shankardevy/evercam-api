@@ -95,7 +95,7 @@ module Evercam
                     expires_in:    (access_token.expires_at.to_i - Time.now.to_i),
                     refresh_token: access_token.refresh_code,
                     token_type:    :bearer}
-        redirect URI.join(redirect_uri, "##{URI.encode_www_form(settings)}").to_s 
+        redirect URI.join(redirect_uri, "?#{URI.encode_www_form(settings)}").to_s 
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
         raise error
