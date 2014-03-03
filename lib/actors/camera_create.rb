@@ -84,7 +84,12 @@ module Evercam
           config: {}
         })
 
-        camera.values[:config][:snapshots] = inputs[:snapshots] if inputs[:snapshots]
+        if inputs[:snapshots]
+          camera.values[:config][:snapshots] = inputs[:snapshots]
+          camera.values[:config][:snapshots].each do |_, value|
+            value.prepend('/') if value[0,1] != '/'
+          end
+        end
         camera.values[:config][:auth] = inputs[:auth] if inputs[:auth]
         camera.timezone = timezone if timezone
         camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model

@@ -43,42 +43,36 @@ describe 'API routes/snapshots' do
     end
 
     context 'when snapshot request is correct' do
-      it 'all snapshots within given range are returned, default no data limit is applied' do
-        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['snapshots'].length).to eq(100)
-      end
-    end
+      context 'all snapshots within given range are returned' do
+        it 'applies default no data limit' do
+          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(100)
+        end
 
-    context 'when snapshot request is correct' do
-      it 'all snapshots within given range are returned, limit is applied' do
-        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['snapshots'].length).to eq(15)
-      end
-    end
+        it 'applies specified limit' do
+          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(15)
+        end
 
-    context 'when snapshot request is correct' do
-      it 'all snapshots within given range are returned, default data limit is applied' do
-        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['snapshots'].length).to eq(10)
-      end
-    end
+        it 'applies default data limit' do
+          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(10)
+        end
 
-    context 'when snapshot request is correct' do
-      it 'all snapshots within given range are returned, limit is applied' do
-        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['snapshots'].length).to eq(5)
-      end
-    end
+        it 'applies specified limit' do
+          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(5)
+        end
 
-    context 'when snapshot request is correct' do
-      it 'all snapshots within given range are returned' do
-        get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['snapshots'].length).to eq(2)
+        it 'returns only two entries' do
+          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(2)
+        end
       end
     end
 
@@ -128,7 +122,7 @@ describe 'API routes/snapshots' do
     context 'when snapshot request is correct' do
 
       context 'and camera is online' do
-        it 'snapshot jpg is returned' do
+        it 'returns snapshot jpg' do
           VCR.use_cassette('API_snapshots/jpg_get') do
             get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
             expect(last_response.status).to eq(200)
@@ -136,9 +130,35 @@ describe 'API routes/snapshots' do
         end
       end
 
+      context 'and camera is online and requires basic auth' do
+        context 'auth is not provided' do
+          it 'returns 403 error' do
+            VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
+              snap.camera.config = {snapshots: { jpg: '/Streaming/channels/1/picture'}};
+              snap.camera.save
+              get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+              expect(last_response.status).to eq(403)
+            end
+          end
+        end
+
+        context 'auth is provided' do
+          it 'returns snapshot jpg' do
+            VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
+              snap.camera.config = {snapshots: { jpg: '/Streaming/channels/1/picture'},
+                                    auth: {basic: {username: 'admin', password: 'mehcam'}}};
+              snap.camera.save
+              get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+              expect(last_response.status).to eq(200)
+            end
+          end
+        end
+      end
+
       context 'and camera is offline' do
         it '503 error is returned' do
-          stub_request(:any, /#{camera0.endpoints[0].host}/).to_raise(Net::OpenTimeout)
+          response = Typhoeus::Response.new({:return_code => :operation_timedout})
+          Typhoeus.stub(/#{camera0.endpoints[0].host}/).and_return(response)
           get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
           expect(last_response.status).to eq(503)
         end

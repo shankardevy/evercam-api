@@ -10,6 +10,7 @@ gem 'rake'
 gem 'sinatra'
 gem 'pony'
 gem 'json'
+gem 'typhoeus'
 
 gem 'grape'
 gem 'grape-entity'

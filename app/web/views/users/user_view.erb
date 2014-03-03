@@ -24,8 +24,8 @@
         <div class="col-md-8 col-sm-12">
           <div class="right_container">
             <div>
-              <h4><a href="<%= c.url -%>"><%= c.exid -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
-              <small class="text-muted"><%= c.name -%></small>
+              <h4><a href="<%= c.url -%>"><%= c.name -%></a> <i exid="<%= c.exid -%>" class="fa fa-1x fa-times-circle-o icon-align-center delete-camera"></i></h4>
+              <small class="text-muted"><%= c.exid -%></small>
               <div class="positionTest">
                 <% if c.is_online == true %>
                   <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>

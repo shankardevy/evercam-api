@@ -1,11 +1,11 @@
 /*!
- * Evercam JavaScript Library v0.2.0
+ * Evercam JavaScript Library v0.2.1
  * http://evercam.io/
  *
  * Copyright 2014 Evercam.io
  * Released under the MIT license
  *
- * Date: 2014-02-27
+ * Date: 2014-03-03
  */
 (function(window, $) {
 
@@ -30,38 +30,38 @@
     },
 
     Model: {
-      base: 'models',
+      base: url.bind(this, 'models'),
 
       all: function() {
-        return $.getJSON(url(this.base)).then(function(data) {
+        return $.getJSON(this.url()).then(function(data) {
           return data.vendors;
         });
       },
 
       by_vendor: function (vid) {
-        return $.getJSON(url(this.base, vid)).then(function(data) {
+        return $.getJSON(this.url(vid)).then(function(data) {
           return data.vendors[0];
         });
       },
 
       by_model: function (vid, mid) {
-        return $.getJSON(url(this.base, vid + '/' + mid)).then(function(data) {
+        return $.getJSON(this.url(vid + '/' + mid)).then(function(data) {
           return data.models[0];
         });
       }
     },
 
     Vendor: {
-      base: 'vendors',
+      url: url.bind(this, 'vendors'),
 
       all: function () {
-        return $.getJSON(url(this.base)).then(function(data) {
+        return $.getJSON(this.url()).then(function(data) {
           return data.vendors;
         });
       },
 
       by_mac: function (mac) {
-        return $.getJSON(url(this.base, mac)).then(function(data) {
+        return $.getJSON(this.url(mac)).then(function(data) {
           return data.vendors;
         });
       }
@@ -83,23 +83,23 @@
   // USER DEFINITION
   // ====
 
-  Evercam.User.base = 'users';
+  Evercam.User.url = url.bind(this, 'users');
 
   Evercam.User.create = function (params) {
-    return $.post(url(this.base), params).then(function(data) {
+    return $.post(this.url(), params).then(function(data) {
       return data.users[0];
     });
   };
 
   Evercam.User.cameras = function (uid) {
-    return $.getJSON(url(this.base, uid + '/cameras')).then(function(data) {
+    return $.getJSON(this.url(uid + '/cameras')).then(function(data) {
       return data.cameras;
     });
   };
 
   Evercam.User.by_login = function (login) {
     var user = new Evercam.User(login);
-    return $.getJSON(url(this.base, login)).then(function (data) {
+    return $.getJSON(this.url(login)).then(function (data) {
       user.data = data.users[0];
       return user;
     });
@@ -116,7 +116,7 @@
     }
     return $.ajax({
       type: 'PATCH',
-      url: url(self.base, self.login),
+      url: Evercam.User.url(self.login),
       dataType: 'json',
       data: newdata
     });
@@ -125,11 +125,11 @@
   // CAMERA DEFINITION
   // =======================
 
-  Evercam.Camera.base = 'cameras';
+  Evercam.Camera.url = url.bind(this, 'cameras');
 
   Evercam.Camera.by_id = function (id) {
     var camera = new Evercam.Camera(id);
-    return $.getJSON(url(this.base, id)).then(function (data) {
+    return $.getJSON(this.url(id)).then(function (data) {
       camera.data = data.cameras[0];
       return camera;
     });
@@ -138,7 +138,7 @@
   Evercam.Camera.remove = function (id) {
     return $.ajax({
       type: 'DELETE',
-      url: url(this.base, id),
+      url: this.url(id),
       dataType: 'json',
       data: {}
     });
@@ -147,14 +147,14 @@
   Evercam.Camera.create = function (params) {
     return $.ajax({
       type: 'POST',
-      url: url(this.base),
+      url: this.url(),
       dataType: 'json',
       data: params
     });
   };
 
   Evercam.Camera.snapshotUrl = function (id) {
-    return url(this.base, id + '/snapshot.jpg');
+    return this.url(id + '/snapshot.jpg');
   };
 
   Evercam.Camera.prototype.update = function (fields) {
@@ -168,7 +168,7 @@
     }
     return $.ajax({
       type: 'PATCH',
-      url: url(Evercam.Camera.base, self.data.id),
+      url: Evercam.Camera.url(self.data.id),
       dataType: 'json',
       data: newdata
     });

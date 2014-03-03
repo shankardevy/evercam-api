@@ -292,6 +292,15 @@ describe 'API routes/cameras' do
       end
     end
 
+    context 'when snapshot url doesnt start with slash' do
+      it 'returns a OK status' do
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}, auth)
+        expect(last_response.json['cameras'][0]['snapshots']['jpg']).to eq('/image.jpg')
+        expect(last_response.status).to eq(200)
+      end
+    end
+
     context 'when no authentication is provided' do
       it 'returns an UNAUTHROZIED status' do
         expect(patch("/cameras/#{camera.exid}", params).status).to eq(401)
