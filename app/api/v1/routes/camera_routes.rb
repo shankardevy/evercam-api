@@ -163,6 +163,11 @@ module Evercam
       {}
     end
 
+    desc 'Update an existing camera share (COMING SOON)'
+    patch '/cameras/share/:id' do
+      raise ComingSoonError
+    end
+
   end
 end
 
