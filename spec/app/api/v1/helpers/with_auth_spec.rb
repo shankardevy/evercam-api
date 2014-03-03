@@ -12,9 +12,9 @@ module Evercam
 
       let(:env) { { 'rack.session' => {} } }
 
-      describe '#token' do
+      describe '#access_token' do
         it 'returns nil' do
-          expect(subject.token).to be_nil
+          expect(subject.access_token).to be_nil
         end
       end
 
@@ -26,9 +26,9 @@ module Evercam
 
         let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic xxxx' } }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'raises an AuthenticationError' do
-            expect{ subject.token }.to raise_error(AuthenticationError)
+            expect{ subject.access_token }.to raise_error(AuthenticationError)
           end
         end
 
@@ -38,9 +38,9 @@ module Evercam
 
         let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic eDp5' } }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'returns the users permanent token' do
-            expect(subject.token).to eq(user.token)
+            expect(subject.access_token).to eq(user.token)
           end
         end
 
@@ -54,9 +54,9 @@ module Evercam
 
         let(:env) { env_for(session: { user: '0' }) }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'raises an AuthenticationError' do
-            expect{ subject.token }.to raise_error(AuthenticationError)
+            expect{ subject.access_token }.to raise_error(AuthenticationError)
           end
         end
 
@@ -66,9 +66,9 @@ module Evercam
 
         let(:env) { env_for(session: { user: user.id }) }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'returns the users permanent token' do
-            expect(subject.token).to eq(user.token)
+            expect(subject.access_token).to eq(user.token)
           end
         end
 
@@ -86,9 +86,9 @@ module Evercam
 
         before(:each) { token.delete }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'raises an AuthenticationError' do
-            expect{ subject.token }.to raise_error(AuthenticationError)
+            expect{ subject.access_token }.to raise_error(AuthenticationError)
           end
         end
 
@@ -98,18 +98,18 @@ module Evercam
 
         before(:each) { token.update(is_revoked: true) }
 
-        describe '#token' do
+        describe '#access_token' do
           it 'raises an AuthenticationError' do
-            expect{ subject.token }.to raise_error(AuthenticationError)
+            expect{ subject.access_token }.to raise_error(AuthenticationError)
           end
         end
 
       end
 
       context 'when the token is valid' do
-        describe '#token' do
+        describe '#access_token' do
           it 'it returns the temporary access token' do
-            expect(subject.token).to eq(token)
+            expect(subject.access_token).to eq(token)
           end
         end
       end

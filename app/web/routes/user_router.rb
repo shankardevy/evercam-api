@@ -53,5 +53,20 @@ module Evercam
       erb 'users/cameras/camera_view'.to_sym
     end
 
+    get '/user' do
+      user = auth.user
+      raise NotFoundError, 'Not logged in' unless user
+
+      content_type :json
+      {id:         user.username,
+       forename:   user.forename,
+       lastname:   user.lastname,
+       username:   user.username,
+       email:      user.email,
+       country:    user.country.iso3166_a2,
+       created_at: user.created_at.to_i,
+       updated_at: user.updated_at.to_i}.to_json
+    end
+
   end
 end
