@@ -59,6 +59,8 @@ module Evercam
           end
           if response.is_a?(Net::HTTPSuccess)
             response
+          elsif response.is_a?(Net::HTTPUnauthorized)
+            raise AuthorizationError, 'Please check camera username and password'
           else
             raise CameraOfflineError, 'Camera offline'
           end
