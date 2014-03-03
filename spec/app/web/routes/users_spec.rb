@@ -98,5 +98,40 @@ describe 'WebApp routes/users_router' do
 
   end
 
+  describe 'GET /user' do
+    context 'when a user is not logged in' do
+      it "returns a not found" do
+        get('/user')
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context 'when a user is logged in' do
+      it "returns details for the currently logged in user" do
+        get("/user", {}, auth)
+        expect(last_response.status).to eq(200)
+
+        data = JSON.parse(last_response.body)
+        expect(data.include?("id")).to eq(true)
+        expect(data.include?("forename")).to eq(true)
+        expect(data.include?("lastname")).to eq(true)
+        expect(data.include?("username")).to eq(true)
+        expect(data.include?("email")).to eq(true)
+        expect(data.include?("country")).to eq(true)
+        expect(data.include?("created_at")).to eq(true)
+        expect(data.include?("updated_at")).to eq(true)
+
+        expect(data["id"]).to eq(user0.username)
+        expect(data["forename"]).to eq(user0.forename)
+        expect(data["lastname"]).to eq(user0.lastname)
+        expect(data["username"]).to eq(user0.username)
+        expect(data["email"]).to eq(user0.email)
+        expect(data["country"]).to eq(user0.country.iso3166_a2)
+        expect(data["created_at"]).to eq(user0.created_at.to_i)
+        expect(data["updated_at"]).to eq(user0.updated_at.to_i)
+      end
+    end
+  end
+
 end
 
