@@ -157,7 +157,8 @@ describe 'API routes/snapshots' do
 
       context 'and camera is offline' do
         it '503 error is returned' do
-          stub_request(:any, /#{camera0.endpoints[0].host}/).to_raise(Net::OpenTimeout)
+          response = Typhoeus::Response.new({:return_code => :operation_timedout})
+          Typhoeus.stub(/#{camera0.endpoints[0].host}/).and_return(response)
           get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
           expect(last_response.status).to eq(503)
         end

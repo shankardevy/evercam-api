@@ -1,3 +1,4 @@
+require 'typhoeus'
 require_relative '../presenters/snapshot_presenter'
 
 # Disable File validation, it doesn't work
@@ -39,27 +40,25 @@ module Evercam
 
           camera.endpoints.each do |endpoint|
             next unless (endpoint.public? rescue false)
-            uri = URI(endpoint.to_s + camera.config['snapshots']['jpg'])
-            req = Net::HTTP::Get.new(uri)
-            req.basic_auth camera.config['auth']['basic']['username'], camera.config['auth']['basic']['password'] unless camera.config['auth'].nil?
-
             begin
-              response = Net::HTTP.start(uri.hostname, uri.port) {|http|
-                http.request(req)
-              }
-              if response.is_a?(Net::HTTPSuccess)
-                break
+              if camera.config['auth'].nil?
+                auth = ''
+              elsif camera.config['auth']['basic'].nil?
+                auth = ''
+              else
+                auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
               end
-            rescue Net::OpenTimeout
-              # offline
-            rescue Exception => e
-              # we weren't expecting this (famous last words)
-              puts e
+              response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
+                                                userpwd: auth,
+                                                timeout: 3,
+                                                connecttimeout:3)
             end
           end
-          if response.is_a?(Net::HTTPSuccess)
+          if response.nil?
+            raise CameraOfflineError, 'No public endpoint'
+          elsif response.success?
             response
-          elsif response.is_a?(Net::HTTPUnauthorized)
+          elsif response.code == 401
             raise AuthorizationError, 'Please check camera username and password'
           else
             raise CameraOfflineError, 'Camera offline'
