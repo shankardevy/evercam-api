@@ -18,6 +18,7 @@ module Evercam
     end
     post '/users' do
       authreport!('users/post')
+      params[:country].downcase!
       outcome = Actors::UserSignup.run(params)
       raise OutcomeError, outcome unless outcome.success?
 
