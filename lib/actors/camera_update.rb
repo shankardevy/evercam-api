@@ -80,7 +80,7 @@ module Evercam
         if inputs[:snapshots]
           camera.values[:config][:snapshots] = inputs[:snapshots]
           camera.values[:config][:snapshots].each do |_, value|
-            value.prepend('/') if value[0,1] != 0
+            value.prepend('/') if value[0,1] != '/'
           end
         end
 
