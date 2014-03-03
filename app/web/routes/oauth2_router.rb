@@ -1,5 +1,6 @@
 require_relative "./web_router"
 require '3scale_client'
+require 'cgi'
 require 'securerandom'
 
 module Evercam
@@ -61,25 +62,34 @@ module Evercam
     end
 
     post '/oauth2/token' do
+      require 'pp'
+      PP.pp params
+
+      result = nil
+
       begin
         raise BadRequestError if [nil, ''].include?(params[:code])
         raise BadRequestError if [nil, ''].include?(params[:client_id])
         raise BadRequestError if [nil, ''].include?(params[:client_secret])
-        raise BadRequestError if [nil, ''].include?(params[:redirect_uri])
         raise BadRequestError if params[:grant_type] != "authorization_code"
 
         client = Client.where(exid: params[:client_id]).first
         raise BadRequestError if client.nil?
 
+        client_id     = CGI.unescape(params[:client_id])
+        client_secret = CGI.unescape(params[:client_secret])
+        code          = CGI.unescape(params[:code])
+
         three_scale = ::ThreeScale::Client.new(:provider_key => Evercam::Config[:threescale][:provider_key])
-        response    = three_scale.authrep(app_id: params[:client_id],
-                                          app_key: params[:client_secret])
+        response    = three_scale.authrep(app_id: client_id,
+                                          app_key: client_secret)
         raise BadRequestError if !response.success?
 
         redirect_uri = params[:redirect_uri]
+        redirect_uri = CGI.unescape(redirect_uri) if !redirect_uri.nil?
 
         access_token = AccessToken.where(client_id: client.id,
-                                         refresh:   params[:code]).first
+                                         refresh:   code).first
         raise BadRequestError if access_token.nil?
         raise BadRequestError if access_token.is_revoked?
 
@@ -95,7 +105,12 @@ module Evercam
                     expires_in:    (access_token.expires_at.to_i - Time.now.to_i),
                     refresh_token: access_token.refresh_code,
                     token_type:    :bearer}
-        redirect URI.join(redirect_uri, "?#{URI.encode_www_form(settings)}").to_s 
+        if redirect_uri
+          redirect URI.join(redirect_uri, "?#{URI.encode_www_form(settings)}").to_s 
+        else
+          content_type :json
+          settings.to_json
+        end
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
         raise error
