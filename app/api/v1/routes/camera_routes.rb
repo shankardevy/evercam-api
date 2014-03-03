@@ -87,16 +87,18 @@ module Evercam
         camera.allow?(:edit, token)
       end
 
-      outcome = Actors::CameraUpdate.run(params)
-      raise OutcomeError, outcome unless outcome.success?
+      Camera.db.transaction do
+        outcome = Actors::CameraUpdate.run(params)
+        raise OutcomeError, outcome unless outcome.success?
 
-      CameraActivity.create(
-        camera: camera,
-        access_token: a_token,
-        action: 'edited',
-        done_at: Time.now,
-        ip: request.ip
-      )
+        CameraActivity.create(
+          camera: camera,
+          access_token: a_token,
+          action: 'edited',
+          done_at: Time.now,
+          ip: request.ip
+        )
+      end
 
       present Array(camera.reload), with: Presenters::Camera
     end

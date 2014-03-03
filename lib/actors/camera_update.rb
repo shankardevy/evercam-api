@@ -73,6 +73,12 @@ module Evercam
 
       def execute
         camera = ::Camera.by_exid(inputs[:id])
+
+        privacy_changed = false
+        if !camera.is_public.nil?
+          privacy_changed = (camera.is_public != is_public) if camera.is_public?
+        end
+
         camera.name = name if name
         camera.owner = User.by_login(username) if username
         camera.is_public = is_public unless is_public.nil?
@@ -90,6 +96,12 @@ module Evercam
         camera.mac_address = mac_address if mac_address
         camera.save
 
+        if privacy_changed
+          # Camera made private so delete any public shares.
+          CameraShare.where(kind: CameraShare::PUBLIC,
+                            camera_id: camera.id).delete
+        end
+
         if inputs[:endpoints]
           camera.remove_all_endpoints
           inputs[:endpoints].each do |e|
@@ -99,8 +111,8 @@ module Evercam
               host: endpoint.host,
               port: endpoint.port
             })
-
           end
+
           # fire off the evr.cm zone update to sidekiq
           primary = camera.endpoints.first
           DNSUpsertWorker.perform_async(id, primary.host)
