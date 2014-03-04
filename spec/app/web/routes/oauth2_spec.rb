@@ -365,6 +365,7 @@ describe 'WebApp routes/oauth2_router' do
       it "returns success" do
         get("/oauth2/revoke", {token: access_token.request})
         expect(last_response.status).to eq(200)
+        expect(access_token.reload.is_revoked?).to eq(true)
       end
     end
 
@@ -374,6 +375,7 @@ describe 'WebApp routes/oauth2_router' do
       it "returns success" do
         get("/oauth2/revoke", {token: access_token.refresh_code})
         expect(last_response.status).to eq(200)
+        expect(access_token.reload.is_revoked?).to eq(true)
       end
     end
   end
