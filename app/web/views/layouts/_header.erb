@@ -5,7 +5,7 @@
       <div class='col-md-3'>
         <div class='header-block clearfix'>
           <h1>
-            <img id='logo' src='/img/logo.svg'>
+            <img id='logo' src='/img/logo.png' width="200px">
           </h1>
         </div>
       </div>
@@ -25,9 +25,8 @@
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse">
             <ul class='nav navbar-nav tm-navbar'>
               <% if curr_user %>
-                <li><a href="https://evercam.3scale.net/login">API Keys</a></li>
-                <!--<li><a href="https://dashboard.evercam.io/docs">Documentation</a></li>-->
-                <li><a href="/users/<%= curr_user.username -%>">Dashboard</a></li>
+                <li><a href="/users/<%= curr_user.username -%>">Camera Dashboard</a></li>
+              <li><a href="/users/<%= curr_user.username -%>/dev">Developer</a></li>
                 <li><a href="/users/<%= curr_user.username -%>/profile"><%= curr_user.fullname -%></a></li>
                 <li><a href="/logout">Sign Out</a></li>
               <% else %>
