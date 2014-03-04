@@ -107,8 +107,7 @@ module Evercam
         if redirect_uri
           redirect URI.join(redirect_uri, "?#{URI.encode_www_form(settings)}").to_s 
         else
-          content_type :json
-          settings.to_json
+          jsonp settings
         end
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
@@ -119,21 +118,25 @@ module Evercam
     get '/oauth2/tokeninfo' do
       response = {error: "invalid_token"}
       begin
-        with_user do |user|
+        if !curr_user.nil?
           raise BadRequestError if [nil, ''].include?(params[:code])
 
           access_token = AccessToken.where(refresh: params[:code]).first
-          if !access_token.nil? && access_token.valid?
+          if !access_token.nil? && access_token.is_valid?
             remaining = access_token.expires_at.to_i - Time.now.to_i
             remaining = 0 if remaining < 0
             response = {audience:   access_token.client.exid,
                         access_token: access_token.request,
                         expires_in: remaining,
-                        userid:     user.username}
+                        userid:     curr_user.username}
           end
         end
 
-        jsonp response
+        if params[:redirect_uri]
+          redirect URI.join(params[:redirect_uri], "?#{URI.encode_www_form(response)}").to_s
+        else
+          jsonp response
+        end
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
         raise error

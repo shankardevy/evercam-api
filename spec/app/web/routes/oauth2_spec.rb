@@ -171,7 +171,7 @@ describe 'WebApp routes/oauth2_router' do
   describe 'POST /oauth2/token' do
     before(:each) { client0.save }
 
-    context "when given not given a code parameter" do
+    context "when g not given a code parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:code)
         post("/oauth2/token", post_parameters, env)
@@ -179,7 +179,7 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context "when given not given a client id parameter" do
+    context "when not given a client id parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:client_id)
         post("/oauth2/token", post_parameters, env)
@@ -187,7 +187,7 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context "when given not given a client secret parameter" do
+    context "when not given a client secret parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:client_secret)
         post("/oauth2/token", post_parameters, env)
@@ -195,7 +195,7 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context "when given not given a redirect URI parameter" do
+    context "when not given a redirect URI parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:redirect_uri)
         post("/oauth2/token", post_parameters, env)
@@ -203,7 +203,7 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context "when given not given a grant type parameter" do
+    context "when not given a grant type parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:grant_type)
         post("/oauth2/token", post_parameters, env)
@@ -257,6 +257,91 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
+  end
+
+
+  describe 'GET /oauth2/tokeninfo' do
+    before(:each) { client0.save }
+
+    context "when not given a code parameter" do
+      it "generates a bad request response" do
+        get("/oauth2/tokeninfo", {}, env)
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when invoked without a user being logged in" do
+      it "generates an error response" do
+        get("/oauth2/tokeninfo", {code: '12345'}, {user: nil})
+        expect(last_response.status).to eq(200)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("error")).to eq(true)
+        expect(data["error"]).to eq("invalid_token")
+      end
+    end
+
+    context "when invoked with an invalid code" do
+      it "generates an error response" do
+        get("/oauth2/tokeninfo", {code: 'xxxxx'}, env)
+        expect(last_response.status).to eq(200)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("error")).to eq(true)
+        expect(data["error"]).to eq("invalid_token")
+      end
+    end
+
+    context "when invoked with for an invalid access token" do
+      let(:access_token) { create(:access_token, is_revoked: true, refresh: 'token01').save }
+
+      it "generates an error response" do
+        get("/oauth2/tokeninfo", {code: access_token.refresh_code}, env)
+        expect(last_response.status).to eq(200)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("error")).to eq(true)
+        expect(data["error"]).to eq("invalid_token")
+      end
+    end
+
+    context "when invoked for a valid access token with a logged in user" do
+      let(:access_token) { create(:access_token, refresh: 'token02', client: client0).save }
+
+      it "generates a success response" do
+        get("/oauth2/tokeninfo", {code: access_token.refresh_code}, env)
+        expect(last_response.status).to eq(200)
+        data = JSON.parse(last_response.body)
+
+        expect(data.include?("audience")).to eq(true)
+        expect(data.include?("access_token")).to eq(true)
+        expect(data.include?("expires_in")).to eq(true)
+        expect(data.include?("userid")).to eq(true)
+
+        expect(data["audience"]).to eq(client0.exid)
+        expect(data["access_token"]).to eq(access_token.request)
+        expect(data["userid"]).to eq(user0.username)
+      end
+    end
+
+    context "when invoked with a redirect_uri parameter" do
+      let(:access_token) { create(:access_token, refresh: 'token02', client: client0).save }
+
+      it "generates a redirect response" do
+        get("/oauth2/tokeninfo", {code: access_token.refresh_code, redirect_uri: "https://www.blah.com"}, env)
+        expect(last_response.status).to eq(302)
+        uri        = URI.parse(last_response.location)
+        parameters = CGI::parse(uri.query)
+
+        expect(uri.host).to eq("www.blah.com")
+
+        expect(parameters.include?("audience")).to eq(true)
+        expect(parameters.include?("access_token")).to eq(true)
+        expect(parameters.include?("expires_in")).to eq(true)
+        expect(parameters.include?("userid")).to eq(true)
+
+        expect(parameters["audience"]).to eq([client0.exid])
+        expect(parameters["access_token"]).to eq([access_token.request])
+        expect(parameters["userid"]).to eq([user0.username])
+      end
+    end
   end
 
 end
