@@ -5,10 +5,11 @@ class AccessRight < Sequel::Model
   VIEW                       = 'view'.freeze
   EDIT                       = 'edit'.freeze
   DELETE                     = 'delete'.freeze
+  LIST                       = "list".freeze
   GRANT                      = 'grant'.freeze
-  BASE_RIGHTS                = [SNAPSHOT, VIEW, EDIT, DELETE]
+  BASE_RIGHTS                = [SNAPSHOT, VIEW, EDIT, DELETE, LIST]
   ALL_RIGHTS                 = BASE_RIGHTS + [GRANT]
-  PUBLIC_RIGHTS              = [SNAPSHOT, VIEW]
+  PUBLIC_RIGHTS              = [SNAPSHOT, LIST]
 
   # Status constants.
   ACTIVE                     = 1

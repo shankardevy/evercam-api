@@ -221,7 +221,7 @@ describe 'API routes/cameras' do
     end
 
     context 'when no authentication is provided' do
-      it 'returns an UNAUTHROZIED status' do
+      it 'returns an UNAUTHORZIED status' do
         expect(post('/cameras', params).status).to eq(401)
       end
     end
@@ -230,7 +230,6 @@ describe 'API routes/cameras' do
 
   describe 'PATCH /cameras' do
 
-    #let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
     let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
     let(:model) { create(:firmware) }
 
@@ -302,8 +301,36 @@ describe 'API routes/cameras' do
     end
 
     context 'when no authentication is provided' do
-      it 'returns an UNAUTHROZIED status' do
+      it 'returns an UNAUTHORZIED status' do
         expect(patch("/cameras/#{camera.exid}", params).status).to eq(401)
+      end
+    end
+
+    context 'for a public camera with public shares' do
+      let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+      let(:sharer1) { create(:user) }
+      let(:sharer2) { create(:user) }
+      let(:sharer3) { create(:user) }
+      let(:share1) { create(:public_camera_share, user: sharer1, camera: camera) }
+      let(:share2) { create(:public_camera_share, user: sharer2, camera: camera) }
+      let(:share3) { create(:private_camera_share, user: sharer3, camera: camera) }
+
+      context 'when the camera is switched from being public' do
+        before(:each) do
+          share1.save
+          share2.save
+          share3.save
+        end
+
+        it "deletes all the public shares but leaves private shares unchanged" do
+          auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+          patch("/cameras/#{camera.exid}", params, auth)
+
+          expect(CameraShare.where(camera_id: camera.id,
+                                   kind: CameraShare::PUBLIC).count).to eq(0)
+          expect(CameraShare.where(camera_id: camera.id,
+                                   kind: CameraShare::PRIVATE).count).to eq(1)
+        end
       end
     end
 
@@ -323,11 +350,147 @@ describe 'API routes/cameras' do
     end
 
     context 'when no authentication is provided' do
-      it 'returns an UNAUTHROZIED status' do
+      it 'returns an UNAUTHORZIED status' do
         expect(delete("/cameras/#{camera.exid}", {}).status).to eq(401)
       end
     end
 
+  end
+
+  describe 'GET /cameras/:id/shares' do
+    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:camera) { create(:camera, is_public: false, owner: owner) }
+
+    context "where shares don't exist" do
+      let(:shares) {
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        get("/cameras/#{camera.exid}/shares", {}, auth).json['shares']
+      }
+
+      it "returns an empty list" do
+        expect(shares.size).to eq(0)
+      end
+    end
+
+    context "where shares exist" do
+      let(:sharer1) { create(:user) }
+      let(:sharer2) { create(:user) }
+      let(:share1) { create(:private_camera_share, camera: camera, user: sharer1) }
+      let(:share2) { create(:private_camera_share, camera: camera, user: sharer2) }
+      let(:shares) {
+        create(:private_camera_share, camera: camera, user: sharer1).save
+        create(:private_camera_share, camera: camera, user: sharer2).save
+        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+        get("/cameras/#{camera.exid}/shares", {}, auth).json['shares']
+      }
+
+      it "returns a full list of shares for a camera" do
+        expect(shares.size).to eq(2)
+        expect(shares[0]).to have_keys('id', 'camera_id', 'user_id', 'email', 'kind', 'rights')
+      end
+    end
+  end
+
+  describe 'POST /cameras/:id/share' do
+    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:sharer) { create(:user) }
+    let(:camera) { create(:camera, is_public: false, owner: owner) }
+    let(:auth) { env_for(session: { user: owner.id }) }
+    let(:parameters) {{email: sharer.email, rights: "Snapshot,List"}}
+
+    context "where an email address is not specified" do
+      it "returns an error" do
+        parameters.delete(:email)
+        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        expect(response.status).to eq(400)
+      end
+    end
+
+    context "where rights are not specified" do
+      it "returns an error" do
+        parameters.delete(:rights)
+        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        expect(response.status).to eq(400)
+      end
+    end
+
+    context "where the camera does not exist" do
+      it "returns an error" do
+        response = post("/cameras/blahblah/share", parameters, auth)
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "where the user email does not exist" do
+      it "returns an error" do
+        parameters[:email] = "noone@nowhere.com"
+        response = post("/cameras/blah/share", parameters, auth)
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "where the caller is not the owner of the camera" do
+      it "returns an error" do
+        settings = env_for(session: { user: create(:user).id })
+        response = post("/cameras/#{camera.exid}/share", parameters, settings)
+        expect(response.status).to eq(403)
+      end
+    end
+
+    context "where the invalid rights are requested" do
+      it "returns an error" do
+        parameters[:rights] = "blah, ningy"
+        response = post("/cameras/blah/share", parameters, auth)
+        expect(response.status).to eq(404)
+      end
+    end
+
+    context "when a proper request is sent" do
+      it "returns success" do
+        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        expect(response.status).to eq(201)
+      end
+    end    
+  end
+
+  describe 'DELETE /cameras/:id/share/:share_id' do
+    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
+    let(:sharer) { create(:user) }
+    let(:camera) { create(:camera, is_public: false, owner: owner) }
+    let(:auth) { env_for(session: { user: owner.id }) }
+
+    context "where the share specified does not exist" do
+      it "returns success" do
+        response = delete("/cameras/#{camera.exid}/share", {share_id: -100}, auth)
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context "when deleting a share that exists" do
+      let(:share) { create(:private_camera_share, camera: camera, user: owner, sharer: sharer).save }
+
+      context "where the camera specified does not exist" do
+        it "returns a not found" do
+          response = delete("/cameras/blahdeblah/share", {share_id: share.id}, auth)
+          expect(response.status).to eq(404)
+        end
+      end
+
+      context "when the caller does not own the camera" do
+        it "returns an error" do
+          settings = env_for(session: { user: create(:user).id })
+          response = delete("/cameras/#{camera.exid}/share", {share_id: share.id}, settings)
+          expect(response.status).to eq(403)
+        end
+      end
+
+      context "when proper request is sent" do
+        it "returns success" do
+          response = delete("/cameras/#{camera.exid}/share", {share_id: share.id}, auth)
+          expect(response.status).to eq(200)
+        end
+      end
+    end
   end
 
 end
