@@ -171,7 +171,7 @@ describe 'WebApp routes/oauth2_router' do
   describe 'POST /oauth2/token' do
     before(:each) { client0.save }
 
-    context "when g not given a code parameter" do
+    context "when not given a code parameter" do
       it "generates a bad request response" do
         post_parameters.delete(:code)
         post("/oauth2/token", post_parameters, env)
