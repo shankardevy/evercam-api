@@ -2339,7 +2339,7 @@ font-weight: normal;
   opacity: 0;
 }
 
-.msg-float .msg-holder.active {
+.msg-float .msg-holder.active, .msg-float .msg-holder.msg-error {
   -webkit-transform: translate(0, -1em);
   -moz-transform: translate(0, -1em);
   -o-transform: translate(0, -1em);

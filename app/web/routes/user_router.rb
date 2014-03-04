@@ -39,6 +39,46 @@ module Evercam
 
     end
 
+    get '/users/:username/dev' do |username|
+      @user = User.by_login(username)
+      raise NotFoundError, 'Username does not exist' unless @user
+
+      auth.allow? { |r| @user.allow?(AccessRight::VIEW, r) }
+
+      if @user.api_id.nil? or @user.api_key.nil?
+        # Get 3scale user id
+        uri = URI(Evercam::Config[:threescale][:url] + 'admin/api/accounts.xml')
+        uri.query = URI.encode_www_form({'provider_key' => Evercam::Config[:threescale][:provider_key]})
+        res = Net::HTTP.get_response(uri)
+        unless res.is_a?(Net::HTTPSuccess)
+          raise Evercam::WebErrors::BadRequestError, res.body
+        end
+        xml_doc  = Nokogiri::XML(res.body)
+        els = xml_doc.search("[text()*='#{@user.username}']")
+        el = els.first
+        if el.nil?
+          raise Evercam::WebErrors::BadRequestError, '3scale user not found'
+        end
+        acc_id = el.parent.parent.parent.css('id').first.text
+
+        # Get 3scale first app data for given id
+        uri = URI(Evercam::Config[:threescale][:url] + "admin/api/accounts/#{acc_id}/applications.xml")
+        uri.query = URI.encode_www_form({'provider_key' => Evercam::Config[:threescale][:provider_key]})
+        res = Net::HTTP.get_response(uri)
+        unless res.is_a?(Net::HTTPSuccess)
+          puts res.body
+          raise Evercam::WebErrors::BadRequestError, res.body
+        end
+        xml_doc  = Nokogiri::XML(res.body)
+        @user.api_id = xml_doc.css('application_id').text
+        @user.api_key = xml_doc.css('key').text
+        @user.save
+      end
+
+      erb 'users/user_keys'.to_sym
+
+    end
+
     get '/users/:username/cameras/:camera' do |username, camera|
       @user = User.by_login(username)
       raise NotFoundError, 'Username does not exist' unless @user

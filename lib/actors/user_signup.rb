@@ -25,6 +25,11 @@ module Evercam
         unless Country.by_iso3166(inputs[:country])
           add_error(:country, :invalid, 'Country is invalid')
         end
+
+        if inputs[:email].length < 5
+          # 3scale stuff, remove later
+          add_error(:email, :invalid, 'Email is too short')
+        end
       end
 
       def execute
@@ -67,6 +72,10 @@ module Evercam
         unless res.is_a?(Net::HTTPSuccess)
           raise Evercam::WebErrors::BadRequestError, 'Failed to create 3scale account'
         end
+        xml_doc  = Nokogiri::XML(res.body)
+        user.api_id = xml_doc.css('application_id').text
+        user.api_key = xml_doc.css('key').text
+        user.save
       end
 
     end
