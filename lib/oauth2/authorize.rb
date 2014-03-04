@@ -7,8 +7,6 @@ module Evercam
       attr_reader :token
 
       def initialize(user, params)
-        require 'pp'
-        PP.pp params
         @user, @params = user, params
         @token = AccessToken.new(client: client,
                                  refresh: SecureRandom.base64(24))
