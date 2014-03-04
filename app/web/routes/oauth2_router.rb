@@ -6,6 +6,8 @@ require 'securerandom'
 module Evercam
   class WebOAuth2Router < WebRouter
 
+    helpers Sinatra::Jsonp
+
     get '/oauth2/error' do
     end
 
@@ -62,11 +64,6 @@ module Evercam
     end
 
     post '/oauth2/token' do
-      require 'pp'
-      PP.pp params
-
-      result = nil
-
       begin
         raise BadRequestError if [nil, ''].include?(params[:code])
         raise BadRequestError if [nil, ''].include?(params[:client_id])
@@ -101,8 +98,10 @@ module Evercam
           access_token.update(refresh: SecureRandom.base64(24))
         end
 
+        remaining = access_token.expires_at.to_i - Time.now.to_i
+        remaining = 0 if remaining < 0
         settings = {access_token:  access_token.request,
-                    expires_in:    (access_token.expires_at.to_i - Time.now.to_i),
+                    expires_in:    remaining,
                     refresh_token: access_token.refresh_code,
                     token_type:    :bearer}
         if redirect_uri
@@ -111,6 +110,30 @@ module Evercam
           content_type :json
           settings.to_json
         end
+      rescue => error
+        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        raise error
+      end
+    end
+
+    get '/oauth2/tokeninfo' do
+      response = {error: "invalid_token"}
+      begin
+        with_user do |user|
+          raise BadRequestError if [nil, ''].include?(params[:code])
+
+          access_token = AccessToken.where(refresh: params[:code]).first
+          if !access_token.nil? && access_token.valid?
+            remaining = access_token.expires_at.to_i - Time.now.to_i
+            remaining = 0 if remaining < 0
+            response = {audience:   access_token.client.exid,
+                        access_token: access_token.request,
+                        expires_in: remaining,
+                        userid:     user.username}
+          end
+        end
+
+        jsonp response
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
         raise error
