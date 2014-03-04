@@ -143,6 +143,23 @@ module Evercam
       end
     end
 
+    get '/oauth2/revoke' do
+      response = {}
+      begin
+        raise BadRequestError if [nil, ''].include?(params[:token])
+
+        access_token = AccessToken.where(request: params[:token]).first
+        access_token = AccessToken.where(refresh: params[:token]).first if access_token.nil?
+        raise NotFoundError if access_token.nil?
+
+        access_token.update(is_revoked: true) if !access_token.is_revoked?
+      rescue => error
+        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        raise error
+      end
+      jsonp response
+    end
+
   end
 end
 

@@ -344,5 +344,39 @@ describe 'WebApp routes/oauth2_router' do
     end
   end
 
+  describe "GET /oauth2/revoke" do
+    context "when invoked without a token parameter" do
+      it "generates an error response" do
+        get("/oauth2/revoke", {})
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context "when invoked for a non-existent token" do
+      it "generates a not found error" do
+        get("/oauth2/revoke", {token: 'xxxxx'})
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context "when invoked with a valid access token" do
+      let(:access_token) { create(:access_token, client: client0).save }
+
+      it "returns success" do
+        get("/oauth2/revoke", {token: access_token.request})
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+    context "when invoked with a valid refresh token" do
+      let(:access_token) { create(:access_token, refresh: 'token03', client: client0).save }
+
+      it "returns success" do
+        get("/oauth2/revoke", {token: access_token.refresh_code})
+        expect(last_response.status).to eq(200)
+      end
+    end
+  end
+
 end
 
