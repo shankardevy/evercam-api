@@ -1,11 +1,12 @@
 require 'rack_helper'
 require_app 'web/app'
+require_lib 'actors'
 
 describe 'WebApp routes/users_router' do
 
   let(:app) { Evercam::WebApp }
 
-  let(:user0) { create(:user) }
+  let(:user0) { create(:user, username: 'tjama') }
   let(:camera0) { create(:camera, owner: user0) }
   let(:auth) { env_for(session: { user: user0.id }) }
 
@@ -54,6 +55,33 @@ describe 'WebApp routes/users_router' do
       it 'returns user profile' do
         get("/users/#{user0.username}/profile", {}, auth)
         expect(last_response.status).to eq(200)
+      end
+    end
+
+  end
+
+  describe 'GET /users/{username}/dev' do
+
+    context 'when the user does not exist' do
+      it 'returns a 404 status' do
+        get('/users/xxxx/dev')
+        expect(last_response.status).to eq(404)
+      end
+    end
+
+    context 'when the user does exist, but we are not authenticated' do
+      it 'returns Not Authorized' do
+        get("/users/#{user0.username}/dev")
+        expect(last_response.status).to eq(401)
+      end
+    end
+
+    context 'when the user does exist and we are authenticated' do
+      VCR.use_cassette('Web_users/threescale_keys') do
+        it 'returns user profile' do
+          get("/users/#{user0.username}/dev", {}, auth)
+          expect(last_response.status).to eq(200)
+        end
       end
     end
 
