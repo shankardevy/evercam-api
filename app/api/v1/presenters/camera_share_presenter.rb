@@ -8,14 +8,14 @@ module Evercam
 
     	expose :id,
     	       documentation: {
-    	       	 type: Integer,
+    	       	 type: 'integer',
     	       	 desc: 'Unique identifier for a camera share.',
     	       	 required: true
     	       }
 
     	expose :camera_id,
     	       documentation: {
-    	       	 type: String,
+    	       	 type: 'string',
     	       	 desc: 'Unique identifier of the shared camera.',
     	       	 required: true
     	       } do |s, o|
@@ -24,7 +24,7 @@ module Evercam
 
     	expose :user_id,
     	       documentation: {
-    	       	 type: Integer,
+    	       	 type: 'integer',
     	       	 desc: 'Unique user id of the user the camera is shared with.',
     	       	 required: true
     	       } do |s, o|
@@ -33,7 +33,7 @@ module Evercam
 
     	expose :email,
     	       documentation: {
-    	       	 type: String,
+    	       	 type: 'string',
     	       	 desc: 'The email address of the user the camera is shared with.',
     	       	 required: true
     	       } do |s, o|
@@ -42,14 +42,14 @@ module Evercam
 
       expose :kind,
              documentation: {
-         	     type: String,
+         	     type: 'string',
          	     desc: "Either 'public' or 'private' depending on the share kind.",
          	     required: true
              }
 
       expose :rights,
              documentation: {
-             	type: String,
+             	type: 'string',
              	desc: "A comma separated list of the rights available on the share.",
              	required: true
              	} do |s, o|
