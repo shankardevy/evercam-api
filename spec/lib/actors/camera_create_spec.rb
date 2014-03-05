@@ -24,6 +24,19 @@ module Evercam
         }
       end
 
+      let(:new_valid) do
+        {
+          id: 'my-new-camera',
+          name: 'My Fancy New Camera',
+          username: create(:user).username,
+          external_url: 'http://123.0.0.1:9393',
+          is_public: true,
+          snapshot_url: '/onvif/snapshot',
+          cam_user: 'admin',
+          cam_pass: '12345'
+        }
+      end
+
       subject { CameraCreate }
 
       describe 'invalid params' do
@@ -55,10 +68,10 @@ module Evercam
           errors = outcome.errors.symbolic
 
           expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:valid)
+          expect(errors[:external_url]).to eq(:valid)
         end
 
-        it 'checks that endpoints is actually an array' do
+        it 'checks that endpoints is converting single string to array' do
           params = valid.merge(endpoints: 'xxxx')
 
           outcome = subject.run(params)
@@ -76,6 +89,16 @@ module Evercam
 
           expect(outcome).to_not be_success
           expect(errors[:endpoints]).to eq(:valid)
+        end
+
+        it 'checks each endpoint is a valid uri' do
+          params = valid.merge(endpoints: [], external_url: 'x')
+
+          outcome = subject.run(params)
+          errors = outcome.errors.symbolic
+
+          expect(outcome).to_not be_success
+          expect(errors[:external_url]).to eq(:valid)
         end
 
         it 'checks any provided timezone is valid' do
@@ -98,6 +121,16 @@ module Evercam
           expect(errors[:mac_address]).to eq(:valid)
         end
 
+      end
+
+      describe 'valid new params' do
+        it 'returns success' do
+          outcome = subject.run(new_valid)
+          result = outcome.result
+
+          expect(outcome).to be_success
+          expect(result.endpoints.first.to_s).to eq(new_valid[:external_url])
+        end
       end
 
       describe 'optional params' do

@@ -7,9 +7,7 @@ module Evercam
       required do
         string :id
         string :name
-
         string :username
-
 
         boolean :is_public
       end
@@ -24,7 +22,7 @@ module Evercam
         string :external_url
         string :internal_url
 
-        array :endpoints, class: String
+        array :endpoints, class: String, arrayize: true
 
         hash :snapshots do
           string :jpg
@@ -54,8 +52,20 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        unless external_url =~ URI.regexp
-          add_error(:external_url, :valid, 'External url is not a valid URI')
+        if !(endpoints && endpoints.length > 0) && !external_url
+          add_error(:external_url, :valid, 'External url is missing')
+        end
+
+        if external_url && !(external_url =~ URI.regexp)
+          add_error(:external_url, :valid, 'External url is invalid')
+        end
+
+        if endpoints
+          endpoints.each do |e|
+            unless e =~ URI.regexp
+              add_error(:endpoints, :valid, 'One or more endpoints is not a valid URI')
+            end
+          end
         end
 
         if timezone && false == Timezone::Zone.names.include?(timezone)
@@ -115,15 +125,27 @@ module Evercam
           done_at: Time.now
         )
 
-        inputs[:endpoints].each do |e|
-          endpoint = URI.parse(e)
+        if inputs[:endpoints]
+          inputs[:endpoints].each do |e|
+            endpoint = URI.parse(e)
+
+            camera.add_endpoint({
+              scheme: endpoint.scheme,
+              host: endpoint.host,
+              port: endpoint.port
+            })
+
+          end
+        end
+
+        if inputs[:external_url]
+          endpoint = URI.parse(inputs[:external_url])
 
           camera.add_endpoint({
             scheme: endpoint.scheme,
             host: endpoint.host,
             port: endpoint.port
           })
-
         end
 
         # fire off the evr.cm zone update to sidekiq
