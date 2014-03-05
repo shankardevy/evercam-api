@@ -25,6 +25,8 @@ module Evercam
 
     include WebErrors
 
+    TIMEOUT = 5
+
     namespace :cameras do
       params do
         requires :id, type: String, desc: "Camera Id."
@@ -50,8 +52,8 @@ module Evercam
               end
               response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
                                                 userpwd: auth,
-                                                timeout: 3,
-                                                connecttimeout:3)
+                                                timeout: TIMEOUT,
+                                                connecttimeout: TIMEOUT)
             end
           end
           if response.nil?
