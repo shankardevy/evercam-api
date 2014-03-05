@@ -30,8 +30,9 @@ module Evercam
           name: 'My Fancy New Camera',
           username: create(:user).username,
           external_url: 'http://123.0.0.1:9393',
+          internal_url: 'http://127.0.0.1:9345',
           is_public: true,
-          snapshot_url: '/onvif/snapshot',
+          jpg_url: '/onvif/snapshot',
           cam_user: 'admin',
           cam_pass: '12345'
         }
@@ -130,6 +131,10 @@ module Evercam
 
           expect(outcome).to be_success
           expect(result.endpoints.first.to_s).to eq(new_valid[:external_url])
+          expect(result.endpoints.last.to_s).to eq(new_valid[:internal_url])
+          expect(result.config['snapshots']['jpg']).to eq(new_valid[:jpg_url])
+          expect(result.config['auth']['basic']['username']).to eq(new_valid[:cam_user])
+          expect(result.config['auth']['basic']['password']).to eq(new_valid[:cam_pass])
         end
       end
 

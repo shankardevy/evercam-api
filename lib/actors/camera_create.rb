@@ -18,7 +18,7 @@ module Evercam
         string :model
         string :vendor
 
-        string :snapshot_url
+        string :jpg_url
         string :external_url
         string :internal_url
 
@@ -113,6 +113,7 @@ module Evercam
         if inputs[:cam_user] or inputs[:cam_pass]
           camera.values[:config].merge!({auth: {basic: {username: inputs[:cam_user], password: inputs[:cam_pass] }}})
         end
+
         camera.timezone = timezone if timezone
         camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
@@ -127,25 +128,16 @@ module Evercam
 
         if inputs[:endpoints]
           inputs[:endpoints].each do |e|
-            endpoint = URI.parse(e)
-
-            camera.add_endpoint({
-              scheme: endpoint.scheme,
-              host: endpoint.host,
-              port: endpoint.port
-            })
-
+            add_endpoint(camera, e)
           end
         end
 
         if inputs[:external_url]
-          endpoint = URI.parse(inputs[:external_url])
+          add_endpoint(camera, inputs[:external_url])
+        end
 
-          camera.add_endpoint({
-            scheme: endpoint.scheme,
-            host: endpoint.host,
-            port: endpoint.port
-          })
+        if inputs[:internal_url]
+          add_endpoint(camera, inputs[:internal_url])
         end
 
         # fire off the evr.cm zone update to sidekiq
@@ -153,6 +145,16 @@ module Evercam
         DNSUpsertWorker.perform_async(id, primary.host)
 
         camera
+      end
+
+      def add_endpoint(camera, url)
+        endpoint = URI.parse(url)
+
+        camera.add_endpoint({
+          scheme: endpoint.scheme,
+          host: endpoint.host,
+          port: endpoint.port
+        })
       end
 
     end
