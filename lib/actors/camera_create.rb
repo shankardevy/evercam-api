@@ -108,10 +108,10 @@ module Evercam
 
         if inputs[:jpg_url]
           inputs[:jpg_url].prepend('/') if inputs[:jpg_url][0,1] != '/'
-          camera.values[:config].merge!({snapshots: { jpg: inputs[:jpg_url]}})
+          camera.values[:config].merge!({'snapshots' => { 'jpg' => inputs[:jpg_url]}})
         end
         if inputs[:cam_user] or inputs[:cam_pass]
-          camera.values[:config].merge!({auth: {basic: {username: inputs[:cam_user], password: inputs[:cam_pass] }}})
+          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_user], 'password' => inputs[:cam_pass] }}})
         end
 
         camera.timezone = timezone if timezone
