@@ -12,10 +12,12 @@ module Evercam
     params do
       requires :id, type: String, desc: "Camera Id."
       requires :name, type: String, desc: "Camera name."
-      requires :endpoints, type: Array, desc: "Endpoints."
       requires :is_public, type: Boolean, desc: "Is camera public?"
-      optional :snapshots, type: Hash, desc: "Snapshots."
-      optional :auth, type: Hash, desc: "Auth."
+      optional :external_url, type: String, desc: "External camera url."
+      optional :internal_url, type: String, desc: "Internal camera url."
+      optional :jpg_url, type: String, desc: "Snapshot url."
+      optional :cam_user, type: String, desc: "Camera username."
+      optional :cam_pass, type: String, desc: "Camera password."
     end
     post '/cameras' do
       auth.demand do |req, usr|

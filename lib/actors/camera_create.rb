@@ -9,7 +9,8 @@ module Evercam
         string :name
 
         string :username
-        array :endpoints, class: String
+
+
         boolean :is_public
       end
 
@@ -18,6 +19,12 @@ module Evercam
         string :mac_address
         string :model
         string :vendor
+
+        string :snapshot_url
+        string :external_url
+        string :internal_url
+
+        array :endpoints, class: String
 
         hash :snapshots do
           string :jpg
@@ -29,6 +36,9 @@ module Evercam
             string :password
           end
         end
+
+        string :cam_user
+        string :cam_pass
       end
 
       def validate
@@ -44,14 +54,8 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        if nil == endpoints || endpoints.size == 0 || false == endpoints.kind_of?(Array)
-          add_error(:endpoints, :valid, 'Endpoints must be an array of at least one item')
-        else
-          endpoints.each do |e|
-            unless e =~ URI.regexp
-              add_error(:endpoints, :valid, 'One or more endpoints is not a valid URI')
-            end
-          end
+        unless external_url =~ URI.regexp
+          add_error(:external_url, :valid, 'External url is not a valid URI')
         end
 
         if timezone && false == Timezone::Zone.names.include?(timezone)
@@ -91,6 +95,14 @@ module Evercam
           end
         end
         camera.values[:config][:auth] = inputs[:auth] if inputs[:auth]
+
+        if inputs[:jpg_url]
+          inputs[:jpg_url].prepend('/') if inputs[:jpg_url][0,1] != '/'
+          camera.values[:config].merge!({snapshots: { jpg: inputs[:jpg_url]}})
+        end
+        if inputs[:cam_user] or inputs[:cam_pass]
+          camera.values[:config].merge!({auth: {basic: {username: inputs[:cam_user], password: inputs[:cam_pass] }}})
+        end
         camera.timezone = timezone if timezone
         camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
