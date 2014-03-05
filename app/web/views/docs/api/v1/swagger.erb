@@ -23,6 +23,7 @@
     onComplete: function(swaggerApi, swaggerUi){
       $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
       $('#resources h2').each( function() { $(this).next('ul').find('li:last').remove(); } );
+      $("a:contains('/cameras/{id}/snapshot.jpg.json')").text('/cameras/{id}/snapshot.jpg');
     },
     onFailure: function(data) {
     },
