@@ -1,19 +1,16 @@
 <h3 class="ec">
-  <%= @req.client.name %> has requested access to the following:
+  <%= @client.name %> has requested access to the following:
 </h3>
 <ol>
+<% @permissions.each do |permission| %>
   <li>
-  <% @req.missing.each do |s| %>
-    Permission to <strong><%= s.right %> <%= s.resource.name %></strong>
-  <% end %>
+    Permission to <strong><%= permission[:right] %> on <%= permission[:target] %></strong>
   </li>
+<% end %>
 </ol>
 <br />
 <div>
-  <form method='POST'>
-    <input type="hidden" name="redirect_uri" value="<%= @redirect_uri %>"></input>
-    <input type="hidden" name="client_id" value="<%= @client_id %>"></input>
-    <input type="hidden" name="scope" value="<%= @scope %>"></input>
+  <form method='POST' action="/oauth2/feedback">
     <button type='submit' name='action' value='approve' class='btn btn-success'>
       Approve
     </button>

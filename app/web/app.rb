@@ -2,8 +2,7 @@
  'errors',
  'models',
  'actors',
- 'mailers',
- 'oauth2'
+ 'mailers'
 ].each { |f| require_relative "../../lib/#{f}" }
 
 ['helpers/form_helpers',
