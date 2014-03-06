@@ -54,6 +54,9 @@ gem 'sinatra-redirect-with-flash',
 gem 'sinatra-partial',
   require: 'sinatra/partial'
 
+gem 'sinatra-jsonp',
+  require: 'sinatra/jsonp'
+
 gem 'bcrypt-ruby',
   require: 'bcrypt'
 
