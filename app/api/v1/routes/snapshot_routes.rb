@@ -139,6 +139,29 @@ module Evercam
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
+        desc 'Returns list of specific days in a given month which contains any snapshots'
+        params do
+          requires :year, type: Integer, desc: "Year, for example 2013"
+          requires :month, type: Integer, desc: "Month, for example 11"
+        end
+        get 'snapshots/:year/:month/days' do
+          if params[:month] > 12 or params[:month] < 1
+            raise BadRequestError, 'Invalid month value'
+          end
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          days = []
+          (1..Date.new(params[:year], params[:month], -1).day).each do |day|
+            from = Time.new(params[:year], params[:month], day).to_s
+            to = Time.new(params[:year], params[:month], day, 23, 59, 59).to_s
+            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+              days << day
+            end
+          end
+
+          { :days => days}
+        end
+
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
         }
