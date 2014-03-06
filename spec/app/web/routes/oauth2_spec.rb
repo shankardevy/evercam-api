@@ -323,18 +323,6 @@ describe 'WebApp routes/oauth2_router' do
                         client_id:     'client0',
                         client_secret: 'client0_secret'} }
 
-    context 'when a redirect URI is not specified' do
-      it 'redirects to /oauth2/error' do
-        parameters.delete(:redirect_uri)
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.path).to eq('/oauth2/error')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
     context 'when a grant type is not specified' do
       it 'hits the redirect URI with an error' do
         parameters.delete(:grant_type)
@@ -451,18 +439,35 @@ describe 'WebApp routes/oauth2_router' do
                      :headers => {})
       end
 
-      it 'hits the redirect URI with appropriate parameters' do
-        post('/oauth2/authorize', parameters)
+      context 'when a redirect URI is included in the request' do
+        it 'hits the redirect URI with appropriate parameters' do
+          post('/oauth2/authorize', parameters)
 
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect([nil, ''].include?(uri.query)).to eq(false)
-        map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
-        expect(map.include?("access_token")).to eq(true)
-        expect(map.include?("refresh_token")).to eq(true)
-        expect(map.include?("expires_in")).to eq(true)
-        expect(map.include?("token_type")).to eq(true)
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect([nil, ''].include?(uri.query)).to eq(false)
+          map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
+          expect(map.include?("access_token")).to eq(true)
+          expect(map.include?("refresh_token")).to eq(true)
+          expect(map.include?("expires_in")).to eq(true)
+          expect(map.include?("token_type")).to eq(true)
+        end
+      end
+
+      context 'when a redirect URI is not included in the request' do
+        it 'hits the redirect URI with appropriate parameters' do
+          parameters.delete(:redirect_uri)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(200)
+          expect([nil, ''].include?(last_response.body)).to eq(false)
+          map = JSON.parse(last_response.body)
+          expect(map.include?("access_token")).to eq(true)
+          expect(map.include?("refresh_token")).to eq(true)
+          expect(map.include?("expires_in")).to eq(true)
+          expect(map.include?("token_type")).to eq(true)
+        end
       end
     end
   end

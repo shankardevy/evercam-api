@@ -254,7 +254,6 @@ module Evercam
       redirect_uri    = '/oauth2/error'
       session[:oauth] = nil
       begin
-        raise INVALID_REQUEST if !params[:redirect_uri]
         redirect_uri = params[:redirect_uri]
 
         raise INVALID_REQUEST if params[:grant_type] != 'authorization_code'
@@ -264,7 +263,7 @@ module Evercam
 
         client = Client.where(exid: params[:client_id]).first
         raise UNAUTHORIZED_CLIENT if client.nil?
-        raise INVALID_REDIRECT_URI if !valid_redirect_uri?(client, redirect_uri)
+        raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(client, redirect_uri)
 
         provider_key = Evercam::Config[:threescale][:provider_key]
         three_scale  = ::ThreeScale::Client.new(:provider_key => provider_key)
@@ -272,9 +271,13 @@ module Evercam
                                            app_key: params[:client_secret])
         raise UNAUTHORIZED_CLIENT if !response.success?
 
-        redirect generate_response_uri(redirect_uri, client,
-                                       'authorization_code',
-                                       params[:state]).to_s
+        if redirect_uri
+          redirect generate_response_uri(redirect_uri, client,
+                                         'authorization_code',
+                                         params[:state]).to_s
+        else
+          jsonp generate_response(client, 'authorization_code', params[:state])
+        end
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
         if "#{error}" != INVALID_REDIRECT_URI
