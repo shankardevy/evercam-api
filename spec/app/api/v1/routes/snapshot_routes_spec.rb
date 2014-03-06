@@ -73,7 +73,7 @@ describe 'API routes/snapshots' do
       end
     end
 
-    describe 'GET /cameras/:id/snapshots/:year/:month/:day/hours', :focus => true do
+    describe 'GET /cameras/:id/snapshots/:year/:month/:day/hours' do
 
       context 'when snapshot request is correct' do
         let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 01, 17)) }
