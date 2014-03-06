@@ -8,7 +8,6 @@ describe 'API routes/snapshots' do
 
   let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
 
-
   describe 'GET /cameras/:id/snapshots' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
@@ -29,47 +28,57 @@ describe 'API routes/snapshots' do
   describe 'GET /cameras/:id/snapshots/range' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
-    let(:snap) { create(:snapshot, camera: camera0) }
-    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.at(12345)) }
-    let(:snap2) { create(:snapshot, camera: camera0, created_at: Time.at(123)) }
 
-    before do
-      snap1
-      snap2
+    before(:all) do
+      @exid = 'xxx'
+      @cam = create(:camera, exid: @exid)
       data = File.read('spec/resources/snapshot.jpg')
-      (1..100).each do |n|
-        Snapshot.create(camera: camera0, created_at: Time.at(n), data: data)
+      (1..150).each do |n|
+        Snapshot.create(camera: @cam, created_at: Time.at(n), data: data)
       end
+    end
+
+    after(:all) do
+      username = @cam.owner.username
+      Camera.where(:exid => @exid).delete
+      User.where(:username => username).delete
     end
 
     context 'when snapshot request is correct' do
       context 'all snapshots within given range are returned' do
+
         it 'applies default no data limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(100)
         end
 
+        it 'applies default no data limit and returns second page' do
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, page: 2}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(50)
+        end
+
         it 'applies specified limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(15)
         end
 
         it 'applies default data limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(10)
         end
 
         it 'applies specified limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(5)
         end
 
         it 'returns only two entries' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 2}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(2)
         end

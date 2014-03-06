@@ -114,6 +114,7 @@ module Evercam
           requires :to, type: Integer, desc: "To Unix timestamp."
           optional :with_data, type: Boolean, desc: "Should it send image data?"
           optional :limit, type: Integer, desc: "Limit number of results, default 100 with no data, 10 with data"
+          optional :page, type: Integer, desc: "Page number"
         end
         get 'snapshots/range' do
           camera = ::Camera.by_exid!(params[:id])
@@ -128,7 +129,12 @@ module Evercam
             limit ||= DEFAULT_LIMIT_NO_DATA
           end
 
-          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit)
+          offset = 0
+          if params[:page]
+            offset = (params[:page] - 1) * limit
+          end
+
+          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
