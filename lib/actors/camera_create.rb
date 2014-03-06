@@ -35,8 +35,8 @@ module Evercam
           end
         end
 
-        string :cam_user
-        string :cam_pass
+        string :cam_username
+        string :cam_password
       end
 
       def validate
@@ -110,8 +110,8 @@ module Evercam
           inputs[:jpg_url].prepend('/') if inputs[:jpg_url][0,1] != '/'
           camera.values[:config].merge!({'snapshots' => { 'jpg' => inputs[:jpg_url]}})
         end
-        if inputs[:cam_user] or inputs[:cam_pass]
-          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_user], 'password' => inputs[:cam_pass] }}})
+        if inputs[:cam_username] or inputs[:cam_password]
+          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_username], 'password' => inputs[:cam_password] }}})
         end
 
         camera.timezone = timezone if timezone

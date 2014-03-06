@@ -16,8 +16,8 @@ module Evercam
       optional :external_url, type: String, desc: "External camera url."
       optional :internal_url, type: String, desc: "Internal camera url."
       optional :jpg_url, type: String, desc: "Snapshot url."
-      optional :cam_user, type: String, desc: "Camera username."
-      optional :cam_pass, type: String, desc: "Camera password."
+      optional :cam_username, type: String, desc: "Camera username."
+      optional :cam_password, type: String, desc: "Camera password."
     end
     post '/cameras', :http_codes => [
       [400, "Invalid parameter entry"],
@@ -83,8 +83,8 @@ module Evercam
       optional :external_url, type: String, desc: "External camera url."
       optional :internal_url, type: String, desc: "Internal camera url."
       optional :jpg_url, type: String, desc: "Snapshot url."
-      optional :cam_user, type: String, desc: "Camera username."
-      optional :cam_pass, type: String, desc: "Camera password."
+      optional :cam_username, type: String, desc: "Camera username."
+      optional :cam_password, type: String, desc: "Camera password."
     end
     patch '/cameras/:id' do
       authreport!('cameras/patch')
