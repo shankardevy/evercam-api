@@ -77,18 +77,6 @@ describe 'WebApp routes/oauth2_router' do
       end
     end
 
-    context 'when a scope is not specified' do
-      it 'hits the redirect URI with an error' do
-        get_parameters.delete(:scope)
-        get('/oauth2/authorize', get_parameters, {})
-
-        expect(last_response.status).to eq(302)
-        uri    = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
     context 'when an invalid client id is specified' do
       it 'hits the redirect URI with an error' do
         get_parameters[:client_id] = 'xxxx'
@@ -143,7 +131,7 @@ describe 'WebApp routes/oauth2_router' do
       let(:client3) { create(:client, callback_uris: ["https://www.google.com"]).save }
 
       before(:each) do
-        token = create(:access_token, client: client3)
+        token = create(:access_token, client: client3, refresh: "rc001")
         AccessRightSet.new(camera0, client3).grant(AccessRight::VIEW)
         token.save
       end
@@ -157,6 +145,22 @@ describe 'WebApp routes/oauth2_router' do
           expect(last_response.status).to eq(302)
           uri = URI.parse(last_response.location)
           expect(uri.host).to eq('www.google.com')
+          map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
+          expect(map.include?("code")).to eq(true)
+        end
+      end
+
+      context 'and a valid code request without a scope is made' do
+        it 'hits the redirect URI' do
+          get_parameters[:client_id] = client3.exid
+          get_parameters.delete(:scope)
+          get('/oauth2/authorize', get_parameters, env)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
+          expect(map.include?("code")).to eq(true)
         end
       end
 
@@ -178,6 +182,37 @@ describe 'WebApp routes/oauth2_router' do
           get_parameters[:client_id] = client3.exid
           get_parameters[:scope] = "camera:view:#{camera0.exid}"
           get_parameters[:response_type] = 'token'
+          get_parameters.delete(:redirect_uri)
+          get('/oauth2/authorize', get_parameters, env)
+
+          expect(last_response.status).to eq(200)
+          expect([nil, ''].include?(last_response.body)).to eq(false)
+          map = JSON.parse(last_response.body)
+          expect(map.include?("access_token")).to eq(true)
+          expect(map.include?("token_type")).to eq(true)
+          expect(map.include?("expires_in")).to eq(true)
+          expect(map.include?("refresh_token")).to eq(false)
+        end
+      end
+
+      context 'and a valid token request is made without a scope' do
+        it 'hits the redirect URI' do
+          get_parameters[:client_id] = client3.exid
+          get_parameters[:response_type] = 'token'
+          get_parameters.delete(:scope)
+          get('/oauth2/authorize', get_parameters, env)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+        end
+      end
+
+      context 'and a valid token request is made without a scope or redirect URI' do
+        it 'hits the redirect URI' do
+          get_parameters[:client_id] = client3.exid
+          get_parameters[:response_type] = 'token'
+          get_parameters.delete(:scope)
           get_parameters.delete(:redirect_uri)
           get('/oauth2/authorize', get_parameters, env)
 

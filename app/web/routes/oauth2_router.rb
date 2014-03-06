@@ -49,7 +49,11 @@ module Evercam
       end
 
       def parse_scope(scope)
-        scope.strip.include?(' ') ? scope.strip.split(' ') : [scope.strip]
+        if scope
+          scope.strip.include?(' ') ? scope.strip.split(' ') : [scope.strip]
+        else
+          []
+        end
       end
 
       # Translate the scope request into a list of scope strings.
@@ -208,7 +212,6 @@ module Evercam
 
         raise UNSUPPORTED_RESPONSE_TYPE if !valid_response_type?(params[:response_type])
         raise INVALID_REQUEST if !params[:client_id]
-        raise INVALID_REQUEST if !params[:scope]
 
         @client = Client.where(exid: params[:client_id]).first
         raise ACCESS_DENIED if @client.nil?
