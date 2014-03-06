@@ -178,10 +178,14 @@ module Evercam
             client = Client[exid: settings[:client_id]]
             scopes = parse_scope(settings[:scope])
             grant_missing_rights(client, user, scopes)
-            redirect generate_response_uri(redirect_uri,
-                                           client,
-                                           response_type,
-                                           settings[:state]).to_s
+            if redirect_uri
+              redirect generate_response_uri(redirect_uri,
+                                             client,
+                                             response_type,
+                                             settings[:state]).to_s
+            else
+              jsonp generate_response(client, response_type, settings[:state])
+            end
           end
         else
           raise ACCESS_DENIED
@@ -198,7 +202,8 @@ module Evercam
       redirect_uri    = '/oauth2/error'
       session[:oauth] = nil
       begin
-        raise INVALID_REDIRECT_URI if !params[:redirect_uri]
+        response_type = params[:response_type]
+        raise INVALID_REDIRECT_URI if response_type == 'code' && !params[:redirect_uri]
         redirect_uri = params[:redirect_uri]
 
         raise UNSUPPORTED_RESPONSE_TYPE if !valid_response_type?(params[:response_type])
@@ -207,10 +212,9 @@ module Evercam
 
         @client = Client.where(exid: params[:client_id]).first
         raise ACCESS_DENIED if @client.nil?
-        raise INVALID_REDIRECT_URI if !valid_redirect_uri?(@client, redirect_uri)
+        raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(@client, redirect_uri)
 
-        response_type = params[:response_type]
-        scopes        = parse_scope(params[:scope])
+        scopes = parse_scope(params[:scope])
 
         with_user do |user|
           if !has_all_rights?(@client, user, scopes)
@@ -224,8 +228,12 @@ module Evercam
             erb 'oauth2/authorize'.to_sym
           else
             # Request has all the rights needed, drop straight through.
-            redirect generate_response_uri(redirect_uri, @client,
-                                           response_type, params[:state]).to_s
+            if redirect_uri
+              redirect generate_response_uri(redirect_uri, @client,
+                                             response_type, params[:state]).to_s
+            else
+              jsonp generate_response(@client, response_type, params[:state])
+            end
           end
         end
       rescue => error

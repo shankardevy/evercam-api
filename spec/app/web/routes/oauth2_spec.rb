@@ -148,7 +148,7 @@ describe 'WebApp routes/oauth2_router' do
         token.save
       end
 
-      context 'and the request is valid' do
+      context 'and a valid code request is made' do
         it 'hits the redirect URI' do
           get_parameters[:client_id] = client3.exid
           get_parameters[:scope] = "camera:view:#{camera0.exid}"
@@ -157,6 +157,37 @@ describe 'WebApp routes/oauth2_router' do
           expect(last_response.status).to eq(302)
           uri = URI.parse(last_response.location)
           expect(uri.host).to eq('www.google.com')
+        end
+      end
+
+      context 'and a valid token request is made with a redirect URI' do
+        it 'hits the redirect URI' do
+          get_parameters[:client_id] = client3.exid
+          get_parameters[:scope] = "camera:view:#{camera0.exid}"
+          get_parameters[:response_type] = 'token'
+          get('/oauth2/authorize', get_parameters, env)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+        end
+      end
+
+      context 'and a valid token request is made without a redirect URI' do
+        it 'hits the redirect URI' do
+          get_parameters[:client_id] = client3.exid
+          get_parameters[:scope] = "camera:view:#{camera0.exid}"
+          get_parameters[:response_type] = 'token'
+          get_parameters.delete(:redirect_uri)
+          get('/oauth2/authorize', get_parameters, env)
+
+          expect(last_response.status).to eq(200)
+          expect([nil, ''].include?(last_response.body)).to eq(false)
+          map = JSON.parse(last_response.body)
+          expect(map.include?("access_token")).to eq(true)
+          expect(map.include?("token_type")).to eq(true)
+          expect(map.include?("expires_in")).to eq(true)
+          expect(map.include?("refresh_token")).to eq(false)
         end
       end
     end
@@ -219,7 +250,7 @@ describe 'WebApp routes/oauth2_router' do
         end
       end
 
-      context 'for a response type of token' do
+      context 'for a response type of token with a redirect URI' do
         it "it hits the redirect URI with the right details in the fragment" do
           get('/oauth2/feedback', parameters, token_settings)
 
@@ -230,6 +261,21 @@ describe 'WebApp routes/oauth2_router' do
           expect(map.include?("access_token")).to eq(true)
           expect(map.include?("token_type")).to eq(true)
           expect(map.include?("expires_in")).to eq(true)
+        end
+      end
+
+      context 'for a response type of token without a redirect URI' do
+        it "it hits the redirect URI with the right details in the fragment" do
+          token_settings["rack.session"][:oauth].delete(:redirect_uri)
+          get('/oauth2/feedback', parameters, token_settings)
+
+          expect(last_response.status).to eq(200)
+          expect([nil, ''].include?(last_response.body)).to eq(false)
+          map = JSON.parse(last_response.body)
+          expect(map.include?("access_token")).to eq(true)
+          expect(map.include?("token_type")).to eq(true)
+          expect(map.include?("expires_in")).to eq(true)
+          expect(map.include?("refresh_token")).to eq(false)
         end
       end
     end
