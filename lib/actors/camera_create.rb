@@ -7,9 +7,8 @@ module Evercam
       required do
         string :id
         string :name
-
         string :username
-        array :endpoints, class: String
+
         boolean :is_public
       end
 
@@ -18,6 +17,12 @@ module Evercam
         string :mac_address
         string :model
         string :vendor
+
+        string :jpg_url
+        string :external_url
+        string :internal_url
+
+        array :endpoints, class: String, arrayize: true
 
         hash :snapshots do
           string :jpg
@@ -29,6 +34,9 @@ module Evercam
             string :password
           end
         end
+
+        string :cam_username
+        string :cam_password
       end
 
       def validate
@@ -44,9 +52,15 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        if nil == endpoints || endpoints.size == 0 || false == endpoints.kind_of?(Array)
-          add_error(:endpoints, :valid, 'Endpoints must be an array of at least one item')
-        else
+        if !(endpoints && endpoints.length > 0) && !external_url
+          add_error(:external_url, :valid, 'External url is missing')
+        end
+
+        if external_url && !(external_url =~ URI.regexp)
+          add_error(:external_url, :valid, 'External url is invalid')
+        end
+
+        if endpoints
           endpoints.each do |e|
             unless e =~ URI.regexp
               add_error(:endpoints, :valid, 'One or more endpoints is not a valid URI')
@@ -91,6 +105,15 @@ module Evercam
           end
         end
         camera.values[:config][:auth] = inputs[:auth] if inputs[:auth]
+
+        if inputs[:jpg_url]
+          inputs[:jpg_url].prepend('/') if inputs[:jpg_url][0,1] != '/'
+          camera.values[:config].merge!({'snapshots' => { 'jpg' => inputs[:jpg_url]}})
+        end
+        if inputs[:cam_username] or inputs[:cam_password]
+          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_username], 'password' => inputs[:cam_password] }}})
+        end
+
         camera.timezone = timezone if timezone
         camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
@@ -103,15 +126,18 @@ module Evercam
           done_at: Time.now
         )
 
-        inputs[:endpoints].each do |e|
-          endpoint = URI.parse(e)
+        if inputs[:endpoints]
+          inputs[:endpoints].each do |e|
+            add_endpoint(camera, e)
+          end
+        end
 
-          camera.add_endpoint({
-            scheme: endpoint.scheme,
-            host: endpoint.host,
-            port: endpoint.port
-          })
+        if inputs[:external_url]
+          add_endpoint(camera, inputs[:external_url])
+        end
 
+        if inputs[:internal_url]
+          add_endpoint(camera, inputs[:internal_url])
         end
 
         # fire off the evr.cm zone update to sidekiq
@@ -119,6 +145,16 @@ module Evercam
         DNSUpsertWorker.perform_async(id, primary.host)
 
         camera
+      end
+
+      def add_endpoint(camera, url)
+        endpoint = URI.parse(url)
+
+        camera.add_endpoint({
+          scheme: endpoint.scheme,
+          host: endpoint.host,
+          port: endpoint.port
+        })
       end
 
     end

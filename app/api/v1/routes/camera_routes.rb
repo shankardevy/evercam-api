@@ -12,12 +12,18 @@ module Evercam
     params do
       requires :id, type: String, desc: "Camera Id."
       requires :name, type: String, desc: "Camera name."
-      requires :endpoints, type: Array, desc: "Endpoints."
       requires :is_public, type: Boolean, desc: "Is camera public?"
-      optional :snapshots, type: Hash, desc: "Snapshots."
-      optional :auth, type: Hash, desc: "Auth."
+      optional :external_url, type: String, desc: "External camera url."
+      optional :internal_url, type: String, desc: "Internal camera url."
+      optional :jpg_url, type: String, desc: "Snapshot url."
+      optional :cam_username, type: String, desc: "Camera username."
+      optional :cam_password, type: String, desc: "Camera password."
     end
-    post '/cameras' do
+    post '/cameras', :http_codes => [
+      [400, "Invalid parameter entry"],
+      [401, "Authentication error"],
+      [403, "Authorization Error"],
+    ]  do
       auth.demand do |req, usr|
         authreport!('cameras/post')
         inputs = params.merge(username: usr.username)
@@ -73,10 +79,12 @@ module Evercam
     params do
       requires :id, type: String, desc: "Camera Id."
       optional :name, type: String, desc: "Camera name."
-      optional :endpoints, type: Array, desc: "Endpoints."
       optional :is_public, type: Boolean, desc: "Is camera public?"
-      optional :snapshots, type: Hash, desc: "Snapshots."
-      optional :auth, type: Hash, desc: "Auth."
+      optional :external_url, type: String, desc: "External camera url."
+      optional :internal_url, type: String, desc: "Internal camera url."
+      optional :jpg_url, type: String, desc: "Snapshot url."
+      optional :cam_username, type: String, desc: "Camera username."
+      optional :cam_password, type: String, desc: "Camera password."
     end
     patch '/cameras/:id' do
       authreport!('cameras/patch')
