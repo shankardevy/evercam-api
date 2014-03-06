@@ -45,7 +45,7 @@ describe 'API routes/snapshots' do
       User.where(:username => username).delete
     end
 
-    describe 'GET /cameras/:id/snapshots/:year/:month/days', :focus => true do
+    describe 'GET /cameras/:id/snapshots/:year/:month/days' do
 
       context 'when snapshot request is correct' do
         let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 17)) }
@@ -68,6 +68,34 @@ describe 'API routes/snapshots' do
       context 'when month is incorrect' do
         it 'returns 400 error' do
           get("/cameras/#{@exid}/snapshots/1970/13/days", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
+      end
+    end
+
+    describe 'GET /cameras/:id/snapshots/:year/:month/:day/hours', :focus => true do
+
+      context 'when snapshot request is correct' do
+        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 01, 17)) }
+
+        it 'returns array of hours for given date' do
+          snapOld
+          get("/cameras/#{@exid}/snapshots/1970/01/01/hours", {}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['hours']).to eq([1,17])
+        end
+      end
+
+      context 'when day is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/00/hours", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
+      end
+
+      context 'when day is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/41/hours", {}, auth)
           expect(last_response.status).to eq(400)
         end
       end

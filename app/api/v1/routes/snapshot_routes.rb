@@ -162,6 +162,33 @@ module Evercam
           { :days => days}
         end
 
+        desc 'Returns list of specific hours in a given day which contains any snapshots'
+        params do
+          requires :year, type: Integer, desc: "Year, for example 2013"
+          requires :month, type: Integer, desc: "Month, for example 11"
+          requires :day, type: Integer, desc: "Day, for example 17"
+        end
+        get 'snapshots/:year/:month/:day/hours' do
+          if params[:month] > 12 or params[:month] < 1
+            raise BadRequestError, 'Invalid month value'
+          end
+          if params[:day] > 31 or params[:day] < 1
+            raise BadRequestError, 'Invalid day value'
+          end
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          hours = []
+          (0..23).each do |hour|
+            from = Time.new(params[:year], params[:month], params[:day], hour).to_s
+            to = Time.new(params[:year], params[:month], params[:day], hour, 59, 59).to_s
+            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+              hours << hour
+            end
+          end
+
+          { :hours => hours}
+        end
+
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
         }
