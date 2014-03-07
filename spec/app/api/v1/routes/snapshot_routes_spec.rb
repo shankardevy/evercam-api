@@ -7,12 +7,11 @@ describe 'API routes/snapshots' do
   let(:app) { Evercam::APIv1 }
 
   let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
+  let(:auth) { env_for(session: { user: camera0.owner.id }) }
+  let(:snap) { create(:snapshot, camera: camera0) }
 
+  describe('GET /cameras/:id/snapshots') {
 
-  describe 'GET /cameras/:id/snapshots' do
-
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-    let(:snap) { create(:snapshot, camera: camera0) }
     let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
 
     context 'when snapshot request is correct' do
@@ -24,52 +23,116 @@ describe 'API routes/snapshots' do
       end
     end
 
-  end
+  }
 
   describe 'GET /cameras/:id/snapshots/range' do
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-    let(:snap) { create(:snapshot, camera: camera0) }
-    let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.at(12345)) }
-    let(:snap2) { create(:snapshot, camera: camera0, created_at: Time.at(123)) }
-
-    before do
-      snap1
-      snap2
+    before(:all) do
+      @exid = 'xxx'
+      @cam = create(:camera, exid: @exid)
       data = File.read('spec/resources/snapshot.jpg')
-      (1..100).each do |n|
-        Snapshot.create(camera: camera0, created_at: Time.at(n), data: data)
+      (1..150).each do |n|
+        Snapshot.create(camera: @cam, created_at: Time.at(n), data: data)
+      end
+    end
+
+    after(:all) do
+      username = @cam.owner.username
+      Camera.where(:exid => @exid).delete
+      User.where(:username => username).delete
+    end
+
+    describe 'GET /cameras/:id/snapshots/:year/:month/days' do
+
+      context 'when snapshot request is correct' do
+        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 17, 0, 0, 0, '+00:00')) }
+
+        it 'returns array of days for given date' do
+          snapOld
+          get("/cameras/#{@exid}/snapshots/1970/01/days", {}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['days']).to eq([1,17])
+        end
+      end
+
+      context 'when month is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/00/days", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
+      end
+
+      context 'when month is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/13/days", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
+      end
+    end
+
+    describe 'GET /cameras/:id/snapshots/:year/:month/:day/hours' do
+
+      context 'when snapshot request is correct' do
+        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 01, 17, 0, 0, '+00:00')) }
+
+        it 'returns array of hours for given date' do
+          snapOld
+          get("/cameras/#{@exid}/snapshots/1970/01/01/hours", {}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['hours']).to eq([0,17])
+        end
+      end
+
+      context 'when day is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/00/hours", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
+      end
+
+      context 'when day is incorrect' do
+        it 'returns 400 error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/41/hours", {}, auth)
+          expect(last_response.status).to eq(400)
+        end
       end
     end
 
     context 'when snapshot request is correct' do
       context 'all snapshots within given range are returned' do
+
         it 'applies default no data limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(100)
         end
 
+        it 'applies default no data limit and returns second page' do
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, page: 2}, auth)
+          expect(last_response.status).to eq(200)
+          expect(last_response.json['snapshots'].length).to eq(50)
+        end
+
         it 'applies specified limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(15)
         end
 
         it 'applies default data limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(10)
         end
 
         it 'applies specified limit' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(5)
         end
 
         it 'returns only two entries' do
-          get("/cameras/#{snap.camera.exid}/snapshots/range", {from: 1, to: 2}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 2}, auth)
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(2)
         end
@@ -93,7 +156,6 @@ describe 'API routes/snapshots' do
 
     let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:instant) { Time.now }
-    let(:snap) { create(:snapshot, camera: camera0) }
     let(:snap1) { create(:snapshot, camera: camera0, created_at: instant) }
     let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
     let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
@@ -115,9 +177,6 @@ describe 'API routes/snapshots' do
   end
 
   describe 'GET /cameras/:id/snapshot.jpg' do
-
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-    let(:snap) { create(:snapshot, camera: camera0) }
 
     context 'when snapshot request is correct' do
 
@@ -179,9 +238,6 @@ describe 'API routes/snapshots' do
 
   describe 'GET /cameras/:id/snapshots/:timestamp' do
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-    let(:snap) { create(:snapshot, camera: camera0) }
-
     context 'when snapshot request is correct' do
 
       let(:instant) { Time.now }
@@ -236,8 +292,6 @@ describe 'API routes/snapshots' do
 
   describe 'POST /cameras/:id/snapshots' do
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-
     let(:params) {
       {
         notes: 'Snap note'
@@ -276,8 +330,6 @@ describe 'API routes/snapshots' do
 
   describe 'POST /cameras/:id/snapshots/:timestamp' do
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-
     let(:params) {
       {
         notes: 'Snap note',
@@ -308,10 +360,6 @@ describe 'API routes/snapshots' do
   end
 
  describe 'DELETE /cameras/:id/snapshots/:timestamp' do
-
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
-
-    let(:snap) { create(:snapshot, camera: camera0) }
 
     context 'when snapshot request is correct' do
       it 'snapshot is deleted' do

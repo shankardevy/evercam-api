@@ -75,6 +75,7 @@ group :test do
   gem 'rspec'
   gem 'guard-rspec'
   gem 'vcr'
+  gem 'database_cleaner'
 
   gem 'mocha',
     require: 'mocha/api'

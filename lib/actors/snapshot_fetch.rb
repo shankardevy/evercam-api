@@ -11,8 +11,8 @@ module Evercam
       end
 
       def execute
-        instant = Time.now
         camera = ::Camera.by_exid!(inputs[:id])
+        instant = camera.timezone.time Time.now
         snapshot = nil
 
         camera.endpoints.each do |endpoint|

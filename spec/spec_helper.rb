@@ -27,6 +27,10 @@ RSpec.configure do |c|
   c.run_all_when_everything_filtered = true
   c.mock_framework = :mocha
   c.fail_fast = true if ENV['FAIL_FAST']
+
+  c.after(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
 end
 
 # fake out sidekiq redis

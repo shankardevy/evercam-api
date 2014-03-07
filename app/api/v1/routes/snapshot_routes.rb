@@ -114,6 +114,7 @@ module Evercam
           requires :to, type: Integer, desc: "To Unix timestamp."
           optional :with_data, type: Boolean, desc: "Should it send image data?"
           optional :limit, type: Integer, desc: "Limit number of results, default 100 with no data, 10 with data"
+          optional :page, type: Integer, desc: "Page number"
         end
         get 'snapshots/range' do
           camera = ::Camera.by_exid!(params[:id])
@@ -128,9 +129,64 @@ module Evercam
             limit ||= DEFAULT_LIMIT_NO_DATA
           end
 
-          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit)
+          offset = 0
+          if params[:page]
+            offset = (params[:page] - 1) * limit
+          end
+
+          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+        end
+
+        desc 'Returns list of specific days in a given month which contains any snapshots'
+        params do
+          requires :year, type: Integer, desc: "Year, for example 2013"
+          requires :month, type: Integer, desc: "Month, for example 11"
+        end
+        get 'snapshots/:year/:month/days' do
+          unless (1..12).include?(params[:month])
+            raise BadRequestError, 'Invalid month value'
+          end
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          days = []
+          (1..Date.new(params[:year], params[:month], -1).day).each do |day|
+            from = camera.timezone.time(Time.utc(params[:year], params[:month], day)).to_s
+            to = camera.timezone.time(Time.utc(params[:year], params[:month], day, 23, 59, 59)).to_s
+            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+              days << day
+            end
+          end
+
+          { :days => days}
+        end
+
+        desc 'Returns list of specific hours in a given day which contains any snapshots'
+        params do
+          requires :year, type: Integer, desc: "Year, for example 2013"
+          requires :month, type: Integer, desc: "Month, for example 11"
+          requires :day, type: Integer, desc: "Day, for example 17"
+        end
+        get 'snapshots/:year/:month/:day/hours' do
+          unless (1..12).include?(params[:month])
+            raise BadRequestError, 'Invalid month value'
+          end
+          unless (1..31).include?(params[:day])
+            raise BadRequestError, 'Invalid day value'
+          end
+          camera = ::Camera.by_exid!(params[:id])
+          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          hours = []
+          (0..23).each do |hour|
+            from = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour)).to_s
+            to = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour, 59, 59)).to_s
+            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+              hours << hour
+            end
+          end
+
+          { :hours => hours}
         end
 
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
