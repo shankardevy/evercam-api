@@ -102,7 +102,6 @@ module Evercam
         end
 
         camera.values[:config]['auth'] = inputs[:auth] if inputs[:auth]
-        puts camera.values[:config]
 
         if inputs[:jpg_url]
           inputs[:jpg_url].prepend('/') if inputs[:jpg_url][0,1] != '/'

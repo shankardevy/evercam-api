@@ -25,9 +25,6 @@ describe 'API routes/snapshots' do
 
   }
 
-
-
-
   describe 'GET /cameras/:id/snapshots/range' do
 
     before(:all) do
@@ -48,13 +45,13 @@ describe 'API routes/snapshots' do
     describe 'GET /cameras/:id/snapshots/:year/:month/days' do
 
       context 'when snapshot request is correct' do
-        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 17)) }
+        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 17, 0, 0, 0, '+00:00')) }
 
         it 'returns array of days for given date' do
           snapOld
           get("/cameras/#{@exid}/snapshots/1970/01/days", {}, auth)
           expect(last_response.status).to eq(200)
-          expect(last_response.json['days']).to eq([1,16])
+          expect(last_response.json['days']).to eq([1,17])
         end
       end
 
@@ -76,13 +73,13 @@ describe 'API routes/snapshots' do
     describe 'GET /cameras/:id/snapshots/:year/:month/:day/hours' do
 
       context 'when snapshot request is correct' do
-        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 01, 17)) }
+        let(:snapOld) { create(:snapshot, camera: @cam, created_at: Time.new(1970, 01, 01, 17, 0, 0, '+00:00')) }
 
         it 'returns array of hours for given date' do
           snapOld
           get("/cameras/#{@exid}/snapshots/1970/01/01/hours", {}, auth)
           expect(last_response.status).to eq(200)
-          expect(last_response.json['hours']).to eq([0,16])
+          expect(last_response.json['hours']).to eq([0,17])
         end
       end
 
