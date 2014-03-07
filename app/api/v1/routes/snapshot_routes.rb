@@ -145,7 +145,7 @@ module Evercam
           requires :month, type: Integer, desc: "Month, for example 11"
         end
         get 'snapshots/:year/:month/days' do
-          if params[:month] > 12 or params[:month] < 1
+          unless (1..12).include?(params[:month])
             raise BadRequestError, 'Invalid month value'
           end
           camera = ::Camera.by_exid!(params[:id])
@@ -169,10 +169,10 @@ module Evercam
           requires :day, type: Integer, desc: "Day, for example 17"
         end
         get 'snapshots/:year/:month/:day/hours' do
-          if params[:month] > 12 or params[:month] < 1
+          unless (1..12).include?(params[:month])
             raise BadRequestError, 'Invalid month value'
           end
-          if params[:day] > 31 or params[:day] < 1
+          unless (1..31).include?(params[:day])
             raise BadRequestError, 'Invalid day value'
           end
           camera = ::Camera.by_exid!(params[:id])
