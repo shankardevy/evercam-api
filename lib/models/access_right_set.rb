@@ -61,11 +61,11 @@ class AccessRightSet
    private
 
    def load_token
-      token
-      if @type != :user
+      token = nil
+      if @type != :user && !@requester.nil?
          token = AccessToken.where(client_id: @requester.id).order(Sequel.desc(:created_at)).first
          token = AccessToken.create(client: @requester, refresh: SecureRandom.base64(24)) if token.nil?
-      else
+      elsif !@requester.nil?
          token = @requester.token
       end
       token
