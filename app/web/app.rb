@@ -7,6 +7,7 @@
 
 ['helpers/form_helpers',
  'helpers/template_helpers',
+ 'helpers/threescale_helpers',
  'routes/root_router',
  'routes/connect_router',
  'routes/docs_router', 
