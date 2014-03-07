@@ -54,7 +54,7 @@ describe 'API routes/snapshots' do
           snapOld
           get("/cameras/#{@exid}/snapshots/1970/01/days", {}, auth)
           expect(last_response.status).to eq(200)
-          expect(last_response.json['days']).to eq([1,17])
+          expect(last_response.json['days']).to eq([1,16])
         end
       end
 
@@ -82,7 +82,7 @@ describe 'API routes/snapshots' do
           snapOld
           get("/cameras/#{@exid}/snapshots/1970/01/01/hours", {}, auth)
           expect(last_response.status).to eq(200)
-          expect(last_response.json['hours']).to eq([1,17])
+          expect(last_response.json['hours']).to eq([0,16])
         end
       end
 

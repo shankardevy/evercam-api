@@ -152,8 +152,8 @@ module Evercam
           auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
-            from = Time.new(params[:year], params[:month], day).to_s
-            to = Time.new(params[:year], params[:month], day, 23, 59, 59).to_s
+            from = camera.timezone.time(Time.utc(params[:year], params[:month], day)).to_s
+            to = camera.timezone.time(Time.utc(params[:year], params[:month], day, 23, 59, 59)).to_s
             if camera.snapshots.filter(:created_at => (from..to)).count > 0
               days << day
             end
@@ -179,8 +179,8 @@ module Evercam
           auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
           hours = []
           (0..23).each do |hour|
-            from = Time.new(params[:year], params[:month], params[:day], hour).to_s
-            to = Time.new(params[:year], params[:month], params[:day], hour, 59, 59).to_s
+            from = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour)).to_s
+            to = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour, 59, 59)).to_s
             if camera.snapshots.filter(:created_at => (from..to)).count > 0
               hours << hour
             end
