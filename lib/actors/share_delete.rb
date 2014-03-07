@@ -18,7 +18,7 @@ module Evercam
     		camera = Camera.by_exid(inputs[:id])
     		share  = CameraShare.where(id: inputs[:share_id]).first
             if !share.nil?
-                rights = AccessRightSet.new(camera, share.sharer)
+                rights = AccessRightSet.for(camera, share.sharer)
         		CameraShare.db.transaction do
                     rights.revoke(*AccessRight::BASE_RIGHTS)
                     share.delete

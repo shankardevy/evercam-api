@@ -33,7 +33,7 @@ module Evercam
     		user   = User.where(email: inputs[:email]).first
     		camera = Camera.by_exid(inputs[:id])
 
-    		access_rights = AccessRightSet.new(camera, user)
+    		access_rights = AccessRightSet.for(camera, user)
     		kind          = (camera.is_public? ? CameraShare::PUBLIC : CameraShare::PRIVATE)
     		share         = nil
     		CameraShare.db.transaction do

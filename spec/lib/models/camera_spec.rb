@@ -51,7 +51,7 @@ describe Camera do
 
         it 'is true when auth includes specific camera scope' do
           expect(camera.allow?(AccessRight::VIEW, access_token)).to eq(false)
-          AccessRightSet.new(camera, user).grant(AccessRight::VIEW)
+          AccessRightSet.for(camera, user).grant(AccessRight::VIEW)
           expect(camera.allow?(AccessRight::VIEW, access_token)).to eq(true)
         end
 

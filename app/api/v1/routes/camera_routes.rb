@@ -76,7 +76,7 @@ module Evercam
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
           a_token = token
-          rights  = AccessRightSet.new(record, (token.nil? ? nil : token.target))
+          rights  = AccessRightSet.for(record, (token.nil? ? nil : token.target))
           allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
           strip   = (allowed && !rights.is_owner?)
           allowed
@@ -86,7 +86,7 @@ module Evercam
         camera = Camera.by_exid!(params[:id])
         auth.allow? do |token|
           a_token = token
-          rights  = AccessRightSet.new(camera, (token.nil? ? nil : token.target))
+          rights  = AccessRightSet.for(camera, (token.nil? ? nil : token.target))
           allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
           strip   = (allowed && !rights.is_owner?)
           allowed

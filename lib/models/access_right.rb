@@ -43,7 +43,7 @@ class AccessRight < Sequel::Model
 
   # Returns an AccessRightSet for a given resource and token combination.
   def self.rights_for(resource, token)
-    AccessRightSet.new(resource, token.target)
+    AccessRightSet.for(resource, token.target)
   end
 
   def self.valid_right_name?(name)

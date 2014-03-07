@@ -1,13 +1,9 @@
 class AccessRightSet
-   def initialize(resource, requester, token=nil)
-      @resource  = resource
-      @requester = requester
-      @type      = requester.instance_of?(User) ? :user : :client
-      if token.nil?
-        @token = (@type == :user && !@requester.nil? ? @requester.token : nil)
-      else
-        @token = token
-      end
+   def initialize(resource, requester)
+      @resource     = resource
+      @requester    = requester
+      @type         = requester.instance_of?(User) ? :user : :client
+      @access_token = load_token
    end
 
    attr_reader :resource, :requester, :type
@@ -15,96 +11,63 @@ class AccessRightSet
    # Tests whether the requester has a specified permission on the resource
    # covered by the right set.
    def allow?(right)
-      @type == :user ? user_allowed?(right) : client_allowed?(right)
+      false
    end
 
    # Convenience method for testing permissions on a set of rights.
    def allow_all?(*rights)
-      rights.find {|right| allow?(right) == false}.nil?
+      false
    end
 
-   # Tests whether the token used to create the access right set is the owner of
-   # the resource being accessed.
+   # Tests whether the requester possesses at least one of a set of permissions
+   # on a resource.
+   def allow_any?(*rights)
+      false
+   end
+
+   def grant(*rights)
+      raise "The #{self.class.name} class has not implemented the #grant() method."
+   end
+
+   def revoke(*rights)
+      raise "The #{self.class.name} class has not implemented the #revoke() method."
+   end
+
+   # Tests whether the requester is the owner of the resource being accessed.
    def is_owner?
    	@type == :user && @resource.respond_to?(:owner) ? (@resource.owner_id == @requester.id) : false
    end
 
-   def is_token_valid?
-   	!@token.nil? && @token.is_valid?
+   # This method is used to test whether the underlying resource is public.
+   def is_public?
+   	@resource.respond_to?(:is_public?) && @resource.is_public?
    end
 
-   def is_resource_public?
-   	@resource.respond_to?(:is_public?) && @resource.is_public
+   # This method fetches the access token for the right set. For client right
+   # sets this will generally be the client latest token.
+   def token
+      @access_token
    end
 
-   def grant(*rights)
-   	rights.each do |right|
-	   	if !allow?(right) && !is_owner?
-	   		AccessRight.create(token:  (@token || current_token),
-	   			                 camera: @resource,
-	   			                 right: right,
-	   			                 status: AccessRight::ACTIVE)
-	   	end
-	   end
-   end
-
-   def revoke(*rights)
-      @type == :user ? revoke_from_user(*rights) : revoke_from_client(*rights)
+   def self.for(resource, requester)
+      case resource.class
+         when Camera.class
+            CameraRightSet.new(resource, requester)
+         else
+            raise "Right set requested for unknown resource class '#{resource.class.name}'."
+      end
    end
 
    private
 
-   def user_allowed?(right)
-      result = is_resource_public? && AccessRight::PUBLIC_RIGHTS.include?(right)
-      if !result && !@requester.nil? && !@resource.nil?
-         result = is_owner?
-         if !result && @token.valid?
-            result = (AccessRight.where(token_id:  @token.id,
-                                        camera_id: @resource.id,
-                                        status:    AccessRight::ACTIVE,
-                                        right:     right).count > 0) 
-         end
+   def load_token
+      token
+      if @type != :user
+         token = AccessToken.where(client_id: @requester.id).order(Sequel.desc(:created_at)).first
+         token = AccessToken.create(client: @requester, refresh: SecureRandom.base64(24)) if token.nil?
+      else
+         token = @requester.token
       end
-      result
-   end
-
-   def client_allowed?(right)
-      result = is_resource_public? && right == AccessRight::SNAPSHOT
-      if !result && !@requester.nil? && !@resource.nil?
-         query = AccessRight.join(:access_tokens, id: :token_id).where(client_id: @requester.id,
-                                                                       is_revoked: false,
-                                                                       camera_id: @resource.id,
-                                                                       status: AccessRight::ACTIVE,
-                                                                       right: right)
-         result = (query.count > 0)
-      end
-      result
-   end
-
-   def current_token
-      type == :client ? requester.tokens.last :  requester.token
-   end
-
-   def revoke_from_user(*rights)
-      if allow_all?(rights) && !is_owner? && !is_resource_public?
-         AccessRight.where(token:  @token,
-                           camera: @resource,
-                           status: AccessRight::ACTIVE,
-                           right: rights).update(status: AccessRight::DELETED)
-      end
-   end
-
-   def revoke_from_client(*rights)
-      if allow_all?(rights) && !is_resource_public?
-         AccessRight.select(:token_id, :right).join(:access_tokens, id: :token_id).where(client_id: @requester.id,
-                                                                                         is_revoked: false,
-                                                                                         camera_id: @resource.id,
-                                                                                         status: AccessRight::ACTIVE,
-                                                                                         right: rights).each do |record|
-            AccessRight.where(token_id: record.token_id,
-                              status: AccessRight::ACTIVE,
-                              right:  record.right).update(status: AccessRight::DELETED)
-         end
-      end
+      token
    end
 end
