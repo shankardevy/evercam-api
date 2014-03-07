@@ -96,6 +96,50 @@ describe 'API routes/cameras' do
 
   end
 
+  describe 'GET /cameras/test' do
+
+    let (:test_params_invalid)  do
+      {
+        external_url: 'http://1.1.1.1',
+        jpg_url: '/test.jpg',
+        cam_username: 'aaa',
+        cam_password: 'xxx'
+      }
+    end
+
+    let (:test_params_valid)  do
+      {
+        external_url: 'http://89.101.225.158:8105',
+        jpg_url: '/Streaming/channels/1/picture',
+        cam_username: 'admin',
+        cam_password: 'mehcam'
+      }
+    end
+
+    context 'when there are no parameters' do
+      it 'returns a 400 bad request status' do
+        expect(get('/cameras/test').status).to eq(400)
+      end
+    end
+
+    context 'when parameters are incorrect' do
+      it 'returns a 503 camera offline status' do
+        VCR.use_cassette('API_cameras/test') do
+          expect(get('/cameras/test', test_params_invalid).status).to eq(503)
+        end
+      end
+    end
+
+    context 'when parameters are correct' do
+      it 'returns a 200 status with image data' do
+        VCR.use_cassette('API_cameras/test') do
+          expect(get('/cameras/test', test_params_valid).status).to eq(200)
+        end
+      end
+    end
+
+  end
+
   describe 'GET /cameras/:id' do
 
     context 'when the camera does not exist' do

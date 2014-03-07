@@ -6,6 +6,8 @@ module Evercam
 
     include WebErrors
 
+    TIMEOUT = 5
+
     desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
     }
@@ -32,6 +34,31 @@ module Evercam
         raise OutcomeError, outcome unless outcome.success?
 
         present Array(outcome.result), with: Presenters::Camera
+      end
+    end
+
+    desc 'Tests if given camera parameters are correct', {
+      entity: Evercam::Presenters::Camera
+    }
+    params do
+      requires :external_url, type: String, desc: "External camera url."
+      requires :jpg_url, type: String, desc: "Snapshot url."
+      requires :cam_username, type: String, desc: "Camera username."
+      requires :cam_password, type: String, desc: "Camera password."
+    end
+    get '/cameras/test' do
+      auth = "#{params[:cam_username]}:#{params[:cam_password]}"
+      response  = Typhoeus::Request.get(params[:external_url] + params[:jpg_url],
+                                        userpwd: auth,
+                                        timeout: TIMEOUT,
+                                        connecttimeout: TIMEOUT)
+      if response.success?
+        data = Base64.encode64(response.body).gsub("\n", '')
+        { status: 'ok', data: "data:image/jpeg;base64,#{data}"}
+      elsif response.code == 401
+        raise AuthorizationError, 'Please check camera username and password'
+      else
+        raise CameraOfflineError, 'Camera offline'
       end
     end
 
