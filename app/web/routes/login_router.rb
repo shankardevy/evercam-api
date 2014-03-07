@@ -23,6 +23,16 @@ module Evercam
       else
         session[:user] = user.id
         cookies.merge!({ name: user.fullname, email: user.email, created_at: user.created_at.to_i })
+
+        # Check for 3scale account and create it if needed
+        if user.api_id.nil? or user.api_key.nil?
+          begin
+            threescale_user_id(user.username)
+          rescue BadRequestError
+            # No 3scale account, create one
+            threescale_signup(user, params[:password])
+          end
+        end
         redirect params[:rt] ? params[:rt] : "/users/#{user.username}"
       end
     end
