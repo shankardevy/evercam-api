@@ -228,7 +228,7 @@ describe 'WebApp routes/oauth2_router' do
     end
   end
 
-  describe 'GET /oauth2/feedback' do
+  describe 'POST /oauth2/feedback' do
     let(:parameters) { {action: 'approve'} }
     let(:code_oauth) {{client_id: client0.exid,
                        response_type: 'code',
@@ -243,7 +243,7 @@ describe 'WebApp routes/oauth2_router' do
 
     context 'when an action parameter is not specified' do
       it "redirects to /oauth2/error" do
-        get('/oauth2/feedback')
+        post('/oauth2/feedback')
 
         expect(last_response.status).to eq(302)
         uri = URI.parse(last_response.location)
@@ -253,7 +253,7 @@ describe 'WebApp routes/oauth2_router' do
 
     context 'when there are no deatils stored in the session' do
       it "redirects to /oauth2/error" do
-        get('/oauth2/feedback', parameters, {})
+        post('/oauth2/feedback', parameters, {})
 
         expect(last_response.status).to eq(302)
         uri = URI.parse(last_response.location)
@@ -263,7 +263,7 @@ describe 'WebApp routes/oauth2_router' do
 
     context 'when an action other than approve is specified' do
       it "hits the redirect URI with an error" do
-        get('/oauth2/feedback', {action: 'decline'}, code_settings)
+        post('/oauth2/feedback', {action: 'decline'}, code_settings)
 
         expect(last_response.status).to eq(302)
         uri = URI.parse(last_response.location)
@@ -275,7 +275,7 @@ describe 'WebApp routes/oauth2_router' do
     context 'when the action specified is approve' do
       context 'for a response type of code' do
         it "it hits the redirect URI with the right details in the query" do
-          get('/oauth2/feedback', parameters, code_settings)
+          post('/oauth2/feedback', parameters, code_settings)
 
           expect(last_response.status).to eq(302)
           uri = URI.parse(last_response.location)
@@ -287,7 +287,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'for a response type of token with a redirect URI' do
         it "it hits the redirect URI with the right details in the fragment" do
-          get('/oauth2/feedback', parameters, token_settings)
+          post('/oauth2/feedback', parameters, token_settings)
 
           expect(last_response.status).to eq(302)
           uri = URI.parse(last_response.location)
@@ -302,7 +302,7 @@ describe 'WebApp routes/oauth2_router' do
       context 'for a response type of token without a redirect URI' do
         it "it hits the redirect URI with the right details in the fragment" do
           token_settings["rack.session"][:oauth].delete(:redirect_uri)
-          get('/oauth2/feedback', parameters, token_settings)
+          post('/oauth2/feedback', parameters, token_settings)
 
           expect(last_response.status).to eq(200)
           expect([nil, ''].include?(last_response.body)).to eq(false)

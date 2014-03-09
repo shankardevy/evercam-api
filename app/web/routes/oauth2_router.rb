@@ -166,7 +166,7 @@ module Evercam
 
     # This method gets hit when the user either approves or declines a rights
     # request.
-    get '/oauth2/feedback' do
+    post '/oauth2/feedback' do
       redirect_uri = '/oauth2/error'
       begin
         raise ACCESS_DENIED if !params[:action]
@@ -222,7 +222,7 @@ module Evercam
         with_user do |user|
           if !has_all_rights?(@client, user, scopes)
             # Rights confirmation needed from user.
-            session[:oauth] = {client_id:     @client.id,
+            session[:oauth] = {client_id:     @client.exid,
                                response_type: response_type,
                                scope:         params[:scope],
                                redirect_uri:  redirect_uri,
