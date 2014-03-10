@@ -9,7 +9,7 @@ describe 'API routes/cameras' do
 
   let(:token) { create(:access_token) }
 
-  let(:access_right) { create(:access_right, token: token) }
+  let(:access_right) { create(:camera_access_right, token: token) }
 
   describe 'presented fields' do
 

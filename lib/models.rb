@@ -19,6 +19,7 @@ require_relative './models/access_right'
 require_relative './models/access_right_set'
 require_relative './models/right_sets/camera_right_set'
 require_relative './models/right_sets/snapshot_right_set'
+require_relative './models/right_sets/account_right_set'
 
 require_relative './models/user'
 require_relative './models/country'

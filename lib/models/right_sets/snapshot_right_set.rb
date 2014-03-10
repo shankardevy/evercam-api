@@ -99,6 +99,11 @@ class SnapshotRightSet < AccessRightSet
                                         snapshot_id: snapshot.id,
                                         status:      AccessRight::ACTIVE,
                                         right:       right).count > 0) 
+            if !result
+               # Check for an account level permissions grant.
+               rights = AccountRightSet.new(snapshot.owner, requester, AccessRight::SNAPSHOTS)
+               result = rights.allow?(right)
+            end
          end
       end
       result
@@ -133,6 +138,11 @@ class SnapshotRightSet < AccessRightSet
                                                                        status: AccessRight::ACTIVE,
                                                                        right: right)
          result = (query.count > 0)
+         if !result
+            # Check for an account level permissions grant.
+            rights = AccountRightSet.new(snapshot.owner, requester, AccessRight::SNAPSHOTS)
+            result = rights.allow?(right)
+         end
       end
       result
    end

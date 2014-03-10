@@ -11,6 +11,11 @@ class AccessRight < Sequel::Model
   ALL_RIGHTS                 = BASE_RIGHTS + [GRANT]
   PUBLIC_RIGHTS              = [SNAPSHOT, LIST]
 
+  # Scope constants.
+  CAMERAS                    = "cameras".freeze
+  SNAPSHOTS                  = "snapshots".freeze
+  ALL_SCOPES                 = [CAMERAS, SNAPSHOTS]
+
   # Status constants.
   ACTIVE                     = 1
   DELETED                    = -1
@@ -20,6 +25,37 @@ class AccessRight < Sequel::Model
   many_to_one :camera
   many_to_one :grantor, class: 'User', key: :grantor_id
   many_to_one :snapshot
+  many_to_one :account, class: 'User', key: :account_id
+
+  # Fetches the resource associated with the access right. This could be a
+  # camera, a snapshot or a user (for account rights).
+  def resource
+    if !camera_id.nil?
+      camera
+    elsif !snapshot_id.nil?
+      snapshot
+    else
+      account
+    end
+  end
+
+  # A simple method to test whether this access right relates to an individual
+  # camera.
+  def for_camera?
+    !camera_id.nil?
+  end
+
+  # A simple method to test whether this access right relates to an individual
+  # snapshot.
+  def for_snapshot?
+    !snapshot_id.nil?
+  end
+
+  # A simple method to test whether this access right relates to an entire
+  # users account.
+  def for_account?
+    !account_id.nil?
+  end
 
   # Returns a basic string representation of an AccessRight.
   def to_s
@@ -30,7 +66,7 @@ class AccessRight < Sequel::Model
   def validate
     super
     errors.add(:token_id, "is not set") if !token_id
-    if camera_id.nil? && snapshot_id.nil?
+    if camera_id.nil? && snapshot_id.nil? && account_id.nil?
       errors.add(:resource, 'has not been set')
     end
     errors.add(:status, "is invalid") if !ALL_STATUSES.include?(status)
@@ -42,6 +78,7 @@ class AccessRight < Sequel::Model
         errors.add(:right, "is invalid")
       end
     end
+    errors.add(:scope, "is invalid") if scope && !ALL_SCOPES.include?(scope)
   end
 
   # Returns an AccessRightSet for a given resource and token combination.
