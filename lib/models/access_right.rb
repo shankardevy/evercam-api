@@ -19,6 +19,7 @@ class AccessRight < Sequel::Model
   many_to_one :token, class: 'AccessToken'
   many_to_one :camera
   many_to_one :grantor, class: 'User', key: :grantor_id
+  many_to_one :snapshot
 
   # Returns a basic string representation of an AccessRight.
   def to_s
@@ -29,7 +30,9 @@ class AccessRight < Sequel::Model
   def validate
     super
     errors.add(:token_id, "is not set") if !token_id
-    errors.add(:camera_id, "is not set") if !camera_id
+    if camera_id.nil? && snapshot_id.nil?
+      errors.add(:resource, 'has not been set')
+    end
     errors.add(:status, "is invalid") if !ALL_STATUSES.include?(status)
     if !BASE_RIGHTS.include?(right)
       match = /^grant~(.+)$/.match(right)

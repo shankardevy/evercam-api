@@ -1,24 +1,24 @@
 require 'data_helper'
 
-describe CameraRightSet do
+describe SnapshotRightSet do
 	context "accessors =>" do
-		let(:camera) { create(:camera) }
+		let(:snapshot) { create(:snapshot) }
 		let(:client) { create(:client) }
 		let(:user)   { create(:user) }
 
-		it "returns a camera for a call to the #camera method" do
-			rights = CameraRightSet.new(camera, user)
-			expect(rights.camera).to eq(camera)
+		it "returns a snapshot for a call to the #snapshot method" do
+			rights = SnapshotRightSet.new(snapshot, user)
+			expect(rights.snapshot).to eq(snapshot)
 		end
 
-      it "returns true for all appropriate rights for calls to the #valid_right? method" do
-			rights = CameraRightSet.new(camera, user)
-			expect(rights.valid_right?(AccessRight::SNAPSHOT)).to eq(true)
+      it "returns and approprite true or false for rights passed to the #valid_right? method" do
+			rights = SnapshotRightSet.new(snapshot, user)
+			expect(rights.valid_right?(AccessRight::SNAPSHOT)).to eq(false)
 			expect(rights.valid_right?(AccessRight::LIST)).to eq(true)
 			expect(rights.valid_right?(AccessRight::VIEW)).to eq(true)
 			expect(rights.valid_right?(AccessRight::EDIT)).to eq(true)
 			expect(rights.valid_right?(AccessRight::DELETE)).to eq(true)
-			expect(rights.valid_right?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(true)
+			expect(rights.valid_right?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 			expect(rights.valid_right?("#{AccessRight::GRANT}~#{AccessRight::LIST}")).to eq(true)
 			expect(rights.valid_right?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(true)
 			expect(rights.valid_right?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(true)
@@ -28,20 +28,18 @@ describe CameraRightSet do
 
 	context "for user right sets" do
 		context "where the resource is not public" do
-			let(:camera) { create(:camera, is_public: false) }
+			let(:snapshot) { create(:snapshot, is_public: false) }
 
 			context "and the user is not the resource owner" do
 				let(:user) { create(:user, id: -100) }
 
 				it "returns false for all rights tests" do
-					rights = CameraRightSet.new(camera, user)
+					rights = SnapshotRightSet.new(snapshot, user)
 
-					expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
 					expect(rights.allow?(AccessRight::LIST)).to eq(false)
 					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
-					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(false)
@@ -50,20 +48,18 @@ describe CameraRightSet do
 		end
 
 		context "where the resource is public" do
-			let(:camera) { create(:camera) }
+			let(:snapshot) { create(:snapshot, is_public: true) }
 
 			context "and the user is not the resource owner" do
 				let(:user) { create(:user, id: -100) }
 
 				it "returns true only for the snapshot and list rights" do
-					rights = CameraRightSet.new(camera, user)
+					rights = SnapshotRightSet.new(snapshot, user)
 
-					expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(true)
 					expect(rights.allow?(AccessRight::LIST)).to eq(true)
 					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
-					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(false)
@@ -73,17 +69,16 @@ describe CameraRightSet do
 
 		context "where the user is the resource owner" do
 			let(:user)   { create(:user) }
-			let(:camera) { create(:camera, is_public: false, owner_id: user.id) }
+			let(:camera) { create(:camera, owner: user) }
+			let(:snapshot) { create(:snapshot, is_public: false, camera: camera) }
 
 			it "returns true for all rights" do
-				rights = CameraRightSet.new(camera, user)
+				rights = SnapshotRightSet.new(snapshot, user)
 
-				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(true)
 				expect(rights.allow?(AccessRight::LIST)).to eq(true)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(true)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(true)
-				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(true)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(true)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(true)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(true)
@@ -93,18 +88,16 @@ describe CameraRightSet do
 
 	context "for client right sets" do
 		context "where the resource is not public" do
-			let(:camera) { create(:camera, is_public: false) }
+			let(:snapshot) { create(:snapshot, is_public: false) }
 			let(:client) { create(:client) }
 
 			it "returns false for all rights tests" do
-				rights = CameraRightSet.new(camera, client)
+				rights = SnapshotRightSet.new(snapshot, client)
 
-				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
 				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(false)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)
-				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(false)
@@ -115,12 +108,12 @@ describe CameraRightSet do
 	describe "#can_grant?" do
 		let(:user)   { create(:user) }
 
-		context "where the user is the camera owner" do
-         let(:camera) { create(:camera, is_public: false, owner: user) }
+		context "where the user is the snapshot owner" do
+			let(:camera) { create(:camera, owner: user) }
+         let(:snapshot) { create(:snapshot, is_public: false, camera: camera) }
 
 			it "returns true for all valid rights" do
-				rights = CameraRightSet.new(camera, user)
-				expect(rights.can_grant?(AccessRight::SNAPSHOT)).to eq(true)
+				rights = SnapshotRightSet.new(snapshot, user)
 				expect(rights.can_grant?(AccessRight::LIST)).to eq(true)
 				expect(rights.can_grant?(AccessRight::VIEW)).to eq(true)
 				expect(rights.can_grant?(AccessRight::EDIT)).to eq(true)
@@ -128,12 +121,11 @@ describe CameraRightSet do
 			end
 		end
 
-		context "where the user is not the owner of the camera and has no rights on it" do
-         let(:camera) { create(:camera, is_public: false) }
+		context "where the user is not the owner of the snapshot and has no rights on it" do
+         let(:snapshot) { create(:snapshot, is_public: false) }
 
 			it "returns false for all valid rights" do
-				rights = CameraRightSet.new(camera, user)
-				expect(rights.can_grant?(AccessRight::SNAPSHOT)).to eq(false)
+				rights = SnapshotRightSet.new(snapshot, user)
 				expect(rights.can_grant?(AccessRight::LIST)).to eq(false)
 				expect(rights.can_grant?(AccessRight::VIEW)).to eq(false)
 				expect(rights.can_grant?(AccessRight::EDIT)).to eq(false)
@@ -141,18 +133,17 @@ describe CameraRightSet do
 			end
 		end
 
-		context "where the user is not the owner but has some grant rights on the camera" do
-         let(:camera) { create(:camera, is_public: false) }
+		context "where the user is not the owner but has some grant rights on the snapshot" do
+         let(:snapshot) { create(:snapshot, is_public: false) }
 			let(:client) { create(:client) }
 			let(:access_token) { create(:access_token, client: client) }
-			let(:rights) { CameraRightSet.new(camera, client)}
+			let(:rights) { SnapshotRightSet.new(snapshot, client)}
          before(:each) do
          	rights.grant("#{AccessRight::GRANT}~#{AccessRight::EDIT}",
          		          "#{AccessRight::GRANT}~#{AccessRight::DELETE}")
          end
 
 			it "returns true or false depending on the requesters permissions" do
-				expect(rights.can_grant?(AccessRight::SNAPSHOT)).to eq(false)
 				expect(rights.can_grant?(AccessRight::LIST)).to eq(false)
 				expect(rights.can_grant?(AccessRight::VIEW)).to eq(false)
 				expect(rights.can_grant?(AccessRight::EDIT)).to eq(true)
@@ -162,23 +153,21 @@ describe CameraRightSet do
 	end
 
 	describe "#grant" do
-		let(:camera) { create(:camera, is_public: false) }
+		let(:snapshot) { create(:snapshot, is_public: false) }
 
 		context "for clients" do
 			let(:client) { create(:client) }
 			let(:access_token) { create(:access_token, client: client) }
-			let(:rights) { CameraRightSet.new(camera, client) }
+			let(:rights) { SnapshotRightSet.new(snapshot, client) }
 
 			before(:each) {access_token.save}
 
 			it "doesn't grant rights that aren't explcitly specified" do
 				rights.grant(AccessRight::VIEW)
-				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
 				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)
-				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(false)
@@ -196,6 +185,7 @@ describe CameraRightSet do
 			end
 
 			it "raises an exception for invalid rights" do
+				expect {rights.grant(AccessRight::SNAPSHOT)}.to raise_error(RuntimeError)
 				expect {rights.grant("blah")}.to raise_error(RuntimeError)
 			end
 		end
@@ -203,18 +193,16 @@ describe CameraRightSet do
 		context "for users" do
 			let(:user) { create(:user, id: -200) }
 			let(:access_token) { create(:access_token, user: user) }
-			let(:rights) { CameraRightSet.new(camera, user) }
+			let(:rights) { SnapshotRightSet.new(snapshot, user) }
 
 			before(:each) {access_token.save}
 
 			it "doesn't grant rights that aren't explcitly specified" do
 				rights.grant(AccessRight::VIEW)
-				expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
 				expect(rights.allow?(AccessRight::LIST)).to eq(false)
 				expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 				expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 				expect(rights.allow?(AccessRight::DELETE)).to eq(false)
-				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::EDIT}")).to eq(false)
 				expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::DELETE}")).to eq(false)
@@ -232,22 +220,23 @@ describe CameraRightSet do
 			end
 
 			it "raises an exception for invalid rights" do
+				expect {rights.grant(AccessRight::SNAPSHOT)}.to raise_error(RuntimeError)
 				expect {rights.grant("blah")}.to raise_error(RuntimeError)
 			end
 		end
 	end
 
 	describe "#revoke" do
-		let(:camera) { create(:camera, is_public: false) }
+		let(:snapshot) { create(:snapshot, is_public: false) }
 
 		context "for clients" do
 			let(:client) { create(:client) }
 			let(:access_token) { create(:access_token, client: client) }
-			let(:rights) { CameraRightSet.new(camera, client) }
+			let(:rights) { SnapshotRightSet.new(snapshot, client) }
 
 			before(:each) {
 				access_token.save
-				rights.grant(*AccessRight::BASE_RIGHTS)
+				rights.grant(*(AccessRight::BASE_RIGHTS - [AccessRight::SNAPSHOT]))
 			}
 
          it "removes a privilege from a requester" do
@@ -269,11 +258,11 @@ describe CameraRightSet do
 		context "for users" do
 			let(:user) { create(:user, id: -300) }
 			let(:access_token) { create(:access_token, user: user) }
-			let(:rights) { CameraRightSet.new(camera, user) }
+			let(:rights) { SnapshotRightSet.new(snapshot, user) }
 
 			before(:each) {
 				access_token.save
-				rights.grant(*AccessRight::BASE_RIGHTS)
+				rights.grant(*(AccessRight::BASE_RIGHTS - [AccessRight::SNAPSHOT]))
 			}
 
          it "removes a privilege from a requester" do
@@ -293,13 +282,13 @@ describe CameraRightSet do
    end
 
    context "for clients with multiple tokens" do
-   	let(:camera) { create(:camera, is_public: false) }
+   	let(:snapshot) { create(:snapshot, is_public: false) }
    	let(:client) { create(:client) }
    	let(:token1) { create(:access_token) }
    	let(:token1) {
    		token  = AccessToken.create(client: client)
-   		rights = CameraRightSet.new(camera, client)
-   		rights.grant(*AccessRight::BASE_RIGHTS)
+   		rights = SnapshotRightSet.new(snapshot, client)
+   		rights.grant(*(AccessRight::BASE_RIGHTS - [AccessRight::SNAPSHOT]))
    		token
    	}
 
@@ -310,7 +299,7 @@ describe CameraRightSet do
    	it "picks up grants from earlier tokens" do
    		token2 = AccessToken.create(client: client)
 
-   		rights = CameraRightSet.new(camera, client)
+   		rights = SnapshotRightSet.new(snapshot, client)
    		expect(rights.allow?(AccessRight::VIEW)).to eq(true)
    	end
    end

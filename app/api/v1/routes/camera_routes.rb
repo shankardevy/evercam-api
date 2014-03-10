@@ -123,7 +123,7 @@ module Evercam
       a_token = nil
       auth.allow? do |token|
         a_token = token
-        camera.allow?(:edit, token)
+        camera.allow?(AccessRight::EDIT, token)
       end
 
       Camera.db.transaction do
@@ -148,7 +148,7 @@ module Evercam
     delete '/cameras/:id' do
       authreport!('cameras/delete')
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |r| camera.allow?(AccessRight::EDIT, r) }
       camera.destroy
       {}
     end

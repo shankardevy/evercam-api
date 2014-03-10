@@ -25,6 +25,18 @@ class AccessRightSet
       false
    end
 
+   # Tests whether the requester possesses the right to grant a specified right
+   # to another user.
+   def can_grant?(right)
+      allow?("#{AccessRight::GRANT}~#{right}")
+   end
+
+   # Tests whether the requester possesses the right to grant a all of a set of
+   # specified rights to another user.
+   def can_grant_all?(*rights)
+      rights.find {|right| can_grant?(right) == false}.nil?
+   end
+
    def grant(*rights)
       raise "The #{self.class.name} class has not implemented the #grant() method."
    end
@@ -35,7 +47,7 @@ class AccessRightSet
 
    # Tests whether the requester is the owner of the resource being accessed.
    def is_owner?
-   	@type == :user && @resource.respond_to?(:owner) ? (@resource.owner_id == @requester.id) : false
+   	@type == :user && @resource.respond_to?(:owner) ? (@resource.owner.id == @requester.id) : false
    end
 
    # This method is used to test whether the underlying resource is public.
@@ -49,6 +61,23 @@ class AccessRightSet
       @access_token
    end
 
+   # Tests whether it is valid to have a specified right on the underlying
+   # resource.
+   def valid_right?(right)
+      false
+   end
+
+   # Tests whether it is valid to have
+   def valid_rights?(*rights)
+      rights.find {|right| valid_right?(right) == false}.nil?
+   end
+
+   # Fetches a specific resource based access right set. Use this in preference
+   # to creating the resource set classes directly.
+   #
+   # ==== Parameters
+   # resource::   The resource related to the right set (e.g. a Camera object).
+   # requester::  The user or client that the right set relates to.
    def self.for(resource, requester)
       case resource.class
          when Camera.class
