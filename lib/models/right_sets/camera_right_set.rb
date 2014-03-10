@@ -142,8 +142,7 @@ class CameraRightSet < AccessRightSet
          result = (query.count > 0)
          if !result
             # Check for an account level permissions grant.
-            rights = AccountRightSet.new(camera.owner, requester, AccessRight::CAMERAS)
-            result = rights.allow?(right)
+            result = AccountRightSet.new(camera.owner, requester, AccessRight::CAMERAS).allow?(right)
          end
       end
       result

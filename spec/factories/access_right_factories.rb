@@ -5,6 +5,7 @@ FactoryGirl.define do
 
     factory :camera_access_right do
       association :camera, factory: :camera
+      association :token, factory: :access_token
       snapshot nil
       snapshot_id nil
       account nil
@@ -15,6 +16,7 @@ FactoryGirl.define do
 
     factory :snapshot_access_right do
       association :snapshot, factory: :snapshot
+      association :token, factory: :access_token
       camera nil
       camera_id nil
       account nil
@@ -25,11 +27,12 @@ FactoryGirl.define do
 
     factory :account_access_right do
       association :account, factory: :user
+      association :token, factory: :access_token
       camera nil
       camera_id nil
       snapshot nil
       snapshot_id nil
-      scope AccessRight::SNAPSHOTS
+      scope AccessRight::CAMERAS
       right AccessRight::VIEW
     end
   end
