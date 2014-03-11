@@ -79,11 +79,12 @@ class AccessRightSet
    # resource::   The resource related to the right set (e.g. a Camera object).
    # requester::  The user or client that the right set relates to.
    def self.for(resource, requester)
-      case resource.class
-         when Camera.class
-            CameraRightSet.new(resource, requester)
-         else
-            raise "Right set requested for unknown resource class '#{resource.class.name}'."
+      if resource.instance_of?(Camera)
+        CameraRightSet.new(resource, requester)
+      elsif resource.instance_of?(Snapshot)
+        SnapshotRightSet.new(resource, requester)
+      else
+        raise "Right set requested for unknown resource class '#{resource.class.name}'."
       end
    end
 

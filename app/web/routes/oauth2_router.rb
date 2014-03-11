@@ -84,8 +84,14 @@ module Evercam
       def grant_missing_rights(client, token, user, scopes)
         missing_rights(client, token, user, scopes).each do |scope|
           type, right, target = scope.split(":")
-          resources_for_scope(scope, user).each do |resource|
-            AccessRightSet.for(resource, client).grant(right)
+          if AccessRight::ALL_SCOPES.include?(type)
+            # Grant an account level right.
+            AccountRightSet.new(user, client, type).grant(right)
+          else
+            # Grant individual resource rights.
+            resources_for_scope(scope, user).each do |resource|
+              AccessRightSet.for(resource, client).grant(right)
+            end
           end
         end
       end

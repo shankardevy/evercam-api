@@ -18,8 +18,8 @@ class AccountRightSet < AccessRightSet
    # requester::  The user or client that the rights pertain to.
    # scope::      The scope that the right will apply to.
    def initialize(user, requester, scope)
-    super(user, requester)
-    @scope = scope
+      super(user, requester)
+      @scope = scope
    end
 
    attr_reader :scope
