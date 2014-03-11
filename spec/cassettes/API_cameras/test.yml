@@ -1258,12 +1258,28 @@ http_interactions:
       - Typhoeus - https://github.com/typhoeus/typhoeus
   response:
     status:
-      code: 0
-      message: 
-    headers: {}
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Tue, 11 Mar 2014 12:38:28 GMT
+      Server:
+      - App-webs/
+      Connection:
+      - close
+      Content-Length:
+      - '266'
+      Content-Type:
+      - application/xml
     body:
       encoding: UTF-8
-      string: ''
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?>
+        <ResponseStatus version="1.0" xmlns="http://www.hikvision.com/ver10/XMLSchema">
+        <requestURL>/Streaming/channels/1/picture</requestURL>
+        <statusCode>4</statusCode>
+        <statusString>Invalid Operation</statusString>
+        </ResponseStatus>
     http_version: 
-  recorded_at: Tue, 11 Mar 2014 12:21:57 GMT
+  recorded_at: Tue, 11 Mar 2014 12:37:01 GMT
 recorded_with: VCR 2.8.0
