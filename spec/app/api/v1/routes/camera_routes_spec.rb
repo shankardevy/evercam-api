@@ -123,9 +123,25 @@ describe 'API routes/cameras' do
     end
 
     context 'when parameters are incorrect' do
+      it 'returns a 400 bad request status' do
+        VCR.use_cassette('API_cameras/test') do
+          expect(get('/cameras/test', test_params_invalid.merge(external_url: '2.2.2.2:123', jpg_url: 'pancake')).status).to eq(400)
+        end
+      end
+    end
+
+    context 'when parameters are correct, but camera is offline' do
       it 'returns a 503 camera offline status' do
         VCR.use_cassette('API_cameras/test') do
           expect(get('/cameras/test', test_params_invalid).status).to eq(503)
+        end
+      end
+    end
+
+    context 'when auth is wrong' do
+      it 'returns a 403 status' do
+        VCR.use_cassette('API_cameras/test') do
+          expect(get('/cameras/test', test_params_valid.merge(cam_password: 'xxx')).status).to eq(403)
         end
       end
     end

@@ -48,10 +48,14 @@ module Evercam
     end
     get '/cameras/test' do
       auth = "#{params[:cam_username]}:#{params[:cam_password]}"
-      response  = Typhoeus::Request.get(params[:external_url] + params[:jpg_url],
-                                        userpwd: auth,
-                                        timeout: TIMEOUT,
-                                        connecttimeout: TIMEOUT)
+      begin
+        response  = Typhoeus::Request.get(params[:external_url] + params[:jpg_url],
+                                          userpwd: auth,
+                                          timeout: TIMEOUT,
+                                          connecttimeout: TIMEOUT)
+      rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
+        raise BadRequestError, 'Invalid URL'
+      end
       if response.success?
         data = Base64.encode64(response.body).gsub("\n", '')
         { status: 'ok', data: "data:image/jpeg;base64,#{data}"}
