@@ -229,17 +229,22 @@ describe 'WebApp routes/oauth2_router' do
   end
 
   describe 'POST /oauth2/feedback' do
+    let(:access_token) { create(:access_token, refresh: SecureRandom.base64(24)) }
     let(:parameters) { {action: 'approve'} }
     let(:code_oauth) {{client_id: client0.exid,
                        response_type: 'code',
                        scope: 'cameras:snapshot:all',
-                       redirect_uri: 'https://www.google.com'}}
+                       redirect_uri: 'https://www.google.com',
+                       access_token_id: access_token.id}}
     let(:code_settings) {env_for(session: {user: user0.id, oauth: code_oauth})}
     let(:token_oauth) {{client_id: client0.exid,
                         response_type: 'token',
                         scope: 'cameras:snapshot:all',
-                        redirect_uri: 'https://www.google.com'}}
+                        redirect_uri: 'https://www.google.com',
+                       access_token_id: access_token.id}}
     let(:token_settings) {env_for(session: {user: user0.id, oauth: token_oauth})}
+
+    before(:each) {access_token.save}
 
     context 'when an action parameter is not specified' do
       it "redirects to /oauth2/error" do
@@ -317,9 +322,10 @@ describe 'WebApp routes/oauth2_router' do
   end
 
   describe 'POST /oauth/authorize' do
+    let(:access_token) { create(:access_token, client: client0, refresh: SecureRandom.base64(24)) }
     let(:parameters) { {redirect_uri:  'http://www.google.com/blah',
                         grant_type:    'authorization_code',
-                        code:          'client0_code',
+                        code:          access_token.refresh_code,
                         client_id:     'client0',
                         client_secret: 'client0_secret'} }
 
@@ -473,7 +479,7 @@ describe 'WebApp routes/oauth2_router' do
   end
 
   describe 'GET /oauth2/tokeninfo' do
-    let(:access_token1) { create(:access_token, request: 'token0001', refresh: 'token0001', client: client0) }
+    let(:access_token1) { create(:access_token, request: 'token0001', refresh: 'token0001', client: client0, grantor: user0) }
     let(:access_token2) { create(:access_token, request: 'token0002', refresh: 'token0002', client: nil, user: user0) }
 
     context 'when an access token is not specified' do
@@ -506,15 +512,6 @@ describe 'WebApp routes/oauth2_router' do
         output = JSON.parse(last_response.body)
         expect(output.include?('error')).to eq(true)
         expect(output['error']).to eq('invalid_request')
-      end
-    end
-
-    context 'when invoked with no user logged in' do
-      it 'redirects to the log in page' do
-        get('/oauth2/tokeninfo', {access_token: access_token1.request})
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.path).to eq("/login")
       end
     end
 
