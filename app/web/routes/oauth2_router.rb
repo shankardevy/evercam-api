@@ -62,13 +62,12 @@ module Evercam
       end
 
       # Used to check whether the request requires the addition of access rights.
-      def has_all_rights?(client, user, scopes)
-        missing_rights(client, user, scopes).size == 0
+      def has_all_rights?(client, token, user, scopes)
+        missing_rights(client, token, user, scopes).size == 0
       end
 
       # Fetches a list of rights not currently held by a client.
-      def missing_rights(client, user, scopes)
-        access_token(client)
+      def missing_rights(client, token, user, scopes)
         rights_list = []
         scopes.each do |scope|
           type, right, target = scope.split(":")
@@ -82,11 +81,11 @@ module Evercam
 
       # This method grants a client all rights that they currently don't have to
       # meet a list of scopes.
-      def grant_missing_rights(client, user, scopes)
-        missing_rights(client, user, scopes).each do |scope|
+      def grant_missing_rights(client, token, user, scopes)
+        missing_rights(client, token, user, scopes).each do |scope|
           type, right, target = scope.split(":")
           resources_for_scope(scope, user).each do |resource|
-            AccessRightSet.new(resource, client).grant(right)
+            AccessRightSet.new(resource, client, token).grant(right)
           end
         end
       end
@@ -111,9 +110,8 @@ module Evercam
       end
 
       # Creates a Hash of response parameters for a redirect.
-      def generate_response(client, response_type, state=nil)
+      def generate_response(token, response_type, state=nil)
         details = nil
-        token   = access_token(client)
         if response_type == 'code'
           details = {code:  token.refresh_code}
         elsif response_type == 'authorization_code'
@@ -131,8 +129,8 @@ module Evercam
       end
 
       # Generates a URI for responding to a rights request.
-      def generate_response_uri(uri, client, response_type, state=nil)
-        details = generate_response(client, response_type, state)
+      def generate_response_uri(uri, token, response_type, state=nil)
+        details = generate_response(token, response_type, state)
         if ['code', 'authorization_code'].include?(response_type)
           URI.join(uri, "?#{URI.encode_www_form(details)}")
         else
@@ -145,18 +143,6 @@ module Evercam
         uri = URI.parse(uri)
         uri.query = URI.encode_www_form(error)
         uri
-      end
-
-      # Get the access_token for a client, creating a new one if it is needed.
-      def access_token(client)
-        token = nil
-        query = AccessToken.where(is_revoked: false, client: client).order(Sequel.desc(:created_at))
-        if query.count > 0
-          token = query.first
-          token = nil if !token.is_valid?
-        end
-        token = AccessToken.create(client: client, refresh: SecureRandom.base64(24)) if token.nil?
-        token
       end
     end
 
@@ -176,26 +162,28 @@ module Evercam
         session[:oauth] = nil
         redirect_uri  = settings[:redirect_uri]
         response_type = settings[:response_type]
+        token         = AccessToken[settings[:access_token_id]]
+        raise ACCESS_DENIED if token.nil?
 
         if params[:action].strip.downcase == 'approve'
           with_user do |user|
             client = Client[exid: settings[:client_id]]
             scopes = parse_scope(settings[:scope])
-            grant_missing_rights(client, user, scopes)
+            grant_missing_rights(client, token, user, scopes)
             if redirect_uri
               redirect generate_response_uri(redirect_uri,
-                                             client,
+                                             token,
                                              response_type,
                                              settings[:state]).to_s
             else
-              jsonp generate_response(client, response_type, settings[:state])
+              jsonp generate_response(token, response_type, settings[:state])
             end
           end
         else
           raise ACCESS_DENIED
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
         redirect generate_error_uri(redirect_uri, {error: error}).to_s
       end
     end
@@ -220,27 +208,32 @@ module Evercam
         scopes = parse_scope(params[:scope])
 
         with_user do |user|
-          if !has_all_rights?(@client, user, scopes)
+          token = AccessToken.create(refresh: SecureRandom.base64(24),
+                                     client: @client,
+                                     grantor: user)
+
+          if !has_all_rights?(@client, token, user, scopes)
             # Rights confirmation needed from user.
-            session[:oauth] = {client_id:     @client.exid,
-                               response_type: response_type,
-                               scope:         params[:scope],
-                               redirect_uri:  redirect_uri,
-                               state:         params[:state]}
+            session[:oauth] = {access_token_id: token.id,
+                               client_id:       @client.exid,
+                               response_type:   response_type,
+                               scope:           params[:scope],
+                               redirect_uri:    redirect_uri,
+                               state:           params[:state]}
             @permissions = enumerate_rights(scopes)
             erb 'oauth2/authorize'.to_sym
           else
             # Request has all the rights needed, drop straight through.
             if redirect_uri
-              redirect generate_response_uri(redirect_uri, @client,
+              redirect generate_response_uri(redirect_uri, token,
                                              response_type, params[:state]).to_s
             else
-              jsonp generate_response(@client, response_type, params[:state])
+              jsonp generate_response(token, response_type, params[:state])
             end
           end
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
         if "#{error}" != INVALID_REDIRECT_URI
           redirect generate_error_uri(redirect_uri, {error: "#{error}"}).to_s
         else
@@ -271,15 +264,18 @@ module Evercam
                                            app_key: params[:client_secret])
         raise UNAUTHORIZED_CLIENT if !response.success?
 
+        token = AccessToken.where(refresh: params[:code]).first
+        raise ACCESS_DENIED if token.nil? 
+
         if redirect_uri
-          redirect generate_response_uri(redirect_uri, client,
+          redirect generate_response_uri(redirect_uri, token,
                                          'authorization_code',
                                          params[:state]).to_s
         else
-          jsonp generate_response(client, 'authorization_code', params[:state])
+          jsonp generate_response(token, 'authorization_code', params[:state])
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[0,5].join("\n")
+        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
         if "#{error}" != INVALID_REDIRECT_URI
           redirect generate_error_uri(redirect_uri, {error: "#{error}"}).to_s
         else
@@ -295,13 +291,11 @@ module Evercam
       if params[:access_token]
         token = AccessToken.where(request: params[:access_token]).first
         if token && !token.client_id.nil?
-          with_user do |user|
-            output = {access_token: token.request,
-                      audience:     token.client.exid,
-                      expires_in:   token.expires_in,
-                      userid:       user.username}
-            code = 200
-          end
+          output = {access_token: token.request,
+                    audience:     token.client.exid,
+                    expires_in:   token.expires_in}
+          output[:userid] = token.grantor.username if token.grantor_id
+          code = 200
         end
       end
       status code

@@ -7,8 +7,8 @@ class AccessToken < Sequel::Model
   many_to_one :user
   many_to_one :client
 
-  one_to_many :rights, class: 'AccessRight',
-    key: :token_id
+  one_to_many :rights, class: 'AccessRight', key: :token_id
+  many_to_one :grantor, class: 'User', key: :grantor_id
 
   # Finds the token with a matching request
   # key string or nil if none exist

@@ -1,9 +1,13 @@
 class AccessRightSet
-   def initialize(resource, requester)
+   def initialize(resource, requester, token=nil)
       @resource  = resource
       @requester = requester
       @type      = requester.instance_of?(User) ? :user : :client
-      @token     = @type == :user && !@requester.nil? ? @requester.token : nil
+      if token.nil?
+        @token = (@type == :user && !@requester.nil? ? @requester.token : nil)
+      else
+        @token = token
+      end
    end
 
    attr_reader :resource, :requester, :type
@@ -36,10 +40,10 @@ class AccessRightSet
    def grant(*rights)
    	rights.each do |right|
 	   	if !allow?(right) && !is_owner?
-	   		AccessRight.create(token:  current_token,
-	   			                camera: @resource,
-	   			                right: right,
-	   			                status: AccessRight::ACTIVE)
+	   		AccessRight.create(token:  (@token || current_token),
+	   			                 camera: @resource,
+	   			                 right: right,
+	   			                 status: AccessRight::ACTIVE)
 	   	end
 	   end
    end
