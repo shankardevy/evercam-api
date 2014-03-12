@@ -31,6 +31,10 @@ RSpec.configure do |c|
   c.after(:suite) do
     DatabaseCleaner.clean_with(:truncation)
   end
+
+  c.before :each do
+    Typhoeus::Expectation.clear
+  end
 end
 
 # fake out sidekiq redis
