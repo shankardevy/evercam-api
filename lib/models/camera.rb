@@ -49,7 +49,7 @@ class Camera < Sequel::Model
   # Determines if the presented token should be allowed
   # to conduct a particular action on this camera
   def allow?(right, token)
-    AccessRightSet.new(self, token.nil? ? nil : token.target).allow?(right)
+    AccessRightSet.for(self, token.nil? ? nil : token.target).allow?(right)
   end
 
   # The IANA standard timezone for this camera

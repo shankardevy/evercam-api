@@ -132,7 +132,7 @@ describe 'WebApp routes/oauth2_router' do
 
       before(:each) do
         token = create(:access_token, client: client3, refresh: "rc001")
-        AccessRightSet.new(camera0, client3).grant(AccessRight::VIEW)
+        AccessRightSet.for(camera0, client3).grant(AccessRight::VIEW)
         token.save
       end
 

@@ -76,8 +76,8 @@ module Evercam
       if Camera.is_mac_address?(params[:id])
         camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
           a_token = token
-          rights  = AccessRightSet.new(record, (token.nil? ? nil : token.target))
-          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
+          rights  = AccessRightSet.for(record, (token.nil? ? nil : token.target))
+          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_public?)
           strip   = (allowed && !rights.is_owner?)
           allowed
         end
@@ -86,8 +86,8 @@ module Evercam
         camera = Camera.by_exid!(params[:id])
         auth.allow? do |token|
           a_token = token
-          rights  = AccessRightSet.new(camera, (token.nil? ? nil : token.target))
-          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_resource_public?)
+          rights  = AccessRightSet.for(camera, (token.nil? ? nil : token.target))
+          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_public?)
           strip   = (allowed && !rights.is_owner?)
           allowed
         end
@@ -123,7 +123,7 @@ module Evercam
       a_token = nil
       auth.allow? do |token|
         a_token = token
-        camera.allow?(:edit, token)
+        camera.allow?(AccessRight::EDIT, token)
       end
 
       Camera.db.transaction do
@@ -148,7 +148,7 @@ module Evercam
     delete '/cameras/:id' do
       authreport!('cameras/delete')
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(:edit, r) }
+      auth.allow? { |r| camera.allow?(AccessRight::EDIT, r) }
       camera.destroy
       {}
     end

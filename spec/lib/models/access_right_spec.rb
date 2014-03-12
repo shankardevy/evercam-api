@@ -2,19 +2,46 @@ require 'data_helper'
 
 describe AccessRight do
 
-  let(:right) { create(:access_right) }
+  let(:right) { create(:camera_access_right) }
 
   describe "creating an access right" do
     let(:token) { create(:access_token) }
     let(:camera) { create(:camera) }
 
-    describe "with all required values set" do
-      it "creates an object that will pass validation" do
-        access_right = AccessRight.new(token:  token,
-                                       camera: camera,
-                                       status: AccessRight::ACTIVE,
-                                       right:  AccessRight::VIEW)
-        expect(access_right.valid?).to eq(true)
+    describe "with all required values" do
+      context "for a camera access right" do
+        it "creates an object that will pass validation" do
+          access_right = AccessRight.new(token:  token,
+                                         camera: camera,
+                                         status: AccessRight::ACTIVE,
+                                         right:  AccessRight::VIEW)
+          expect(access_right.valid?).to eq(true)
+        end
+      end
+
+      context "for a snapshot access right" do
+        let(:snapshot) { create(:snapshot) }
+
+        it "creates an object that will pass validation" do
+          access_right = AccessRight.new(token:  token,
+                                         snapshot: snapshot,
+                                         status: AccessRight::ACTIVE,
+                                         right:  AccessRight::VIEW)
+          expect(access_right.valid?).to eq(true)
+        end
+      end
+
+      context "for an account access right" do
+        let(:user) { create(:user) }
+
+        it "creates an object that will pass validation" do
+          access_right = AccessRight.new(token:  token,
+                                         account: user,
+                                         scope: AccessRight::CAMERAS,
+                                         status: AccessRight::ACTIVE,
+                                         right:  AccessRight::VIEW)
+          expect(access_right.valid?).to eq(true)
+        end
       end
     end
 
