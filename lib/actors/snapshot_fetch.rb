@@ -19,11 +19,8 @@ module Evercam
         camera.endpoints.each do |endpoint|
           next unless (endpoint.public? rescue false)
           begin
-            if camera.config['auth'].nil?
-              auth = ''
-            elsif camera.config['auth']['basic'].nil?
-              auth = ''
-            else
+            auth = camera.config.fetch('auth', {}).fetch('basic', '')
+            if auth != ''
               auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
             end
             response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
