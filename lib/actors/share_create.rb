@@ -39,7 +39,7 @@ module Evercam
     		CameraShare.db.transaction do
     			rights_list = to_rights_list(inputs[:rights])
     			share       = CameraShare.create(camera: camera, user: camera.owner, sharer: user, kind: kind)
-    			rights_list.delete_if {|r| AccessRight::PUBLIC_RIGHTS.include?(r)} if camera.is_public?
+    			rights_list.delete_if {|r| CameraRightSet::PUBLIC_RIGHTS.include?(r)} if camera.is_public?
     			access_rights.grant(*rights_list) if rights_list.size > 0
     		end
     		share

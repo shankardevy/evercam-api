@@ -9,7 +9,6 @@ class AccessRight < Sequel::Model
   GRANT                      = 'grant'.freeze
   BASE_RIGHTS                = [SNAPSHOT, VIEW, EDIT, DELETE, LIST]
   ALL_RIGHTS                 = BASE_RIGHTS + [GRANT]
-  PUBLIC_RIGHTS              = [SNAPSHOT, LIST]
 
   # Scope constants.
   CAMERAS                    = "cameras".freeze

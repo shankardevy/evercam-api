@@ -11,6 +11,9 @@ class CameraRightSet < AccessRightSet
                    "#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}",
                    "#{AccessRight::GRANT}~#{AccessRight::VIEW}"]
 
+   # List of public rights for a snapshot.
+   PUBLIC_RIGHTS = [AccessRight::SNAPSHOT, AccessRight::LIST]
+
    # Constructor for the CameraRightSet class.
    #
    # ==== Parameters
@@ -93,7 +96,7 @@ class CameraRightSet < AccessRightSet
    # right::  The name of the right to perform the check for.
    def user_allow?(right)
       raise "#{right} is not a valid camera access right." if !valid_right?(right)
-      result = is_public? && AccessRight::PUBLIC_RIGHTS.include?(right)
+      result = is_public? && PUBLIC_RIGHTS.include?(right)
       if !result && !requester.nil? && !camera.nil?
          result = is_owner?
          if !result && token.valid?
@@ -132,7 +135,7 @@ class CameraRightSet < AccessRightSet
    # right::  The name of the right to perform the check for.
    def client_allow?(right)
       raise "#{right} is not a valid camera access right." if !valid_right?(right)
-      result = is_public? && right == AccessRight::SNAPSHOT
+      result = is_public? && PUBLIC_RIGHTS.include?(right)
       if !result && !requester.nil? && !camera.nil?
          query = AccessRight.join(:access_tokens, id: :token_id).where(client_id: requester.id,
                                                                        is_revoked: false,

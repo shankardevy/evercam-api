@@ -57,7 +57,7 @@ describe SnapshotRightSet do
 					rights = SnapshotRightSet.new(snapshot, user)
 
 					expect(rights.allow?(AccessRight::LIST)).to eq(true)
-					expect(rights.allow?(AccessRight::VIEW)).to eq(false)
+					expect(rights.allow?(AccessRight::VIEW)).to eq(true)
 					expect(rights.allow?(AccessRight::EDIT)).to eq(false)
 					expect(rights.allow?(AccessRight::DELETE)).to eq(false)
 					expect(rights.allow?("#{AccessRight::GRANT}~#{AccessRight::VIEW}")).to eq(false)
