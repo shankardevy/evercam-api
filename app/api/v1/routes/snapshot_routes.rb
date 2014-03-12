@@ -25,8 +25,6 @@ module Evercam
 
     include WebErrors
 
-    TIMEOUT = 5
-
     namespace :cameras do
       params do
         requires :id, type: String, desc: "Camera Id."
@@ -43,23 +41,25 @@ module Evercam
           camera.endpoints.each do |endpoint|
             next unless (endpoint.public? rescue false)
             begin
-              if camera.config['auth'].nil?
-                auth = ''
-              elsif camera.config['auth']['basic'].nil?
-                auth = ''
-              else
+              auth = camera.config.fetch('auth', {}).fetch('basic', '')
+              if auth != ''
                 auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
               end
               response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
                                                 userpwd: auth,
-                                                timeout: TIMEOUT,
-                                                connecttimeout: TIMEOUT)
+                                                timeout: Evercam::Config[:api][:timeout],
+                                                connecttimeout: Evercam::Config[:api][:timeout])
+              if response.success?
+                break
+              end
+            rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
+              raise BadRequestError, 'Invalid URL'
             end
           end
-          if response.nil?
-            raise CameraOfflineError, 'No public endpoint'
-          elsif response.success?
+          if response.success?
             response
+          elsif response.nil?
+            raise CameraOfflineError, 'No public endpoint'
           elsif response.code == 401
             raise AuthorizationError, 'Please check camera username and password'
           else

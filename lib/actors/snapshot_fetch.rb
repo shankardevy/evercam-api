@@ -14,15 +14,20 @@ module Evercam
         camera = ::Camera.by_exid!(inputs[:id])
         instant = camera.timezone.time Time.now
         snapshot = nil
+        response = nil
 
         camera.endpoints.each do |endpoint|
           next unless (endpoint.public? rescue false)
-          con = Net::HTTP.new(endpoint.host, endpoint.port)
-
           begin
-            con.open_timeout = Evercam::Config[:api][:timeout]
-            response = con.get(camera.config['snapshots']['jpg'])
-            if response.is_a?(Net::HTTPSuccess)
+            auth = camera.config.fetch('auth', {}).fetch('basic', '')
+            if auth != ''
+              auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+            end
+            response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
+                                              userpwd: auth,
+                                              timeout: Evercam::Config[:api][:timeout],
+                                              connecttimeout: Evercam::Config[:api][:timeout])
+            if response.success?
               snapshot = Snapshot.create(
                 camera: camera,
                 created_at: instant,
@@ -31,12 +36,15 @@ module Evercam
               )
               break
             end
-          rescue Net::OpenTimeout
-            # offline
-          rescue Exception => e
-            # we weren't expecting this (famous last words)
-            puts e
+          rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
+            raise BadRequestError, 'Invalid URL'
           end
+        end
+
+        if response.nil?
+          raise CameraOfflineError, 'No public endpoint'
+        elsif response.code == 401
+          raise AuthorizationError, 'Please check camera username and password'
         end
 
         if snapshot.nil?
