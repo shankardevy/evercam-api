@@ -7,7 +7,7 @@ class Vendor < Sequel::Model
   dataset_module do
 
     def by_exid(val)
-      where(exid: val)
+      where(exid: val.downcase)
     end
 
     def by_mac(val)

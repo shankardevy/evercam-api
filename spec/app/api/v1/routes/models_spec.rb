@@ -55,6 +55,12 @@ describe 'API routes/models' do
       end
     end
 
+    context 'when the vendor is upper case' do
+      it 'returns an OK status' do
+        expect(get("/models/#{vendor0.exid.upcase}").status).to eq(200)
+      end
+    end
+
     context 'when the vendor does not exist' do
       it 'returns a NOT FOUND status' do
         expect(get('/models/xxxx').status).to eq(404)
@@ -82,6 +88,12 @@ describe 'API routes/models' do
         expect(last_response.json['models'][0]['defaults']).to eq({'jpg' => '/aaa/snap', 'username' => 'aaa', 'password' => 'yyy'})
       end
 
+    end
+
+    context 'when the vendor is upper case' do
+      it 'returns an OK status' do
+        expect(get("/models/#{vendor0.exid.upcase}/#{firmware1.name}").status).to eq(200)
+      end
     end
 
     context 'when the model does not exist' do
