@@ -9,3 +9,5 @@ coverage/
 tmp/
 log/
 
+# IDE
+.idea

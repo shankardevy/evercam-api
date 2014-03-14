@@ -11,7 +11,7 @@ module Evercam
     }
     get '/models' do
       authreport!('models/get')
-      vendors = ::Vendor.supported.eager(:firmwares).all
+      vendors = ::Vendor.supported.eager(:vendor_models).all
       present vendors, with: Presenters::Vendor, models: true
     end
 
@@ -32,8 +32,8 @@ module Evercam
       authreport!('models/vendor/model/get')
       vendor = ::Vendor.supported.by_exid(params[:vendor]).first
       raise NotFoundError, 'model vendor was not found' unless vendor
-      firmware = vendor.get_firmware_for(params[:model])
-      present Array(firmware), with: Presenters::Model
+      model = vendor.get_model_for(params[:model])
+      present Array(model), with: Presenters::Model
     end
 
     desc 'Returns all known IP hardware vendors', {
@@ -41,7 +41,7 @@ module Evercam
     }
     get '/vendors' do
       authreport!('vendors/get')
-      vendors = ::Vendor.eager(:firmwares).all
+      vendors = ::Vendor.eager(:vendor_models).all
       present vendors, with: Presenters::Vendor, supported: true
     end
 
@@ -50,7 +50,7 @@ module Evercam
     }
     get '/vendors/:mac', requirements: { mac: Vendor::REGEX_MAC } do
       authreport!('vendors/mac/get')
-      vendors = ::Vendor.by_mac(params[:mac][0,8]).eager(:firmwares).all
+      vendors = ::Vendor.by_mac(params[:mac][0,8]).eager(:vendor_models).all
       raise NotFoundError, 'mac address was not matched' if vendors.empty?
       present vendors, with: Presenters::Vendor, supported: true
     end

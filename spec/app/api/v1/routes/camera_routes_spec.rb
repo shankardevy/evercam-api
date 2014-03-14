@@ -200,8 +200,8 @@ describe 'API routes/cameras' do
     end
 
     it 'returns the camera make and model information when available' do
-      model = create(:firmware)
-      camera.update(firmware: model)
+      model = create(:vendor_model)
+      camera.update(vendor_model: model)
 
       response = get("/cameras/#{camera.exid}")
       data = response.json['cameras'][0]
@@ -291,7 +291,7 @@ describe 'API routes/cameras' do
   describe 'PATCH /cameras' do
 
     let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
-    let(:model) { create(:firmware) }
+    let(:model) { create(:vendor_model) }
 
     let(:params) {
       {
@@ -327,7 +327,7 @@ describe 'API routes/cameras' do
         cam = Camera.by_exid(camera.exid)
         expect(cam.is_public).to eq(false)
         expect(cam.name).to eq("Garrett's Super New Camera v2")
-        expect(cam.firmware).to eq(model)
+        expect(cam.vendor_model).to eq(model)
         expect(cam.mac_address).to eq('aa:aa:aa:aa:aa:aa')
         expect(cam.timezone.zone).to eq('Etc/GMT+1')
         expect(cam.config['snapshots']).to eq({ 'jpg' => '/snap'})

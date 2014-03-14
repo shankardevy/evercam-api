@@ -2,7 +2,7 @@ class Vendor < Sequel::Model
 
   REGEX_MAC = /([0-9A-F]{2}[:-]){2,5}([0-9A-F]{2})/i
 
-  one_to_many :firmwares
+  one_to_many :vendor_models
 
   dataset_module do
 
@@ -15,7 +15,7 @@ class Vendor < Sequel::Model
     end
 
     def supported
-      join(:firmwares, :vendor_id => :id).distinct(:id).
+      join(:vendor_models, :vendor_id => :id).distinct(:id).
         select_all(:vendors)
     end
 
@@ -27,20 +27,20 @@ class Vendor < Sequel::Model
     values[:known_macs] = val
   end
 
-  def get_firmware_for(val)
-    match_firmware(val) || default_firmware
+  def get_model_for(val)
+    match_model(val) || default_model
   end
 
-  def default_firmware
-    firmwares.find do |f|
+  def default_model
+    vendor_models.find do |f|
       '*' == f.name 
     end
   end
 
   private
 
-  def match_firmware(val)
-    firmwares.find do |f|
+  def match_model(val)
+    vendor_models.find do |f|
       '*' != f.name && nil != val.upcase.match(f.name.upcase)
     end
   end

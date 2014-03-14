@@ -5,9 +5,9 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:firmware0) { create(:firmware, name: '*', config: {username:'aaa', password: 'xxx'}) }
-  let!(:vendor0) { firmware0.vendor }
-  let!(:firmware1) { create(:firmware, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
+  let!(:model0) { create(:vendor_model, name: '*', config: {username:'aaa', password: 'xxx'}) }
+  let!(:vendor0) { model0.vendor }
+  let!(:model1) { create(:vendor_model, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
   let!(:vendor1) { create(:vendor) }
 
   describe 'GET /models' do
@@ -73,7 +73,7 @@ describe 'API routes/models' do
 
     context 'when the model exists' do
 
-      before(:each) { get("/models/#{vendor0.exid}/#{firmware1.name}") }
+      before(:each) { get("/models/#{vendor0.exid}/#{model1.name}") }
 
       it 'returns an OK status' do
         expect(last_response.status).to eq(200)
@@ -92,7 +92,7 @@ describe 'API routes/models' do
 
     context 'when the vendor is upper case' do
       it 'returns an OK status' do
-        expect(get("/models/#{vendor0.exid.upcase}/#{firmware1.name}").status).to eq(200)
+        expect(get("/models/#{vendor0.exid.upcase}/#{model1.name}").status).to eq(200)
       end
     end
 

@@ -25,31 +25,31 @@ describe Vendor do
 
   end
 
-  describe '#get_firmware_for' do
+  describe '#get_model_for' do
 
-    let!(:firmware0) { create(:firmware, name: '*') }
-    let!(:firmware1) { create(:firmware, vendor: firmware0.vendor, name: 'abcd') }
+    let!(:model0) { create(:vendor_model, name: '*') }
+    let!(:model1) { create(:vendor_model, vendor: model0.vendor, name: 'abcd') }
 
-    subject { firmware0.vendor }
+    subject { model0.vendor }
 
     it 'returns the default on no match' do
-      firmware = subject.get_firmware_for('xxxx')
-      expect(firmware).to eq(firmware0)
+      model = subject.get_model_for('xxxx')
+      expect(model).to eq(model0)
     end
 
     it 'returns an exact match' do
-      firmware = subject.get_firmware_for('abcd')
-      expect(firmware).to eq(firmware1)
+      model = subject.get_model_for('abcd')
+      expect(model).to eq(model1)
     end
 
     it 'returns partial match' do
-      firmware = subject.get_firmware_for('abcd-e')
-      expect(firmware).to eq(firmware1)
+      model = subject.get_model_for('abcd-e')
+      expect(model).to eq(model1)
     end
 
     it 'returns a case insensitive match' do
-      firmware = subject.get_firmware_for('ABCD-E')
-      expect(firmware).to eq(firmware1)
+      model = subject.get_model_for('ABCD-E')
+      expect(model).to eq(model1)
     end
 
   end
