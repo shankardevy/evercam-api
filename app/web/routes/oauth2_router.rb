@@ -214,9 +214,11 @@ module Evercam
         scopes = parse_scope(params[:scope])
 
         with_user do |user|
-          token = AccessToken.create(refresh: SecureRandom.base64(24),
-                                     client: @client,
-                                     grantor: user)
+          expiration = Time.now + (response_type == "token" ? 315569000 : 3600)
+          token      = AccessToken.create(refresh:    SecureRandom.base64(24),
+                                          client:     @client,
+                                          grantor:    user,
+                                          expires_at: expiration)
 
           if !has_all_rights?(@client, token, user, scopes)
             # Rights confirmation needed from user.
