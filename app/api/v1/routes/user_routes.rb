@@ -6,6 +6,19 @@ module Evercam
 
     include WebErrors
 
+    desc 'Internal endpoint only, keep hidden', {
+      :hidden => true
+    }
+    params do
+      requires :username, type: String
+    end
+    get '/testusername' do
+      user = ::User.by_login(params[:username])
+      raise BadRequestError, 'Username already in use' if user
+
+      {:message => 'OK'}
+    end
+
     desc 'Starts the new user signup process', {
       entity: Evercam::Presenters::User
     }
