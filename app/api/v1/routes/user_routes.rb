@@ -57,11 +57,15 @@ module Evercam
     desc 'Returns available information for the user'
     get '/users/:id' do
       authreport!('users/get')
-      user = ::User.by_login(params[:id])
-      raise NotFoundError, 'user does not exist' unless user
-      auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
+      target = ::User.by_login(params[:id])
+      raise NotFoundError, 'user does not exist' unless target
 
-      present Array(user), with: Presenters::User
+      # NOTE: This is not a valid rights check for this request so I've commented
+      # it out but will need to be replaced with one that is. PW 18/03/14
+      # auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
+      auth.allow? {|token, user| !user.nil? && user.id == target.id}
+
+      present Array(target), with: Presenters::User
     end
 
     desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'

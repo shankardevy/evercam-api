@@ -12,7 +12,6 @@ describe 'API routes/cameras' do
   let(:access_right) { create(:camera_access_right, token: token) }
 
   describe 'presented fields' do
-
     describe "for public cameras" do
       describe "when not the camera owner" do
 
@@ -71,33 +70,32 @@ describe 'API routes/cameras' do
                                         'auth', 'mac_address')
         end
       end
+
+      describe "when location" do
+        let(:json) {
+          output = get("/cameras/#{camera.exid}").json
+          output['cameras'] ? output['cameras'][0] : {}
+        }
+
+        context 'is nil' do
+          it 'returns location as nil' do
+            camera.update(location: nil)
+            expect(json['location']).to be_nil
+          end
+        end
+
+        context 'is not nil' do
+          it 'returns location as lng lat object' do
+            camera.update(location: { lng: 10, lat: 20 })
+            expect(json['location']).to have_keys('lng', 'lat')
+          end
+        end
+      end
     end
-
-    describe "when location"
-
-      let(:json) {
-        output = get("/cameras/#{camera.exid}").json
-        output['cameras'] ? output['cameras'][0] : {}
-      }
-
-      context 'is nil' do
-        it 'returns location as nil' do
-          camera.update(location: nil)
-          expect(json['location']).to be_nil
-        end
-      end
-
-      context 'is not nil' do
-        it 'returns location as lng lat object' do
-          camera.update(location: { lng: 10, lat: 20 })
-          expect(json['location']).to have_keys('lng', 'lat')
-        end
-      end
-
   end
 
-  describe 'GET /cameras/test' do
 
+  describe 'GET /cameras/test' do
     let (:test_params_invalid)  do
       {
         external_url: 'http://1.1.1.1',
@@ -554,4 +552,3 @@ describe 'API routes/cameras' do
   end
 
 end
-
