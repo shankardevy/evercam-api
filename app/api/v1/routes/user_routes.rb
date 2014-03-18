@@ -59,7 +59,10 @@ module Evercam
       authreport!('users/get')
       user = ::User.by_login(params[:id])
       raise NotFoundError, 'user does not exist' unless user
-      auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
+
+      # NOTE: This is not a valid rights check for this request so I've commented
+      # it out but will need to be replaced with one that is. PW 18/03/14
+      # auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
 
       present Array(user), with: Presenters::User
     end
