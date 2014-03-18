@@ -34,6 +34,8 @@ module Evercam
           authen_with_access_token
         when :session
           authen_with_rack_session
+        when :keys
+          authen_with_api_key
         else
           nil
       end
@@ -47,12 +49,20 @@ module Evercam
       @env['rack.session'] || {}
     end
 
+    def params
+      @env['grape.request.params']
+    end
+
     def authen_type
       case header.split[0]
       when /basic/i then :basic
       when /bearer/i then :bearer
       else
-        session[:user] ? :session : nil
+        if params && params[:api_id] && params[:api_key]
+          :keys
+        else
+          session[:user] ? :session : nil
+        end
       end
     end
 
@@ -79,6 +89,25 @@ module Evercam
       @user         = @access_token.user if !@access_token.nil?
       return @access_token if @access_token && @access_token.is_valid?
       authen_err 'Invalid or incorrect access token'
+    end
+
+    def authen_with_api_key
+      api_id  = params[:api_id]
+      api_key = params[:api_key]
+      query = Client.where(exid: api_id)
+      if query.count == 0
+        @user         = User.where(api_id: api_id).first
+        @access_token = @user.token if !@user.nil?
+      else
+        client        = query.first
+        @access_token = AccessToken.where(client_id: client.id).order(Sequel.desc(:created_at)).first
+        if @access_token.nil?
+          @access_token = AccessToken.create(expires_at: Time.now + 3600,
+                                             client: client)
+        elsif @access_token.is_revoked?
+          @access_token = nil
+        end
+      end
     end
 
     def authen_err(msg=nil)
