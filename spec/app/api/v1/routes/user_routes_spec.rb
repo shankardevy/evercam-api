@@ -15,6 +15,41 @@ describe 'API routes/users' do
     }
   end
 
+  describe 'GET /testusername' do
+
+    let!(:user0) { create(:user, username: 'xxxx', email: 'xxxx@gmail.com') }
+
+    context 'when username is already in use' do
+      it 'returns 400 error ' do
+        get("/testusername?username=#{user0.username}", {})
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when username is not in use' do
+      it 'returns a 200 OK status' do
+        get("/testusername?username=unique", {})
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+    context 'when email is already in use' do
+      it 'returns 400 error ' do
+        get("/testusername?username=#{user0.email}", {})
+
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when email is not in use' do
+      it 'returns a 200 OK status' do
+        get("/testusername?username=unique@gmail.com", {})
+        expect(last_response.status).to eq(200)
+      end
+    end
+
+  end
   describe 'POST /users' do
 
     context 'when the params are valid' do
