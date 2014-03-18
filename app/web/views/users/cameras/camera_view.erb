@@ -60,7 +60,7 @@
                     <label for="name">Camera Model</label>
                     <% @vendors.each do |v| -%>
                     <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control <% if v != @camera.vendor %>hidden<% end %>">
-                      <% v.models.to_hash(:name).each_with_index  do |m, index| -%>
+                      <% v.vendor_models.to_hash(:name).each_with_index  do |m, index| -%>
                       <% if index == 0 %>
                       <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
                       <% else %>
