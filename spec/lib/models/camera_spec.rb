@@ -81,26 +81,26 @@ describe Camera do
 
   describe '#config' do
 
-    let(:firmware0) { create(:firmware, config: { 'a' => 'xxxx' }) }
+    let(:model0) { create(:vendor_model, config: { 'a' => 'xxxx' }) }
 
-    it 'returns camera config if firmware is nil' do
-      d0 = create(:camera, firmware: nil, config: { 'a' => 'zzzz' })
+    it 'returns camera config if model is nil' do
+      d0 = create(:camera, vendor_model: nil, config: { 'a' => 'zzzz' })
       expect(d0.config).to eq({ 'a' => 'zzzz' })
     end
 
-    it 'merges its config with that of its firmware' do
-      d0 = create(:camera, firmware: firmware0, config: { 'b' => 'yyyy' })
+    it 'merges its config with that of its model' do
+      d0 = create(:camera, vendor_model: model0, config: { 'b' => 'yyyy' })
       expect(d0.config).to eq({ 'a' => 'xxxx', 'b' => 'yyyy'})
     end
 
     it 'gives precedence to values from the camera config' do
-      d0 = create(:camera, firmware: firmware0, config: { 'a' => 'yyyy' })
+      d0 = create(:camera, vendor_model: model0, config: { 'a' => 'yyyy' })
       expect(d0.config).to eq({ 'a' => 'yyyy' })
     end
 
     it 'deep merges where both camera have the same keys' do
-      firmware0.update(config: { 'a' => { 'b' => 'xxxx' } })
-      d0 = create(:camera, firmware: firmware0, config: { 'a' => { 'c' => 'yyyy' } })
+      model0.update(config: { 'a' => { 'b' => 'xxxx' } })
+      d0 = create(:camera, vendor_model: model0, config: { 'a' => { 'c' => 'yyyy' } })
       expect(d0.config).to eq({ 'a' => { 'b' => 'xxxx', 'c' => 'yyyy' } })
     end
 
@@ -136,39 +136,39 @@ describe Camera do
 
   end
 
-  describe '#firmware' do
+  describe '#model' do
 
-    context 'when a firmware is specifically set' do
-      it 'returns that specific firmware' do
-        firmware = create(:firmware)
-        camera.update(firmware: firmware)
-        expect(camera.firmware).to eq(firmware)
+    context 'when a model is specifically set' do
+      it 'returns that specific model' do
+        model = create(:vendor_model)
+        camera.update(vendor_model: model)
+        expect(camera.vendor_model).to eq(model)
       end
     end
 
-    context 'when a firmware is not specifically set' do
+    context 'when a model is not specifically set' do
 
       context 'when the mac address matches a supported vendor' do
-        it 'returns the default firmware' do
+        it 'returns the default model' do
           vendor = create(:vendor, known_macs: ['8C:E7:48'])
-          firmware = create(:firmware, vendor: vendor, name: '*')
+          model = create(:vendor_model, vendor: vendor, name: '*')
 
-          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
-          expect(camera.firmware).to eq(firmware)
+          camera.update(vendor_model: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.vendor_model).to eq(model)
         end
       end
 
       context 'when the mac address does not match a supported vendor' do
         it 'return nil' do
-          camera.update(firmware: nil, mac_address: '8c:e7:48:bd:bd:f5')
-          expect(camera.firmware).to be_nil
+          camera.update(vendor_model: nil, mac_address: '8c:e7:48:bd:bd:f5')
+          expect(camera.vendor_model).to be_nil
         end
       end
 
       context 'when the mac address is nil' do
         it 'return nil' do
-          camera.update(firmware: nil, mac_address: nil)
-          expect(camera.firmware).to be_nil
+          camera.update(vendor_model: nil, mac_address: nil)
+          expect(camera.vendor_model).to be_nil
         end
       end
 

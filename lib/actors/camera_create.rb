@@ -80,7 +80,7 @@ module Evercam
           add_error(:model, :valid, 'If you provide model you must also provide vendor')
         end
 
-        if model && vendor && !Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+        if model && vendor && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
           add_error(:model, :exists, 'Model does not exist')
         end
         
@@ -115,7 +115,7 @@ module Evercam
         end
 
         camera.timezone = timezone if timezone
-        camera.firmware = Firmware.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        camera.vendor_model = VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
         camera.mac_address = mac_address if mac_address
         camera.save
 

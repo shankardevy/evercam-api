@@ -5,7 +5,7 @@ class Camera < Sequel::Model
   require 'georuby'
   include GeoRuby::SimpleFeatures
 
-  many_to_one :firmware
+  many_to_one :vendor_model, class: 'VendorModel', key: :model_id
   one_to_many :endpoints, class: 'CameraEndpoint'
   many_to_one :owner, class: 'User', key: :owner_id
   one_to_many :activities, class: 'CameraActivity'
@@ -28,21 +28,21 @@ class Camera < Sequel::Model
       raise Evercam::NotFoundError, 'Camera does not exist')
   end
 
-  # Returns the firmware for this camera using any specifically
+  # Returns the model for this camera using any specifically
   # set before trying to infer vendor from the mac address
-  def firmware
+  def vendor_model
     definite = super
     return definite if definite
     if mac_address
       if vendor = Vendor.by_mac(mac_address).first
-        vendor.default_firmware
+        vendor.default_model
       end
     end
   end
 
   def vendor
-    if firmware
-      firmware.vendor
+    if vendor_model
+      vendor_model.vendor
     end
   end
 
@@ -60,9 +60,9 @@ class Camera < Sequel::Model
   end
 
   # Returns a deep merge of any config values set for this
-  # camera with the config of any associated firmware
+  # camera with the config of any associated model
   def config
-    fconf = firmware ? firmware.config : {}
+    fconf = vendor_model ? vendor_model.config : {}
     fconf.deep_merge(values[:config] || {})
   end
 

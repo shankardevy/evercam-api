@@ -47,6 +47,16 @@ describe 'API routes/users' do
       end
     end
 
+    context 'when the country code is in capital letters' do
+      it 'returns a 400 BAD Request status' do
+        VCR.use_cassette('API_users/account_creation') do
+          params[:country].upcase!
+          post('/users', params)
+          expect(last_response.status).to eq(201)
+        end
+      end
+    end
+
   end
 
   describe 'GET /users/{username}' do

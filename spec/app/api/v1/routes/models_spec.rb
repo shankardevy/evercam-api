@@ -5,9 +5,9 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:firmware0) { create(:firmware, name: '*', config: {username:'aaa', password: 'xxx'}) }
-  let!(:vendor0) { firmware0.vendor }
-  let!(:firmware1) { create(:firmware, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
+  let!(:model0) { create(:vendor_model, name: '*', config: {username:'aaa', password: 'xxx'}) }
+  let!(:vendor0) { model0.vendor }
+  let!(:model1) { create(:vendor_model, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
   let!(:vendor1) { create(:vendor) }
 
   describe 'GET /models' do
@@ -55,6 +55,12 @@ describe 'API routes/models' do
       end
     end
 
+    context 'when the vendor is upper case' do
+      it 'returns an OK status' do
+        expect(get("/models/#{vendor0.exid.upcase}").status).to eq(200)
+      end
+    end
+
     context 'when the vendor does not exist' do
       it 'returns a NOT FOUND status' do
         expect(get('/models/xxxx').status).to eq(404)
@@ -67,7 +73,7 @@ describe 'API routes/models' do
 
     context 'when the model exists' do
 
-      before(:each) { get("/models/#{vendor0.exid}/#{firmware1.name}") }
+      before(:each) { get("/models/#{vendor0.exid}/#{model1.name}") }
 
       it 'returns an OK status' do
         expect(last_response.status).to eq(200)
@@ -82,6 +88,12 @@ describe 'API routes/models' do
         expect(last_response.json['models'][0]['defaults']).to eq({'jpg' => '/aaa/snap', 'username' => 'aaa', 'password' => 'yyy'})
       end
 
+    end
+
+    context 'when the vendor is upper case' do
+      it 'returns an OK status' do
+        expect(get("/models/#{vendor0.exid.upcase}/#{model1.name}").status).to eq(200)
+      end
     end
 
     context 'when the model does not exist' do

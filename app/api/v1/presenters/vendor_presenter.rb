@@ -33,7 +33,7 @@ module Evercam
         type: 'boolean',
         desc: 'Whether or not this vendor produces Evercam supported cameras',
       } do |v,o|
-        false == v.firmwares.empty?
+        false == v.vendor_models.empty?
       end
 
       expose :models, if: { models: true }, documentation: {
@@ -43,7 +43,7 @@ module Evercam
           type: 'string'
         }
       } do |v,o|
-        v.firmwares.map(&:known_models).flatten
+        v.vendor_models.map(&:known_models).flatten
       end
 
     end

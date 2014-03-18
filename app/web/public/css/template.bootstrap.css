@@ -3089,7 +3089,7 @@ table.table tr:hover td div.btn-group { display:inline-block;}
   color: red;
 }
 
-.user-profile form {
+#apikeys, #userProfile {
   max-width: 500px;
 }
 

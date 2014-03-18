@@ -33,14 +33,14 @@ module Evercam
         type: 'string',
         desc: 'Unique identifier for the camera vendor'
       } do |c,o|
-        nil == c.firmware ? nil : c.firmware.vendor.exid
+        nil == c.vendor_model ? nil : c.vendor_model.vendor.exid
       end
 
       expose :model, documentation: {
         type: 'string',
         desc: 'Name of the camera model'
       } do |c,o|
-        nil == c.firmware ? nil : c.firmware.name
+        nil == c.vendor_model ? nil : c.vendor_model.name
       end
 
       with_options(format_with: :timestamp) do
