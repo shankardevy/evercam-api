@@ -63,7 +63,7 @@ module Evercam
       # NOTE: This is not a valid rights check for this request so I've commented
       # it out but will need to be replaced with one that is. PW 18/03/14
       # auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
-      # auth.allow? {|token, user| !user.nil? && user.id == target.id}
+      auth.allow? {|token, user| !token.nil?}
 
       present Array(target), with: Presenters::User
     end

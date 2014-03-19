@@ -124,6 +124,7 @@ describe 'API routes/users' do
       }
 
       it 'returns user data' do
+        expect(last_response.status).to eq(200)
         expect(last_response.json['users'].map{ |s| s['id'] }).
           to eq([user0.username])
       end
