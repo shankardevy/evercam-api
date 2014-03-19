@@ -11,12 +11,20 @@ describe 'API routes/cameras' do
 
   let(:access_right) { create(:camera_access_right, token: token) }
 
+  let(:authorization_user) { create(:user, username: 'xxxx', password: 'yyyy') }
+  let(:authorization_env) { {'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}"} }
+
   describe 'presented fields' do
     describe "for public cameras" do
       describe "when not the camera owner" do
 
+        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
+        let(:access_token) { create(:access_token, user: user) }
+
         let(:json) {
-          output = get("/cameras/#{camera.exid}").json
+          access_token.save
+          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
+          output = get("/cameras/#{camera.exid}", {}, env).json
           output['cameras'] ? output['cameras'][0] : {}
         }
 
@@ -32,8 +40,7 @@ describe 'API routes/cameras' do
       end
 
       describe "when queried by the camera owner" do
-        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
-        let(:camera) { create(:camera, is_public: true, owner: user) }
+        let(:camera) { create(:camera, is_public: true, owner: authorization_user) }
         let(:json) {
           env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
           output = get("/cameras/#{camera.exid}", {}, env).json
@@ -73,14 +80,12 @@ describe 'API routes/cameras' do
       end
 
       describe "when location" do
-        let(:json) {
-          output = get("/cameras/#{camera.exid}").json
-          output['cameras'] ? output['cameras'][0] : {}
-        }
-
         context 'is nil' do
           it 'returns location as nil' do
             camera.update(location: nil)
+            authorization_user.save
+            json = get("/cameras/#{camera.exid}", {}, authorization_env).json
+            json = json['cameras'] ? json['cameras'][0] : {}
             expect(json['location']).to be_nil
           end
         end
@@ -88,13 +93,15 @@ describe 'API routes/cameras' do
         context 'is not nil' do
           it 'returns location as lng lat object' do
             camera.update(location: { lng: 10, lat: 20 })
+            authorization_user.save
+            json = get("/cameras/#{camera.exid}", {}, authorization_env).json
+            json = json['cameras'] ? json['cameras'][0] : {}
             expect(json['location']).to have_keys('lng', 'lat')
           end
         end
       end
     end
   end
-
 
   describe 'GET /cameras/test' do
     let (:test_params_invalid)  do
@@ -115,16 +122,20 @@ describe 'API routes/cameras' do
       }
     end
 
+    before(:each) { authorization_user.save }
+
     context 'when there are no parameters' do
       it 'returns a 400 bad request status' do
-        expect(get('/cameras/test').status).to eq(400)
+        get('/cameras/test', {}, authorization_env)
+        expect(last_response.status).to eq(400)
       end
     end
 
     context 'when parameters are incorrect' do
       it 'returns a 400 bad request status' do
         VCR.use_cassette('API_cameras/test') do
-          expect(get('/cameras/test', test_params_invalid.merge(external_url: '2.2.2.2:123', jpg_url: 'pancake')).status).to eq(400)
+          get('/cameras/test', test_params_invalid.merge(external_url: '2.2.2.2:123', jpg_url: 'pancake'), authorization_env)
+          expect(last_response.status).to eq(400)
         end
       end
     end
@@ -132,7 +143,8 @@ describe 'API routes/cameras' do
     context 'when parameters are correct, but camera is offline' do
       it 'returns a 503 camera offline status' do
         VCR.use_cassette('API_cameras/test') do
-          expect(get('/cameras/test', test_params_invalid).status).to eq(503)
+          get('/cameras/test', test_params_invalid, authorization_env)
+          expect(last_response.status).to eq(503)
         end
       end
     end
@@ -140,7 +152,8 @@ describe 'API routes/cameras' do
     context 'when auth is wrong' do
       it 'returns a 403 status' do
         VCR.use_cassette('API_cameras/test') do
-          expect(get('/cameras/test', test_params_valid.merge(cam_password: 'xxx')).status).to eq(403)
+          get('/cameras/test', test_params_valid.merge(cam_password: 'xxx'), authorization_env)
+          expect(last_response.status).to eq(403)
         end
       end
     end
@@ -148,7 +161,8 @@ describe 'API routes/cameras' do
     context 'when parameters are correct' do
       it 'returns a 200 status with image data' do
         VCR.use_cassette('API_cameras/test') do
-          expect(get('/cameras/test', test_params_valid).status).to eq(200)
+          get('/cameras/test', test_params_valid, authorization_env)
+          expect(last_response.status).to eq(200)
         end
       end
     end
@@ -157,15 +171,17 @@ describe 'API routes/cameras' do
 
   describe 'GET /cameras/:id' do
 
+    before(:each) {authorization_user.save}
+
     context 'when the camera does not exist' do
       it 'returns a NOT FOUND status' do
-        expect(get('/cameras/xxxx').status).to eq(404)
+        expect(get('/cameras/xxxx', {}, authorization_env).status).to eq(404)
       end
     end
 
     context 'when the camera is public' do
       it 'returns the camera data' do
-        response = get("/cameras/#{camera.exid}")
+        response = get("/cameras/#{camera.exid}", {}, authorization_env)
         expect(response.status).to eq(200)
       end
     end
@@ -182,17 +198,14 @@ describe 'API routes/cameras' do
 
       context 'when the request is unauthorized' do
         it 'returns a FORBIDDEN status' do
-          create(:user, username: 'xxxx', password: 'yyyy')
-          env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          expect(get("/cameras/#{camera.exid}", {}, env).status).to eq(403)
+          expect(get("/cameras/#{camera.exid}", {}, authorization_env).status).to eq(403)
         end
       end
 
       context 'when the request is authorized' do
         it 'returns the camera data' do
-          camera.update(owner: create(:user, username: 'xxxx', password: 'yyyy'))
-          env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          expect(get("/cameras/#{camera.exid}", {}, env).status).to eq(200)
+          camera.update(owner: authorization_user)
+          expect(get("/cameras/#{camera.exid}", {}, authorization_env).status).to eq(200)
         end
       end
 
@@ -202,7 +215,7 @@ describe 'API routes/cameras' do
       model = create(:vendor_model)
       camera.update(vendor_model: model)
 
-      response = get("/cameras/#{camera.exid}")
+      response = get("/cameras/#{camera.exid}", {}, authorization_env)
       data = response.json['cameras'][0]
 
       expect(data['vendor']).to eq(model.vendor.exid)
@@ -210,9 +223,8 @@ describe 'API routes/cameras' do
     end
 
     it 'can fetch details for a camera via MAC address' do
-      camera.update(owner: create(:user, username: 'xxxx', password: 'yyyy'))
-      env = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-      response = get("/cameras/#{camera.mac_address}", {}, env)
+      camera.update(owner: authorization_user)
+      response = get("/cameras/#{camera.mac_address}", {}, authorization_env)
       data     = response.json['cameras'][0]
 
       expect(data['id']).to eq(camera.exid)
@@ -289,8 +301,8 @@ describe 'API routes/cameras' do
 
   describe 'PATCH /cameras' do
 
-    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
-    let(:model) { create(:vendor_model) }
+    let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
+    let(:model) { create(:firmware) }
 
     let(:params) {
       {
@@ -312,8 +324,12 @@ describe 'API routes/cameras' do
     context 'when the params are valid' do
 
       before do
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        patch("/cameras/#{camera.exid}", params, auth)
+        camera.add_endpoint({
+          scheme: 'http',
+          host: 'www.evercam.io',
+          port: 80
+        })
+        patch("/cameras/#{camera.exid}", params, authorization_env)
       end
 
       it 'returns a OK status' do
@@ -343,23 +359,22 @@ describe 'API routes/cameras' do
 
     context 'when params are empty' do
       it 'returns a OK status' do
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        patch("/cameras/#{camera.exid}", params.clear, auth)
+        patch("/cameras/#{camera.exid}", params.clear, authorization_env)
         expect(last_response.status).to eq(200)
       end
     end
 
     context 'when snapshot url doesnt start with slash' do
       it 'returns a OK status' do
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        patch("/cameras/#{camera.exid}", {jpg_url: 'image.jpg'}, auth)
-        expect(last_response.json['cameras'][0]['jpg_url']).to eq('/image.jpg')
+        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}, authorization_env)
+        expect(last_response.json['cameras'][0]['snapshots']['jpg']).to eq('/image.jpg')
         expect(last_response.status).to eq(200)
       end
     end
 
     context 'when no authentication is provided' do
-      it 'returns an UNAUTHORZIED status' do
+      it 'returns an UNAUTHENTICATED status' do
+        authorization_user.save
         expect(patch("/cameras/#{camera.exid}", params).status).to eq(401)
       end
     end
@@ -381,8 +396,7 @@ describe 'API routes/cameras' do
         end
 
         it "deletes all the public shares but leaves private shares unchanged" do
-          auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          patch("/cameras/#{camera.exid}", params, auth)
+          patch("/cameras/#{camera.exid}", params, authorization_env)
 
           expect(CameraShare.where(camera_id: camera.id,
                                    kind: CameraShare::PUBLIC).count).to eq(0)

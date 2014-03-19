@@ -111,6 +111,8 @@ GEM
       celluloid-io (>= 0.15.0)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    logjam (1.1.0)
+      json
     lumberjack (1.0.4)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -260,6 +262,7 @@ DEPENDENCIES
   guard-rspec
   intercom
   json
+  logjam
   mocha
   mutations!
   newrelic-grape
