@@ -44,8 +44,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'owner', 'created_at', 'updated_at',
             'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-            'endpoints', 'vendor', 'model', 'timezone', 'snapshots', 'auth',
-            'location', 'mac_address')
+            'external_url', 'internal_url', 'vendor', 'model', 'timezone', 'jpg_url', 'cam_username',
+            'cam_password', 'location', 'mac_address')
         end
       end
 
@@ -228,7 +228,7 @@ describe 'API routes/cameras' do
       {
         id: 'my-new-camera',
         name: "Garrett's Super New Camera",
-        endpoints: ['http://localhost:1234'],
+        external_url: 'http://localhost:1234',
         is_public: true
       }.merge(
         build(:camera).config
@@ -271,9 +271,9 @@ describe 'API routes/cameras' do
       end
     end
 
-    context 'when :endpoints key is missing' do
+    context 'when :external_url key is missing' do
       it 'returns a BAD REQUEST status' do
-        post('/cameras', params.merge(endpoints: nil), auth)
+        post('/cameras', params.merge(external_url: nil), auth)
         expect(last_response.status).to eq(400)
       end
     end
@@ -353,7 +353,7 @@ describe 'API routes/cameras' do
       it 'returns a OK status' do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
         patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}, auth)
-        expect(last_response.json['cameras'][0]['snapshots']['jpg']).to eq('/image.jpg')
+        expect(last_response.json['cameras'][0]['jpg_url']).to eq('/image.jpg')
         expect(last_response.status).to eq(200)
       end
     end

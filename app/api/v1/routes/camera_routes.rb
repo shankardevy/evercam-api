@@ -15,7 +15,7 @@ module Evercam
       requires :id, type: String, desc: "Camera Id."
       requires :name, type: String, desc: "Camera name."
       requires :is_public, type: Boolean, desc: "Is camera public?"
-      optional :external_url, type: String, desc: "External camera url."
+      requires :external_url, type: String, desc: "External camera url."
       optional :internal_url, type: String, desc: "Internal camera url."
       optional :jpg_url, type: String, desc: "Snapshot url."
       optional :cam_username, type: String, desc: "Camera username."

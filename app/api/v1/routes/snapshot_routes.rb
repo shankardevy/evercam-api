@@ -52,7 +52,7 @@ module Evercam
               if response.success?
                 break
               end
-            rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
+            rescue URI::InvalidURIError
               raise BadRequestError, 'Invalid URL'
             end
           end
