@@ -302,7 +302,7 @@ describe 'API routes/cameras' do
   describe 'PATCH /cameras' do
 
     let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
-    let(:model) { create(:firmware) }
+    let(:model) { create(:vendor_model) }
 
     let(:params) {
       {
