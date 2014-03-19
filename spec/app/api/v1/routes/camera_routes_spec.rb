@@ -272,9 +272,9 @@ describe 'API routes/cameras' do
     end
 
     context 'when :external_url key is missing' do
-      it 'returns a BAD REQUEST status' do
+      it 'returns a ok status' do
         post('/cameras', params.merge(external_url: nil), auth)
-        expect(last_response.status).to eq(400)
+        expect(last_response.status).to eq(201)
       end
     end
 
@@ -294,14 +294,16 @@ describe 'API routes/cameras' do
     let(:params) {
       {
         name: "Garrett's Super New Camera v2",
-        endpoints: ['http://www.evercam.io', 'http://localhost:4321'],
+        external_url: 'http://www.evercam.io',
+        internal_url: 'http://localhost:4321',
         is_public: false,
         mac_address: 'aa:aa:aa:aa:aa:aa',
         vendor: model.vendor.exid,
         model: model.name,
         timezone: 'Etc/GMT+1',
-        snapshots: { 'jpg' => '/snap'},
-        auth: { 'basic' => {'username' => 'zzz', 'password' => 'qqq'}}
+        jpg_url: '/snap',
+        cam_username: 'zzz',
+        cam_password: 'qqq'
       }
     }
 
@@ -328,8 +330,9 @@ describe 'API routes/cameras' do
         expect(cam.vendor_model).to eq(model)
         expect(cam.mac_address).to eq('aa:aa:aa:aa:aa:aa')
         expect(cam.timezone.zone).to eq('Etc/GMT+1')
-        expect(cam.config['snapshots']).to eq({ 'jpg' => '/snap'})
-        expect(cam.config['auth']).to eq({ 'basic' => {'username' => 'zzz', 'password' => 'qqq'}})
+        expect(cam.jpg_url).to eq('/snap')
+        expect(cam.cam_username).to eq('zzz')
+        expect(cam.cam_password).to eq('qqq')
         expect(cam.endpoints.length).to eq(2)
         expect(cam.endpoints[1][:port]).to eq(4321)
       end
@@ -352,7 +355,7 @@ describe 'API routes/cameras' do
     context 'when snapshot url doesnt start with slash' do
       it 'returns a OK status' do
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}, auth)
+        patch("/cameras/#{camera.exid}", {jpg_url: 'image.jpg'}, auth)
         expect(last_response.json['cameras'][0]['jpg_url']).to eq('/image.jpg')
         expect(last_response.status).to eq(200)
       end

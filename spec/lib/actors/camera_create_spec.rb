@@ -10,17 +10,11 @@ module Evercam
           id: 'my-new-camera',
           name: 'My Fancy New Camera',
           username: create(:user).username,
-          endpoints: ['http://127.0.0.1:9393'],
+          internal_url: 'http://127.0.0.1:9393',
           is_public: true,
-          snapshots: {
-            jpg: '/onvif/snapshot'
-          },
-          auth: {
-            basic: {
-              username: 'admin',
-              password: '12345'
-            }
-          }
+          jpg_url: '/onvif/snapshot',
+          cam_username: 'admin',
+          cam_password: '12345'
         }
       end
 
@@ -62,38 +56,8 @@ module Evercam
           expect(errors[:camera]).to eq(:exists)
         end
 
-        it 'checks at least one endpoint is provided' do
-          params = valid.merge(endpoints: [])
-
-          outcome = subject.run(params)
-          errors = outcome.errors.symbolic
-
-          expect(outcome).to_not be_success
-          expect(errors[:external_url]).to eq(:valid)
-        end
-
-        it 'checks that endpoints is converting single string to array' do
-          params = valid.merge(endpoints: 'xxxx')
-
-          outcome = subject.run(params)
-          errors = outcome.errors.symbolic
-
-          expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:valid)
-        end
-
         it 'checks each endpoint is a valid uri' do
-          params = valid.merge(endpoints: ['h'])
-
-          outcome = subject.run(params)
-          errors = outcome.errors.symbolic
-
-          expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:valid)
-        end
-
-        it 'checks each endpoint is a valid uri' do
-          params = valid.merge(endpoints: [], external_url: 'x')
+          params = valid.merge(external_url: 'h')
 
           outcome = subject.run(params)
           errors = outcome.errors.symbolic
