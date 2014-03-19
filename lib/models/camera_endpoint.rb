@@ -34,7 +34,11 @@ class CameraEndpoint < Sequel::Model
   end
 
   def to_s
-    "#{scheme}://#{host}:#{port}"
+    if port == 80
+      "#{scheme}://#{host}"
+    else
+      "#{scheme}://#{host}:#{port}"
+    end
   end
 
   private

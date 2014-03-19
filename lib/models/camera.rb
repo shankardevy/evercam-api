@@ -113,11 +113,13 @@ class Camera < Sequel::Model
   end
 
   def external_url
-    endpoints.find {|e| e.public?}
+    e = endpoints.find {|e| e.public?}
+    e.to_s unless e.nil?
   end
 
   def internal_url
-    endpoints.find {|e| !e.public?}
+    e = endpoints.find {|e| !e.public?}
+    e.to_s unless e.nil?
   end
 
   def jpg_url

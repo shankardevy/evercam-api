@@ -335,6 +335,8 @@ describe 'API routes/cameras' do
         expect(cam.cam_password).to eq('qqq')
         expect(cam.endpoints.length).to eq(2)
         expect(cam.endpoints[1][:port]).to eq(4321)
+        expect(cam.external_url).to eq('http://www.evercam.io')
+        expect(cam.internal_url).to eq('http://localhost:4321')
       end
 
       it 'returns the updated camera' do
