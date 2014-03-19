@@ -112,5 +112,25 @@ class Camera < Sequel::Model
     !(MAC_ADDRESS_PATTERN =~ text).nil?
   end
 
+  def external_url
+    endpoints.find {|e| e.public?}
+  end
+
+  def internal_url
+    endpoints.find {|e| !e.public?}
+  end
+
+  def jpg_url
+    config.fetch('snapshots', {}).fetch('jpg', '')
+  end
+
+  def cam_username
+    config.fetch('auth', {}).fetch('basic', {}).fetch('username', '')
+  end
+
+  def cam_password
+    config.fetch('auth', {}).fetch('basic', {}).fetch('password', '')
+  end
+
 end
 

@@ -88,25 +88,45 @@ module Evercam
         required: true
       }
 
-      expose :location, documentation: {
-        type: 'hash',
-        desc: 'GPS lng and lat coordinates of the camera location'
+      expose :external_url, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'String',
+        desc: 'External URL of the camera',
+        required: true
       } do |c,o|
-        if c.location
-          { lng: c.location.x, lat: c.location.y }
-        end
+        c.external_url
       end
 
-      expose :endpoints, if: lambda {|instance, options| !options[:minimal]},
+      expose :internal_url, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
-        type: 'array',
-        desc: 'String array of all available camera endpoints',
-        required: true,
-        items: {
-          type: 'string'
-        }
-      } do |s,o|
-        s.endpoints.map(&:to_s)
+        type: 'String',
+        desc: 'Internal URL of the camera'
+      } do |c,o|
+        c.internal_url
+      end
+
+      expose :jpg_url, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'String',
+        desc: 'Snapshot url'
+      } do |c,o|
+        c.jpg_url
+      end
+
+      expose :cam_username, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'String',
+        desc: 'Camera username'
+      } do |c,o|
+        c.cam_username
+      end
+
+      expose :cam_password, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'String',
+        desc: 'Camera password'
+      } do |c,o|
+        c.cam_password
       end
 
       expose :mac_address, if: lambda {|instance, options| !options[:minimal]},
@@ -115,22 +135,13 @@ module Evercam
         desc: 'The physical network MAC address of the camera'
       }
 
-      expose :snapshots, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
+      expose :location, documentation: {
         type: 'hash',
-        desc: 'Hash of image types and paths which return snapshots',
-        required: true
-      } do |s,o|
-        s.config['snapshots']
-      end
-
-      expose :auth, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'hash',
-        desc: 'Hash of authentication mechanisms and login details',
-        required: true
-      } do |s,o|
-        s.config['auth']
+        desc: 'GPS lng and lat coordinates of the camera location'
+      } do |c,o|
+        if c.location
+          { lng: c.location.x, lat: c.location.y }
+        end
       end
 
     end

@@ -11,17 +11,12 @@ module Evercam
         {
           id: camera.exid,
           name: 'My Fancy New Camera',
-          endpoints: ['http://127.0.0.1:9393'],
+          username: create(:user).username,
+          internal_url: 'http://127.0.0.1:9393',
           is_public: true,
-          snapshots: {
-            jpg: '/onvif/snapshot'
-          },
-          auth: {
-            basic: {
-              username: 'administrator',
-              password: '123456'
-            }
-          }
+          jpg_url: '/onvif/snapshot',
+          cam_username: 'administrator',
+          cam_password: '123456'
         }
       end
 
@@ -52,28 +47,8 @@ module Evercam
           expect(errors[:camera]).to eq(:exists)
         end
 
-        it 'checks that endpoints is converting single string to array' do
-          params = valid.merge(endpoints: 'xxxx')
-
-          outcome = subject.run(params)
-          errors = outcome.errors.symbolic
-
-          expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:valid)
-        end
-
         it 'checks each endpoint is a valid uri' do
-          params = valid.merge(endpoints: ['h'])
-
-          outcome = subject.run(params)
-          errors = outcome.errors.symbolic
-
-          expect(outcome).to_not be_success
-          expect(errors[:endpoints]).to eq(:valid)
-        end
-
-        it 'checks each endpoint is a valid uri' do
-          params = valid.merge(endpoints: [], external_url: 'x')
+          params = valid.merge(external_url: 'h')
 
           outcome = subject.run(params)
           errors = outcome.errors.symbolic
@@ -115,19 +90,6 @@ module Evercam
           expect(result.config['snapshots']['jpg']).to eq(new_valid[:jpg_url])
           expect(result.config['auth']['basic']['username']).to eq(new_valid[:cam_username])
           expect(result.config['auth']['basic']['password']).to eq(new_valid[:cam_password])
-        end
-      end
-
-      describe 'valid old params' do
-        it 'returns success' do
-          outcome = subject.run(valid)
-          result = outcome.result
-
-          expect(outcome).to be_success
-          expect(result.endpoints.first.to_s).to eq(valid[:endpoints][0])
-          expect(result.config['snapshots']['jpg']).to eq(valid[:snapshots][:jpg])
-          expect(result.config['auth']['basic']['username']).to eq(valid[:auth][:basic][:username])
-          expect(result.config['auth']['basic']['password']).to eq(valid[:auth][:basic][:password])
         end
       end
 
