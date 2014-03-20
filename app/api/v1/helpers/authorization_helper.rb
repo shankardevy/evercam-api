@@ -2,7 +2,7 @@ module Evercam
    module AuthorizationHelper
    	def authorize!
    		requester = caller
-   		raise AuthenticationError.new if requester.nil?
+   		raise AuthenticationError.new("Unauthenticated") if requester.nil?
    	end
 
       # This method retrieves a model object representing the entity that is

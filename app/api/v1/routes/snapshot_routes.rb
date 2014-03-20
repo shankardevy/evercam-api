@@ -23,8 +23,6 @@ module Evercam
     formatter :img, lambda { |object, env| object.body }
     format :img
 
-    include WebErrors
-
     namespace :cameras do
       params do
         requires :id, type: String, desc: "Camera Id."
@@ -72,6 +70,17 @@ module Evercam
   class V1SnapshotRoutes < Grape::API
 
     include WebErrors
+
+    include WebErrors
+    helpers do
+      include AuthorizationHelper
+      include LoggingHelper
+      include SessionHelper
+    end
+
+    before do
+      authorize!
+    end
 
     DEFAULT_LIMIT_WITH_DATA = 10
     DEFAULT_LIMIT_NO_DATA = 100
