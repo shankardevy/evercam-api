@@ -86,7 +86,7 @@ module Evercam
       end
       raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
 
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
       CameraActivity.create(
@@ -121,7 +121,7 @@ module Evercam
       authreport!('cameras/patch')
 
       camera = ::Camera.by_exid!(params[:id])
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
       Camera.db.transaction do
@@ -147,7 +147,7 @@ module Evercam
       authreport!('cameras/delete')
 
       camera = ::Camera.by_exid!(params[:id])
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
       camera.destroy
@@ -164,7 +164,7 @@ module Evercam
       authreport!('shares/get')
 
       camera = ::Camera.by_exid!(params[:id])
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
       shares = CameraShare.where(camera_id: camera.id).to_a
@@ -184,7 +184,7 @@ module Evercam
       authreport!('share/post')
 
       camera = ::Camera.by_exid!(params[:id])
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.is_owner?
 
       outcome = Actors::ShareCreate.run(params)
@@ -200,7 +200,7 @@ module Evercam
       authreport!('share/delete')
 
       camera = ::Camera.by_exid!(params[:id])
-      rights = caller_rights_for(camera)
+      rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.is_owner?
 
       Actors::ShareDelete.run(params)

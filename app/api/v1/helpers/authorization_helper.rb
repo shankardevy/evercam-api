@@ -14,8 +14,13 @@ module Evercam
    	end
 
       # Generates a right set for the requester on a specified resource.
-   	def caller_rights_for(resource)
-   		AccessRightSet.for(resource, caller)
+   	def requester_rights_for(resource, scope=nil)
+         if resource.instance_of?(User)
+            raise "Invalid account scope specified." if !AccessRight::ALL_SCOPES.include?(scope)
+            AccountRightSet.new(resource, caller, scope)
+         else
+   		   AccessRightSet.for(resource, caller)
+         end
    	end
 
       # This method fetches the access token associated with the request. This

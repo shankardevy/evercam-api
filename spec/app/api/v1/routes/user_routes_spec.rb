@@ -175,7 +175,7 @@ describe 'API routes/users' do
         expect(last_response.status).to eq(403)
         data = last_response.json
         expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Required authorization not available")
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -272,7 +272,7 @@ describe 'API routes/users' do
         expect(last_response.status).to eq(403)
         data = last_response.json
         expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Required authorization not available")
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -358,7 +358,7 @@ describe 'API routes/users' do
         expect(last_response.status).to eq(403)
         data = last_response.json
         expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Required authorization not available")
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 

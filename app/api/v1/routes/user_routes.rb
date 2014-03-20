@@ -106,9 +106,8 @@ module Evercam
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
-        auth.allow? do |token, user|
-          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::VIEW)
-        end
+        rights = requester_rights_for(target, AccessRight::USER)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
         present Array(target), with: Presenters::User
       end
@@ -128,9 +127,9 @@ module Evercam
         authreport!('users/patch')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
-        auth.allow? do |token, user|
-          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::EDIT)
-        end
+
+        rights = requester_rights_for(target, AccessRight::USER)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
         outcome = Actors::UserUpdate.run(params)
         raise OutcomeError, outcome unless outcome.success?
@@ -146,9 +145,8 @@ module Evercam
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
-        auth.allow? do |token, user|
-          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::DELETE)
-        end
+        rights = requester_rights_for(target, AccessRight::USER)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
         target.destroy
         {}
