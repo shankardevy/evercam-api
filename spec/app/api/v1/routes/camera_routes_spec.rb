@@ -5,26 +5,23 @@ describe 'API routes/cameras' do
 
   let(:app) { Evercam::APIv1 }
 
-  let(:camera) { create(:camera, is_public: true) }
+  let(:camera_owner) { create(:user) }
+  let(:camera) { create(:camera, is_public: true, owner: camera_owner) }
 
   let(:token) { create(:access_token) }
 
   let(:access_right) { create(:camera_access_right, token: token) }
 
-  let(:authorization_user) { create(:user, username: 'xxxx', password: 'yyyy') }
+  let(:authorization_user) { create(:user) }
   let(:authorization_env) { {'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}"} }
+  let(:api_keys) { {api_id: authorization_user.api_id, api_key: authorization_user.api_key} }
 
   describe 'presented fields' do
     describe "for public cameras" do
       describe "when not the camera owner" do
 
-        let(:user) { create(:user, username: 'xxxx', password: 'yyyy') }
-        let(:access_token) { create(:access_token, user: user) }
-
         let(:json) {
-          access_token.save
-          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          output = get("/cameras/#{camera.exid}", {}, env).json
+          output = get("/cameras/#{camera.exid}", api_keys).json
           output['cameras'] ? output['cameras'][0] : {}
         }
 
@@ -42,8 +39,7 @@ describe 'API routes/cameras' do
       describe "when queried by the camera owner" do
         let(:camera) { create(:camera, is_public: true, owner: authorization_user) }
         let(:json) {
-          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-          output = get("/cameras/#{camera.exid}", {}, env).json
+          output = get("/cameras/#{camera.exid}", api_keys).json
           output['cameras'] ? output['cameras'][0] : {}
         }
 
@@ -58,14 +54,10 @@ describe 'API routes/cameras' do
       end
 
       describe "when queried by someone that is not the camera owner" do
-        let(:user1) { create(:user, username: 'aaaa', password: 'bbbb') }
-        let(:user2) { create(:user, username: 'xxxx', password: 'yyyy') }
-        let(:camera) { create(:camera, is_public: true, owner: user2) }
+        let(:not_owner) { create(:user, username: 'aaaa', password: 'bbbb') }
         let(:json) {
-          user1.save
-          user2.save
-          env    = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('aaaa:bbbb')}" }
-          output = get("/cameras/#{camera.exid}", {}, env).json
+          parameters = {api_id: not_owner.api_id, api_key: not_owner.api_key}
+          output = get("/cameras/#{camera.exid}", parameters).json
           output['cameras'] ? output['cameras'][0] : {}
         }
 
@@ -83,8 +75,7 @@ describe 'API routes/cameras' do
         context 'is nil' do
           it 'returns location as nil' do
             camera.update(location: nil)
-            authorization_user.save
-            json = get("/cameras/#{camera.exid}", {}, authorization_env).json
+            json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
             expect(json['location']).to be_nil
           end
@@ -94,7 +85,7 @@ describe 'API routes/cameras' do
           it 'returns location as lng lat object' do
             camera.update(location: { lng: 10, lat: 20 })
             authorization_user.save
-            json = get("/cameras/#{camera.exid}", {}, authorization_env).json
+            json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
             expect(json['location']).to have_keys('lng', 'lat')
           end
@@ -122,19 +113,20 @@ describe 'API routes/cameras' do
       }
     end
 
-    before(:each) { authorization_user.save }
-
     context 'when there are no parameters' do
       it 'returns a 400 bad request status' do
-        get('/cameras/test', {}, authorization_env)
+        get('/cameras/test', api_keys)
         expect(last_response.status).to eq(400)
       end
     end
 
     context 'when parameters are incorrect' do
       it 'returns a 400 bad request status' do
+        WebMock.allow_net_connect!
         VCR.use_cassette('API_cameras/test') do
-          get('/cameras/test', test_params_invalid.merge(external_url: '2.2.2.2:123', jpg_url: 'pancake'), authorization_env)
+          parameters = test_params_invalid.merge(external_url: '2.2.2.2:123',
+                                                 jpg_url: 'pancake').merge(api_keys)
+          get('/cameras/test', parameters)
           expect(last_response.status).to eq(400)
         end
       end
@@ -142,28 +134,37 @@ describe 'API routes/cameras' do
 
     context 'when parameters are correct, but camera is offline' do
       it 'returns a 503 camera offline status' do
+        WebMock.allow_net_connect!
         VCR.use_cassette('API_cameras/test') do
-          get('/cameras/test', test_params_invalid, authorization_env)
+          parameters = test_params_invalid.merge(api_keys)
+          get('/cameras/test', parameters)
           expect(last_response.status).to eq(503)
         end
+        WebMock.disable_net_connect!
       end
     end
 
     context 'when auth is wrong' do
       it 'returns a 403 status' do
+        WebMock.allow_net_connect!
         VCR.use_cassette('API_cameras/test') do
-          get('/cameras/test', test_params_valid.merge(cam_password: 'xxx'), authorization_env)
+          parameters = test_params_valid.merge(cam_password: 'xxx').merge(api_keys)
+          get('/cameras/test', parameters)
           expect(last_response.status).to eq(403)
         end
+        WebMock.disable_net_connect!
       end
     end
 
     context 'when parameters are correct' do
       it 'returns a 200 status with image data' do
+        WebMock.allow_net_connect!
         VCR.use_cassette('API_cameras/test') do
-          get('/cameras/test', test_params_valid, authorization_env)
+          parameters = test_params_valid.merge(api_keys)
+          get('/cameras/test', parameters)
           expect(last_response.status).to eq(200)
         end
+        WebMock.disable_net_connect!
       end
     end
 
@@ -175,13 +176,13 @@ describe 'API routes/cameras' do
 
     context 'when the camera does not exist' do
       it 'returns a NOT FOUND status' do
-        expect(get('/cameras/xxxx', {}, authorization_env).status).to eq(404)
+        expect(get('/cameras/xxxx', api_keys).status).to eq(404)
       end
     end
 
     context 'when the camera is public' do
       it 'returns the camera data' do
-        response = get("/cameras/#{camera.exid}", {}, authorization_env)
+        response = get("/cameras/#{camera.exid}", api_keys)
         expect(response.status).to eq(200)
       end
     end
@@ -198,14 +199,14 @@ describe 'API routes/cameras' do
 
       context 'when the request is unauthorized' do
         it 'returns a FORBIDDEN status' do
-          expect(get("/cameras/#{camera.exid}", {}, authorization_env).status).to eq(403)
+          expect(get("/cameras/#{camera.exid}", api_keys).status).to eq(403)
         end
       end
 
       context 'when the request is authorized' do
         it 'returns the camera data' do
           camera.update(owner: authorization_user)
-          expect(get("/cameras/#{camera.exid}", {}, authorization_env).status).to eq(200)
+          expect(get("/cameras/#{camera.exid}", api_keys).status).to eq(200)
         end
       end
 
@@ -215,7 +216,7 @@ describe 'API routes/cameras' do
       model = create(:vendor_model)
       camera.update(vendor_model: model)
 
-      response = get("/cameras/#{camera.exid}", {}, authorization_env)
+      response = get("/cameras/#{camera.exid}", api_keys)
       data = response.json['cameras'][0]
 
       expect(data['vendor']).to eq(model.vendor.exid)
@@ -224,7 +225,7 @@ describe 'API routes/cameras' do
 
     it 'can fetch details for a camera via MAC address' do
       camera.update(owner: authorization_user)
-      response = get("/cameras/#{camera.mac_address}", {}, authorization_env)
+      response = get("/cameras/#{camera.mac_address}", api_keys)
       data     = response.json['cameras'][0]
 
       expect(data['id']).to eq(camera.exid)
@@ -251,7 +252,7 @@ describe 'API routes/cameras' do
     context 'when the params are valid' do
 
       before(:each) do
-        post('/cameras', params, auth)
+        post('/cameras', params.merge(api_keys))
       end
 
       it 'returns a CREATED status' do
@@ -272,21 +273,21 @@ describe 'API routes/cameras' do
 
     context 'when required keys are missing' do
       it 'returns a BAD REQUEST status' do
-        post('/cameras', { id: '' }, auth)
+        post('/cameras', { id: '' }.merge(api_keys))
         expect(last_response.status).to eq(400)
       end
     end
 
     context 'when is_public is null' do
       it 'returns a BAD REQUEST status' do
-        post('/cameras', params.merge(is_public: nil), auth)
+        post('/cameras', params.merge(is_public: nil).merge(api_keys))
         expect(last_response.status).to eq(400)
       end
     end
 
     context 'when :external_url key is missing' do
       it 'returns a ok status' do
-        post('/cameras', params.merge(external_url: nil), auth)
+        post('/cameras', params.merge(external_url: nil).merge(api_keys), auth)
         expect(last_response.status).to eq(201)
       end
     end
@@ -329,7 +330,7 @@ describe 'API routes/cameras' do
           host: 'www.evercam.io',
           port: 80
         })
-        patch("/cameras/#{camera.exid}", params, authorization_env)
+        patch("/cameras/#{camera.exid}", params.merge(api_keys))
       end
 
       it 'returns a OK status' do
@@ -359,14 +360,14 @@ describe 'API routes/cameras' do
 
     context 'when params are empty' do
       it 'returns a OK status' do
-        patch("/cameras/#{camera.exid}", params.clear, authorization_env)
+        patch("/cameras/#{camera.exid}", api_keys)
         expect(last_response.status).to eq(200)
       end
     end
 
     context 'when snapshot url doesnt start with slash' do
       it 'returns a OK status' do
-        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}, authorization_env)
+        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}.merge(api_keys))
         expect(last_response.json['cameras'][0]['snapshots']['jpg']).to eq('/image.jpg')
         expect(last_response.status).to eq(200)
       end
@@ -380,7 +381,7 @@ describe 'API routes/cameras' do
     end
 
     context 'for a public camera with public shares' do
-      let(:camera) { create(:camera, is_public: true, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+      let(:camera) { create(:camera, is_public: true, owner: authorization_user) }
       let(:sharer1) { create(:user) }
       let(:sharer2) { create(:user) }
       let(:sharer3) { create(:user) }
@@ -396,7 +397,7 @@ describe 'API routes/cameras' do
         end
 
         it "deletes all the public shares but leaves private shares unchanged" do
-          patch("/cameras/#{camera.exid}", params, authorization_env)
+          patch("/cameras/#{camera.exid}", params.merge(api_keys))
 
           expect(CameraShare.where(camera_id: camera.id,
                                    kind: CameraShare::PUBLIC).count).to eq(0)
@@ -410,12 +411,11 @@ describe 'API routes/cameras' do
 
   describe 'DELETE /cameras' do
 
-    let(:camera) { create(:camera, is_public: false, owner: create(:user, username: 'xxxx', password: 'yyyy')) }
+    let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
     context 'when params are empty' do
       it 'returns a OK status' do
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        delete("/cameras/#{camera.exid}", {}, auth)
+        delete("/cameras/#{camera.exid}", api_keys)
         expect(last_response.status).to eq(200)
         expect(Camera.by_exid(camera.exid)).to eq(nil)
       end
@@ -430,13 +430,11 @@ describe 'API routes/cameras' do
   end
 
   describe 'GET /cameras/:id/shares' do
-    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
-    let(:camera) { create(:camera, is_public: false, owner: owner) }
+    let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
     context "where shares don't exist" do
       let(:shares) {
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        get("/cameras/#{camera.exid}/shares", {}, auth).json['shares']
+        get("/cameras/#{camera.exid}/shares", api_keys).json['shares']
       }
 
       it "returns an empty list" do
@@ -452,8 +450,7 @@ describe 'API routes/cameras' do
       let(:shares) {
         create(:private_camera_share, camera: camera, user: sharer1).save
         create(:private_camera_share, camera: camera, user: sharer2).save
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        get("/cameras/#{camera.exid}/shares", {}, auth).json['shares']
+        get("/cameras/#{camera.exid}/shares", api_keys).json['shares']
       }
 
       it "returns a full list of shares for a camera" do
@@ -464,16 +461,15 @@ describe 'API routes/cameras' do
   end
 
   describe 'POST /cameras/:id/share' do
-    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
     let(:sharer) { create(:user) }
-    let(:camera) { create(:camera, is_public: false, owner: owner) }
-    let(:auth) { env_for(session: { user: owner.id }) }
+    let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
     let(:parameters) {{email: sharer.email, rights: "Snapshot,List"}}
 
     context "where an email address is not specified" do
       it "returns an error" do
         parameters.delete(:email)
-        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        parameters.merge!(api_keys)
+        response = post("/cameras/#{camera.exid}/share", parameters)
         expect(response.status).to eq(400)
       end
     end
@@ -481,14 +477,15 @@ describe 'API routes/cameras' do
     context "where rights are not specified" do
       it "returns an error" do
         parameters.delete(:rights)
-        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        parameters.merge!(api_keys)
+        response = post("/cameras/#{camera.exid}/share", parameters)
         expect(response.status).to eq(400)
       end
     end
 
     context "where the camera does not exist" do
       it "returns an error" do
-        response = post("/cameras/blahblah/share", parameters, auth)
+        response = post("/cameras/blahblah/share", parameters.merge(api_keys))
         expect(response.status).to eq(404)
       end
     end
@@ -496,15 +493,17 @@ describe 'API routes/cameras' do
     context "where the user email does not exist" do
       it "returns an error" do
         parameters[:email] = "noone@nowhere.com"
-        response = post("/cameras/blah/share", parameters, auth)
+        parameters.merge!(api_keys)
+        response = post("/cameras/blah/share", parameters)
         expect(response.status).to eq(404)
       end
     end
 
     context "where the caller is not the owner of the camera" do
       it "returns an error" do
-        settings = env_for(session: { user: create(:user).id })
-        response = post("/cameras/#{camera.exid}/share", parameters, settings)
+        not_owner = create(:user)
+        parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
+        response = post("/cameras/#{camera.exid}/share", parameters)
         expect(response.status).to eq(403)
       end
     end
@@ -512,53 +511,53 @@ describe 'API routes/cameras' do
     context "where the invalid rights are requested" do
       it "returns an error" do
         parameters[:rights] = "blah, ningy"
-        response = post("/cameras/blah/share", parameters, auth)
+        parameters.merge!(api_keys)
+        response = post("/cameras/blah/share", parameters)
         expect(response.status).to eq(404)
       end
     end
 
     context "when a proper request is sent" do
       it "returns success" do
-        response = post("/cameras/#{camera.exid}/share", parameters, auth)
+        response = post("/cameras/#{camera.exid}/share", parameters.merge(api_keys))
         expect(response.status).to eq(201)
       end
     end    
   end
 
   describe 'DELETE /cameras/:id/share/:share_id' do
-    let(:owner) { create(:user, username: 'xxxx', password: 'yyyy') }
     let(:sharer) { create(:user) }
-    let(:camera) { create(:camera, is_public: false, owner: owner) }
-    let(:auth) { env_for(session: { user: owner.id }) }
+    let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
     context "where the share specified does not exist" do
       it "returns success" do
-        response = delete("/cameras/#{camera.exid}/share", {share_id: -100}, auth)
+        response = delete("/cameras/#{camera.exid}/share", {share_id: -100}.merge(api_keys))
         expect(response.status).to eq(200)
       end
     end
 
     context "when deleting a share that exists" do
-      let(:share) { create(:private_camera_share, camera: camera, user: owner, sharer: sharer).save }
+      let(:share) { create(:private_camera_share, camera: camera, user: authorization_user, sharer: sharer).save }
 
       context "where the camera specified does not exist" do
         it "returns a not found" do
-          response = delete("/cameras/blahdeblah/share", {share_id: share.id}, auth)
+          response = delete("/cameras/blahdeblah/share", {share_id: share.id}.merge(api_keys))
           expect(response.status).to eq(404)
         end
       end
 
       context "when the caller does not own the camera" do
         it "returns an error" do
-          settings = env_for(session: { user: create(:user).id })
-          response = delete("/cameras/#{camera.exid}/share", {share_id: share.id}, settings)
+          not_owner  = create(:user)
+          parameters = {api_id: not_owner.api_id, api_key: not_owner.api_key, share_id: share.id}
+          response = delete("/cameras/#{camera.exid}/share", parameters)
           expect(response.status).to eq(403)
         end
       end
 
       context "when proper request is sent" do
         it "returns success" do
-          response = delete("/cameras/#{camera.exid}/share", {share_id: share.id}, auth)
+          response = delete("/cameras/#{camera.exid}/share", {share_id: share.id}.merge(api_keys))
           expect(response.status).to eq(200)
         end
       end
