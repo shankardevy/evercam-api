@@ -16,6 +16,9 @@ describe 'API routes/snapshots' do
   let(:api_keys) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
   let(:snap) { create(:snapshot, camera: camera0) }
 
+  let(:other_user) { create(:user) }
+  let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
+
   before(:each) { WebMock.allow_net_connect! }
   after(:each) { WebMock.disable_net_connect! }
 
@@ -33,12 +36,22 @@ describe 'API routes/snapshots' do
     end
 
     context 'when unauthenticated' do
-      it 'returns an unauthorized error' do
+      it 'returns an unauthenticated error' do
         get("/cameras/#{snap.camera.exid}/snapshots")
         expect(last_response.status).to eq(401)
         data = JSON.parse(last_response.body)
         expect(data.include?("message")).to eq(true)
         expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      it 'returns an unauthorized error' do
+        get("/cameras/#{snap.camera.exid}/snapshots", alt_keys)
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -373,12 +386,24 @@ describe 'API routes/snapshots' do
       end
 
       context 'when unauthenticated' do
-        it 'returns an unauthorized error' do
+        it 'returns an unauthenticated error' do
           get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10})
           expect(last_response.status).to eq(401)
           data = JSON.parse(last_response.body)
           expect(data.include?("message")).to eq(true)
           expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        it 'returns an unauthorized error' do
+          other_user = create(:user)
+          parameters = {range: 10, api_id: other_user.api_id, api_key: other_user.api_key}
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", parameters)
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
         end
       end
 
@@ -421,7 +446,7 @@ describe 'API routes/snapshots' do
       end
 
       context 'when unauthenticated' do
-        it 'returns an unauthorized error' do
+        it 'returns an unauthenticated error' do
           VCR.use_cassette('API_snapshots/basic_post') do
             post("/cameras/#{camera0.exid}/snapshots", params)
           end
@@ -429,6 +454,21 @@ describe 'API routes/snapshots' do
           data = JSON.parse(last_response.body)
           expect(data.include?("message")).to eq(true)
           expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        let(:camera2) { create(:camera, is_public: false) }
+
+        it 'returns an unauthorized error' do
+          VCR.use_cassette('API_snapshots/basic_post') do
+            parameters = params.merge(api_id: other_user.api_id, api_key: other_user.api_key)
+            post("/cameras/#{camera2.exid}/snapshots", parameters)
+          end
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
         end
       end
 
@@ -466,12 +506,24 @@ describe 'API routes/snapshots' do
     end
 
     context 'when unauthenticated' do
-      it 'returns an unauthorized error' do
+      it 'returns an unauthenticated error' do
         post("/cameras/#{camera0.exid}/snapshots/12345678", params)
         expect(last_response.status).to eq(401)
         data = JSON.parse(last_response.body)
         expect(data.include?("message")).to eq(true)
         expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      let(:camera3) { create(:camera, is_public: false) }
+
+      it 'returns an unauthorized error' do
+        post("/cameras/#{camera3.exid}/snapshots/12345678", params.merge(alt_keys))
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -488,12 +540,22 @@ describe 'API routes/snapshots' do
     end
 
     context 'when unauthenticated' do
-      it 'returns an unauthorized error' do
+      it 'returns an unauthenticated error' do
         delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}")
         expect(last_response.status).to eq(401)
         data = JSON.parse(last_response.body)
         expect(data.include?("message")).to eq(true)
         expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      it 'returns an unauthorized error' do
+        delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", alt_keys)
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
