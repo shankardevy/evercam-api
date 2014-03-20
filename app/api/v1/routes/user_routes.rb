@@ -106,10 +106,9 @@ module Evercam
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
-        # NOTE: This is not a valid rights check for this request so I've commented
-        # it out but will need to be replaced with one that is. PW 18/03/14
-        # auth.allow? { |r| user.allow?(AccessRight::SNAPSHOT, r) }
-        auth.allow? {|token, user| !user.nil? && user.id == target.id}
+        auth.allow? do |token, user|
+          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::VIEW)
+        end
 
         present Array(target), with: Presenters::User
       end
@@ -127,14 +126,16 @@ module Evercam
       end
       patch '/:id' do
         authreport!('users/patch')
-        user = ::User.by_login(params[:id])
-        raise NotFoundError, 'user does not exist' unless user
-        auth.allow? { |r| user.allow?(:edit, r) }
+        target = ::User.by_login(params[:id])
+        raise NotFoundError, 'user does not exist' unless target
+        auth.allow? do |token, user|
+          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::EDIT)
+        end
 
         outcome = Actors::UserUpdate.run(params)
         raise OutcomeError, outcome unless outcome.success?
 
-        present Array(user.reload), with: Presenters::User
+        present Array(target.reload), with: Presenters::User
       end
 
       desc 'Delete your account, any cameras you own and all stored media', {
@@ -142,10 +143,14 @@ module Evercam
       }
       delete '/:id' do
         authreport!('users/delete')
-        user = ::User.by_login(params[:id])
-        raise NotFoundError, 'user does not exist' unless user
-        auth.allow? { |r| user.allow?(:edit, r) }
-        user.destroy
+        target = ::User.by_login(params[:id])
+        raise NotFoundError, 'user does not exist' unless target
+
+        auth.allow? do |token, user|
+          AccountRightSet.new(target, user, AccessRight::USER).allow?(AccessRight::DELETE)
+        end
+
+        target.destroy
         {}
       end
     end

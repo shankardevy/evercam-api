@@ -154,17 +154,29 @@ describe 'API routes/users' do
     end
 
     context 'when the authenticated user is the owner' do
-
       before(:each) {
         get("/users/#{user0.username}", api_keys)
       }
 
       it 'returns user data' do
-        expect(last_response.status).to eq(200)
-        expect(last_response.json['users'].map{ |s| s['id'] }).
-          to eq([user0.username])
+        data = last_response.json
+        expect(data).not_to be_nil
+        expect(data.include?("users")).to eq(true)
+        expect(data["users"].map {|s| s['id']}).to eq([user0.username])
       end
+    end
 
+    context 'when not authorized' do
+      let(:different_user) { create(:user) }
+      let(:credentials) { {api_id: different_user.api_id, api_key: different_user.api_key} }
+
+      it 'returns an unauthorized error' do
+        get("/users/#{user0.username}", credentials)
+        expect(last_response.status).to eq(403)
+        data = last_response.json
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Required authorization not available")
+      end
     end
 
   end
@@ -251,6 +263,19 @@ describe 'API routes/users' do
       end
     end
 
+    context 'when not authorized' do
+      let(:different_user) { create(:user) }
+      let(:credentials) { {api_id: different_user.api_id, api_key: different_user.api_key} }
+
+      it 'returns an unauthorized error' do
+        get("/users/#{user0.username}", credentials)
+        expect(last_response.status).to eq(403)
+        data = last_response.json
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Required authorization not available")
+      end
+    end
+
   end
 
   describe 'PATCH /users/:id' do
@@ -321,6 +346,19 @@ describe 'API routes/users' do
       it 'returns a 404 not found status' do
         patch('/users/notexistingone', api_keys)
         expect(last_response.status).to eq(404)
+      end
+    end
+
+    context 'when not authorized' do
+      let(:different_user) { create(:user) }
+      let(:credentials) { {api_id: different_user.api_id, api_key: different_user.api_key} }
+
+      it 'returns an unauthorized error' do
+        patch("/users/#{user0.username}", params.merge(email: 'gh@evercam.io').merge(credentials))
+        expect(last_response.status).to eq(403)
+        data = last_response.json
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Required authorization not available")
       end
     end
 
