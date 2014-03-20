@@ -24,6 +24,12 @@ module Evercam
     format :img
 
     namespace :cameras do
+      helpers do
+        include AuthorizationHelper
+        include LoggingHelper
+        include SessionHelper
+      end
+
       params do
         requires :id, type: String, desc: "Camera Id."
       end
@@ -32,7 +38,8 @@ module Evercam
         get 'snapshot.jpg' do
           camera = ::Camera.by_exid!(params[:id])
 
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
           response = nil
 
@@ -70,8 +77,6 @@ module Evercam
   class V1SnapshotRoutes < Grape::API
 
     include WebErrors
-
-    include WebErrors
     helpers do
       include AuthorizationHelper
       include LoggingHelper
@@ -94,7 +99,9 @@ module Evercam
         desc 'Returns the list of all snapshots currently stored for this camera'
         get 'snapshots' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
           present camera.snapshots, with: Presenters::Snapshot, models: true
         end
@@ -107,7 +114,9 @@ module Evercam
         end
         get 'snapshots/latest' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
           snap = camera.snapshots.order(:created_at).last
 
@@ -124,7 +133,10 @@ module Evercam
         end
         get 'snapshots/range' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+
           from = Time.at(params[:from].to_i).to_s
           to = Time.at(params[:to].to_i).to_s
 
@@ -155,7 +167,10 @@ module Evercam
             raise BadRequestError, 'Invalid month value'
           end
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
             from = camera.timezone.time(Time.utc(params[:year], params[:month], day)).to_s
@@ -182,7 +197,10 @@ module Evercam
             raise BadRequestError, 'Invalid day value'
           end
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+
           hours = []
           (0..23).each do |hour|
             from = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour)).to_s
@@ -205,7 +223,9 @@ module Evercam
         end
         get 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::SNAPSHOT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
           snap = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
 
@@ -218,7 +238,9 @@ module Evercam
         end
         post 'snapshots' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
           outcome = Actors::SnapshotFetch.run(params)
           raise OutcomeError, outcome unless outcome.success?
@@ -234,7 +256,9 @@ module Evercam
         end
         post 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
           outcome = Actors::SnapshotCreate.run(params)
           raise OutcomeError, outcome unless outcome.success?
@@ -248,7 +272,9 @@ module Evercam
         end
         delete 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])
-          auth.allow? { |token| camera.allow?(AccessRight::EDIT, token) }
+
+          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
           camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i)).destroy
           {}
