@@ -15,6 +15,9 @@ describe 'API routes/users' do
     }
   end
 
+  let(:other_user) { create(:user) }
+  let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
+
   before(:each) do
     body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
            "<status>\n"\

@@ -32,6 +32,12 @@ module Evercam
     end
 
     resource :users do
+      helpers do
+        include AuthorizationHelper
+        include LoggingHelper
+        include SessionHelper
+      end
+
       route_param :id do
         desc 'Returns the set of cameras owned by a particular user', {
           entity: Evercam::Presenters::Camera
@@ -41,8 +47,8 @@ module Evercam
           user = ::User.by_login(params[:id])
           raise NotFoundError, 'user does not exist' unless user
 
-          cameras = user.cameras.select do |s|
-            s.allow?(AccessRight::SNAPSHOT, auth.access_token)
+          cameras = user.cameras.select do |camera|
+            requester_rights_for(camera).allow?(AccessRight::SNAPSHOT)
           end
 
           present cameras, with: Presenters::Camera
