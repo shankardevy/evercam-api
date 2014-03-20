@@ -31,24 +31,22 @@ module Evercam
    			values    = request.headers["Authorization"].split
    			values[0] = values[0].downcase
             log.debug "Authorization header type: #{values[0]}"
-   			if values[0] == "basic"
-   				username, password = Base64.decode64(values[1]).split(":")
-   				if username && password
-                  log.debug "Fetching the user with the user name '#{username}'."
-   				   user  = User.by_login(username)
-   				   token = user.token if user && user.password == password
-   				end
-   			elsif values[0] == "bearer"
+   			if values[0] == "bearer"
                log.debug "Fetching the access token for '#{values[1]}'."
    				token = AccessToken.where(request: values[1]).first
    			end
    		else
-            log.debug "No authorization header found, checking for a session entry."
-   			if session.include?(:user)
-               log.debug "Session entry found, retrieving user id #{session[:user]}."
-   				user  = User[session[:user]]
-   				token = user.token if !user.nil?
-   			end
+            parameters = request.params
+            if parameters.include?(:api_id) && parameters.include?(:api_key)
+               query = Client.where(exid: parameters[:api_id])
+               if query.count == 0
+                  user  = User.where(api_id: parameters[:api_id]).first
+                  token = user.token if !user.nil?
+               else
+                  client = query.first
+                  token  = AccessToken.where(client_id: client.id).order(Sequel.desc(:created_at)).first
+               end
+            end
    		end
    		token
    	end
