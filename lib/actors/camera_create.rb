@@ -19,8 +19,12 @@ module Evercam
         string :vendor
 
         string :jpg_url
-        string :external_url
-        string :internal_url
+        string :external_host
+        string :internal_host
+        integer :external_http_port
+        integer :internal_http_port
+        integer :external_rtsp_port
+        integer :internal_rtsp_port
 
         string :cam_username
         string :cam_password
@@ -39,12 +43,12 @@ module Evercam
           add_error(:camera, :exists, 'Camera already exists')
         end
 
-        if external_url && !(external_url =~ URI.regexp)
-          add_error(:external_url, :valid, 'External url is invalid')
+        if external_host && !(external_host =~ ValidIpAddressRegex or external_host =~ ValidHostnameRegex)
+          add_error(:external_host, :valid, 'External url is invalid')
         end
 
-        if internal_url && !(internal_url =~ URI.regexp)
-          add_error(:internal_url, :valid, 'Internal url is invalid')
+        if internal_host && !(internal_host =~ ValidIpAddressRegex or internal_host =~ ValidHostnameRegex)
+          add_error(:internal_host, :valid, 'Internal url is invalid')
         end
 
         if timezone && false == Timezone::Zone.names.include?(timezone)
@@ -98,31 +102,20 @@ module Evercam
           done_at: Time.now
         )
 
-        if inputs[:external_url]
-          add_endpoint(camera, inputs[:external_url])
-        end
+        camera.values[:config].merge!({'external_host' => inputs[:external_host]}) if inputs[:external_host]
+        camera.values[:config].merge!({'external_http_port' => inputs[:external_http_port]}) if inputs[:external_http_port]
+        camera.values[:config].merge!({'external_rtsp_port' => inputs[:external_rtsp_port]}) if inputs[:external_rtsp_port]
 
-        if inputs[:internal_url]
-          add_endpoint(camera, inputs[:internal_url])
-        end
+        camera.values[:config].merge!({'internal_host' => inputs[:internal_host]}) if inputs[:internal_host]
+        camera.values[:config].merge!({'internal_http_port' => inputs[:internal_http_port]}) if inputs[:internal_http_port]
+        camera.values[:config].merge!({'internal_rtsp_port' => inputs[:internal_rtsp_port]}) if inputs[:internal_rtsp_port]
 
-        if inputs[:external_url] or inputs[:internal_url]
+        if inputs[:external_host]
           # fire off the evr.cm zone update to sidekiq
-          primary = camera.endpoints.first
-          DNSUpsertWorker.perform_async(id, primary.host)
+          DNSUpsertWorker.perform_async(id, inputs[:external_host])
         end
 
         camera
-      end
-
-      def add_endpoint(camera, url)
-        endpoint = URI.parse(url)
-
-        camera.add_endpoint({
-          scheme: endpoint.scheme,
-          host: endpoint.host,
-          port: endpoint.port
-        })
       end
 
     end

@@ -3,7 +3,7 @@ require_lib 'actors'
 
 module Evercam
   module Actors
-    describe CameraCreate do
+    describe CameraUpdate do
 
       let(:camera) {create(:camera, is_public: false) }
 
@@ -12,7 +12,10 @@ module Evercam
           id: camera.exid,
           name: 'My Fancy New Camera',
           username: create(:user).username,
-          internal_url: 'http://127.0.0.1:9393',
+          external_host: '123.0.0.1',
+          internal_host: '127.0.0.1',
+          external_http_port: 9393,
+          internal_http_port: 9292,
           is_public: true,
           jpg_url: '/onvif/snapshot',
           cam_username: 'administrator',
@@ -24,8 +27,10 @@ module Evercam
         {
           id: camera.exid,
           name: 'My Super Fancy New Camera',
-          external_url: 'http://123.0.0.1:9393',
-          internal_url: 'http://127.0.0.1:9345',
+          external_host: '123.0.0.2',
+          internal_host: '127.0.0.2',
+          external_http_port: 7393,
+          internal_http_port: 7292,
           is_public: true,
           jpg_url: '/new/snapshot',
           cam_username: 'admin',
@@ -48,13 +53,13 @@ module Evercam
         end
 
         it 'checks each endpoint is a valid uri' do
-          params = valid.merge(external_url: 'h')
+          params = valid.merge(external_host: '!h')
 
           outcome = subject.run(params)
           errors = outcome.errors.symbolic
 
           expect(outcome).to_not be_success
-          expect(errors[:external_url]).to eq(:valid)
+          expect(errors[:external_host]).to eq(:valid)
         end
 
         it 'checks any provided timezone is valid' do
@@ -85,11 +90,13 @@ module Evercam
           result = outcome.result
 
           expect(outcome).to be_success
-          expect(result.endpoints.first.to_s).to eq(new_valid[:external_url])
-          expect(result.endpoints.last.to_s).to eq(new_valid[:internal_url])
-          expect(result.config['snapshots']['jpg']).to eq(new_valid[:jpg_url])
-          expect(result.config['auth']['basic']['username']).to eq(new_valid[:cam_username])
-          expect(result.config['auth']['basic']['password']).to eq(new_valid[:cam_password])
+          expect(result.config['external_host']).to eq(new_valid[:external_host])
+          expect(result.config['internal_host']).to eq(new_valid[:internal_host])
+          expect(result.config['external_http_port']).to eq(new_valid[:external_http_port])
+          expect(result.config['internal_http_port']).to eq(new_valid[:internal_http_port])
+          expect(result.jpg_url).to eq(new_valid[:jpg_url])
+          expect(result.cam_username).to eq(new_valid[:cam_username])
+          expect(result.cam_password).to eq(new_valid[:cam_password])
         end
       end
 
@@ -124,7 +131,7 @@ module Evercam
           params = valid
 
           Evercam::DNSUpsertWorker.expects(:perform_async).
-            with(camera.exid, '127.0.0.1')
+            with(camera.exid, valid[:external_host])
 
           outcome = subject.run(params)
           expect(outcome).to be_success

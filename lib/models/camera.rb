@@ -113,13 +113,22 @@ class Camera < Sequel::Model
   end
 
   def external_url
-    e = endpoints.find {|e| e.public?}
-    e.to_s unless e.nil?
+    port = config.fetch('external_http_port', nil)
+    host = config.fetch('external_host', nil)
+    unless host.nil?
+      host = "http://#{host}"
+      host << ":#{port}" unless port.nil?
+    end
+    host
   end
 
   def internal_url
-    e = endpoints.find {|e| !e.public?}
-    e.to_s unless e.nil?
+    port = config.fetch('internal_http_port', nil)
+    host = config.fetch('internal_host', nil)
+    unless host.nil?
+      host = "http://#{host}"
+      host << ":#{port}" unless port.nil?
+    end
   end
 
   def jpg_url
