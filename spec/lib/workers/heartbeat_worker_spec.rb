@@ -9,13 +9,18 @@ describe Evercam::HeartbeatWorker do
 
   subject { Evercam::HeartbeatWorker }
 
-  let(:camera0) { create(:camera_endpoint, host: 'www.evercam.io', port: 80).camera }
+  let(:camera0) do
+    camera0 = create(:camera)
+    camera0.values[:config].merge!({'external_host' => 'www.evercam.io'})
+    camera0.save
+    camera0
+  end
 
   context 'when the camera has no public endpoints' do
     it 'does not make an outbound request' do
       stub_request(:any, 'localhost')
 
-      camera0.endpoints.first.update(host: 'localhost')
+      camera0.update(config: {})
       subject.new.perform(camera0.exid)
 
       assert_not_requested :any, 'localhost'
@@ -24,7 +29,8 @@ describe Evercam::HeartbeatWorker do
 
   context 'when a camera endpoint cannot be resolved' do
     it 'does not raise an error' do
-      camera0.endpoints.first.update(host: 'bad.host')
+      camera0.values[:config].merge!({'external_host' => 'bad.host'})
+      camera0.save
       expect{ subject.new.perform(camera0.exid) }.to_not raise_error
     end
   end

@@ -117,7 +117,7 @@ class Camera < Sequel::Model
     host = config.fetch('external_host', nil)
     unless host.nil?
       host = "http://#{host}"
-      host << ":#{port}" unless port.nil?
+      host << ":#{port}" unless port.nil? or port == 80
     end
     host
   end
@@ -127,7 +127,7 @@ class Camera < Sequel::Model
     host = config.fetch('internal_host', nil)
     unless host.nil?
       host = "http://#{host}"
-      host << ":#{port}" unless port.nil?
+      host << ":#{port}" unless port.nil? or port == 80
     end
   end
 

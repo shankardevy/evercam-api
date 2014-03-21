@@ -38,28 +38,25 @@ module Evercam
 
           response = nil
 
-          camera.endpoints.each do |endpoint|
-            next unless (endpoint.public? rescue false)
+          unless camera.external_url.nil?
             begin
               auth = camera.config.fetch('auth', {}).fetch('basic', '')
               if auth != ''
                 auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
               end
-              response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
+              response  = Typhoeus::Request.get(camera.external_url + camera.config['snapshots']['jpg'],
                                                 userpwd: auth,
                                                 timeout: Evercam::Config[:api][:timeout],
                                                 connecttimeout: Evercam::Config[:api][:timeout])
-              if response.success?
-                break
-              end
             rescue URI::InvalidURIError
               raise BadRequestError, 'Invalid URL'
             end
           end
-          if response.success?
-            response
-          elsif response.nil?
+
+          if response.nil?
             raise CameraOfflineError, 'No public endpoint'
+          elsif response.success?
+            response
           elsif response.code == 401
             raise AuthorizationError, 'Please check camera username and password'
           else

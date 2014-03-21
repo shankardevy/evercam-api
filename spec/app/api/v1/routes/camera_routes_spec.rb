@@ -25,7 +25,7 @@ describe 'API routes/cameras' do
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
             'timezone', 'location')
-          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+          expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
                                         'auth', 'mac_address')
         end
 

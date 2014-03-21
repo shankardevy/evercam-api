@@ -20,15 +20,13 @@ module Evercam
       camera = Camera.by_exid(camera_name)
       updates = { is_online: false, last_polled_at: instant }
 
-      camera.endpoints.each do |endpoint|
-        next unless (endpoint.public? rescue false)
-        con = Net::HTTP.new(endpoint.host, endpoint.port)
+      unless camera.external_url.nil?
+        con = Net::HTTP.new(camera.config['external_host'], camera.config['external_http_port'])
 
         begin
           con.open_timeout = TIMEOUT
           if con.get('/')
             updates.merge!(is_online: true, last_online_at: instant)
-            break
           end
         rescue Net::OpenTimeout
           # offline
