@@ -367,5 +367,100 @@ describe 'API routes/users' do
 
   end
 
+  describe 'GET /users/:id/credentials' do
+    let(:password) { SecureRandom.base64(6)}
+    let(:user) { create(:user, password: password) }
+    let(:client) { create(:client) }
+    let(:api_keys) { {api_id: client.exid, api_key: client.secret} }
+    let(:parameters) { {password: password}.merge(api_keys) }
+
+    context 'when properly authenticated' do
+      context 'and a valid user name and password are provided' do
+        it 'returns success and provides valid user credentials' do
+          get("/users/#{user.username}/credentials", parameters)
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("api_id")).to eq(true)
+          expect(data.include?("api_key")).to eq(true)
+          expect(data["api_id"]).to eq(user.api_id)
+          expect(data["api_key"]).to eq(user.api_key)
+        end
+      end
+
+      context 'when a non-existent user name is specified' do
+        it 'returns a not found error' do
+          get("/users/blah/credentials", parameters)
+          expect(last_response.status).to eq(404)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("User does not exist.")
+        end
+      end
+
+      context 'when a password is not specified' do
+        it 'returns a parameters error' do
+          parameters.delete(:password)
+          get("/users/#{user.username}/credentials", parameters)
+          expect(last_response.status).to eq(400)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("password is missing")
+        end
+      end
+
+      context 'when an invalid password is specified' do
+        it 'returns an authentication error' do
+          parameters[:password] = 'this is wrong'
+          get("/users/#{user.username}/credentials", parameters)
+          expect(last_response.status).to eq(401)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Invalid user name and/or password.")
+        end
+      end
+    end
+
+    context 'when no authentication details are provided' do
+      it 'returns an unauthenticated error' do
+        parameters.delete(:api_id)
+        parameters.delete(:api_key)
+        get("/users/#{user.username}/credentials", parameters)
+        expect(last_response.status).to eq(401)
+        data = last_response.json
+        expect(data).not_to be_nil
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when an non-existent API id is specified' do
+      it 'returns an unauthenticated error' do
+        parameters[:api_id] = 'blah'
+        get("/users/#{user.username}/credentials", parameters)
+        expect(last_response.status).to eq(401)
+        data = last_response.json
+        expect(data).not_to be_nil
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when the API key does not match the API id specified' do
+      it 'returns an unauthenticated error' do
+        parameters[:api_key] = 'blah'
+        get("/users/#{user.username}/credentials", parameters)
+        expect(last_response.status).to eq(401)
+        data = last_response.json
+        expect(data).not_to be_nil
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+  end
+
 end
 

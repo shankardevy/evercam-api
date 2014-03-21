@@ -157,6 +157,23 @@ module Evercam
         target.destroy
         {}
       end
+
+      desc "Fetch API credentials for an authenticated user."
+      params do
+        requires :id, type: String, desc: "User name for the user to fetch credentials for."
+        requires :password, type: String, desc: "Password for the user to fetch credentials for."
+      end
+      get '/:id/credentials' do
+        authreport!('users/credentials')
+        user = User.by_login(params[:id])
+        raise NotFoundError.new('User does not exist.') if user.nil?
+
+        if user.password != params[:password]
+          raise AuthenticationError.new("Invalid user name and/or password.")
+        end
+
+        {api_id: user.api_id, api_key: user.api_key}
+      end
     end
   end
 end
