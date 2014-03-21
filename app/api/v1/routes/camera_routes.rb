@@ -8,10 +8,7 @@ module Evercam
 
     include WebErrors
     helpers do
-      include AuthorizationHelper
       include CameraHelper
-      include LoggingHelper
-      include SessionHelper
     end
 
     before do

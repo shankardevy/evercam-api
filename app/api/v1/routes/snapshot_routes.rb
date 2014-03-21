@@ -24,12 +24,6 @@ module Evercam
     format :img
 
     namespace :cameras do
-      helpers do
-        include AuthorizationHelper
-        include LoggingHelper
-        include SessionHelper
-      end
-
       params do
         requires :id, type: String, desc: "Camera Id."
       end
@@ -77,12 +71,6 @@ module Evercam
   class V1SnapshotRoutes < Grape::API
 
     include WebErrors
-    helpers do
-      include AuthorizationHelper
-      include LoggingHelper
-      include SessionHelper
-    end
-
     before do
       authorize!
     end

@@ -5,11 +5,6 @@ module Evercam
   class V1ModelRoutes < Grape::API
 
     include WebErrors
-    helpers do
-      include AuthorizationHelper
-      include LoggingHelper
-      include SessionHelper
-    end
 
     before do
       authorize!

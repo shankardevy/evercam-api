@@ -7,12 +7,6 @@ module Evercam
     include WebErrors
 
     namespace :testusername do
-      helpers do
-        include AuthorizationHelper
-        include LoggingHelper
-        include SessionHelper
-      end
-
       before do
         authorize!
       end
@@ -32,12 +26,6 @@ module Evercam
     end
 
     resource :users do
-      helpers do
-        include AuthorizationHelper
-        include LoggingHelper
-        include SessionHelper
-      end
-
       route_param :id do
         desc 'Returns the set of cameras owned by a particular user', {
           entity: Evercam::Presenters::Camera
@@ -57,12 +45,6 @@ module Evercam
     end
 
     resource :users do
-      helpers do
-        include AuthorizationHelper
-        include LoggingHelper
-        include SessionHelper
-      end
-
       before do
         authorize!
       end
