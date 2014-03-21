@@ -367,9 +367,16 @@ describe 'API routes/cameras' do
 
     context 'when snapshot url doesnt start with slash' do
       it 'returns a OK status' do
-        patch("/cameras/#{camera.exid}", {snapshots: {jpg: 'image.jpg'}}.merge(api_keys))
-        expect(last_response.json['cameras'][0]['snapshots']['jpg']).to eq('/image.jpg')
+        patch("/cameras/#{camera.exid}", {jpg_url: 'image.jpg'}.merge(api_keys))
         expect(last_response.status).to eq(200)
+        content = last_response.json
+        expect(content).not_to be_nil
+        expect(content.include?("cameras")).to eq(true)
+        expect(content['cameras']).not_to be_nil
+        expect(content['cameras'].length).not_to eq(0)
+        expect(content['cameras'][0]).not_to be_nil
+        expect(content['cameras'][0].include?("jpg_url")).to eq(true)
+        expect(content['cameras'][0]["jpg_url"]).to eq("/image.jpg")
       end
     end
 
