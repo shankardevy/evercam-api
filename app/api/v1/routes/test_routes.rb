@@ -9,8 +9,8 @@ module Evercam
       	desc "A simple endpoint that can be used to test whether an API id "\
       	     "and key pair are valid."
       	params do
-      		requires :api_id, type: String, desc: "The API id to be tested."
-      		requires :api_key, type: String, desc: "The API key to be tested."
+      		optional :api_id, type: String, desc: "The API id to be tested."
+      		optional :api_key, type: String, desc: "The API key to be tested."
       	end
 	      get do
 	      	result = {authenticated: false,
@@ -19,10 +19,12 @@ module Evercam
 	      	query = Client.where(exid: params[:api_id])
 	      	if query.count == 0
 	      		user = User.where(api_id: params[:api_id]).first
-	      		result[:authenticated] = (user.api_key == params[:api_key])
+	      		if user.nil? && !user.api_id.nil?
+	      		   result[:authenticated] = (user.api_key == params[:api_key])
+	      		end
 	      	else
 	      		client = query.first
-	      		result[:authenticated] = (client.secret == params[:api_key])
+	      		result[:authenticated] = (client.secret == params[:api_key]) if !client.nil?
 	      	end
 	      	result
 	      end
