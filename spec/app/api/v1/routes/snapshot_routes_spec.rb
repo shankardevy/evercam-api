@@ -13,29 +13,56 @@ describe 'API routes/snapshots' do
     camera0.save
     camera0
   end
-  let(:auth) { env_for(session: { user: camera0.owner.id }) }
+  let(:api_keys) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
   let(:snap) { create(:snapshot, camera: camera0) }
 
-  describe('GET /cameras/:id/snapshots') {
+  let(:other_user) { create(:user) }
+  let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
+
+  before(:each) { WebMock.allow_net_connect! }
+  after(:each) { WebMock.disable_net_connect! }
+
+  describe('GET /cameras/:id/snapshots') do
 
     let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
 
     context 'when snapshot request is correct' do
       it 'all snapshots for given camera are returned' do
         snap1
-        get("/cameras/#{snap.camera.exid}/snapshots", {}, auth)
+        get("/cameras/#{snap.camera.exid}/snapshots", api_keys)
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'].length).to eq(2)
       end
     end
 
-  }
+    context 'when unauthenticated' do
+      it 'returns an unauthenticated error' do
+        get("/cameras/#{snap.camera.exid}/snapshots")
+        expect(last_response.status).to eq(401)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      it 'returns an unauthorized error' do
+        get("/cameras/#{snap.camera.exid}/snapshots", alt_keys)
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
+      end
+    end
+
+  end
 
   describe 'GET /cameras/:id/snapshots/range' do
 
     before(:all) do
-      @exid = 'xxx'
-      @cam = create(:camera, exid: @exid)
+      @exid     = 'xxx'
+      @cam      = create(:camera, exid: @exid)
+      @api_keys = {api_id: @cam.owner.api_id, api_key: @cam.owner.api_key}
       data = File.read('spec/resources/snapshot.jpg')
       (1..150).each do |n|
         Snapshot.create(camera: @cam, created_at: Time.at(n), data: data)
@@ -55,7 +82,7 @@ describe 'API routes/snapshots' do
 
         it 'returns array of days for given date' do
           snapOld
-          get("/cameras/#{@exid}/snapshots/1970/01/days", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/01/days", @api_keys)
           expect(last_response.status).to eq(200)
           expect(last_response.json['days']).to eq([1,17])
         end
@@ -63,15 +90,35 @@ describe 'API routes/snapshots' do
 
       context 'when month is incorrect' do
         it 'returns 400 error' do
-          get("/cameras/#{@exid}/snapshots/1970/00/days", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/00/days", @api_keys)
           expect(last_response.status).to eq(400)
         end
       end
 
       context 'when month is incorrect' do
         it 'returns 400 error' do
-          get("/cameras/#{@exid}/snapshots/1970/13/days", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/13/days", @api_keys)
           expect(last_response.status).to eq(400)
+        end
+      end
+
+      context 'when unauthenticated' do
+        it 'returns an unauthenticated error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/days")
+          expect(last_response.status).to eq(401)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        it 'returns an unauthorized error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/days", api_keys)
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
         end
       end
     end
@@ -83,7 +130,7 @@ describe 'API routes/snapshots' do
 
         it 'returns array of hours for given date' do
           snapOld
-          get("/cameras/#{@exid}/snapshots/1970/01/01/hours", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/01/01/hours", @api_keys)
           expect(last_response.status).to eq(200)
           expect(last_response.json['hours']).to eq([0,17])
         end
@@ -91,15 +138,35 @@ describe 'API routes/snapshots' do
 
       context 'when day is incorrect' do
         it 'returns 400 error' do
-          get("/cameras/#{@exid}/snapshots/1970/01/00/hours", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/01/00/hours", @api_keys)
           expect(last_response.status).to eq(400)
         end
       end
 
       context 'when day is incorrect' do
         it 'returns 400 error' do
-          get("/cameras/#{@exid}/snapshots/1970/01/41/hours", {}, auth)
+          get("/cameras/#{@exid}/snapshots/1970/01/41/hours", @api_keys)
           expect(last_response.status).to eq(400)
+        end
+      end
+
+      context 'when unauthenticated' do
+        it 'returns an unauthenticated error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/01/hours")
+          expect(last_response.status).to eq(401)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        it 'returns an unauthorized error' do
+          get("/cameras/#{@exid}/snapshots/1970/01/01/hours", api_keys)
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
         end
       end
     end
@@ -108,37 +175,37 @@ describe 'API routes/snapshots' do
       context 'all snapshots within given range are returned' do
 
         it 'applies default no data limit' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(100)
         end
 
         it 'applies default no data limit and returns second page' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, page: 2}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, page: 2}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(50)
         end
 
         it 'applies specified limit' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, limit: 15}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(15)
         end
 
         it 'applies default data limit' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(10)
         end
 
         it 'applies specified limit' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 1234567890, with_data: true, limit: 5}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(5)
         end
 
         it 'returns only two entries' do
-          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 2}, auth)
+          get("/cameras/#{@exid}/snapshots/range", {from: 1, to: 2}.merge(@api_keys))
           expect(last_response.status).to eq(200)
           expect(last_response.json['snapshots'].length).to eq(2)
         end
@@ -156,28 +223,28 @@ describe 'API routes/snapshots' do
       camera1.save
       camera1
     end
-    let(:auth) { env_for(session: { user: camera1.owner.id }) }
+    let(:auth) { {api_id: camera1.owner.api_id, api_key: camera1.owner.api_key} }
 
     context 'when snapshot request is correct but there are no snapshots' do
       it 'empty list is returned' do
-        get("/cameras/#{camera1.exid}/snapshots/latest", {}, auth)
+        get("/cameras/#{camera1.exid}/snapshots/latest", auth)
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'].length).to eq(0)
       end
     end
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
     let(:instant) { Time.now }
     let(:snap1) { create(:snapshot, camera: camera0, created_at: instant) }
     let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
     let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
+    let(:credentials) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
 
     context 'when snapshot request is correct' do
       it 'latest snapshot for given camera is returned' do
         snap1
         snap2
         snap3
-        get("/cameras/#{snap.camera.exid}/snapshots/latest", {}, auth)
+        get("/cameras/#{snap.camera.exid}/snapshots/latest", credentials)
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
         expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
@@ -185,6 +252,25 @@ describe 'API routes/snapshots' do
       end
     end
 
+    context 'when unauthenticated' do
+      it 'returns an unauthenticated error' do
+        get("/cameras/#{camera1.exid}/snapshots/latest")
+        expect(last_response.status).to eq(401)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when not authorized' do
+      it 'returns an unauthorized error' do
+        get("/cameras/#{camera1.exid}/snapshots/latest", api_keys)
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
+      end
+    end
 
   end
 
@@ -195,7 +281,7 @@ describe 'API routes/snapshots' do
       context 'and camera is online' do
         it 'returns snapshot jpg' do
           VCR.use_cassette('API_snapshots/jpg_get') do
-            get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+            get("/cameras/#{snap.camera.exid}/snapshot.jpg")
             expect(last_response.status).to eq(200)
           end
         end
@@ -208,7 +294,7 @@ describe 'API routes/snapshots' do
               snap.camera.values[:config]['snapshots'] = { jpg: '/Streaming/channels/1/picture'};
               snap.camera.values[:config]['auth'] = {};
               snap.camera.save
-              get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+              get("/cameras/#{snap.camera.exid}/snapshot.jpg")
               expect(last_response.status).to eq(403)
             end
           end
@@ -220,7 +306,7 @@ describe 'API routes/snapshots' do
               snap.camera.values[:config]['snapshots'] =  { jpg: '/Streaming/channels/1/picture'}
               snap.camera.values[:config]['auth'] = {basic: {username: 'admin', password: 'mehcam'}};
               snap.camera.save
-              get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+              get("/cameras/#{snap.camera.exid}/snapshot.jpg")
               expect(last_response.status).to eq(200)
             end
           end
@@ -231,19 +317,19 @@ describe 'API routes/snapshots' do
         it '503 error is returned' do
           response = Typhoeus::Response.new({:return_code => :operation_timedout})
           Typhoeus.stub(/#{camera0.external_url}/).and_return(response)
-          get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
+          get("/cameras/#{snap.camera.exid}/snapshot.jpg")
           expect(last_response.status).to eq(503)
         end
       end
 
     end
 
-    context 'when snapshot request is not authenticated' do
+    context 'when snapshot request is not authorized' do
       it 'request is not authorized' do
         camera0.is_public = false
         camera0.save
         get("/cameras/#{snap.camera.exid}/snapshot.jpg")
-        expect(last_response.status).to eq(401)
+        expect(last_response.status).to eq(403)
       end
     end
 
@@ -266,7 +352,7 @@ describe 'API routes/snapshots' do
 
       context 'range is specified' do
         it 'latest snapshot is returned' do
-          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10}, auth)
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10}.merge(api_keys))
           expect(last_response.json['snapshots'][0]['data']).to be_nil
           expect(last_response.json['snapshots'][0]['created_at']).to eq(s2.created_at.to_i)
           expect(last_response.status).to eq(200)
@@ -275,7 +361,7 @@ describe 'API routes/snapshots' do
 
       context 'range is not specified' do
         it 'specific snapshot is returned' do
-          get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", {}, auth)
+          get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", api_keys)
           expect(last_response.json['snapshots'][0]['data']).to be_nil
           expect(last_response.json['snapshots'][0]['created_at']).to eq(s1.created_at.to_i)
           expect(last_response.json['snapshots'][0]['camera']).to eq(s1.camera.exid)
@@ -285,7 +371,7 @@ describe 'API routes/snapshots' do
 
       context 'type is not specified' do
         it 'snapshot without image data is returned' do
-          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", api_keys)
           expect(last_response.json['snapshots'][0]['data']).to be_nil
           expect(last_response.status).to eq(200)
         end
@@ -293,9 +379,31 @@ describe 'API routes/snapshots' do
 
       context 'type is full' do
         it 'snapshot without image data is returned' do
-          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {with_data: 'true'}, auth)
+          get("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {with_data: 'true'}.merge(api_keys))
           expect(last_response.json['snapshots'][0]['data']).not_to be_nil
           expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'when unauthenticated' do
+        it 'returns an unauthenticated error' do
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", {range: 10})
+          expect(last_response.status).to eq(401)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        it 'returns an unauthorized error' do
+          other_user = create(:user)
+          parameters = {range: 10, api_id: other_user.api_id, api_key: other_user.api_key}
+          get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", parameters)
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
         end
       end
 
@@ -315,7 +423,7 @@ describe 'API routes/snapshots' do
 
       before do
         VCR.use_cassette('API_snapshots/basic_post') do
-          post("/cameras/#{camera0.exid}/snapshots", params, auth)
+          post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
         end
       end
 
@@ -337,6 +445,33 @@ describe 'API routes/snapshots' do
         expect(Time.at(res['created_at'])).to be_around_now
       end
 
+      context 'when unauthenticated' do
+        it 'returns an unauthenticated error' do
+          VCR.use_cassette('API_snapshots/basic_post') do
+            post("/cameras/#{camera0.exid}/snapshots", params)
+          end
+          expect(last_response.status).to eq(401)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthenticated")
+        end
+      end
+
+      context 'when unauthorized' do
+        let(:camera2) { create(:camera, is_public: false) }
+
+        it 'returns an unauthorized error' do
+          VCR.use_cassette('API_snapshots/basic_post') do
+            parameters = params.merge(api_id: other_user.api_id, api_key: other_user.api_key)
+            post("/cameras/#{camera2.exid}/snapshots", parameters)
+          end
+          expect(last_response.status).to eq(403)
+          data = JSON.parse(last_response.body)
+          expect(data.include?("message")).to eq(true)
+          expect(data["message"]).to eq("Unauthorized")
+        end
+      end
+
     end
 
   end
@@ -352,7 +487,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'snapshot is saved to database' do
-        post("/cameras/#{camera0.exid}/snapshots/12345678", params, auth)
+        post("/cameras/#{camera0.exid}/snapshots/12345678", params.merge(api_keys))
         expect(last_response.status).to eq(201)
         snap = Snapshot.first
         expect(snap.notes).to eq('Snap note')
@@ -365,8 +500,30 @@ describe 'API routes/snapshots' do
     context 'when data has incorrect file format' do
       it 'error is returned' do
         post("/cameras/#{camera0.exid}/snapshots/12345678",
-             params.merge(data: Rack::Test::UploadedFile.new('.gitignore', 'text/plain')), auth)
+             params.merge(data: Rack::Test::UploadedFile.new('.gitignore', 'text/plain')).merge(api_keys))
         expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when unauthenticated' do
+      it 'returns an unauthenticated error' do
+        post("/cameras/#{camera0.exid}/snapshots/12345678", params)
+        expect(last_response.status).to eq(401)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      let(:camera3) { create(:camera, is_public: false) }
+
+      it 'returns an unauthorized error' do
+        post("/cameras/#{camera3.exid}/snapshots/12345678", params.merge(alt_keys))
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -376,9 +533,29 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'snapshot is deleted' do
-        delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", {}, auth)
+        delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", api_keys)
         expect(last_response.status).to eq(200)
         expect(Snapshot.first).to be_nil
+      end
+    end
+
+    context 'when unauthenticated' do
+      it 'returns an unauthenticated error' do
+        delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}")
+        expect(last_response.status).to eq(401)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthenticated")
+      end
+    end
+
+    context 'when unauthorized' do
+      it 'returns an unauthorized error' do
+        delete("/cameras/#{camera0.exid}/snapshots/#{snap.created_at.to_i}", alt_keys)
+        expect(last_response.status).to eq(403)
+        data = JSON.parse(last_response.body)
+        expect(data.include?("message")).to eq(true)
+        expect(data["message"]).to eq("Unauthorized")
       end
     end
 

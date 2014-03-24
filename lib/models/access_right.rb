@@ -13,7 +13,8 @@ class AccessRight < Sequel::Model
   # Scope constants.
   CAMERAS                    = "cameras".freeze
   SNAPSHOTS                  = "snapshots".freeze
-  ALL_SCOPES                 = [CAMERAS, SNAPSHOTS]
+  USER                       = "user".freeze
+  ALL_SCOPES                 = [CAMERAS, SNAPSHOTS, USER]
 
   # Status constants.
   ACTIVE                     = 1

@@ -47,11 +47,11 @@ describe CameraActivity do
       end
     end
 
-    let(:auth) { env_for(session: { user: camera0.owner.id }) }
+    let(:auth) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
 
     context 'when the request is authorized' do
       it 'creates access activity' do
-        expect(get("/cameras/#{camera0.exid}", {}, auth).status).to eq(200)
+        expect(get("/cameras/#{camera0.exid}", auth).status).to eq(200)
         ca = CameraActivity.first
         expect(ca.camera.exid).to eq(camera0.exid)
         expect(ca.access_token).to eq(camera0.owner.token)
@@ -69,14 +69,15 @@ describe CameraActivity do
     let(:params) {
       {
         name: "Garrett's Super New Camera v2",
-        is_public: true
+        is_public: true,
+        api_id: camera.owner.api_id,
+        api_key: camera.owner.api_key
       }
     }
 
     context 'when new camera is created' do
       it 'creates create activity' do
-        auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
-        response = patch("/cameras/#{camera.exid}", params, auth)
+        response = patch("/cameras/#{camera.exid}", params)
         expect(response.status).to eq(200)
         ca = CameraActivity.first
         expect(ca.camera.exid).to eq(Camera.first.exid)

@@ -6,6 +6,10 @@ module Evercam
 
     include WebErrors
 
+    before do
+      authorize!
+    end
+
     desc 'Returns set of support supported camera vendors', {
       entity: Evercam::Presenters::Vendor
     }

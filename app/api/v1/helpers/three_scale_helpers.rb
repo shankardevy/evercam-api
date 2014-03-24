@@ -1,4 +1,8 @@
 module Evercam
+   # This module contains helpers methods that are specific to the user of the
+   # 3Scale API. Note that the methods in this helper are dependent on methods
+   # defined in the authorization helper so if you want to use this helper you
+   # also have to include that one.
    module ThreeScaleHelper
       @@client = ThreeScale::Client.new(provider_key: Evercam::Config[:threescale][:provider_key])
 
@@ -30,35 +34,6 @@ module Evercam
    		else
    			{app_id: params['app_id'], app_key: params['app_key']}
    		end
-   	end
-
-   	# This method provides convenient access to the Rack session object.
-      # Note that this method will ultimately be moved to the session helpers
-      # when that becomes available and should be deleted from here once that
-      # is the case.
-   	def session
-   		(env["rack.session"] || {})
-   	end
-
-      # This method fetches the access token associated with the request.
-      # Note that this method will ultimately be moved to the authorization
-      # helpers when that becomes available and should be deleted from here
-      # once that is the case.
-   	def access_token
-   		token  = nil
-   		if request.headers.include?("Authorization")
-   			values    = request.headers["Authorization"].split
-   			values[0] = values[0].downcase
-   			if values[0] == "bearer"
-   				token = AccessToken.where(request: values[1]).first
-   			end
-   		else
-   			if session.include?(:user)
-   				user  = User[session[:user]]
-   				token = user.token if !user.nil?
-   			end
-   		end
-   		token
    	end
    end
 end

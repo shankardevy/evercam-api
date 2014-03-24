@@ -4,9 +4,16 @@ require_relative '../presenters/camera_share_presenter'
 module Evercam
   class V1CameraRoutes < Grape::API
 
-    include WebErrors
-
     TIMEOUT = 5
+
+    include WebErrors
+    helpers do
+      include CameraHelper
+    end
+
+    before do
+      authorize!
+    end
 
     desc 'Creates a new camera owned by the authenticating user', {
       entity: Evercam::Presenters::Camera
@@ -25,20 +32,12 @@ module Evercam
       optional :cam_username, type: String, desc: "Camera username."
       optional :cam_password, type: String, desc: "Camera password."
     end
-    post '/cameras', :http_codes => [
-      [400, "Invalid parameter entry"],
-      [401, "Authentication error"],
-      [403, "Authorization Error"],
-    ]  do
-      auth.demand do |req, usr|
-        authreport!('cameras/post')
-        inputs = params.merge(username: usr.username)
-
-        outcome = Actors::CameraCreate.run(inputs)
-        raise OutcomeError, outcome unless outcome.success?
-
-        present Array(outcome.result), with: Presenters::Camera
-      end
+    post '/cameras'  do
+      authreport!('cameras/post')
+      parameters = {}.merge(params).merge(username: caller.username)
+      outcome    = Actors::CameraCreate.run(parameters)
+      raise OutcomeError, outcome unless outcome.success?
+      present Array(outcome.result), with: Presenters::Camera
     end
 
     desc 'Tests if given camera parameters are correct', {
@@ -75,37 +74,27 @@ module Evercam
     }
     get '/cameras/:id' do
       authreport!('cameras/get')
-      a_token = nil
-      strip   = false
+
+      camera = nil
       if Camera.is_mac_address?(params[:id])
-        camera = auth.first_allowed(Camera.where(mac_address: params[:id])) do |record, token|
-          a_token = token
-          rights  = AccessRightSet.for(record, (token.nil? ? nil : token.target))
-          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_public?)
-          strip   = (allowed && !rights.is_owner?)
-          allowed
-        end
-        raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
+        camera = camera_for_mac(caller, params[:id])
       else
-        camera = Camera.by_exid!(params[:id])
-        auth.allow? do |token|
-          a_token = token
-          rights  = AccessRightSet.for(camera, (token.nil? ? nil : token.target))
-          allowed = (rights.allow?(AccessRight::VIEW) || rights.is_public?)
-          strip   = (allowed && !rights.is_owner?)
-          allowed
-        end
+        camera = Camera.where(exid: params[:id]).first
       end
+      raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
+
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
       CameraActivity.create(
         camera: camera,
-        access_token: a_token,
+        access_token: access_token,
         action: 'accessed',
         done_at: Time.now,
         ip: request.ip
       )
 
-      present Array(camera), with: Presenters::Camera, minimal: strip
+      present Array(camera), with: Presenters::Camera, minimal: !rights.allow?(AccessRight::VIEW)
     end
 
     desc 'Updates full or partial data for an existing camera', {
@@ -127,12 +116,10 @@ module Evercam
     end
     patch '/cameras/:id' do
       authreport!('cameras/patch')
+
       camera = ::Camera.by_exid!(params[:id])
-      a_token = nil
-      auth.allow? do |token|
-        a_token = token
-        camera.allow?(AccessRight::EDIT, token)
-      end
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
       Camera.db.transaction do
         outcome = Actors::CameraUpdate.run(params)
@@ -140,7 +127,7 @@ module Evercam
 
         CameraActivity.create(
           camera: camera,
-          access_token: a_token,
+          access_token: access_token,
           action: 'edited',
           done_at: Time.now,
           ip: request.ip
@@ -155,8 +142,11 @@ module Evercam
     }
     delete '/cameras/:id' do
       authreport!('cameras/delete')
+
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? { |r| camera.allow?(AccessRight::EDIT, r) }
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
+
       camera.destroy
       {}
     end
@@ -169,8 +159,10 @@ module Evercam
     end
     get '/cameras/:id/shares' do
       authreport!('shares/get')
+
       camera = ::Camera.by_exid!(params[:id])
-      auth.allow? {|token| camera.allow?(AccessRight::VIEW, token)}
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
       shares = CameraShare.where(camera_id: camera.id).to_a
       present shares, with: Presenters::CameraShare
@@ -187,9 +179,10 @@ module Evercam
     end
     post '/cameras/:id/share' do
       authreport!('share/post')
-      camera = ::Camera.by_exid!(params[:id])
 
-      auth.allow? {|token, user| camera.owner_id == (user ? user.id : nil)}
+      camera = ::Camera.by_exid!(params[:id])
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.is_owner?
 
       outcome = Actors::ShareCreate.run(params)
       present [outcome.result], with: Presenters::CameraShare
@@ -202,9 +195,10 @@ module Evercam
     end
     delete '/cameras/:id/share' do
       authreport!('share/delete')
-      camera = ::Camera.by_exid!(params[:id])
 
-      auth.allow? {|token, user| camera.owner_id == (user ? user.id : nil)}
+      camera = ::Camera.by_exid!(params[:id])
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.is_owner?
 
       Actors::ShareDelete.run(params)
       {}

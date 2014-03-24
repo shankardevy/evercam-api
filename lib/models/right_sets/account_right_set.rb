@@ -1,15 +1,28 @@
 class AccountRightSet < AccessRightSet
    # The list of valid rights for a account.
-   VALID_RIGHTS = [AccessRight::SNAPSHOT,
-                   AccessRight::DELETE,
-                   AccessRight::EDIT,
-                   AccessRight::LIST,
-                   AccessRight::VIEW,
-                   "#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}",
-                   "#{AccessRight::GRANT}~#{AccessRight::DELETE}",
-                   "#{AccessRight::GRANT}~#{AccessRight::EDIT}",
-                   "#{AccessRight::GRANT}~#{AccessRight::LIST}",
-                   "#{AccessRight::GRANT}~#{AccessRight::VIEW}"]
+   VALID_RIGHTS = {AccessRight::CAMERAS   => [AccessRight::SNAPSHOT,
+                                              AccessRight::DELETE,
+                                              AccessRight::EDIT,
+                                              AccessRight::LIST,
+                                              AccessRight::VIEW,
+                                              "#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::DELETE}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::EDIT}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::LIST}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::VIEW}"],
+                   AccessRight::SNAPSHOTS => [AccessRight::DELETE,
+                                              AccessRight::EDIT,
+                                              AccessRight::LIST,
+                                              AccessRight::VIEW,
+                                              "#{AccessRight::GRANT}~#{AccessRight::SNAPSHOT}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::DELETE}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::EDIT}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::LIST}",
+                                              "#{AccessRight::GRANT}~#{AccessRight::VIEW}"],
+                   AccessRight::USER      => [AccessRight::DELETE,
+                                              AccessRight::EDIT,
+                                              AccessRight::LIST,
+                                              AccessRight::VIEW]}
 
    # List of account public rights.
    PUBLIC_RIGHTS = []
@@ -27,6 +40,11 @@ class AccountRightSet < AccessRightSet
 
    attr_reader :scope
    alias :user :resource
+
+   # Tests whether the requester is the owner of the account.
+   def is_owner?
+      resource.id == requester.id
+   end
 
    # Tests whether the requester has a specified permission on the account.
    #
@@ -83,12 +101,12 @@ class AccountRightSet < AccessRightSet
    # ==== Parameters.
    # right::  The right to perform the test for.
    def valid_right?(right)
-      AccountRightSet.valid_right?(right)
+      AccountRightSet.valid_right?(right, @scope)
    end
 
    # Class level implementation of the valid right test.
-   def self.valid_right?(right)
-      VALID_RIGHTS.include?(right)
+   def self.valid_right?(right, scope)
+      VALID_RIGHTS[scope].include?(right)
    end
 
    private

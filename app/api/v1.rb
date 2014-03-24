@@ -1,7 +1,7 @@
 ['config', 'models', 'errors', 'actors', 'mailers'].
   each { |f| require_relative "../../lib/#{f}" }
 
-Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).
+Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).sort.
   each { |f| require f }
 
 module Evercam
@@ -14,6 +14,9 @@ module Evercam
       def auth
         WithAuth.new(env)
       end
+      include AuthorizationHelper
+      include LoggingHelper
+      include SessionHelper
       include ThreeScaleHelper
     end
 
