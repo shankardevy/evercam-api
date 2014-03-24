@@ -15,13 +15,13 @@ module Rack
   end
 end
 
-use Rack::Rewrite do
-  if Sinatra::Base.production?
-    r301 %r{.*}, 'https://dashboard.evercam.io$&', :if => Proc.new {|rack_env|
-      rack_env['SERVER_NAME'] != 'dashboard.evercam.io' and rack_env['SERVER_NAME'] != 'api.evercam.io'
-    }
-  end
-end
+#use Rack::Rewrite do
+#  if Sinatra::Base.production?
+#    r301 %r{.*}, 'https://dashboard.evercam.io$&', :if => Proc.new {|rack_env|
+#      rack_env['SERVER_NAME'] != 'dashboard.evercam.io' and rack_env['SERVER_NAME'] != 'api.evercam.io'
+#    }
+#  end
+#end
 
 base = File.dirname(__FILE__)
 ['api/v1', 'web/app'].each do |app|
