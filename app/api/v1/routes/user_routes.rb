@@ -7,10 +7,6 @@ module Evercam
     include WebErrors
 
     namespace :testusername do
-      before do
-        authorize!
-      end
-
       desc 'Internal endpoint only, keep hidden', {
         :hidden => true
       }
