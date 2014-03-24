@@ -88,21 +88,52 @@ module Evercam
         required: true
       }
 
-      expose :external_url, if: lambda {|instance, options| !options[:minimal]},
+      expose :external_host, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
         type: 'String',
-        desc: 'External URL of the camera',
-        required: true
+        desc: 'External host of the camera'
       } do |c,o|
-        c.external_url
+        c.config['external_host']
       end
 
-      expose :internal_url, if: lambda {|instance, options| !options[:minimal]},
+      expose :internal_host, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
         type: 'String',
-        desc: 'Internal URL of the camera'
+        desc: 'Internal host of the camera'
       } do |c,o|
-        c.internal_url
+        c.config['internal_host']
+      end
+
+      expose :external_http_port, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'Integer',
+        desc: 'External http port of the camera'
+      } do |c,o|
+        c.config['external_http_port']
+      end
+
+      expose :internal_http_port, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'Integer',
+        desc: 'Internal http port of the camera'
+      } do |c,o|
+        c.config['internal_http_port']
+      end
+
+      expose :external_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'Integer',
+        desc: 'Internal rtsp port of the camera'
+      } do |c,o|
+        c.config['external_rtsp_port']
+      end
+
+      expose :internal_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'Integer',
+        desc: 'External rtsp port of the camera'
+       } do |c,o|
+        c.config['internal_rtsp_port']
       end
 
       expose :jpg_url, if: lambda {|instance, options| !options[:minimal]},

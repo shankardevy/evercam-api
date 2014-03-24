@@ -25,7 +25,7 @@ describe 'API routes/cameras' do
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
             'timezone', 'location')
-          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+          expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
                                         'auth', 'mac_address')
         end
 
@@ -44,8 +44,9 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'owner', 'created_at', 'updated_at',
             'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-            'external_url', 'internal_url', 'vendor', 'model', 'timezone', 'jpg_url', 'cam_username',
-            'cam_password', 'location', 'mac_address')
+            'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
+            'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
+            'cam_username', 'cam_password', 'location', 'mac_address')
         end
       end
 
@@ -294,8 +295,9 @@ describe 'API routes/cameras' do
     let(:params) {
       {
         name: "Garrett's Super New Camera v2",
-        external_url: 'http://www.evercam.io',
-        internal_url: 'http://localhost:4321',
+        external_host: 'www.evercam.io',
+        internal_host: 'localhost',
+        internal_http_port: 4321,
         is_public: false,
         mac_address: 'aa:aa:aa:aa:aa:aa',
         vendor: model.vendor.exid,
@@ -310,11 +312,6 @@ describe 'API routes/cameras' do
     context 'when the params are valid' do
 
       before do
-        camera.add_endpoint({
-          scheme: 'http',
-          host: 'www.evercam.io',
-          port: 80
-        })
         auth = { 'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64('xxxx:yyyy')}" }
         patch("/cameras/#{camera.exid}", params, auth)
       end
@@ -333,8 +330,6 @@ describe 'API routes/cameras' do
         expect(cam.jpg_url).to eq('/snap')
         expect(cam.cam_username).to eq('zzz')
         expect(cam.cam_password).to eq('qqq')
-        expect(cam.endpoints.length).to eq(2)
-        expect(cam.endpoints[1][:port]).to eq(4321)
         expect(cam.external_url).to eq('http://www.evercam.io')
         expect(cam.internal_url).to eq('http://localhost:4321')
       end

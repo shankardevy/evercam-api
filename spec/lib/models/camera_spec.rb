@@ -176,5 +176,32 @@ describe Camera do
 
   end
 
+  describe 'urls' do
+
+    context 'when external host is empty' do
+      it 'returns null' do
+        camera.values[:config].merge!({'external_host' => nil})
+        expect(camera.external_url).to be_nil
+      end
+    end
+
+    context 'when external host is not empty, but port is empty' do
+      it 'returns url without port' do
+        camera.values[:config].merge!({'external_host' => '1.1.1.1'})
+        camera.values[:config].merge!({'external_http_port' => nil})
+        expect(camera.external_url).to eq('http://1.1.1.1')
+      end
+    end
+
+    context 'when external host is not empty and port is not empty' do
+      it 'returns url with port' do
+        camera.values[:config].merge!({'external_host' => '1.1.1.1'})
+        camera.values[:config].merge!({'external_http_port' => 123})
+        expect(camera.external_url).to eq('http://1.1.1.1:123')
+      end
+    end
+
+  end
+
 end
 

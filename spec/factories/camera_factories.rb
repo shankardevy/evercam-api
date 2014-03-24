@@ -20,16 +20,12 @@ FactoryGirl.define do
           username: 'abcd',
           password: 'wxyz'
         }
-      }
+      },
+      external_host: 'www.evercam.test',
+      external_http_port: 80
     })
 
   end
 
-  factory :camera_endpoint do
-    association :camera, factory: :camera
-    scheme 'http'
-    host 'www.evercam.test'
-    port 80
-  end
 end
 

@@ -16,14 +16,13 @@ module Evercam
         snapshot = nil
         response = nil
 
-        camera.endpoints.each do |endpoint|
-          next unless (endpoint.public? rescue false)
+        unless camera.external_url.nil?
           begin
             auth = camera.config.fetch('auth', {}).fetch('basic', '')
             if auth != ''
               auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
             end
-            response  = Typhoeus::Request.get(endpoint.to_s + camera.config['snapshots']['jpg'],
+            response  = Typhoeus::Request.get(camera.external_url + camera.config['snapshots']['jpg'],
                                               userpwd: auth,
                                               timeout: Evercam::Config[:api][:timeout],
                                               connecttimeout: Evercam::Config[:api][:timeout])
@@ -34,7 +33,6 @@ module Evercam
                 data: response.body,
                 notes: inputs[:notes]
               )
-              break
             end
           rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
             raise BadRequestError, 'Invalid URL'

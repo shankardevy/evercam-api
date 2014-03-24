@@ -6,7 +6,13 @@ describe 'API routes/snapshots' do
 
   let(:app) { Evercam::APIv1 }
 
-  let(:camera0) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
+  let(:camera0) do
+    camera0 = create(:camera)
+    camera0.values[:config].merge!({'external_host' => '89.101.225.158'})
+    camera0.values[:config].merge!({'external_http_port' => 8105})
+    camera0.save
+    camera0
+  end
   let(:auth) { env_for(session: { user: camera0.owner.id }) }
   let(:snap) { create(:snapshot, camera: camera0) }
 
@@ -143,7 +149,13 @@ describe 'API routes/snapshots' do
 
   describe 'GET /cameras/:id/snapshots/latest' do
 
-    let(:camera1) { create(:camera_endpoint, host: '89.101.225.158', port: 8105).camera }
+    let(:camera1) do
+      camera1 = create(:camera)
+      camera1.values[:config].merge!({'external_host' => '89.101.225.158'})
+      camera1.values[:config].merge!({'external_http_port' => 8105})
+      camera1.save
+      camera1
+    end
     let(:auth) { env_for(session: { user: camera1.owner.id }) }
 
     context 'when snapshot request is correct but there are no snapshots' do
@@ -193,7 +205,8 @@ describe 'API routes/snapshots' do
         context 'auth is not provided' do
           it 'returns 403 error' do
             VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
-              snap.camera.config = {snapshots: { jpg: '/Streaming/channels/1/picture'}};
+              snap.camera.values[:config]['snapshots'] = { jpg: '/Streaming/channels/1/picture'};
+              snap.camera.values[:config]['auth'] = {};
               snap.camera.save
               get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
               expect(last_response.status).to eq(403)
@@ -204,8 +217,8 @@ describe 'API routes/snapshots' do
         context 'auth is provided' do
           it 'returns snapshot jpg' do
             VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
-              snap.camera.config = {snapshots: { jpg: '/Streaming/channels/1/picture'},
-                                    auth: {basic: {username: 'admin', password: 'mehcam'}}};
+              snap.camera.values[:config]['snapshots'] =  { jpg: '/Streaming/channels/1/picture'}
+              snap.camera.values[:config]['auth'] = {basic: {username: 'admin', password: 'mehcam'}};
               snap.camera.save
               get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
               expect(last_response.status).to eq(200)
@@ -217,7 +230,7 @@ describe 'API routes/snapshots' do
       context 'and camera is offline' do
         it '503 error is returned' do
           response = Typhoeus::Response.new({:return_code => :operation_timedout})
-          Typhoeus.stub(/#{camera0.endpoints[0].host}/).and_return(response)
+          Typhoeus.stub(/#{camera0.external_url}/).and_return(response)
           get("/cameras/#{snap.camera.exid}/snapshot.jpg", {}, auth)
           expect(last_response.status).to eq(503)
         end
@@ -314,7 +327,7 @@ describe 'API routes/snapshots' do
         snap = Snapshot.first
         expect(snap.notes).to eq(params[:notes])
         expect(snap.created_at).to be_around_now
-        expect(snap.camera).to eq(camera0)
+        expect(snap.camera.exid).to eq(camera0.exid)
       end
 
       it 'returns the snapshot' do
@@ -344,7 +357,7 @@ describe 'API routes/snapshots' do
         snap = Snapshot.first
         expect(snap.notes).to eq('Snap note')
         expect(snap.created_at).to be_around_now
-        expect(snap.camera).to eq(camera0)
+        expect(snap.camera.exid).to eq(camera0.exid)
         expect(snap.data).not_to be_nil
       end
     end
