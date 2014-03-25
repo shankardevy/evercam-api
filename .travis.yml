@@ -20,13 +20,3 @@ env:
 
 branches:
   only: master
-
-deploy:
-  provider: heroku
-  app:
-    master: powerful-ocean-5002
-  api_key:
-    secure: ZztBXxYMZxZv65UJCKeLQF0amEy+5HX8/izUlFPD90AIosok7C2IhM0VhWtVlSYS4GvAagbvkZe4OR89vGYJaBzM8akA3J1X7PRm2AD+GEKmpxTkCrVUkR5iCoLDG+10wV50yYPKizR9Noi9DBpZcSnPOSHDHuIIvdWBjz63Nfw=
-  run:
-  - rake db:migrate
-  - restart
