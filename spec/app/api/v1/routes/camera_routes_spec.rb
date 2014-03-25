@@ -326,6 +326,13 @@ describe 'API routes/cameras' do
       end
     end
 
+    context 'when authentication details tie to a client rather than a user' do
+      it 'returns a BAD REQUEST status' do
+        client = create(:client).save
+        expect(post('/cameras', params.merge(api_id: client.exid, api_key: client.secret)).status).to eq(400)
+      end
+    end
+
   end
 
   describe 'PATCH /cameras' do

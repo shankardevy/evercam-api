@@ -104,6 +104,7 @@ module Evercam
       end
       post do
         authreport!('cameras/post')
+        raise BadRequestError.new("Requester is not a user.") if caller.nil? || !caller.instance_of?(User)
         parameters = {}.merge(params).merge(username: caller.username)
         outcome    = Actors::CameraCreate.run(parameters)
         raise OutcomeError, outcome unless outcome.success?
