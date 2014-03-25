@@ -322,157 +322,234 @@ describe 'WebApp routes/oauth2_router' do
   end
 
   describe 'POST /oauth/authorize' do
-    let(:access_token) { create(:access_token, client: client0, refresh: SecureRandom.base64(24)) }
-    let(:parameters) { {redirect_uri:  'http://www.google.com/blah',
-                        grant_type:    'authorization_code',
-                        code:          access_token.refresh_code,
-                        client_id:     'client0',
-                        client_secret: 'client0_secret'} }
+    context 'for the code grant flow' do
+      let(:access_token) { create(:access_token, client: client0, refresh: SecureRandom.base64(24)) }
+      let(:parameters) { {redirect_uri:  'http://www.google.com/blah',
+                          grant_type:    'authorization_code',
+                          code:          access_token.refresh_code,
+                          client_id:     'client0',
+                          client_secret: 'client0_secret'} }
 
-    context 'when a grant type is not specified' do
-      it 'hits the redirect URI with an error' do
-        parameters.delete(:grant_type)
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
-    context 'when an invalid grant type is specified' do
-      it 'hits the redirect URI with an error' do
-        parameters[:grant_type] = 'blah'
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
-    context 'when a code is not specified' do
-      it 'hits the redirect URI with an error' do
-        parameters.delete(:code)
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
-    context 'when a client_id is not specified' do
-      it 'hits the redirect URI with an error' do
-        parameters.delete(:client_id)
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
-    context 'when a client_secret is not specified' do
-      it 'hits the redirect URI with an error' do
-        parameters.delete(:client_secret)
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=invalid_request')
-      end
-    end
-
-    context 'when the client id specified does not match an existing client' do
-      it 'hits the redirect URI with an error' do
-        parameters[:client_id] = 'xxxx'
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=unauthorized_client')
-      end
-    end
-
-    context 'when the URI specified does not match the clients allowed callback URIs' do
-      let(:client1) { create(:client, exid: 'client1', callback_uris: ['https://www.blah.com/redirect']).save }
-
-      it 'redirects to /oauth2/error' do
-        parameters[:client_id] = client1.exid
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.path).to eq('/oauth2/error')
-        expect(uri.query).to eq('error=invalid_redirect_uri')
-      end
-    end
-
-    context 'when 3Scale returns a negative response' do
-      before(:each) do
-        client0.update(callback_uris: ['http://www.google.com/blah'])
-        stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=client0_secret&provider_key=b25bc9166b8805fc26a96f1130578d2b").
-           with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
-           to_return(:status => 409,
-                     :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>false</authorized>\n   <reason>its broke</reason>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
-                     :headers => {})
-      end
-
-      it 'hits the redirect URI with an error' do
-        post('/oauth2/authorize', parameters)
-
-        expect(last_response.status).to eq(302)
-        uri = URI.parse(last_response.location)
-        expect(uri.host).to eq('www.google.com')
-        expect(uri.query).to eq('error=unauthorized_client')
-      end
-    end
-
-    context 'when 3Scale returns a positive response' do
-      before(:each) do
-        client0.update(callback_uris: ['http://www.google.com/blah'])
-        stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=client0_secret&provider_key=b25bc9166b8805fc26a96f1130578d2b").
-           with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
-           to_return(:status => 200,
-                     :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
-                     :headers => {})
-      end
-
-      context 'when a redirect URI is included in the request' do
-        it 'hits the redirect URI with appropriate parameters' do
+      context 'when a grant type is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:grant_type)
           post('/oauth2/authorize', parameters)
 
           expect(last_response.status).to eq(302)
           uri = URI.parse(last_response.location)
           expect(uri.host).to eq('www.google.com')
-          expect([nil, ''].include?(uri.query)).to eq(false)
-          map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
-          expect(map.include?("access_token")).to eq(true)
-          expect(map.include?("refresh_token")).to eq(true)
-          expect(map.include?("expires_in")).to eq(true)
-          expect(map.include?("token_type")).to eq(true)
+          expect(uri.query).to eq('error=invalid_request')
         end
       end
 
-      context 'when a redirect URI is not included in the request' do
-        it 'hits the redirect URI with appropriate parameters' do
-          parameters.delete(:redirect_uri)
+      context 'when an invalid grant type is specified' do
+        it 'hits the redirect URI with an error' do
+          parameters[:grant_type] = 'blah'
           post('/oauth2/authorize', parameters)
 
-          expect(last_response.status).to eq(200)
-          expect([nil, ''].include?(last_response.body)).to eq(false)
-          map = JSON.parse(last_response.body)
-          expect(map.include?("access_token")).to eq(true)
-          expect(map.include?("refresh_token")).to eq(true)
-          expect(map.include?("expires_in")).to eq(true)
-          expect(map.include?("token_type")).to eq(true)
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'when a code is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:code)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'when a client_id is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:client_id)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'when a client_secret is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:client_secret)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'when the client id specified does not match an existing client' do
+        it 'hits the redirect URI with an error' do
+          parameters[:client_id] = 'xxxx'
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=unauthorized_client')
+        end
+      end
+
+      context 'when the URI specified does not match the clients allowed callback URIs' do
+        let(:client1) { create(:client, exid: 'client1', callback_uris: ['https://www.blah.com/redirect']).save }
+
+        it 'redirects to /oauth2/error' do
+          parameters[:client_id] = client1.exid
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.path).to eq('/oauth2/error')
+          expect(uri.query).to eq('error=invalid_redirect_uri')
+        end
+      end
+
+      context 'when 3Scale returns a negative response' do
+        before(:each) do
+          client0.update(callback_uris: ['http://www.google.com/blah'])
+          stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=client0_secret&provider_key=b25bc9166b8805fc26a96f1130578d2b").
+             with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
+             to_return(:status => 409,
+                       :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>false</authorized>\n   <reason>its broke</reason>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
+                       :headers => {})
+        end
+
+        it 'hits the redirect URI with an error' do
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=unauthorized_client')
+        end
+      end
+
+      context 'when 3Scale returns a positive response' do
+        before(:each) do
+          client0.update(callback_uris: ['http://www.google.com/blah'])
+          stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=client0_secret&provider_key=b25bc9166b8805fc26a96f1130578d2b").
+             with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
+             to_return(:status => 200,
+                       :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
+                       :headers => {})
+        end
+
+        context 'when a redirect URI is included in the request' do
+          it 'hits the redirect URI with appropriate parameters' do
+            post('/oauth2/authorize', parameters)
+
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            expect(uri.host).to eq('www.google.com')
+            expect([nil, ''].include?(uri.query)).to eq(false)
+            map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
+            expect(map.include?("access_token")).to eq(true)
+            expect(map.include?("refresh_token")).to eq(true)
+            expect(map.include?("expires_in")).to eq(true)
+            expect(map.include?("token_type")).to eq(true)
+          end
+        end
+
+        context 'when a redirect URI is not included in the request' do
+          it 'returns success and includes data in the response body' do
+            parameters.delete(:redirect_uri)
+            post('/oauth2/authorize', parameters)
+
+            expect(last_response.status).to eq(200)
+            expect([nil, ''].include?(last_response.body)).to eq(false)
+            map = JSON.parse(last_response.body)
+            expect(map.include?("access_token")).to eq(true)
+            expect(map.include?("refresh_token")).to eq(true)
+            expect(map.include?("expires_in")).to eq(true)
+            expect(map.include?("token_type")).to eq(true)
+          end
+        end
+      end
+    end
+
+    context 'for the refresh token flow' do
+      let(:access_token) { create(:access_token, client: client0, refresh: SecureRandom.base64(24)) }
+      let(:parameters) { {redirect_uri:  'http://www.google.com/blah',
+                          grant_type:    'refresh_code',
+                          refresh_token: access_token.refresh_code,
+                          client_secret: 'client0_secret'} }
+
+      context 'when a refresh token is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:refresh_token)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'when a client_secret is not specified' do
+        it 'hits the redirect URI with an error' do
+          parameters.delete(:client_secret)
+          post('/oauth2/authorize', parameters)
+
+          expect(last_response.status).to eq(302)
+          uri = URI.parse(last_response.location)
+          expect(uri.host).to eq('www.google.com')
+          expect(uri.query).to eq('error=invalid_request')
+        end
+      end
+
+      context 'for valid requests' do
+        before(:each) do
+          client0.update(callback_uris: ['http://www.google.com/blah'])
+          stub_request(:get, "http://su1.3scale.net/transactions/authrep.xml?%5Busage%5D%5Bhits%5D=1&app_id=client0&app_key=client0_secret&provider_key=b25bc9166b8805fc26a96f1130578d2b").
+             with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Host'=>'su1.3scale.net', 'User-Agent'=>'Ruby'}).
+             to_return(:status => 200,
+                       :body => "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<status>\n  <authorized>true</authorized>\n  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n</status>",
+                       :headers => {})
+        end
+
+        context 'when a redirect URI is included in the request' do
+          it 'returns success and includes data in the redirect URL' do
+            post('/oauth2/authorize', parameters)
+
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            map = URI.decode_www_form(uri.query).inject({}) do |hash, entry|
+              hash[entry[0]] = entry[1]
+              hash
+            end
+            expect(map.include?("access_token")).to eq(true)
+            expect(map.include?("refresh_token")).to eq(true)
+            expect(map.include?("expires_in")).to eq(true)
+            expect(map.include?("token_type")).to eq(true)
+          end
+        end
+
+        context 'when a redirect URI is not included in the request' do
+          it 'returns success and includes data in the response body' do
+            parameters.delete(:redirect_uri)
+            post('/oauth2/authorize', parameters)
+
+            expect(last_response.status).to eq(200)
+            expect([nil, ''].include?(last_response.body)).to eq(false)
+            map = JSON.parse(last_response.body)
+            expect(map.include?("access_token")).to eq(true)
+            expect(map.include?("refresh_token")).to eq(true)
+            expect(map.include?("expires_in")).to eq(true)
+            expect(map.include?("token_type")).to eq(true)
+          end
         end
       end
     end

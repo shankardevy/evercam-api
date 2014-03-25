@@ -256,13 +256,24 @@ module Evercam
       session[:oauth] = nil
       begin
         redirect_uri = params[:redirect_uri]
+        grant_type   = params[:grant_type]
 
-        raise INVALID_REQUEST if params[:grant_type] != 'authorization_code'
-        raise INVALID_REQUEST if !params[:code]
-        raise INVALID_REQUEST if !params[:client_id]
+        raise INVALID_REQUEST if !['authorization_code', 'refresh_code'].include?(grant_type)
+        raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:code]
+        raise INVALID_REQUEST if grant_type == "refresh_code" && !params[:refresh_token]
+        raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:client_id]
         raise INVALID_REQUEST if !params[:client_secret]
 
-        client = Client.where(exid: params[:client_id]).first
+        client = nil
+        token  = nil
+        if grant_type == 'refresh_code'
+          token = AccessToken.where(refresh: params[:refresh_token]).first
+          raise UNAUTHORIZED_CLIENT if token.nil?
+          raise INVALID_REQUEST if token.client_id.nil?
+          client = token.client
+        else
+          client = Client.where(exid: params[:client_id]).first
+        end
         raise UNAUTHORIZED_CLIENT if client.nil?
         raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(client, redirect_uri)
 
@@ -272,8 +283,9 @@ module Evercam
                                            app_key: params[:client_secret])
         raise UNAUTHORIZED_CLIENT if !response.success?
 
-        token = AccessToken.where(refresh: params[:code]).first
-        raise ACCESS_DENIED if token.nil? 
+        code = params[(grant_type == 'authorization_code') ? :code : :refresh_token]
+        token = AccessToken.where(refresh: code).first if token.nil?
+        raise ACCESS_DENIED if token.nil? || token.is_revoked?
 
         if redirect_uri
           redirect generate_response_uri(redirect_uri, token,
