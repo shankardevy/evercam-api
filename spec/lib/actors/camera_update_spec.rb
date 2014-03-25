@@ -92,8 +92,8 @@ module Evercam
           expect(outcome).to be_success
           expect(result.config['external_host']).to eq(new_valid[:external_host])
           expect(result.config['internal_host']).to eq(new_valid[:internal_host])
-          expect(result.config['external_http_port']).to eq(new_valid[:external_http_port])
-          expect(result.config['internal_http_port']).to eq(new_valid[:internal_http_port])
+          expect(result.config['external_http_port']).to eq("#{new_valid[:external_http_port]}")
+          expect(result.config['internal_http_port']).to eq("#{new_valid[:internal_http_port]}")
           expect(result.jpg_url).to eq(new_valid[:jpg_url])
           expect(result.cam_username).to eq(new_valid[:cam_username])
           expect(result.cam_password).to eq(new_valid[:cam_password])
