@@ -283,14 +283,14 @@ describe 'API routes/cameras' do
 
     end
 
-    context 'when required keys are missing' do
+    context 'when vendor doesnt have default model' do
       it 'returns a BAD REQUEST status' do
         post('/cameras', params.merge(api_keys).merge({vendor: vendor.exid}))
         expect(last_response.status).to eq(400)
       end
     end
 
-    context 'when vendor doesnt have default model' do
+    context 'when required keys are missing' do
       it 'returns a BAD REQUEST status' do
         post('/cameras', { id: '' }.merge(api_keys))
         expect(last_response.status).to eq(400)
