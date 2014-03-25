@@ -181,9 +181,18 @@ describe 'API routes/cameras' do
     end
 
     context 'when the camera is public' do
-      it 'returns the camera data' do
-        response = get("/cameras/#{camera.exid}", api_keys)
-        expect(response.status).to eq(200)
+      context 'and the user is not authenticated' do
+        it 'returns the camera data' do
+          response = get("/cameras/#{camera.exid}")
+          expect(response.status).to eq(200)
+        end
+      end
+
+      context 'and the user is authenticated' do
+        it 'returns the camera data' do
+          response = get("/cameras/#{camera.exid}", api_keys)
+          expect(response.status).to eq(200)
+        end
       end
     end
 
@@ -192,14 +201,14 @@ describe 'API routes/cameras' do
       let(:camera) { create(:camera, is_public: false) }
 
       context 'when the request is unauthenticated' do
-        it 'returns an UNAUTHORIZED status' do
-          expect(get("/cameras/#{camera.exid}").status).to eq(401)
+        it 'returns an NOT FOUND status' do
+          expect(get("/cameras/#{camera.exid}").status).to eq(404)
         end
       end
 
       context 'when the request is unauthorized' do
-        it 'returns a FORBIDDEN status' do
-          expect(get("/cameras/#{camera.exid}", api_keys).status).to eq(403)
+        it 'returns a NOT FOUND status' do
+          expect(get("/cameras/#{camera.exid}", api_keys).status).to eq(404)
         end
       end
 
