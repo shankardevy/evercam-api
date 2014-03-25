@@ -11,35 +11,9 @@ module Evercam
       include CameraHelper
     end
 
-    before do
-      authorize!
-    end
-
-    desc 'Creates a new camera owned by the authenticating user', {
-      entity: Evercam::Presenters::Camera
-    }
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      requires :name, type: String, desc: "Camera name."
-      requires :is_public, type: Boolean, desc: "Is camera public?"
-      optional :external_host, type: String, desc: "External camera host."
-      optional :internal_host, type: String, desc: "Internal camera host."
-      optional :external_http_port, type: Integer, desc: "External camera http port."
-      optional :internal_http_port, type: Integer, desc: "Internal camera http port."
-      optional :external_rtsp_port, type: Integer, desc: "External camera rtsp port."
-      optional :internal_rtsp_port, type: Integer, desc: "Internal camera rtsp port."
-      optional :jpg_url, type: String, desc: "Snapshot url."
-      optional :cam_username, type: String, desc: "Camera username."
-      optional :cam_password, type: String, desc: "Camera password."
-    end
-    post '/cameras'  do
-      authreport!('cameras/post')
-      parameters = {}.merge(params).merge(username: caller.username)
-      outcome    = Actors::CameraCreate.run(parameters)
-      raise OutcomeError, outcome unless outcome.success?
-      present Array(outcome.result), with: Presenters::Camera
-    end
-
+    #---------------------------------------------------------------------------
+    # GET /cameras/test
+    #---------------------------------------------------------------------------
     desc 'Tests if given camera parameters are correct', {
       entity: Evercam::Presenters::Camera
     }
@@ -69,6 +43,9 @@ module Evercam
       end
     end
 
+    #---------------------------------------------------------------------------
+    # GET /cameras/:id
+    #---------------------------------------------------------------------------
     desc 'Returns all data for a given camera', {
       entity: Evercam::Presenters::Camera
     }
@@ -84,7 +61,10 @@ module Evercam
       raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
 
       rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
+      if !rights.allow?(AccessRight::LIST)
+        raise AuthorizationError.new if camera.is_public?
+        raise NotFoundError.new if !camera.is_public?
+      end
 
       CameraActivity.create(
         camera: camera,
@@ -97,116 +77,170 @@ module Evercam
       present Array(camera), with: Presenters::Camera, minimal: !rights.allow?(AccessRight::VIEW)
     end
 
-    desc 'Updates full or partial data for an existing camera', {
-      entity: Evercam::Presenters::Camera
-    }
-    params do
-      requires :id, type: String, desc: "Camera Id."
-      optional :name, type: String, desc: "Camera name."
-      optional :is_public, type: Boolean, desc: "Is camera public?"
-      optional :external_host, type: String, desc: "External camera host."
-      optional :internal_host, type: String, desc: "Internal camera host."
-      optional :external_http_port, type: String, desc: "External camera http port."
-      optional :internal_http_port, type: String, desc: "Internal camera http port."
-      optional :external_rtsp_port, type: String, desc: "External camera rtsp port."
-      optional :internal_rtsp_port, type: String, desc: "Internal camera rtsp port."
-      optional :jpg_url, type: String, desc: "Snapshot url."
-      optional :cam_username, type: String, desc: "Camera username."
-      optional :cam_password, type: String, desc: "Camera password."
-    end
-    patch '/cameras/:id' do
-      authreport!('cameras/patch')
-
-      camera = ::Camera.by_exid!(params[:id])
-      rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
-
-      Camera.db.transaction do
-        outcome = Actors::CameraUpdate.run(params)
-        raise OutcomeError, outcome unless outcome.success?
-
-        CameraActivity.create(
-          camera: camera,
-          access_token: access_token,
-          action: 'edited',
-          done_at: Time.now,
-          ip: request.ip
-        )
+    resource :cameras do
+      before do
+        authorize!
       end
 
-      present Array(camera.reload), with: Presenters::Camera
-    end
+      #-------------------------------------------------------------------------
+      # POST /cameras
+      #-------------------------------------------------------------------------
+      desc 'Creates a new camera owned by the authenticating user', {
+        entity: Evercam::Presenters::Camera
+      }
+      params do
+        requires :id, type: String, desc: "Camera Id."
+        requires :name, type: String, desc: "Camera name."
+        requires :is_public, type: Boolean, desc: "Is camera public?"
+        optional :external_host, type: String, desc: "External camera host."
+        optional :internal_host, type: String, desc: "Internal camera host."
+        optional :external_http_port, type: Integer, desc: "External camera http port."
+        optional :internal_http_port, type: Integer, desc: "Internal camera http port."
+        optional :external_rtsp_port, type: Integer, desc: "External camera rtsp port."
+        optional :internal_rtsp_port, type: Integer, desc: "Internal camera rtsp port."
+        optional :jpg_url, type: String, desc: "Snapshot url."
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+      end
+      post do
+        authreport!('cameras/post')
+        parameters = {}.merge(params).merge(username: caller.username)
+        outcome    = Actors::CameraCreate.run(parameters)
+        raise OutcomeError, outcome unless outcome.success?
+        present Array(outcome.result), with: Presenters::Camera
+      end
 
-    desc 'Deletes a camera from Evercam along with any stored media', {
-      entity: Evercam::Presenters::Camera
-    }
-    delete '/cameras/:id' do
-      authreport!('cameras/delete')
+      #-------------------------------------------------------------------------
+      # PATCH /cameras/:id
+      #-------------------------------------------------------------------------
+      desc 'Updates full or partial data for an existing camera', {
+        entity: Evercam::Presenters::Camera
+      }
+      params do
+        requires :id, type: String, desc: "Camera Id."
+        optional :name, type: String, desc: "Camera name."
+        optional :is_public, type: Boolean, desc: "Is camera public?"
+        optional :external_host, type: String, desc: "External camera host."
+        optional :internal_host, type: String, desc: "Internal camera host."
+        optional :external_http_port, type: Integer, desc: "External camera http port."
+        optional :internal_http_port, type: String, desc: "Internal camera http port."
+        optional :external_rtsp_port, type: Integer, desc: "External camera rtsp port."
+        optional :internal_rtsp_port, type: Integer, desc: "Internal camera rtsp port."
+        optional :jpg_url, type: String, desc: "Snapshot url."
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+      end
+      patch '/:id' do
+        authreport!('cameras/patch')
 
-      camera = ::Camera.by_exid!(params[:id])
-      rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
+        camera = ::Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
-      camera.destroy
-      {}
-    end
+        Camera.db.transaction do
+          outcome = Actors::CameraUpdate.run(params)
+          raise OutcomeError, outcome unless outcome.success?
 
-    desc 'Get the list of shares for a specified camera', {
-      entity: Evercam::Presenters::CameraShare
-    }
-    params do
-      requires :id, type: String, desc: "The unique identifier for a camera."
-    end
-    get '/cameras/:id/shares' do
-      authreport!('shares/get')
+          CameraActivity.create(
+            camera: camera,
+            access_token: access_token,
+            action: 'edited',
+            done_at: Time.now,
+            ip: request.ip
+          )
+        end
 
-      camera = ::Camera.by_exid!(params[:id])
-      rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+        present Array(camera.reload), with: Presenters::Camera
+      end
 
-      shares = CameraShare.where(camera_id: camera.id).to_a
-      present shares, with: Presenters::CameraShare
-    end
 
-    desc 'Create a new camera share', {
-      entity: Evercam::Presenters::CameraShare
-    }
-    params do
-      requires :email, type: String, desc: "Email address of user to share the camera with."
-      requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
-      optional :message, String, desc: "Not currently used."
-      optional :notify, type: Boolean, desc: "Not currently used."
-    end
-    post '/cameras/:id/share' do
-      authreport!('share/post')
+      #-------------------------------------------------------------------------
+      # DELETE /cameras/:id
+      #-------------------------------------------------------------------------
+      desc 'Deletes a camera from Evercam along with any stored media', {
+        entity: Evercam::Presenters::Camera
+      }
+      delete '/:id' do
+        authreport!('cameras/delete')
 
-      camera = ::Camera.by_exid!(params[:id])
-      rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.is_owner?
+        camera = ::Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
-      outcome = Actors::ShareCreate.run(params)
-      present [outcome.result], with: Presenters::CameraShare
-    end
+        camera.destroy
+        {}
+      end
 
-    desc 'Delete an existing camera share', {}
-    params do
-      requires :id, type: String, desc: "The unique identifier for a camera."
-      requires :share_id, type: Integer, desc: "The unique identifier of the share to be deleted."
-    end
-    delete '/cameras/:id/share' do
-      authreport!('share/delete')
 
-      camera = ::Camera.by_exid!(params[:id])
-      rights = requester_rights_for(camera)
-      raise AuthorizationError.new if !rights.is_owner?
+      #-------------------------------------------------------------------------
+      # GET /cameras/:id/shares
+      #-------------------------------------------------------------------------
+      desc 'Get the list of shares for a specified camera', {
+        entity: Evercam::Presenters::CameraShare
+      }
+      params do
+        requires :id, type: String, desc: "The unique identifier for a camera."
+      end
+      get '/:id/shares' do
+        authreport!('shares/get')
 
-      Actors::ShareDelete.run(params)
-      {}
-    end
+        camera = ::Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
-    desc 'Update an existing camera share (COMING SOON)'
-    patch '/cameras/share/:id' do
-      raise ComingSoonError
+        shares = CameraShare.where(camera_id: camera.id).to_a
+        present shares, with: Presenters::CameraShare
+      end
+
+      #-------------------------------------------------------------------------
+      # POST /cameras/:id/share
+      #-------------------------------------------------------------------------
+      desc 'Create a new camera share', {
+        entity: Evercam::Presenters::CameraShare
+      }
+      params do
+        requires :email, type: String, desc: "Email address of user to share the camera with."
+        requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
+        optional :message, String, desc: "Not currently used."
+        optional :notify, type: Boolean, desc: "Not currently used."
+      end
+      post '/:id/share' do
+        authreport!('share/post')
+
+        camera = ::Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.is_owner?
+
+        outcome = Actors::ShareCreate.run(params)
+        present [outcome.result], with: Presenters::CameraShare
+      end
+
+      #-------------------------------------------------------------------------
+      # DELETE /cameras/:id/share
+      #-------------------------------------------------------------------------
+      desc 'Delete an existing camera share', {}
+      params do
+        requires :id, type: String, desc: "The unique identifier for a camera."
+        requires :share_id, type: Integer, desc: "The unique identifier of the share to be deleted."
+      end
+      delete '/:id/share' do
+        authreport!('share/delete')
+
+        camera = ::Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.is_owner?
+
+        Actors::ShareDelete.run(params)
+        {}
+      end
+
+      #-------------------------------------------------------------------------
+      # PATCH /cameras/share/:id
+      #-------------------------------------------------------------------------
+      desc 'Update an existing camera share (COMING SOON)'
+      patch '/share/:id' do
+        raise ComingSoonError
+      end
     end
 
   end
