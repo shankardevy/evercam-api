@@ -17,11 +17,11 @@ module Evercam
 
         string :jpg_url
         string :external_host
-        string :internal_host
-        integer :external_http_port
-        integer :internal_http_port
-        integer :external_rtsp_port
-        integer :internal_rtsp_port
+        string :internal_host, :empty => true
+        string :external_http_port, :empty => true
+        string :internal_http_port, :empty => true
+        string :external_rtsp_port, :empty => true
+        string :internal_rtsp_port, :empty => true
 
         string :username
         boolean :is_public
@@ -39,12 +39,12 @@ module Evercam
           add_error(:camera, :exists, 'Camera does not exist')
         end
 
-        if external_host && !(external_host =~ ValidIpAddressRegex or external_host =~ ValidHostnameRegex)
-          add_error(:external_host, :valid, 'External url is invalid')
+        if external_host && !external_host.empty? && !(external_host =~ ValidIpAddressRegex or external_host =~ ValidHostnameRegex)
+          add_error(:external_host, :valid, 'External host is invalid')
         end
 
-        if internal_host && !(internal_host =~ ValidIpAddressRegex or internal_host =~ ValidHostnameRegex)
-          add_error(:internal_host, :valid, 'Internal url is invalid')
+        if internal_host && !internal_host.empty? && !(internal_host =~ ValidIpAddressRegex or internal_host =~ ValidHostnameRegex)
+          add_error(:internal_host, :valid, 'Internal host is invalid')
         end
 
         if timezone && false == Timezone::Zone.names.include?(timezone)

@@ -237,12 +237,18 @@ describe 'API routes/cameras' do
   describe 'POST /cameras' do
 
     let(:auth) { env_for(session: { user: create(:user).id }) }
+    let(:vendor) { create(:vendor)}
+    let(:vendor_model) { create(:vendor_model, name: '*')}
 
     let(:params) {
       {
         id: 'my-new-camera',
         name: "Garrett's Super New Camera",
-        external_url: 'http://localhost:1234',
+        external_host: 'super.camera',
+        internal_host: '192.168.1.101',
+        internal_rtsp_port: 9101,
+        external_rtsp_port: 8300,
+        vendor: vendor_model.vendor.exid,
         is_public: true
       }.merge(
         build(:camera).config
@@ -265,10 +271,23 @@ describe 'API routes/cameras' do
       end
 
       it 'returns the new camera' do
-        expect(last_response.json['cameras'].map{ |s| s['id'] }).
-          to eq([Camera.first.exid])
+        res = last_response.json['cameras'][0]
+        expect(res['id']).to eq(Camera.first.exid)
+        expect(res['name']).to eq(Camera.first.name)
+        expect(res['external_host']).to eq(Camera.first.config['external_host'])
+        expect(res['internal_host']).to eq(Camera.first.config['internal_host'])
+        expect(res['internal_rtsp_port']).to eq(Camera.first.config['internal_rtsp_port'])
+        expect(res['external_rtsp_port']).to eq(Camera.first.config['external_rtsp_port'])
+        expect(res['vendor']).to eq(Camera.first.vendor.exid)
       end
 
+    end
+
+    context 'when vendor doesnt have default model' do
+      it 'returns a BAD REQUEST status' do
+        post('/cameras', params.merge(api_keys).merge({vendor: vendor.exid}))
+        expect(last_response.status).to eq(400)
+      end
     end
 
     context 'when required keys are missing' do
@@ -377,6 +396,14 @@ describe 'API routes/cameras' do
         expect(content['cameras'][0]).not_to be_nil
         expect(content['cameras'][0].include?("jpg_url")).to eq(true)
         expect(content['cameras'][0]["jpg_url"]).to eq("/image.jpg")
+      end
+    end
+
+    context 'when we want to remove port number with empty string from form' do
+      it 'returns a OK status' do
+        patch("/cameras/#{camera.exid}", {internal_http_port: ''}.merge(api_keys))
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['cameras'][0]["internal_http_port"]).to eq('')
       end
     end
 

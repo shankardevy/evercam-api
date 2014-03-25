@@ -55,8 +55,8 @@ module Evercam
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
         end
 
-        if vendor && !Vendor.by_exid(vendor)
-          add_error(:username, :exists, 'Vendor does not exist')
+        if vendor && !Vendor.by_exid(vendor).first
+          add_error(:vendor, :exists, 'Vendor does not exist')
         end
 
         if model && !vendor
@@ -92,15 +92,13 @@ module Evercam
 
         camera.timezone = timezone if timezone
         camera.vendor_model = VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        if !model and vendor
+          camera.vendor_model = VendorModel.find(:name => '*', :vendor_id => Vendor.by_exid(vendor).first.id)
+          unless camera.vendor_model
+            add_error(:model, :valid, 'No default model for this vendor')
+          end
+        end
         camera.mac_address = mac_address if mac_address
-        camera.save
-
-        CameraActivity.create(
-          camera: camera,
-          access_token: camera.owner.token,
-          action: 'created',
-          done_at: Time.now
-        )
 
         camera.values[:config].merge!({'external_host' => inputs[:external_host]}) if inputs[:external_host]
         camera.values[:config].merge!({'external_http_port' => inputs[:external_http_port]}) if inputs[:external_http_port]
@@ -109,6 +107,14 @@ module Evercam
         camera.values[:config].merge!({'internal_host' => inputs[:internal_host]}) if inputs[:internal_host]
         camera.values[:config].merge!({'internal_http_port' => inputs[:internal_http_port]}) if inputs[:internal_http_port]
         camera.values[:config].merge!({'internal_rtsp_port' => inputs[:internal_rtsp_port]}) if inputs[:internal_rtsp_port]
+        camera.save
+
+        CameraActivity.create(
+          camera: camera,
+          access_token: camera.owner.token,
+          action: 'created',
+          done_at: Time.now
+        )
 
         if inputs[:external_host]
           # fire off the evr.cm zone update to sidekiq
