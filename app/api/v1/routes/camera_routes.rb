@@ -123,7 +123,7 @@ module Evercam
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: Integer, desc: "External camera http port."
-        optional :internal_http_port, type: Integer, desc: "Internal camera http port."
+        optional :internal_http_port, type: String, desc: "Internal camera http port."
         optional :external_rtsp_port, type: Integer, desc: "External camera rtsp port."
         optional :internal_rtsp_port, type: Integer, desc: "Internal camera rtsp port."
         optional :jpg_url, type: String, desc: "Snapshot url."
