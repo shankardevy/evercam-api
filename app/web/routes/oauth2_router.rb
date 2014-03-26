@@ -270,8 +270,8 @@ module Evercam
 
     # Step 2 of the authorization process for the explicit flow only.
     post '/oauth2/authorize' do
-      redirect_uri    = '/oauth2/error'
       session[:oauth] = nil
+      redirect_uri    = nil
       begin
         redirect_uri = params[:redirect_uri]
         grant_type   = params[:grant_type]
@@ -314,6 +314,7 @@ module Evercam
         end
       rescue => error
         #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
+        redirect_uri = '/oauth2/error' if redirect_uri.nil?
         if "#{error}" != INVALID_REDIRECT_URI
           redirect generate_error_uri(redirect_uri, {error: "#{error}"}).to_s
         else
