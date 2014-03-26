@@ -12,6 +12,7 @@ module Evercam
           lastname: 'Heaver',
           username: 'garrettheaver',
           email: 'garrett@evercam.io',
+          password: 'password',
           country: create(:country).iso3166_a2
         }
       end
@@ -56,10 +57,10 @@ module Evercam
 
       describe 'account creation' do
 
-        it 'creates a user with a 32 char password' do
+        it 'creates a user with provided String password' do
           VCR.use_cassette('API_users/account_creation') do
             double = User.expects(:create).with do |inputs|
-              expect(inputs[:password].size).to eq(32)
+              expect(inputs[:password]).to be_a(String)
             end
 
             double.returns(create(:user))

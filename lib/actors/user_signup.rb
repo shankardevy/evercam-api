@@ -13,6 +13,7 @@ module Evercam
         string :username
         string :country
         string :email
+        string :password
       end
 
       def validate
@@ -36,7 +37,7 @@ module Evercam
 
       def execute
         country = Country.by_iso3166(inputs[:country])
-        password = SecureRandom.hex(16)
+        password = inputs[:password]
 
         User.db.transaction do
           User.create(inputs.merge(password: password, country: country)).tap do |user|
