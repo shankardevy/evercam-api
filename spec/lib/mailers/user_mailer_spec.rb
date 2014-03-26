@@ -23,7 +23,6 @@ module Evercam
 
         it 'includes the username and password' do
           expect(result[:body]).to match(user.username)
-          expect(result[:body]).to match(password)
         end
 
       end

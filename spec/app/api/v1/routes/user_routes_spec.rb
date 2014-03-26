@@ -11,6 +11,7 @@ describe 'API routes/users' do
       lastname: 'Heaver',
       username: 'garrettheaver',
       email: 'garrett@evercam.io',
+      password: 'password',
       country: create(:country).iso3166_a2
     }
   end

@@ -4,7 +4,6 @@ module Evercam
 
       required do
         string :username
-        string :confirmation
       end
 
       def validate
@@ -14,10 +13,6 @@ module Evercam
 
         if user && user.confirmed_at
           add_error(:username, :confirmed, 'Username is already confirmed')
-        end
-
-        if user && user.password != confirmation
-          add_error(:confirmation, :invalid, 'Confirmation code is invalid')
         end
       end
 

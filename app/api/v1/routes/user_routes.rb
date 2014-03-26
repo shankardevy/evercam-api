@@ -54,6 +54,7 @@ module Evercam
         requires :username, type: String, desc: "Username."
         requires :country, type: String, desc: "Country."
         requires :email, type: String, desc: "Email."
+        requires :password, type: String, desc: "Password."
       end
       post do
         authreport!('users/post')
