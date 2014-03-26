@@ -118,11 +118,24 @@ describe 'WebApp routes/oauth2_router' do
       end
 
       context "when logged in" do
-        it 'returns success' do
-          get_parameters[:client_id] = client2.exid
-          get('/oauth2/authorize', get_parameters, env)
+        context "and it is given all valid parameters" do
+          it 'returns success' do
+            get_parameters[:client_id] = client2.exid
+            get('/oauth2/authorize', get_parameters, env)
 
-          expect(last_response.status).to eq(200)
+            expect(last_response.status).to eq(200)
+          end
+        end
+
+        context "and it is given an invalid scope" do
+          it 'returns an error' do
+            get_parameters[:scope] = "blah:ningy:all"
+            get('/oauth2/authorize', get_parameters, {})
+
+            expect(last_response.status).to eq(302)
+            uri    = URI.parse(last_response.location)
+            expect(uri.host).to eq('www.google.com')
+          end
         end
       end
     end
