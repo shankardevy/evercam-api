@@ -42,6 +42,14 @@ module Evercam
           output[:target] = "all of your existing cameras."
         elsif resource == "camera"
           output[:target] = "'#{extent}' camera."
+        elsif resource == 'snapshots'
+          output[:target] = "all of your existing snapshots"
+        elsif resource == "user"
+          if right == "view"
+            output[:target] = "your account details"
+          else
+            output[:target] = "your account"
+          end
         else
           raise INVALID_SCOPE
         end
@@ -71,10 +79,15 @@ module Evercam
         rights_list = []
         scopes.each do |scope|
           type, right, target = scope.split(":")
-          rights_list.concat(resources_for_scope(scope, user).inject([]) do |list, resource|
-            list << scope if !AccessRightSet.for(resource, client).allow?(right)
-            list
-          end)
+          if !AccessRight::ALL_SCOPES.include?(type)
+            rights_list.concat(resources_for_scope(scope, user).inject([]) do |list, resource|
+              list << scope if !AccessRightSet.for(resource, client).allow?(right)
+              list
+            end)
+          else
+            rights = AccountRightSet.new(user, client, type)
+            rights_list << scope if !rights.allow?(right)
+          end
         end
         rights_list
       end
@@ -109,7 +122,12 @@ module Evercam
           if !camera.nil?
             resources << camera if AccessRightSet.for(camera, user).allow?(right)
           end
-        else
+        elsif resource == "snapshots"
+          camera_ids = Camera.where(owner: user).inject([]) {|list, entry| list << entry.id; list}
+          Snapshot.where(camera_id: camera_ids).each do |snapshot|
+            resources << snapshot if AccessRightSet.for(snapshot, user).allow?(right)
+          end
+        elsif resource != "user"
           raise INVALID_SCOPE
         end
         resources

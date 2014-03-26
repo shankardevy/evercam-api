@@ -125,7 +125,8 @@ class AccountRightSet < AccessRightSet
             result = (AccessRight.where(token_id:    token.id,
                                         account_id:  user.id,
                                         status:      AccessRight::ACTIVE,
-                                        right:       right).count > 0) 
+                                        right:       right,
+                                        scope:       @scope).count > 0) 
          end
       end
       result
@@ -141,7 +142,8 @@ class AccountRightSet < AccessRightSet
          AccessRight.where(token:    token,
                            account:  user,
                            status:   AccessRight::ACTIVE,
-                           right:    rights).update(status: AccessRight::DELETED)
+                           right:    rights,
+                           scope:    @scope).update(status: AccessRight::DELETED)
       end
    end
 
@@ -158,7 +160,8 @@ class AccountRightSet < AccessRightSet
                                                                        is_revoked: false,
                                                                        account_id: user.id,
                                                                        status: AccessRight::ACTIVE,
-                                                                       right: right)
+                                                                       right: right,
+                                                                       scope: @scope)
          result = (query.count > 0)
       end
       result
@@ -175,7 +178,8 @@ class AccountRightSet < AccessRightSet
                                                                                          is_revoked: false,
                                                                                          account_id: user.id,
                                                                                          status: AccessRight::ACTIVE,
-                                                                                         right: rights).each do |record|
+                                                                                         right: rights,
+                                                                                         scope: @scope).each do |record|
             AccessRight.where(token_id: record.token_id,
                               status: AccessRight::ACTIVE,
                               right:  record.right).update(status: AccessRight::DELETED)
