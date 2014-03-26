@@ -23,6 +23,9 @@ module Evercam
 
     resource :users do
       route_param :id do
+        #-----------------------------------------------------------------------
+        # GET /v1/users/:id/cameras
+        #-----------------------------------------------------------------------
         desc 'Returns the set of cameras owned by a particular user', {
           entity: Evercam::Presenters::Camera
         }
@@ -38,32 +41,10 @@ module Evercam
           present cameras, with: Presenters::Camera
         end
       end
-    end
 
-    resource :users do
-      before do
-        authorize!
-      end
-
-      route_param :id do
-        desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'
-        get :rights do
-          raise ComingSoonError
-        end
-      end
-    end
-
-    resource :users do
-      helpers do
-        include AuthorizationHelper
-        include LoggingHelper
-        include SessionHelper
-      end
-
-      before do
-        authorize!
-      end
-
+      #-------------------------------------------------------------------------
+      # POST /v1/users
+      #-------------------------------------------------------------------------
       desc 'Starts the new user signup process', {
         entity: Evercam::Presenters::User
       }
@@ -83,7 +64,38 @@ module Evercam
         user = outcome.result
         present Array(user), with: Presenters::User
       end
+    end
 
+    resource :users do
+      before do
+        authorize!
+      end
+
+      route_param :id do
+        #-----------------------------------------------------------------------
+        # GET /v1/users/rights
+        #-----------------------------------------------------------------------
+        desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'
+        get :rights do
+          raise ComingSoonError
+        end
+      end
+    end
+
+    resource :users do
+      helpers do
+        include AuthorizationHelper
+        include LoggingHelper
+        include SessionHelper
+      end
+
+      before do
+        authorize!
+      end
+
+      #-------------------------------------------------------------------------
+      # GET /v1/users/:id
+      #-------------------------------------------------------------------------
       desc 'Returns available information for the user'
       get '/:id' do
         authreport!('users/get')
@@ -96,6 +108,9 @@ module Evercam
         present Array(target), with: Presenters::User
       end
 
+      #-------------------------------------------------------------------------
+      # PATCH /v1/users/:id
+      #-------------------------------------------------------------------------
       desc 'Updates full or partial data on your existing user account', {
         entity: Evercam::Presenters::User
       }
@@ -121,6 +136,9 @@ module Evercam
         present Array(target.reload), with: Presenters::User
       end
 
+      #-------------------------------------------------------------------------
+      # DELETE /v1/users/:id
+      #-------------------------------------------------------------------------
       desc 'Delete your account, any cameras you own and all stored media', {
         entity: Evercam::Presenters::User
       }
@@ -136,6 +154,9 @@ module Evercam
         {}
       end
 
+      #-------------------------------------------------------------------------
+      # GET /v1/users/:id/credentials
+      #-------------------------------------------------------------------------
       desc "Fetch API credentials for an authenticated user."
       params do
         requires :id, type: String, desc: "User name for the user to fetch credentials for."

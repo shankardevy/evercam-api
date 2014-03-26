@@ -76,12 +76,11 @@ describe 'API routes/users' do
   describe 'POST /users' do
 
     let(:user) { create(:user) }
-    let(:api_keys) { {api_id: user.api_id, api_key: user.api_key} }
 
     context 'when the params are valid' do
       it 'creates the user and returns the json' do
         VCR.use_cassette('API_users/account_creation') do
-          post('/users', params.merge(api_keys))
+          post('/users', params)
 
           expect(last_response.status).to eq(201)
           response0 = last_response.json['users'][0]
@@ -96,14 +95,14 @@ describe 'API routes/users' do
     context 'when the username or email already exists' do
       it 'returns a 400 BAD Request status' do
         create(:user, username: 'xxxx')
-        post('/users', params.merge(username: 'xxxx').merge(api_keys))
+        post('/users', params.merge(username: 'xxxx'))
         expect(last_response.status).to eq(400)
       end
     end
 
     context 'when the country code does not exist' do
       it 'returns a 400 BAD Request status' do
-        post('/users', params.merge(country: 'xx').merge(api_keys))
+        post('/users', params.merge(country: 'xx'))
         expect(last_response.status).to eq(400)
       end
     end
@@ -112,21 +111,9 @@ describe 'API routes/users' do
       it 'returns a 400 BAD Request status' do
         VCR.use_cassette('API_users/account_creation') do
           params[:country].upcase!
-          post('/users', params.merge(api_keys))
+          post('/users', params)
           expect(last_response.status).to eq(201)
         end
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'returns an unauthenticated error' do
-        VCR.use_cassette('API_users/account_creation') do
-          post('/users', params)
-        end
-        expect(last_response.status).to eq(401)
-        data = JSON.parse(last_response.body)
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
       end
     end
 
