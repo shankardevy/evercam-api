@@ -14,7 +14,7 @@ module Evercam
     	       documentation: {desc: "The callback URLs and host names accepted for the client.",
     	       	               required: true,
     	       	               type: String} do |client, options|
-        client.callback_uris.join(",")
+         client.callback_uris ? client.callback_uris.join(",") : ''
       end
 
     	expose :name,
