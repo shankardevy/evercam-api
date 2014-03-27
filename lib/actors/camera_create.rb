@@ -118,7 +118,7 @@ module Evercam
 
         if inputs[:external_host]
           # fire off the evr.cm zone update to sidekiq
-          DNSUpsertWorker.perform_async(id, inputs[:external_host])
+          #DNSUpsertWorker.perform_async(id, inputs[:external_host])
         end
 
         camera
