@@ -21,7 +21,7 @@ module Evercam
                                         email:    user.email,
                                         password: password)
       response   = get_faraday_connection.post('/admin/api/signup.xml', parameters)
-      if !response.is_a?(Net::HTTPSuccess)
+      if !(200..299).include?(response.status)
         raise Evercam::WebErrors::BadRequestError, response.body
       end
       document     = Nokogiri::XML(response.body)
@@ -37,7 +37,7 @@ module Evercam
                                         email:    email,
                                         password: password)
       response   = get_faraday_connection.post('/admin/api/signup.xml', parameters)
-      if !response.is_a?(Net::HTTPSuccess)
+      if !(200..299).include?(response.status)
         raise Evercam::WebErrors::BadRequestError, response.body
       end
       document = Nokogiri::XML(response.body)
