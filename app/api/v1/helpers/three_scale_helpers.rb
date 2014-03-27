@@ -8,11 +8,11 @@ module Evercam
 
       # This method validates a requesters 3Scale credentials.
    	def authreport!(method_name='hits', usage_value=1)
-   		credentials = get_3scale_credentials
-   		if !credentials.nil?
-	         response = @@client.authrep(credentials.merge({method_name => usage_value}))
-	         puts response.error_message unless response.success? || Evercam::Config.env == :test
-	      end
+   		#credentials = get_3scale_credentials
+   		#if !credentials.nil?
+	      #   response = @@client.authrep(credentials.merge({method_name => usage_value}))
+	      #   puts response.error_message unless response.success? || Evercam::Config.env == :test
+	      #end
    	end
 
       # This method fetches the 3Scale API credentials for a request. It will
