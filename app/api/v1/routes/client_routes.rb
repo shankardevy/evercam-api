@@ -75,7 +75,7 @@ module Evercam
             #-------------------------------------------------------------------
             # PATCH /v1/client/:id
             #-------------------------------------------------------------------
-            desc "Deletes an existing client from the system.",
+            desc "Update an existing clients details.",
                  {entity: Evercam::Presenters::Client, hidden: true}
             params do
                requires :id, type: String, desc: "The unique identifier for the client to be updated."
