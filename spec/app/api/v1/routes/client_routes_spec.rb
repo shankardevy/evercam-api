@@ -200,4 +200,56 @@ describe 'API routes/client' do
       	end
       end
 	end
+
+	describe 'PATCH /v1/client/:id' do
+		let!(:client) {
+			create(:client)
+		}
+
+		let(:api_keys) {
+			{api_id: client.exid, api_key: client.secret}
+		}
+
+		let(:parameters) {
+			{name: "The Changed Client Name",
+			 callback_uris: ["https://www.blah.ie", "www.middenhiem.com", "www.noodles.com"].join(",")}
+		}
+
+      context 'when given the proper parameters' do
+      	it 'returns success and updates the client record' do
+      		patch("/client/#{client.exid}", parameters.merge(api_keys))
+      		expect(last_response.status).to eq(200)
+      		client.reload
+      		expect(client.name).to eq(parameters[:name])
+      		expect(client.callback_uris.join(",")).to eq(parameters[:callback_uris])
+      	end
+      end
+
+      context 'when not given a client id' do
+      	it 'returns a parameter error' do
+      		patch("/client", parameters.merge(api_keys))
+      		expect(last_response.status).to eq(405)
+      	end
+      end
+
+      context 'when given a client id for a client that does not exist' do
+      	it 'returns a not found error' do
+      		patch("/client/does_not_exist", parameters.merge(api_keys))
+      		expect(last_response.status).to eq(404)
+      		data = last_response.json
+      		expect(data.include?("message"))
+      		expect(data["message"]).to eq("Not Found")
+      	end
+      end
+
+      context 'when not authenticated' do
+      	it 'returns an unauthenticated error' do
+      		patch("/client/does_not_exist", parameters)
+      		expect(last_response.status).to eq(401)
+      		data = last_response.json
+      		expect(data.include?("message"))
+      		expect(data["message"]).to eq("Unauthenticated")
+      	end
+      end
+	end
 end

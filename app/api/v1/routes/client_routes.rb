@@ -33,7 +33,7 @@ module Evercam
    			uris   = nil
    			if params[:callback_uris]
    				uris = []
-   				params[:callback_uris].split(",").each {|entry| uris << entry}
+   				params[:callback_uris].each {|entry| uris << entry.strip}
    			end
    			client = Client.create(exid: values[:exid],
    				                    secret: values[:secret],
@@ -71,6 +71,42 @@ module Evercam
 	         	client.destroy if !client.nil?
 	         	{}
 	         end
+
+            #-------------------------------------------------------------------
+            # PATCH /v1/client/:id
+            #-------------------------------------------------------------------
+            desc "Deletes an existing client from the system.",
+                 {entity: Evercam::Presenters::Client, hidden: true}
+            params do
+               requires :id, type: String, desc: "The unique identifier for the client to be updated."
+               optional :name, type: String, desc: "The new name for the client."
+               optional :callback_uris, type: String, desc: "A comma separated list of callback URIs and host names."
+            end
+            patch do
+               client = Client.where(exid: params[:id]).first
+               raise NotFoundError.new if client.nil?
+
+               changed = false
+               if params.include?(:name)
+                  if client.name != params[:name]
+                     client.name = params[:name]
+                     changed = true
+                  end
+               end
+
+               if params.include?(:callback_uris)
+                  uris = params[:callback_uris].split(",").inject([]) do |list, entry|
+                     list << entry.strip
+                  end
+                  if uris.sort != client.callback_uris.sort
+                     client.callback_uris = uris
+                     changed = true
+                  end
+               end
+
+               client.save if changed
+               {}
+            end
 	      end
    	end
    end
