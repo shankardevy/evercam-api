@@ -178,6 +178,7 @@ module Evercam
     # request.
     post '/oauth2/feedback' do
       redirect_uri = '/oauth2/error'
+    	log.debug "POST /oauth2/feedback\nPARAMETERS: #{params}"
       begin
         raise ACCESS_DENIED if !params[:action]
 
@@ -207,7 +208,7 @@ module Evercam
           raise ACCESS_DENIED
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
+      	log.error "#{error}\n" + error.backtrace.join("\n")
         redirect generate_error_uri(redirect_uri, {error: error}).to_s
       end
     end
@@ -215,8 +216,9 @@ module Evercam
     # Step 1 of the authorization process for both the implicit and explicit
     # authorization flows.
     get '/oauth2/authorize' do
-      redirect_uri    = '/oauth2/error'
+      redirect_uri    = nil
       session[:oauth] = nil
+      log.debug "GET /oauth2/authorize\nParameters: #{params}"
       begin
         response_type = params[:response_type]
         raise INVALID_REDIRECT_URI if response_type == 'code' && !params[:redirect_uri]
@@ -240,6 +242,7 @@ module Evercam
 
           if !has_all_rights?(@client, token, user, scopes)
             # Rights confirmation needed from user.
+            log.debug "Rights grant confirmation needed, displaying page to user."
             session[:oauth] = {access_token_id: token.id,
                                client_id:       @client.exid,
                                response_type:   response_type,
@@ -250,6 +253,7 @@ module Evercam
             erb 'oauth2/authorize'.to_sym
           else
             # Request has all the rights needed, drop straight through.
+            log.debug "No rights grant confirmation needed, responding with result."
             if redirect_uri
               redirect generate_response_uri(redirect_uri, token,
                                              response_type, params[:state]).to_s
@@ -259,7 +263,8 @@ module Evercam
           end
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
+      	log.error "#{error}\n" + error.backtrace.join("\n")
+      	redirect_uri = '/oauth2/error' if redirect_uri.nil?
         if "#{error}" != INVALID_REDIRECT_URI
           redirect generate_error_uri(redirect_uri, {error: "#{error}"}).to_s
         else
@@ -272,6 +277,7 @@ module Evercam
     post '/oauth2/authorize' do
       session[:oauth] = nil
       redirect_uri    = nil
+      log.debug "POST /oauth2/authorize\nPARAMETERS: #{params}"
       begin
         redirect_uri = params[:redirect_uri]
         grant_type   = params[:grant_type]
@@ -295,10 +301,12 @@ module Evercam
         raise UNAUTHORIZED_CLIENT if client.nil?
         raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(client, redirect_uri)
 
+        log.debug "Making call to 3Scale to authorize client."
         provider_key = Evercam::Config[:threescale][:provider_key]
         three_scale  = ::ThreeScale::Client.new(:provider_key => provider_key)
         response     = three_scale.authrep(app_id: client.exid,
                                            app_key: params[:client_secret])
+        log.debug "3Scale request successful: #{response.success?}"
         raise UNAUTHORIZED_CLIENT if !response.success?
 
         code = params[(grant_type == 'authorization_code') ? :code : :refresh_token]
@@ -313,7 +321,7 @@ module Evercam
           jsonp generate_response(token, 'authorization_code', params[:state])
         end
       rescue => error
-        #puts "ERROR: #{error}\n" + error.backtrace[1,20].join("\n")
+      	log.error "#{error}\n" + error.backtrace.join("\n")
         redirect_uri = '/oauth2/error' if redirect_uri.nil?
         if "#{error}" != INVALID_REDIRECT_URI
           redirect generate_error_uri(redirect_uri, {error: "#{error}"}).to_s
@@ -327,6 +335,7 @@ module Evercam
     get '/oauth2/tokeninfo' do
       output = {error: INVALID_REQUEST}
       code   = 400
+      log.debug "GET /oauth2/tokeninfo\nPARAMETERS: #{params}"
       if params[:access_token]
         token = AccessToken.where(request: params[:access_token]).first
         if token && !token.client_id.nil?
@@ -345,6 +354,7 @@ module Evercam
     get '/oauth2/revoke' do
       output = {error: INVALID_REQUEST}
       code   = 400
+      log.debug "GET /oauth2/revoke\nPARAMETERS: #{params}"
       if params[:access_token]
         token = AccessToken.where(request: params[:access_token]).first
         if token && !token.client_id.nil?
