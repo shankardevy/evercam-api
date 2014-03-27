@@ -28,6 +28,11 @@ module Evercam
         error_response({ status: 404, message: e.message })
       end
 
+      # errors where a conflict exists
+      base.rescue_from ConflictError do |e|
+        error_response({ status: 409, message: e.message })
+      end
+
       # errors where camera is offline
       base.rescue_from CameraOfflineError do |e|
         error_response({ status: 503, message: e.message })

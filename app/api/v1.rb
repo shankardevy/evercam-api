@@ -34,6 +34,7 @@ module Evercam
     mount V1SnapshotJpgRoutes
     mount V1ModelRoutes
     mount V1TestRoutes
+    mount V1ClientRoutes
 
     # bring on the swagger
     add_swagger_documentation(

@@ -34,6 +34,8 @@ gem 'newrelic-grape'
 gem '3scale_client'
 
 gem 'logjam'
+gem 'faraday',
+  require: 'faraday'
 
 gem 'activesupport',
   require: 'active_support'
