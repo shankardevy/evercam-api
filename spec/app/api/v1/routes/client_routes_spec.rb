@@ -29,23 +29,26 @@ describe 'API routes/client' do
                with(:body => {"email"=>"no.one@nowhere.com", "org_name"=>parameters[:name], "password"=>"password", "provider_key"=>"b25bc9166b8805fc26a96f1130578d2b", "username"=>parameters[:user_name]},
               :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.0'}).
               to_return(:status => 201,
-              	         :body => "<account>\n<applications>\n<application>\n<application_id>6261dee8</application_id>\n<keys>\n<key>a31505fce7268dfa702e31cb290a1f73</key>\n</keys>\n</application>\n</applications>\n</account>",
+              	         :body => "<account>\n<id>123456789012345</id><applications>\n<application>\n<application_id>6261dee8</application_id>\n<keys>\n<key>a31505fce7268dfa702e31cb290a1f73</key>\n</keys>\n</application>\n</applications>\n</account>",
               	         :headers => {})
 			end
 
 			it 'returns success and creates a new client record' do
-				post('/client', parameters.merge(api_keys))
-				expect(last_response.status).to eq(201)
-				data = last_response.json
-				expect(data.include?("id")).to eq(true)
-				expect(data.include?("api_key")).to eq(true)
-				client = Client.where(exid: data["id"]).first
-				expect(client).not_to be_nil
-				expect(client.secret).to eq(data["api_key"])
-				expect(client.callback_uris.include?("www.blah.com"))
-				expect(client.callback_uris.include?("https://www.other.com"))
-			end
-		end
+            post('/client', parameters.merge(api_keys))
+            expect(last_response.status).to eq(201)
+            data = last_response.json
+            expect(data.include?("id")).to eq(true)
+            expect(data.include?("api_key")).to eq(true)
+            client = Client.where(exid: data["id"]).first
+            expect(client).not_to be_nil
+            expect(client.secret).to eq(data["api_key"])
+            expect(client.callback_uris.include?("www.blah.com"))
+            expect(client.callback_uris.include?("https://www.other.com"))
+            expect(client.settings).to eq({"3Scale" => {"account_id" => "123456789012345",
+                                                        "email"      => parameters[:email],
+                                                        "user_name"  => parameters[:user_name]}})
+         end
+      end
 
 		context 'when a name parameter is not specified' do
 			it 'returns a parmameters error' do
