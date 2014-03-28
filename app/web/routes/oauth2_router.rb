@@ -29,8 +29,13 @@ module Evercam
 
       # Used to test whether the specified redirect URI is valid.
       def valid_redirect_uri?(client, uri)
+      	compare = URI.parse(uri)
         client && client.callback_uris && client.callback_uris.find do |entry|
-          entry[0,4] != "http" ? (entry == URI.parse(uri).host) : (entry == uri)
+          if entry[0,4] == "http"
+            entry == uri
+          else
+            entry.index(":").nil? ? (entry == compare.host) : (entry == ("#{compare.host}:#{compare.port}"))
+          end
         end.nil? == false
       end
 
