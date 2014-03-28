@@ -12,8 +12,8 @@ module Evercam
         string :timezone
         string :name
         string :mac_address
-        string :model
-        string :vendor
+        string :model, :empty => true
+        string :vendor, :empty => true
 
         string :jpg_url
         string :external_host
@@ -26,8 +26,8 @@ module Evercam
         string :username
         boolean :is_public
 
-        string :cam_username
-        string :cam_password
+        string :cam_username, :empty => true
+        string :cam_password, :empty => true
       end
 
       def validate
@@ -52,14 +52,14 @@ module Evercam
         end
 
         if vendor && !Vendor.by_exid(vendor)
-          add_error(:username, :exists, 'Vendor does not exist')
+          add_error(:vendor, :exists, 'Vendor does not exist')
         end
 
         if model && !vendor
           add_error(:model, :valid, 'If you provide model you must also provide vendor')
         end
 
-        if model && vendor && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+        if model && vendor && !Vendor.by_exid(vendor) && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
           add_error(:model, :exists, 'Model does not exist')
         end
 
