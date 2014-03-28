@@ -4,6 +4,14 @@ class Client < Sequel::Model
 
   one_to_many :tokens, class: 'AccessToken', key: :client_id
 
+  def settings
+    self[:settings] ? JSON.parse(self[:settings]) : {}
+  end
+
+  def settings=(hash)
+  	self[:settings] = hash.to_json
+  end
+
   def self.by_exid(val)
     first(exid: val)
   end

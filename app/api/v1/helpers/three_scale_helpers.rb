@@ -41,18 +41,31 @@ module Evercam
       # a Hash.
       def threescale_signup_client(organization, user_name, email, password=nil)
          password ||= SecureRandom.hex(10)
-         parameters = get_parameters.merge(org_name: organization,
-                                           username: user_name,
-                                           email:    email,
-                                           password: password)
+         parameters = get_parameters(org_name: organization,
+                                     username: user_name,
+                                     email:    email,
+                                     password: password)
          response   = get_faraday_connection.post('/admin/api/signup.xml', parameters)
          if !(200..299).include?(response.status)
            raise Evercam::WebErrors::BadRequestError, response.body
          end
          document = Nokogiri::XML(response.body)
-         {exid: document.xpath("/account/applications/application[1]/application_id").text,
+         {account_id: document.xpath("/account/id").text,
+          email: email,
+          exid: document.xpath("/account/applications/application[1]/application_id").text,
           secret: document.xpath("/account/applications/application[1]/keys/key[1]").text,
-          password: password}
+          password: password,
+          user_name: user_name}
+      end
+
+      # This method deletes an account from 3Scale and requires the account id
+      # to do it.
+      def threescale_delete_account(account_id)
+         response = get_faraday_connection.delete("/admin/api/accounts/#{account_id}.xml",
+                                                  get_parameters)
+         if !(200..299).include?(response.status)
+            raise Evercam::WebErrors.BadRequestError.new(response.body)
+         end
       end
 
 

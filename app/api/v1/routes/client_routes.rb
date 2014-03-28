@@ -35,10 +35,14 @@ module Evercam
    				uris = []
    				params[:callback_uris].each {|entry| uris << entry.strip}
    			end
-   			client = Client.create(exid: values[:exid],
-   				                    secret: values[:secret],
-   				                    name: params[:name],
-   				                    callback_uris: uris)
+   			settings = {"3Scale" => {"account_id" => values[:account_id],
+   				                      "email"      => values[:email],
+   				                      "user_name"  => values[:user_name]}}
+   			client   = Client.create(exid: values[:exid],
+   				                      secret: values[:secret],
+   				                      name: params[:name],
+   				                      callback_uris: uris,
+   				                      settings: settings)
    			status = 201
    			{id: client.exid, api_key: client.secret}
    		end
@@ -67,10 +71,16 @@ module Evercam
 	         	requires :id, type: String, desc: "The unique identifier for the client to be deleted."
 	         end
 	         delete do
-	         	client = Client.where(exid: params[:id]).first
-	         	client.destroy if !client.nil?
-	         	{}
-	         end
+               client = Client.where(exid: params[:id]).first
+               if !client.nil?
+                  settings = client.settings
+                  if settings && settings.include?("3Scale")
+                     threescale_delete_account(client.settings["3Scale"]["account_id"])
+                  end
+                  client.destroy
+               end
+               {}
+            end
 
             #-------------------------------------------------------------------
             # PATCH /v1/client/:id

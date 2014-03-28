@@ -40,5 +40,19 @@ describe Client do
     end
   end
 
+  describe '#settings property' do
+  	it 'returns an empty hash when not explicitly set' do
+      client = build(:client)
+      expect(client.settings).to eq({})
+    end
+
+    it 'can be assigned from a Hash' do
+      client = Client.create(exid: "client#{Time.now}")
+      client.settings = {one: 'One', two: 2, three: 31.4}
+      client.save
+      client = Client[client.id]
+      expect(client.settings).to eq({"one" => 'One', "two" => 2, "three" => 31.4})
+    end
+  end
 end
 
