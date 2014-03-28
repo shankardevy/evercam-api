@@ -48,7 +48,7 @@ module Evercam
          #document = Nokogiri::XML(response.body)
          {account_id: document.xpath("/account/id").text,
           email: email,
-          exid: 'aaaaaaaa',
+          exid: SecureRandom.hex,
           secret: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
           password: password,
           user_name: user_name}

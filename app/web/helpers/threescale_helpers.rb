@@ -26,7 +26,7 @@ module Evercam
       #  raise Evercam::WebErrors::BadRequestError, response.body
       #end
       #document     = Nokogiri::XML(response.body)
-      user.api_id  = 'aaaaaaaa' #document.css('application_id').text
+      user.api_id  = SecureRandom.hex #document.css('application_id').text
       user.api_key = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' #document.css('key').text
       user.save
     end
@@ -42,7 +42,7 @@ module Evercam
       #  raise Evercam::WebErrors::BadRequestError, response.body
       #end
       #document = Nokogiri::XML(response.body)
-      {exid: 'aaaaaaaa',
+      {exid: SecureRandom.hex,
        secret: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
        password: password}
     end
