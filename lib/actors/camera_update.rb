@@ -51,15 +51,15 @@ module Evercam
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
         end
 
-        if vendor && !Vendor.by_exid(vendor)
+        if !vendor.empty? && Vendor.by_exid(vendor).first.nil?
           add_error(:vendor, :exists, 'Vendor does not exist')
         end
 
-        if model && !vendor
+        if model && vendor.empty?
           add_error(:model, :valid, 'If you provide model you must also provide vendor')
         end
 
-        if model && vendor && !Vendor.by_exid(vendor) && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+        if model && !vendor.empty? && !Vendor.by_exid(vendor).first.nil? && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
           add_error(:model, :exists, 'Model does not exist')
         end
 
@@ -90,7 +90,7 @@ module Evercam
         end
 
         camera.timezone = timezone if timezone
-        camera.vendor_model =  VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        camera.vendor_model =  VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) unless model.empty?
         camera.mac_address = mac_address if mac_address
 
         if privacy_changed

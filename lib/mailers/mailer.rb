@@ -28,9 +28,13 @@ module Evercam
 
       def self.method_missing(name, *inputs)
         if self.method_defined?(name) && inputs[0]
-          opts = self.new(inputs[0]).send(name)
-          mail = Evercam::Config[:mail].merge(opts)
-          Pony.mail(mail)
+          begin
+            opts = self.new(inputs[0]).send(name)
+            mail = Evercam::Config[:mail].merge(opts)
+            Pony.mail(mail)
+          rescue Exception => e
+            logger.warn(e)
+          end
         end
       end
 
