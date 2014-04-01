@@ -12,8 +12,8 @@ module Evercam
         string :timezone
         string :name
         string :mac_address
-        string :model
-        string :vendor
+        string :model, :empty => true
+        string :vendor, :empty => true
 
         string :jpg_url
         string :external_host
@@ -26,8 +26,8 @@ module Evercam
         string :username
         boolean :is_public
 
-        string :cam_username
-        string :cam_password
+        string :cam_username, :empty => true
+        string :cam_password, :empty => true
       end
 
       def validate
@@ -51,15 +51,15 @@ module Evercam
           add_error(:timezone, :valid, 'Timezone does not exist or is invalid')
         end
 
-        if vendor && !Vendor.by_exid(vendor)
-          add_error(:username, :exists, 'Vendor does not exist')
+        if !vendor.blank? && Vendor.by_exid(vendor).first.nil?
+          add_error(:vendor, :exists, 'Vendor does not exist')
         end
 
-        if model && !vendor
+        if model && vendor.blank?
           add_error(:model, :valid, 'If you provide model you must also provide vendor')
         end
 
-        if model && vendor && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+        if model && !vendor.blank? && !Vendor.by_exid(vendor).first.nil? && !VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id)
           add_error(:model, :exists, 'Model does not exist')
         end
 
@@ -90,7 +90,7 @@ module Evercam
         end
 
         camera.timezone = timezone if timezone
-        camera.vendor_model =  VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) if model
+        camera.vendor_model =  VendorModel.find(:name => model, :vendor_id => Vendor.by_exid(vendor).first.id) unless model.blank?
         camera.mac_address = mac_address if mac_address
 
         if privacy_changed
@@ -110,7 +110,7 @@ module Evercam
 
         if inputs[:external_host]
           # fire off the evr.cm zone update to sidekiq
-          DNSUpsertWorker.perform_async(id, inputs[:external_host])
+          DNSUpsertWorker.perform_async(id, inputs[:external_host]) unless Evercam::Config[:testserver]
         end
 
         camera

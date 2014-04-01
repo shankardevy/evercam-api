@@ -77,7 +77,6 @@ module Evercam
     helpers Sinatra::RedirectWithFlash    
     helpers Evercam::FormHelpers
     helpers Evercam::TemplateHelpers
-    helpers Evercam::ThreescaleHelpers
     helpers Sinatra::ContentFor
     
   end  
