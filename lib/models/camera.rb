@@ -136,12 +136,17 @@ class Camera < Sequel::Model
   end
 
   def cam_username
-    config.fetch('auth', {}).fetch('basic', {}).fetch('username', '')
+    basic_auth.fetch('username', '')
   end
 
   def cam_password
-    config.fetch('auth', {}).fetch('basic', {}).fetch('password', '')
+    basic_auth.fetch('password', '')
   end
 
+  private
+
+  def basic_auth
+    (config.fetch('auth', {}) || {}).fetch('basic', {})
+  end
 end
 

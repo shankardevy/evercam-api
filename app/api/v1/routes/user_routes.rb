@@ -35,7 +35,7 @@ module Evercam
           raise NotFoundError, 'user does not exist' unless user
 
           cameras = user.cameras.select do |camera|
-            requester_rights_for(camera).allow?(AccessRight::SNAPSHOT)
+            requester_rights_for(camera).allow?(AccessRight::LIST)
           end
 
           present cameras, with: Presenters::Camera
