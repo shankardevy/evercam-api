@@ -7,7 +7,7 @@ module Evercam
     	       documentation: {desc: "The unique identifier for the client (also its API id).",
     	       	               required: true,
     	       	               type: String} do |client, options|
-    		client.exid
+    		client.api_id
     	end
 
     	expose :callback_uris,
@@ -26,7 +26,7 @@ module Evercam
     	       documentation: {desc: "The API key for the client.",
     	       	               required: true,
     	       	               type: String} do |client, options|
-    	  client.secret
+    	  client.api_key
     	end
 
       with_options(format_with: :timestamp) do

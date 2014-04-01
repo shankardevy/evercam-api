@@ -13,14 +13,14 @@ describe 'WebApp routes/oauth2_router' do
 
   let(:user0) { camera0.owner }
 
-  let(:client0) { create(:client, exid: 'client0', callback_uris: nil) }
+  let(:client0) { create(:client, api_id: 'client0', callback_uris: nil) }
 
   let(:env) { env_for(session: { user: user0.id }) }
 
   let(:valid) do
     {
       response_type: 'token',
-      client_id: client0.exid,
+      client_id: client0.api_id,
       redirect_uri: client0.default_callback_uri,
       scope: "camera:view:#{camera0.exid}"
     }
@@ -93,7 +93,7 @@ describe 'WebApp routes/oauth2_router' do
       let(:client1) { create(:client, callback_uris: ["https://www.yahoo.com"]).save }
 
       it 'redirects with a /oauth2/error' do
-        get_parameters[:client_id] = client1.exid
+        get_parameters[:client_id] = client1.api_id
         get('/oauth2/authorize', get_parameters, {})
 
         expect(last_response.status).to eq(302)
@@ -108,7 +108,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'when not logged in' do
         it 'redirects to the log in URL' do
-          get_parameters[:client_id] = client2.exid
+          get_parameters[:client_id] = client2.api_id
           get('/oauth2/authorize', get_parameters, {})
 
           expect(last_response.status).to eq(302)
@@ -120,7 +120,7 @@ describe 'WebApp routes/oauth2_router' do
       context "when logged in" do
         context "and it is given all valid parameters" do
           it 'returns success' do
-            get_parameters[:client_id] = client2.exid
+            get_parameters[:client_id] = client2.api_id
             get('/oauth2/authorize', get_parameters, env)
 
             expect(last_response.status).to eq(200)
@@ -151,7 +151,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid code request is made' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters[:scope] = "camera:view:#{camera0.exid}"
           get('/oauth2/authorize', get_parameters, env)
 
@@ -165,7 +165,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid code request without a scope is made' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters.delete(:scope)
           get('/oauth2/authorize', get_parameters, env)
 
@@ -179,7 +179,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid token request is made with a redirect URI' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters[:scope] = "camera:view:#{camera0.exid}"
           get_parameters[:response_type] = 'token'
           get('/oauth2/authorize', get_parameters, env)
@@ -192,7 +192,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid token request is made without a redirect URI' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters[:scope] = "camera:view:#{camera0.exid}"
           get_parameters[:response_type] = 'token'
           get_parameters.delete(:redirect_uri)
@@ -210,7 +210,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid token request is made without a scope' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters[:response_type] = 'token'
           get_parameters.delete(:scope)
           get('/oauth2/authorize', get_parameters, env)
@@ -223,7 +223,7 @@ describe 'WebApp routes/oauth2_router' do
 
       context 'and a valid token request is made without a scope or redirect URI' do
         it 'hits the redirect URI' do
-          get_parameters[:client_id] = client3.exid
+          get_parameters[:client_id] = client3.api_id
           get_parameters[:response_type] = 'token'
           get_parameters.delete(:scope)
           get_parameters.delete(:redirect_uri)
@@ -244,13 +244,13 @@ describe 'WebApp routes/oauth2_router' do
   describe 'POST /oauth2/feedback' do
     let(:access_token) { create(:access_token, refresh: SecureRandom.base64(24)) }
     let(:parameters) { {action: 'approve'} }
-    let(:code_oauth) {{client_id: client0.exid,
+    let(:code_oauth) {{client_id: client0.api_id,
                        response_type: 'code',
                        scope: 'cameras:snapshot:all',
                        redirect_uri: 'https://www.google.com',
                        access_token_id: access_token.id}}
     let(:code_settings) {env_for(session: {user: user0.id, oauth: code_oauth})}
-    let(:token_oauth) {{client_id: client0.exid,
+    let(:token_oauth) {{client_id: client0.api_id,
                         response_type: 'token',
                         scope: 'cameras:snapshot:all',
                         redirect_uri: 'https://www.google.com',
@@ -416,10 +416,10 @@ describe 'WebApp routes/oauth2_router' do
       end
 
       context 'when the URI specified does not match the clients allowed callback URIs' do
-        let(:client1) { create(:client, exid: 'client1', callback_uris: ['https://www.blah.com/redirect']).save }
+        let(:client1) { create(:client, api_id: 'client1', callback_uris: ['https://www.blah.com/redirect']).save }
 
         it 'redirects to /oauth2/error' do
-          parameters[:client_id] = client1.exid
+          parameters[:client_id] = client1.api_id
           post('/oauth2/authorize', parameters)
 
           expect(last_response.status).to eq(302)
@@ -616,7 +616,7 @@ describe 'WebApp routes/oauth2_router' do
         expect(output.include?("expires_in")).to eq(true)
         expect(output.include?("userid")).to eq(true)
         expect(output["access_token"]).to eq(access_token1.request)
-        expect(output["audience"]).to eq(client0.exid)
+        expect(output["audience"]).to eq(client0.api_id)
         expect(output["userid"]).to eq(user0.username)
       end
     end

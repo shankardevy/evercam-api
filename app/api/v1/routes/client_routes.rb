@@ -38,13 +38,13 @@ module Evercam
    			settings = {"3Scale" => {"account_id" => values[:account_id],
    				                      "email"      => values[:email],
    				                      "user_name"  => values[:user_name]}}
-   			client   = Client.create(exid: values[:exid],
-   				                      secret: values[:secret],
+   			client   = Client.create(api_id: values[:exid],
+   				                      api_key: values[:secret],
    				                      name: params[:name],
    				                      callback_uris: uris,
    				                      settings: settings)
    			status = 201
-   			{id: client.exid, api_key: client.secret}
+   			{id: client.api_id, api_key: client.api_key}
    		end
 
          route_param :id do
@@ -57,7 +57,7 @@ module Evercam
 	         	requires :id, type: String, desc: "The unique identifier for the client to retrieve details for."
 	         end
 	         get do
-	         	client = Client.where(exid: params[:id]).first
+	         	client = Client.where(api_id: params[:id]).first
 	         	raise NotFoundError.new if client.nil?
 	         	present client, with: Presenters::Client
 	         end
@@ -71,7 +71,7 @@ module Evercam
 	         	requires :id, type: String, desc: "The unique identifier for the client to be deleted."
 	         end
 	         delete do
-               client = Client.where(exid: params[:id]).first
+               client = Client.where(api_id: params[:id]).first
                if !client.nil?
                   settings = client.settings
                   if settings && settings.include?("3Scale")
@@ -93,7 +93,7 @@ module Evercam
                optional :callback_uris, type: String, desc: "A comma separated list of callback URIs and host names."
             end
             patch do
-               client = Client.where(exid: params[:id]).first
+               client = Client.where(api_id: params[:id]).first
                raise NotFoundError.new if client.nil?
 
                changed = false

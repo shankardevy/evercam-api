@@ -85,7 +85,7 @@ module Evercam
       def get_api_id_owner(credentials)
          log.debug "Fetching owner for API id '#{credentials[:api_id]}'."
          owner = nil
-         query = Client.where(exid: credentials[:api_id])
+         query = Client.where(api_id: credentials[:api_id])
          if query.count == 0
             log.debug "API id does not belong to a client, checking for a user."
             owner = User.where(api_id: credentials[:api_id]).first
@@ -104,13 +104,8 @@ module Evercam
       def valid_api_credentials?(owner, credentials)
          result = false
          if owner
-            if owner.instance_of?(User)
-               result = (owner.api_id == credentials[:api_id] &&
-                         owner.api_key == credentials[:api_key])
-            else
-               result = (owner.exid == credentials[:api_id] &&
-                         owner.secret == credentials[:api_key])
-            end
+            result = (owner.api_id == credentials[:api_id] &&
+                      owner.api_key == credentials[:api_key])
          end
          result
       end
