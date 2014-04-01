@@ -119,6 +119,9 @@ module Evercam
         if inputs[:external_host]
           # fire off the evr.cm zone update to sidekiq
           #DNSUpsertWorker.perform_async(id, inputs[:external_host])
+
+          # Check if online
+          HeartbeatWorker.perform_async(id)
         end
 
         camera
