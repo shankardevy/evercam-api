@@ -197,7 +197,7 @@ module Evercam
 
         if params[:action].strip.downcase == 'approve'
           with_user do |user|
-            client = Client[exid: settings[:client_id]]
+            client = Client[api_id: settings[:client_id]]
             scopes = parse_scope(settings[:scope])
             grant_missing_rights(client, token, user, scopes)
             if redirect_uri
@@ -232,7 +232,7 @@ module Evercam
         raise UNSUPPORTED_RESPONSE_TYPE if !valid_response_type?(params[:response_type])
         raise INVALID_REQUEST if !params[:client_id]
 
-        @client = Client.where(exid: params[:client_id]).first
+        @client = Client.where(api_id: params[:client_id]).first
         raise ACCESS_DENIED if @client.nil?
         raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(@client, redirect_uri)
 
@@ -249,7 +249,7 @@ module Evercam
             # Rights confirmation needed from user.
             log.debug "Rights grant confirmation needed, displaying page to user."
             session[:oauth] = {access_token_id: token.id,
-                               client_id:       @client.exid,
+                               client_id:       @client.api_id,
                                response_type:   response_type,
                                scope:           params[:scope],
                                redirect_uri:    redirect_uri,
@@ -301,7 +301,7 @@ module Evercam
           raise INVALID_REQUEST if token.client_id.nil?
           client = token.client
         else
-          client = Client.where(exid: params[:client_id]).first
+          client = Client.where(api_id: params[:client_id]).first
         end
         raise UNAUTHORIZED_CLIENT if client.nil?
         raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(client, redirect_uri)
@@ -309,7 +309,7 @@ module Evercam
         log.debug "Making call to 3Scale to authorize client."
         provider_key = Evercam::Config[:threescale][:provider_key]
         three_scale  = ::ThreeScale::Client.new(:provider_key => provider_key)
-        response     = three_scale.authrep(app_id: client.exid,
+        response     = three_scale.authrep(app_id: client.api_id,
                                            app_key: params[:client_secret])
         log.debug "3Scale request successful: #{response.success?}"
         raise UNAUTHORIZED_CLIENT if !response.success?
@@ -345,7 +345,7 @@ module Evercam
         token = AccessToken.where(request: params[:access_token]).first
         if token && !token.client_id.nil?
           output = {access_token: token.request,
-                    audience:     token.client.exid,
+                    audience:     token.client.api_id,
                     expires_in:   token.expires_in}
           output[:userid] = token.grantor.username if token.grantor_id
           code = 200

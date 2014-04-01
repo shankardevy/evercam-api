@@ -4,14 +4,14 @@ describe Client do
 
   describe 'after_initialize' do
 
-    it 'generates a 20 char random #exid' do
+    it 'generates a 20 char random #api_id' do
       client = build(:client)
-      expect(client.exid.length).to be(20)
+      expect(client.api_id.length).to be(20)
     end
 
-    it 'generates a 32 char random #secret' do
+    it 'generates a 32 char random #api_key' do
       client = build(:client)
-      expect(client.secret.length).to be(32)
+      expect(client.api_key.length).to be(32)
     end
 
   end

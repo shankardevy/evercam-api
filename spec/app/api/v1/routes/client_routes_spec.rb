@@ -20,7 +20,7 @@ describe 'API routes/client' do
 		}
 
 		let(:api_keys) {
-			{api_id: client.exid, api_key: client.secret}
+			{api_id: client.api_id, api_key: client.api_key}
 		}
 
 		context 'when given a correct set of parameters' do
@@ -39,9 +39,9 @@ describe 'API routes/client' do
             data = last_response.json
             expect(data.include?("id")).to eq(true)
             expect(data.include?("api_key")).to eq(true)
-            client = Client.where(exid: data["id"]).first
+            client = Client.where(api_id: data["id"]).first
             expect(client).not_to be_nil
-            expect(client.secret).to eq(data["api_key"])
+            expect(client.api_key).to eq(data["api_key"])
             expect(client.callback_uris.include?("www.blah.com"))
             expect(client.callback_uris.include?("https://www.other.com"))
             expect(client.settings).to eq({"3Scale" => {"account_id" => "123456789012345",
@@ -111,12 +111,12 @@ describe 'API routes/client' do
 		}
 
 		let(:api_keys) {
-			{api_id: client.exid, api_key: client.secret}
+			{api_id: client.api_id, api_key: client.api_key}
 		}
 
 		context 'when given proper parameters' do
 			it 'returns correct details for the client' do
-				get("/client/#{client.exid}", api_keys)
+				get("/client/#{client.api_id}", api_keys)
 				expect(last_response.status).to eq(200)
 				data = last_response.json
 				expect(data.include?("id")).to eq(true)
@@ -125,10 +125,10 @@ describe 'API routes/client' do
 				expect(data.include?("api_key")).to eq(true)
 				expect(data.include?("created_at")).to eq(true)
 				expect(data.include?("updated_at")).to eq(true)
-				expect(data["id"]).to eq(client.exid)
+				expect(data["id"]).to eq(client.api_id)
 				expect(data["callback_uris"]).to eq(client.callback_uris.join(","))
 				expect(data["name"]).to eq(client.name)
-				expect(data["api_key"]).to eq(client.secret)
+				expect(data["api_key"]).to eq(client.api_key)
 				expect(data["created_at"]).to eq(client.created_at.to_i)
 				expect(data["updated_at"]).to eq(client.updated_at.to_i)
 			end
@@ -168,14 +168,14 @@ describe 'API routes/client' do
 		}
 
 		let(:api_keys) {
-			{api_id: client.exid, api_key: client.secret}
+			{api_id: client.api_id, api_key: client.api_key}
 		}
 
       context 'when given the proper parameters' do
       	it 'returns success and deletes the client record' do
-      		delete("/client/#{client.exid}", api_keys)
+      		delete("/client/#{client.api_id}", api_keys)
       		expect(last_response.status).to eq(200)
-      		expect(Client.where(exid: client.exid).count).to eq(0)
+      		expect(Client.where(api_id: client.api_id).count).to eq(0)
       	end
       end
 
@@ -210,7 +210,7 @@ describe 'API routes/client' do
 		}
 
 		let(:api_keys) {
-			{api_id: client.exid, api_key: client.secret}
+			{api_id: client.api_id, api_key: client.api_key}
 		}
 
 		let(:parameters) {
@@ -220,7 +220,7 @@ describe 'API routes/client' do
 
       context 'when given the proper parameters' do
       	it 'returns success and updates the client record' do
-      		patch("/client/#{client.exid}", parameters.merge(api_keys))
+      		patch("/client/#{client.api_id}", parameters.merge(api_keys))
       		expect(last_response.status).to eq(200)
       		client.reload
       		expect(client.name).to eq(parameters[:name])

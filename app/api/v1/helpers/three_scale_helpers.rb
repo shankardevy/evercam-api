@@ -24,11 +24,7 @@ module Evercam
    			token       = access_token
    			if !token.nil?
 	   			entity = token.target
-	   			if entity.instance_of?(User)
-	   				{app_id: entity.api_id, app_key: entity.api_key}
-	   			else
-	   				{app_id: entity.exid, app_key: entity.secret}
-	   			end
+   				{app_id: entity.api_id, app_key: entity.api_key}
 	   		end
 	   		credentials
    		else

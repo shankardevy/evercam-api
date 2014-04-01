@@ -4,6 +4,14 @@ class Client < Sequel::Model
 
   one_to_many :tokens, class: 'AccessToken', key: :client_id
 
+  def exid
+    self[:api_id]
+  end
+
+  def exid=(setting)
+    self[:api_id] = setting
+  end
+
   def settings
     self[:settings] ? JSON.parse(self[:settings]) : {}
   end
@@ -13,12 +21,12 @@ class Client < Sequel::Model
   end
 
   def self.by_exid(val)
-    first(exid: val)
+    first(api_id: val)
   end
 
   def after_initialize
-    self.secret ||= SecureRandom.hex(16)
-    self.exid ||= SecureRandom.hex(10)
+    self.api_id  ||= SecureRandom.hex(10)
+    self.api_key ||= SecureRandom.hex(16)
     super
   end
 

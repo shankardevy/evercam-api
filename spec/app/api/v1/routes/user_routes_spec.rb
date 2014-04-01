@@ -356,7 +356,7 @@ describe 'API routes/users' do
     let(:password) { SecureRandom.base64(6)}
     let(:user) { create(:user, password: password) }
     let(:client) { create(:client) }
-    let(:api_keys) { {api_id: client.exid, api_key: client.secret} }
+    let(:api_keys) { {api_id: client.api_id, api_key: client.api_key} }
     let(:parameters) { {password: password}.merge(api_keys) }
 
     context 'when properly authenticated' do
