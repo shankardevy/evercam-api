@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<%= partial 'layouts/_head'.to_sym %>
+</head>
+<body>
+<div id='wrapper'>
+
+  <%= partial 'layouts/_header'.to_sym %>
+
+  <div class='main'>
+    <div id='content'>
+      <div class='container'>
+
+        <%= partial 'layouts/_flash'.to_sym %>
+
+        <%= yield %>
+
+      </div>
+    </div>
+  </div>
+
+  <div class='clearfix'>
+    &nbsp;
+  </div>
+
+  <%= partial 'layouts/_footer'.to_sym %>
+
+</div>
+<%= yield_content :scripts %>
+</body>
+</html>
+

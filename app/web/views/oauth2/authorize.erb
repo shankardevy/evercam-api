@@ -1,0 +1,22 @@
+<h3 class="ec">
+  <%= @client.name %> has requested access to the following:
+</h3>
+<ol>
+<% @permissions.each do |permission| %>
+  <li>
+    Permission to <strong><%= permission[:right] %> on <%= permission[:target] %></strong>
+  </li>
+<% end %>
+</ol>
+<br />
+<div>
+  <form method='POST' action="/oauth2/feedback">
+    <button type='submit' name='action' value='approve' class='btn btn-success'>
+      Approve
+    </button>
+    <button type='submit' name='action' value='decline' class='btn btn-danger'>
+      Decline
+    </button>
+  </form>
+</div>
+

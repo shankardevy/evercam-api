@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<%= partial 'layouts/_head'.to_sym %>
+<link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.4/styles/tomorrow.min.css'>
+<script src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/7.4/highlight.min.js'></script>
+</head>
+<body>
+<div id='wrapper'>
+
+
+  <div class='main'>
+    <div id='content'>
+      <div class='container'>
+
+        <%= partial 'layouts/_flash'.to_sym %>
+
+        <div class='col-sm-2 left-nav'>
+          <h1>Documentation</h1>
+          <ul>
+            <li>
+            <i class='fa fa-cloud'></i>
+            API V1
+            <ul>
+              <li><a href='/docs/api/v1/authentication'>Authentication</a></li>
+              <li><a href='/docs/api/v1/swagger'>Docs</a></li>
+              <li><a href='/docs/api/clients/evercam.js'>evercam.js</a></li>
+            </ul>
+            </li>
+          </ul>
+          <ul>
+            <li>
+            <i class='fa fa-cog'></i>
+            Client Bindings
+            <ul>
+              <li><a href='http://github.com/evercam/evercam.py' target='_blank'>Python</a></li>
+              <li><a href='http://github.com/evercam/evercam.node' target='_blank'>NodeJS</a></li>
+              <li><a href='http://github.com/evercam/evercam.java' target='_blank'>Java</a></li>
+              <li>more soon&hellip;</li>
+            </ul>
+            </li>
+          </ul>
+            </li>
+          </ul>
+          <ul>
+            <li>
+            <i class='fa fa-link'></i>
+            Connect
+            <ul>
+              <li><a href="http://blog.evercam.io/blog/evercam-connect/" target="_new">Android Connect</a></li>
+          </ul>
+        </div>
+
+        <div class='col-sm-10'>
+          <%= yield %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('pre code').each(function(i, e) {
+        hljs.highlightBlock(e);
+      });
+
+      if (typeof $.cookie('lang') !== 'undefined') {
+        $("a[href^='#" + $.cookie('lang') + "'").click();
+      }
+
+      $('.nav-pills a').click(function(e) {
+        var lang = $(this).text().toLowerCase();
+        $.cookie('lang', lang);
+        $("a[href^='#" + lang + "'").not(this).tab('show');
+      });
+    });
+  </script>
+
+  <div class='clearfix'>
+    &nbsp;
+  </div>
+
+
+</div>
+</body>
+</html>
+

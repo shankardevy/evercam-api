@@ -24,7 +24,7 @@ end
 #end
 
 base = File.dirname(__FILE__)
-['api/v1'].each do |app|
+['api/v1', 'web/app'].each do |app|
   require File.join(base, 'app', app)
 end
 
@@ -52,4 +52,11 @@ map '/v1' do
 
 end
 
+map '/' do
+  # setup ssl requirements
+  use Rack::SslEnforcer,
+      Evercam::Config[:api][:ssl]
+
+  run Evercam::WebApp
+end
 
