@@ -1,0 +1,21 @@
+<div class="col-sm-19 col-sm-offset-1">
+	<div class="form_container">
+		<div class="signup">
+			
+			<h1><%= @title = 'Forgotten password' %></h1>
+
+			<div class="row">
+				<div class="col-sm-10 col-sm-offset-1">
+					<form method="post" role="form">
+						<div class="form-group">
+							<label for="mail">Email</label>							
+							<%= input(:email, :text, :required, placeholder: 'Email') %>
+						</div>
+						<input id="submit" class="btn btn-primary pull-right" type="submit" value="reset"></input>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</div>	
+</div>

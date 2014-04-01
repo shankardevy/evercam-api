@@ -1,0 +1,59 @@
+<h1>API <%= @title = 'Authentication' %></h1>
+<p>
+The evercam REST API supports multiple different authentication mechanisms to ensure that whatever environment you find yourself in, we've got you covered. This section of the documentation outlines the various methods available.
+</p>
+<h4>Basic</h4>
+<p>
+To make it as easy as possible for developers to quickly test and learn the various resource actions available we've enabled HTTP basic authentication using your username (or email) and password. The following cURL command illustrates this authentication method.
+</p>
+<pre><code class='bash'>curl -X GET https://api.evercam.io/v1/... \
+  -u {username}
+</pre></code>
+<h4>Session</h4>
+<p>
+As evercam utilises cookies to maintain a users session once they have been logged in, any ajax requests originating from the same user agent can be told to include the apprioriate credentials. This can be achieved in jQuery in the following way:
+</p>
+<pre><code class='javascript'>jQuery.ajax({
+  url: 'https://api.evercam.io/v1/...',
+  xhrFields: {
+    withCredentials: true
+  },
+  statusCode: {
+    200: {
+      ...
+    },
+    ...
+  },
+  ...
+});
+</pre></code>
+<h4>OAuth 2.0</h4>
+<h5>Implicit Grant</h5>
+<p>
+Our implementation supports the <strong>implicit grant type</strong> which can be used to obtain access tokens. It is optimised and secured for clients with a predetermined set of redirect uris. Typically this means a browser using javascript. It is a redirection-based flow which, when successfully authorized, results in the browser being directed back to the client application with an access token appended to the fragment portion of the redirect uri.
+</p>
+<p>
+The process starts with the client (you) redirecting the user (their browser) to our authorization endpoint with the following querystring parameters. Values surrounded with curly braces { } are required, those surrounded by square brackets [ ] are optional.
+</p>
+<pre><code class='no-highlight'>https://www.evercam.io/oauth2/authorize...
+
+?response_type=token
+&client_id={your evercam client id}
+&scope={the access scopes you wish to use}
+&redirect_uri=[one of your registered callback uris] // optional
+&state=[a value you choose to help prevent CSRF] // optional
+</pre></code>
+<p>
+If the user has previously granted your application access to all the resources requested in the {scope} parameters, or if the user chooses to now authorize those scopes, evercam will generate a new access token and redirect the user back to the either the {redirect_uri} parameter you provided or to the default callback uri associated with your client account when you registered. The access token and its duration will be appended as part of the uri fragment as follows:
+</p>
+<pre><code class='no-highlight'>https://{redirect_uri}#access_token=410d79341e45c915&token_type=bearer&expires_in=3600
+</code></pre>
+<p>
+If the user declines your authorization request or if your request is malformed or invalid then the user will be redirected back to the {redirect_uri} (or default callback uri) with an error status and message as follows:
+</p>
+<pre><code class='no-highlight'>https://{redirect_uri}#error=access_denied&error_description=some+error+message&state={your state}
+</code></pre>
+<p>
+Should the {client_id} parameter be invalid or the {redirect_uri} parameter not match one of the values you have registered with your account then the user will be shown an error on the evercam site.
+</p>
+

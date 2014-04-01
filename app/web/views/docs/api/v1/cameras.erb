@@ -1,0 +1,281 @@
+<h1>Cameras</h1>
+
+<%= partial('docs/api/v1/_is_protected') %>
+
+<a name="get"></a>
+<h4>GET /v1/cameras/{id}</h4>
+<p>
+  This operation returns all data required to connect to the camera , authenticate where nessessary, and retrieve images in whatever formats are currently available. Public cameras can be accessed without providing any authentication. Private cameras require authentication via any <a href='/docs/api/v1/authentication'>supported method</a> and authorization to view it.
+</p>
+<p>
+  A typical cURL command to GET the data for any particular private camera would look like this:
+</p>
+
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+    <pre><code class='bash'>curl -X GET https://api.evercam.io/v1/cameras/{id} \
+  -u '{username}' </code></pre>
+    <p>
+      Assuming your authentication information is verified and you are authorized to view the camera, the server will respond with an <%= code(200) %> status and the camera snapshot data using the following format:
+    </p>
+    <pre><code class='json'>{
+  "cameras": [{
+    "id": "my-camera-name",
+    "name": "My Fancy New Camera",
+    "owner": "{your-username}",
+    "created_at": 1387370779,
+    "updated_at": 1387370779,
+    "endpoints": ["http://176.34.180.134:1234"],
+    "is_public": true,
+    "is_online": true,
+    "snapshots": {
+      "jpg": "/onvif/snapshot"
+    },
+    "auth": {
+      "basic": {
+        "username": "user1",
+        "password": "abcde"
+      }
+    }
+  }]
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+    </code></pre>
+  </div>
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.snapshot.get('teststream',
+    function (errors, snapshot) {
+      // asynchronously called
+    }
+);
+    </code></pre>
+
+    <p>
+      Assuming your authentication information is verified and you are authorized to view the camera, the server will respond with an <%= code(200) %> status and the camera data using the following format:
+    </p>
+    <pre><code class='json'>
+{
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Snapshot.get_snapshot('teststream')
+    </code></pre>
+
+    <h5>Example Response</h5>
+    <pre><code class='json'>
+&lt;evercam.Snapshot object&gt; JSON: {
+  "uris":{
+    "external": "http://mystic-mountains-1471.evr.cm",
+    "internal": "http://192.168.1.123"
+  },
+  "formats": {
+    "jpg": {
+      "path": "/streaming/channels/1/picture"
+    }
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "1d3$35f2#2"
+    }
+  }
+}
+    </code></pre>
+  </div>
+</div>
+
+<a name="post"></a>
+<h4>POST /v1/cameras</h4>
+<p>
+  This operation creates a new camera in the Evercam system associated with the authenticated users account. All parameters are required, the camera id must be unique within Evercam and at least one endpoint must be specified. If the camera is successfully created, the server will respond with a <span class='label label-success'>201 CREATED</span> status.
+</p>
+<h5>Example Request</h5>
+
+<!-- Nav tabs -->
+<ul class="nav nav-pills pull-right">
+  <li class="active"><a href="#curl" data-toggle="tab">Curl</a></li>
+  <li><a href="#java" data-toggle="tab">Java</a></li>
+  <li><a href="#node" data-toggle="tab">Node</a></li>
+  <li><a href="#python" data-toggle="tab">Python</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="curl">
+    <pre><code class='http'>curl -X POST https://api.evercam.io/v1/cameras \
+  -u '{your-username}' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "id": "{my-camera-name}",
+        "name": "My Fancy New Camera",
+        "endpoints": ["http://.0.1:8080"],
+        "is_public": true,
+        "snapshots": {
+          "jpg": "/onvif/snapshot"
+        },
+        "auth": {
+          "basic": {
+            "username": "user1",
+            "password": "abcde"
+          }
+        }
+      }'
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>{
+  "cameras": [{
+    "id": "my-camera-name",
+    "name": "My Fancy New Camera",
+    "owner": "{your-username}",
+    "created_at": 1387370779,
+    "updated_at": 1387370779,
+    "endpoints": ["http://176.34.180.134:1234"],
+    "is_public": true,
+    "snapshots": {
+      "jpg": "/onvif/snapshot"
+    },
+    "auth": {
+      "basic": {
+        "username": "user1",
+        "password": "abcde"
+      }
+    }
+  }]
+}
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='json'>{
+  "message": [
+    "Stream already exists",
+    ...
+  ]
+}
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="java">
+    <pre><code class='java'>import io.evercam.*;
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="node">
+    <pre><code class='javascript'>var evercam = require("evercam");
+evercam.stream.create({
+      'id': 'teststream',
+      'endpoints': ['http://176.34.180.134:1234'],
+      'is_public': true,
+      'snapshots': {
+        'jpg': '/onvif/snapshot'
+      },
+      'auth': {
+        'basic': {
+          'username': 'user1',
+          'password': 'abcde'
+        }
+      }
+  },
+  function (errors, stream) {
+    // asynchronously called
+  }
+);
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>{
+  "id": "my-camera-name",
+  "owner": "{your-username}",
+  "created_at": 1387370779,
+  "updated_at": 1387370779,
+  "endpoints": ["http://176.34.180.134:1234"],
+  "is_public": true,
+  "snapshots": {
+    "jpg": "/onvif/snapshot"
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "abcde"
+    }
+  }
+}
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='json'>[Error: Stream already exists]
+    </code></pre>
+  </div>
+
+  <div class="tab-pane" id="python">
+    <pre><code class='python'>import evercam
+evercam.Stream.create({
+  'id': 'teststream',
+  'endpoints': ['http://176.34.180.134:1234'],
+  'is_public': True,
+  'snapshots': {
+    'jpg': '/onvif/snapshot'
+  },
+  'auth': {
+    'basic': {
+      'username': 'user1',
+      'password': 'abcde'
+    }
+  }
+})
+    </code></pre>
+    <h5>Example Success Response</h5>
+    <pre><code class='json'>
+&lt;evercam.Stream object&gt; JSON: {
+  "id": "my-camera-name",
+  "owner": "{your-username}",
+  "created_at": 1387370779,
+  "updated_at": 1387370779,
+  "endpoints": ["http://176.34.180.134:1234"],
+  "is_public": true,
+  "snapshots": {
+    "jpg": "/onvif/snapshot"
+  },
+  "auth": {
+    "basic": {
+      "username": "user1",
+      "password": "abcde"
+    }
+  }
+}
+    </code></pre>
+    <h5>Example Failure Response</h5>
+    <pre><code class='python'>evercam.errors.StreamAlreadyExists
+    </code></pre>
+
+  </div>
+</div>

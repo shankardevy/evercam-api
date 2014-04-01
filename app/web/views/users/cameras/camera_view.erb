@@ -1,0 +1,284 @@
+<div class="">
+  
+  <br/><!-- Temp Line Breaks -->
+
+  <div class="row">
+    <div class="col-xs-10 col-xs-offset-1">
+      <h3><%= @camera.exid -%></h3>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="streamList">
+            <img class="img-loader" src="/img/ajax-loader.gif" >
+            <img class="preview" evercam="<%= @camera.exid -%>" src="" width="450px" height="450px" >
+          </div>
+          <div class="Refresh">
+            <a href="#" class="refresh"><i class="fa fa-1x fa-repeat icon-align-center blue"></i>Refresh</a>
+            <img class="refresh-loader" src="/img/ajax-loader.gif" style="display: none;">
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="stream">
+
+            <div class="right_container">
+              <div class="online">
+                <form class="form" role="form" id="cameraForm" autocomplete="off">
+
+                  <div class="form-group">
+                    <label for="name">Camera Name</label>
+                    <input type="text" class="form-control" value="<%= @camera.name -%>" id="name" placeholder="Enter camera name">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Camera MAC address</label>
+                    <input type="text" class="form-control" value="<%= @camera.mac_address -%>" id="mac" placeholder="Enter camera MAC address">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Snapshot URL</label>
+                    <input type="text" class="form-control" value="<%= @camera.config['snapshots']['jpg'] unless @camera.config['snapshots'].nil? -%>" id="snapshot" placeholder="/onvif/snapshot">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="username">Credentials:</label>
+                    <input type="text" class="form-control" id="username" value="<%= @camera.config['auth']['basic']['username'] unless @camera.config['auth'].nil? -%>" placeholder="Camera Username">
+                    <input type="Password" class="form-control" id="password" value="<%= @camera.config['auth']['basic']['password'] unless @camera.config['auth'].nil? -%>" placeholder="Camera Password">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="cameraVendor">Camera Vendor</label>
+                    <select id="cameraVendor" name="cameraVendor" class="form-control">
+                      <option selected="selected" value="-1">-- select model --</option>
+                      <% @vendors.each_with_index  do |v, index| -%>
+                      <option value="<%= v.exid -%>" <% if v == @camera.vendor %>selected="selected"<% end %>>
+                        <%= v.name -%>
+                      </option>
+                      <% end %>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="name">Camera Model</label>
+                    <% @vendors.each do |v| -%>
+                    <select id="cameraModel<%= v.exid -%>" name="cameraModel" class="form-control <% if v != @camera.vendor %>hidden<% end %>">
+                      <% v.vendor_models.to_hash(:name).each_with_index  do |m, index| -%>
+                      <% if index == 0 %>
+                      <option selected="selected" value="<%= m[0] -%>"><%= m[0] -%></option>
+                      <% else %>
+                      <option value="<%= m[0] -%>" <% if @camera.model && m[0] == @camera.model.name %>selected="selected"<% end %>>
+                        <%= m[0] -%>
+                      </option>
+                      <% end %>
+                      <% end -%>
+                    </select>
+                    <% end %>
+                  </div>
+
+                  <div class="alert alert-danger" id="cameraFormErrors" style="display: none">
+                    <strong>Error!</strong> <span class="alert-content"></span>
+                  </div>
+
+                  <div></div>
+                  <button type="submit" class="btn btn-default">Save</button>
+                  <img src="/img/ajax-loader.gif" id="cameraFormLoader" style="display: none">
+                  <span class="label label-success" id="cameraFormSuccess" style="display: none">Success</span>
+                </form>
+
+                <div class="positionTest">
+                  <% if @camera.is_online == true %>
+                  <p class="online"><i class="fa fa-1x fa-plus-circle icon-align-center"></i>Online</p>
+                  <% elsif @camera.is_online == false %>
+                  <p class="offline"><i class="fa fa-1x fa-minus-circle icon-align-center"></i>Offline</p>
+                  <% else %>
+                  <p class="unknown"><i class="fa fa-1x fa-adjust icon-align-center"></i>Unknown</p>
+                  <% end %>
+                </div>
+              </div>
+              <div class="camAddress hidden">
+                <p><i class="fa fa-1x fa-map-marker icon-align-center blue"></i>Garden of Remembrance, Parnell Square, Dublin 1.</p>
+              </div>
+
+              <h3>URLs</h3>
+              <div class="cam-endpoints">
+                <% @camera.endpoints.each_with_index  do |e, i| -%>
+                <div>
+                  <% if e.public? %>
+                  External URL:
+                  <% else %>
+                  Internal URL:
+                  <% end %>
+                  <span class="endpoint_string"><%= e.to_s -%></span>
+                  <% if @camera.endpoints.length > 1 %>
+                  <i index="<%= i -%>" class="fa fa-1x fa-times-circle-o icon-align-center pull-right delete-endpoint"></i>
+                  <% end %>
+                </div>
+                <% end %>
+
+                <br/>
+
+                <form class="form" role="form" id="addEndpoint">
+
+                  <div class="form-group">
+                    <label class="sr-only" for="url">Camera URL</label>
+                    <input type="text" class="form-control" id="url" placeholder="http://www.mycamera.com:8005">
+                  </div>
+
+                  <div class="alert alert-danger" id="urlErrors" style="display: none">
+                    <strong>Error!</strong> <span class="alert-content"></span>
+                  </div>
+
+                  <button type="submit" class="btn btn-default">Add</button>
+                </form>
+              </div>
+
+              <h5>Owned by:</h5>
+              <p class="userInfo"><%= @camera.owner.fullname -%></p>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="border-1"></div>
+
+      <div class="activity">
+        <h3>Activity</h3>
+
+        <% @camera.activities.reverse_order(:done_at).limit(30).each do |a| %>
+          <div>
+            <%= a -%>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<% content_for :scripts do %>
+<script>
+  $(function() {
+
+    Evercam.Camera.by_id('<%= @camera.exid -%>')
+      .then(function(camera) {
+
+        $('#cameraForm').on('submit', function(e) {
+          e.preventDefault();
+          $('#cameraFormErrors').hide();
+          $('#cameraFormLoader').show();
+
+          var toUpdate= [];
+          if (camera.data.name !== $('#name').val()) {
+            camera.data.name = $('#name').val();
+            toUpdate.push('name');
+          }
+          if ((camera.data.snapshots &&  camera.data.snapshots.jpg !== $('#snapshot').val()) ||
+            (camera.data.snapshots === null && $('#snapshot').val())) {
+            camera.data.snapshots = { jpg: $('#snapshot').val() };
+            toUpdate.push('snapshots');
+          }
+          if ((camera.data.auth &&  (camera.data.auth.basic.username !== $('#username').val() || camera.data.auth.basic.password !== $('#password').val())) ||
+            (camera.data.auth === null && $('#username').val() && $('#password').val())) {
+            camera.data.auth = { basic: {username: $('#username').val(), password: $('#password').val() } };
+            toUpdate.push('auth');
+          }
+          if (camera.data.mac_address !== $('#mac').val() && (camera.data.mac_address || $('#mac').val())) {
+            camera.data.mac_address = $('#mac').val();
+            toUpdate.push('mac_address');
+          }
+          if (camera.data.vendor !== $('#cameraVendor').val()) {
+            camera.data.vendor = $('#cameraVendor').val();
+            toUpdate.push('vendor');
+          }
+          if (camera.data.model !== $('#cameraModel' + $('#cameraVendor').val()).val()) {
+            camera.data.model = $('#cameraModel' + $('#cameraVendor').val()).val();
+            camera.data.vendor = $('#cameraVendor').val();
+            toUpdate.push('model');
+            toUpdate.push('vendor');
+          }
+
+          camera.update(toUpdate)
+          .done(function() {
+            console.log('updated');
+            $('#cameraFormSuccess').fadeIn().delay(2000).fadeOut('slow');
+          })
+          .fail(function(jqXHR, textStatus, errorThrown) {
+            console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+            $('#cameraFormErrors .alert-content').text(jqXHR.responseJSON.message);
+            $('#cameraFormErrors').show();
+          })
+          .always(function() {
+            $('#cameraFormLoader').hide();
+          });
+        });
+
+        $('#addEndpoint').on('submit', function(e) {
+          e.preventDefault();
+          $('#urlErrors').hide();
+            camera.data.endpoints.push($('#url').val());
+            camera.update(['endpoints'])
+            .done(function() {
+              location.reload();
+              console.log('updated');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+        $('.delete-endpoint').on('click', function(e) {
+          var ep_index = $(this).attr('index');
+          camera.data.endpoints.splice(ep_index, 1);
+          camera.update(['endpoints'])
+            .done(function() {
+              location.reload();
+              console.log('deleted');
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+              $('#urlErrors .alert-content').text(jqXHR.responseJSON.message);
+              $('#urlErrors').show();
+            });
+        });
+
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log( errorThrown + ' - ' + jqXHR.responseJSON.message);
+        $('#renameErrors .alert-content').text(jqXHR.responseJSON.message);
+        $('#renameErrors').show();
+      });
+
+    $('.refresh').click(function() {
+      $('.refresh-loader').show();
+      setTimeout(function() {
+        $('.refresh-loader').hide();
+      }, 5000);
+      $('.preview').attr('src', $('.preview').attr('src'))
+      .load(function() {
+        $('.refresh-loader').hide();
+      });
+    });
+
+    $('.preview').on('load', function() {
+      $(this).parent().siblings('.img-loader').hide();
+    })
+
+    setTimeout(function() {
+      $('.img-loader').hide();
+    }, 5000);
+
+    var previous;
+    $('#cameraVendor').one('focus', function() {
+      previous = this.value;
+    }).on('change', function() {
+      $('#cameraModel' + previous).addClass('hidden');
+      $('#cameraModel' + this.value).removeClass('hidden');
+      previous = this.value;
+    });
+
+  });
+</script>
+<% end %>
