@@ -1,11 +1,11 @@
 require 'nokogiri'
 require_relative '../errors/web'
-require_relative '../../app/web/helpers/threescale_helpers'
+require_relative '../../app/api/v1/helpers/three_scale_helpers'
 
 module Evercam
   module Actors
     class UserSignup < Mutations::Command
-      include ThreescaleHelpers
+      include ThreeScaleHelper
 
       required do
         string :forename
