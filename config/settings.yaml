@@ -25,6 +25,7 @@
   :threescale:
     :url: https://evercam-admin.3scale.net/
     :provider_key: <%= ENV['THREESCALE_PROVIDER_KEY'] %>
+  :testserver: false
 
 :development:
   <<: *defaults

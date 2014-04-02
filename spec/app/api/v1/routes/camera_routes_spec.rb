@@ -257,11 +257,31 @@ describe 'API routes/cameras' do
         internal_host: '192.168.1.101',
         internal_rtsp_port: 9101,
         external_rtsp_port: 8300,
+        internal_http_port: 9101,
+        external_http_port: 8300,
         vendor: vendor_model.vendor.exid,
         is_public: true
       }.merge(
         build(:camera).config
       )
+    }
+
+    let(:params_blank) {
+      {
+        id: 'my-new-camera',
+        name: "Garrett's Super New Camera",
+        external_host: '',
+        internal_host: '',
+        internal_rtsp_port: '',
+        external_rtsp_port: '',
+        internal_http_port: '',
+        external_http_port: '',
+        cam_username: '',
+        cam_password: '',
+        vendor: '',
+        model: '',
+        is_public: true
+      }
     }
 
     context 'when the params are valid' do
@@ -290,6 +310,13 @@ describe 'API routes/cameras' do
         expect(res['vendor']).to eq(Camera.first.vendor.exid)
       end
 
+    end
+
+    context 'when optional fields are blank' do
+      it 'returns a BAD REQUEST status' do
+        post('/cameras', params_blank.merge(api_keys))
+        expect(last_response.status).to eq(400)
+      end
     end
 
     context 'when vendor doesnt have default model' do
@@ -357,6 +384,24 @@ describe 'API routes/cameras' do
       }
     }
 
+    let(:params_blank) {
+      {
+        name: "Garrett's Super New Camera",
+        external_host: '',
+        internal_host: '',
+        internal_rtsp_port: '',
+        external_rtsp_port: '',
+        internal_http_port: '',
+        external_http_port: '',
+        mac_address: '',
+        cam_username: '',
+        cam_password: '',
+        vendor: '',
+        model: '',
+        jpg_url: ''
+      }
+    }
+
     context 'when the params are valid' do
 
       before do
@@ -374,14 +419,14 @@ describe 'API routes/cameras' do
 
       it 'updates camera in the system' do
         cam = Camera.by_exid(camera.exid)
-        expect(cam.is_public).to eq(false)
-        expect(cam.name).to eq("Garrett's Super New Camera v2")
+        expect(cam.is_public).to eq(params[:is_public])
+        expect(cam.name).to eq(params[:name])
         expect(cam.vendor_model).to eq(model)
-        expect(cam.mac_address).to eq('aa:aa:aa:aa:aa:aa')
+        expect(cam.mac_address).to eq(params[:mac_address])
         expect(cam.timezone.zone).to eq('Etc/GMT+1')
-        expect(cam.jpg_url).to eq('/snap')
-        expect(cam.cam_username).to eq('zzz')
-        expect(cam.cam_password).to eq('qqq')
+        expect(cam.jpg_url).to eq(params[:jpg_url])
+        expect(cam.cam_username).to eq(params[:cam_username])
+        expect(cam.cam_password).to eq(params[:cam_password])
         expect(cam.external_url).to eq('http://www.evercam.io')
         expect(cam.internal_url).to eq('http://localhost:4321')
       end
@@ -391,13 +436,32 @@ describe 'API routes/cameras' do
           to eq([camera.exid])
       end
 
-    end
-
-    context 'when params are empty' do
-      it 'returns a OK status' do
-        patch("/cameras/#{camera.exid}", api_keys)
-        expect(last_response.status).to eq(200)
+      context 'when params are empty' do
+        it 'returns a OK status and no changes' do
+          patch("/cameras/#{camera.exid}", api_keys)
+          expect(last_response.status).to eq(200)
+        end
       end
+
+      context 'when optional fields are blank' do
+        it 'returns a OK status and nullifies values' do
+          patch("/cameras/#{camera.exid}", params_blank.merge(api_keys))
+          expect(last_response.status).to eq(200)
+          cam = Camera.by_exid(camera.exid)
+          expect(cam.vendor_model).to be_nil
+          expect(cam.mac_address).to be_nil
+          expect(cam.jpg_url).to be_nil
+          expect(cam.cam_username).to be_nil
+          expect(cam.cam_password).to be_nil
+          expect(cam.config['external_host']).to be_nil
+          expect(cam.config['internal_host']).to be_nil
+          expect(cam.config['external_http_port']).to be_nil
+          expect(cam.config['internal_http_port']).to be_nil
+          expect(cam.config['external_rtsp_port']).to be_nil
+          expect(cam.config['internal_rtsp_port']).to be_nil
+        end
+      end
+
     end
 
     context 'when snapshot url doesnt start with slash' do
@@ -419,7 +483,7 @@ describe 'API routes/cameras' do
       it 'returns a OK status' do
         patch("/cameras/#{camera.exid}", {internal_http_port: ''}.merge(api_keys))
         expect(last_response.status).to eq(200)
-        expect(last_response.json['cameras'][0]["internal_http_port"]).to eq('')
+        expect(last_response.json['cameras'][0]["internal_http_port"]).to be_nil
       end
     end
 
