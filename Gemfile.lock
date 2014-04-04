@@ -1,4 +1,11 @@
 GIT
+  remote: git://github.com/garrettheaver/mutations.git
+  revision: 0b9ed69ff61934d9d6c26eb0061d4a576e39e144
+  specs:
+    mutations (0.6.0)
+      activesupport
+
+GIT
   remote: git://github.com/tim-vandecasteele/grape-swagger.git
   revision: ef40b7892b2a4e0fe4fc7c6618499a14daace1de
   specs:
@@ -170,8 +177,6 @@ GEM
     multi_json (1.9.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    mutations (0.7.2)
-      activesupport
     newrelic-grape (1.3.1)
       grape
       newrelic_rpm
@@ -308,6 +313,7 @@ DEPENDENCIES
   json
   logjam
   mocha
+  mutations!
   newrelic-grape
   newrelic_rpm
   nokogiri
