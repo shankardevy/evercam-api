@@ -1,5 +1,4 @@
 require 'spec_helper'
-require_lib 'models'
 
 # auto undo tests
 RSpec.configure do |c|

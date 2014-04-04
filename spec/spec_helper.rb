@@ -1,5 +1,9 @@
 ENV['EVERCAM_ENV'] ||= 'test'
 
+require 'evercam_misc'
+require 'sequel'
+db = Sequel.connect(Evercam::Config[:database])
+
 require 'bundler'
 Bundler.require(:default, :test)
 
@@ -9,8 +13,6 @@ SimpleCov.start do
 end
 
 require_relative './matchers'
-require_relative '../lib/config'
-require_relative '../lib/errors'
 
 def require_app(name)
   require_relative "../app/#{name}"

@@ -1,5 +1,3 @@
-require_relative '../../../../lib/errors'
-
 module Evercam
   module GrapeErrorHandlers
 
