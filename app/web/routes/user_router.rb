@@ -1,5 +1,4 @@
 require_relative "./web_router"
-require_relative "../../../lib/models"
 require_relative "../../../app/api/v1/helpers/with_auth"
 
 module Evercam

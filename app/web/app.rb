@@ -1,10 +1,3 @@
-['config',
- 'errors',
- 'models',
- 'actors',
- 'mailers'
-].each { |f| require_relative "../../lib/#{f}" }
-
 ['helpers/form_helpers',
  'helpers/template_helpers',
  'routes/root_router',

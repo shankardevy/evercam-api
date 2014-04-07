@@ -1,5 +1,11 @@
 require 'bundler'
 require 'rack/rewrite'
+require 'evercam_misc'
+require 'sequel'
+
+# Establish a connection to the database.
+db = Sequel.connect(Evercam::Config[:database])
+
 Bundler.require(:default)
 
 # This monkeypatch is needed to ensure the X-Frame-Options header is
@@ -14,14 +20,6 @@ module Rack
     end
   end
 end
-
-#use Rack::Rewrite do
-#  if Sinatra::Base.production?
-#    r301 %r{.*}, 'https://dashboard.evercam.io$&', :if => Proc.new {|rack_env|
-#      rack_env['SERVER_NAME'] != 'dashboard.evercam.io' and rack_env['SERVER_NAME'] != 'api.evercam.io'
-#    }
-#  end
-#end
 
 base = File.dirname(__FILE__)
 ['api/v1', 'web/app'].each do |app|

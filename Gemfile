@@ -9,39 +9,21 @@ gem 'rack-ssl-enforcer',
 
 gem 'rake'
 gem 'sinatra'
-gem 'pony'
 gem 'json'
-gem 'typhoeus'
 
 gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger', '0.7.2',
   github: 'tim-vandecasteele/grape-swagger'
 
-gem 'sequel'
-gem 'georuby'
-gem 'pg'
-
-gem 'aws-sdk'
-gem 'intercom'
-gem 'timezone'
-gem 'sidekiq'
-gem 'dotenv'
-
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
 
-gem '3scale_client'
-
+gem 'intercom', require: 'intercom'
 gem 'logjam'
-gem 'faraday',
-  require: 'faraday'
-
-gem 'activesupport',
-  require: 'active_support'
 
 gem 'mutations',
-  github: 'garrettheaver/mutations'
+ github: 'garrettheaver/mutations'
 
 gem 'rack-cors',
   require: 'rack/cors'
@@ -61,8 +43,10 @@ gem 'sinatra-partial',
 gem 'sinatra-jsonp',
   require: 'sinatra/jsonp'
 
-gem 'bcrypt-ruby',
-  require: 'bcrypt'
+gem 'evercam_misc', '~> 0.0'
+gem 'evercam_models', '~> 0.0'
+gem 'evercam_sidekiq', '~> 0.0'
+gem 'evercam_actors', '~> 0.0'
 
 group :development do
   gem 'sqlite3'
@@ -84,4 +68,3 @@ group :test do
   gem 'mocha',
     require: 'mocha/api'
 end
-
