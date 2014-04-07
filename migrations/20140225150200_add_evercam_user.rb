@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 Sequel.migration do
 
   up do
