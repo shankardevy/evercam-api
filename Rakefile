@@ -1,6 +1,6 @@
 require 'rake'
+require 'evercam_misc'
 
-require_relative './lib/config'
 if :development == Evercam::Config.env
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
@@ -43,7 +43,7 @@ end
 
 namespace :workers do
 
-  require_relative './lib/workers'
+  require 'evercam_sidekiq'
 
   task :enable do
     Evercam::ScheduleWorker.enable
