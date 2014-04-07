@@ -1,3 +1,6 @@
+require 'evercam_misc'
+require 'evercam_models'
+
 Sequel.migration do
 
   up do
