@@ -20,59 +20,6 @@ GIT
   specs:
     rack-ssl-enforcer (0.2.6)
 
-GIT
-  remote: git@github.com:evercam/evercam_actors.git
-  revision: 11b860551dbcb94c5f59d389cffcf4bb8f5368c0
-  specs:
-    evercam_actors (0.0.1)
-      3scale_client (~> 2.3)
-      activesupport (~> 4.0)
-      evercam_misc (~> 0.0)
-      evercam_models (~> 0.0)
-      evercam_sidekiq (~> 0.0)
-      faraday (~> 0.9)
-      logjam (~> 1.1)
-      mutations (~> 0.6)
-      pony (~> 1.8)
-      sequel (~> 4.9)
-      sidekiq (~> 2.17)
-
-GIT
-  remote: git@github.com:evercam/evercam_misc.git
-  revision: 3c12290c3d3501f83e77f8f139a22167b4c03aec
-  specs:
-    evercam_misc (0.0.1)
-      3scale_client (~> 2.3)
-      dotenv (~> 0.10)
-      sidekiq (~> 2.17)
-
-GIT
-  remote: git@github.com:evercam/evercam_models.git
-  revision: 8a76e65351aedae233d821853e85a798a2d67929
-  specs:
-    evercam_models (0.0.1)
-      bcrypt (~> 3.1)
-      dotenv (~> 0.10)
-      evercam_misc (~> 0.0)
-      georuby (~> 2.2)
-      nokogiri (~> 1.6)
-      pg (~> 0.17)
-      sequel (~> 4.9)
-      sidekiq (~> 2.17)
-      simplecov (~> 0.8)
-      timezone (~> 0.3)
-      typhoeus (~> 0.6)
-
-GIT
-  remote: git@github.com:evercam/evercam_sidekiq.git
-  revision: aa5d76b00f2b8c03ac9cae033a091e5f627b178d
-  specs:
-    evercam_sidekiq (0.0.1)
-      aws-sdk
-      evercam_misc
-      evercam_models
-      sidekiq (~> 2.17)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -95,7 +42,6 @@ GEM
       ice_nine (~> 0.9)
     backports (3.6.0)
     bcrypt (3.1.7)
-    bcrypt (3.1.7-x86-mingw32)
     builder (3.2.2)
     celluloid (0.15.2)
       timers (~> 1.1.0)
@@ -119,6 +65,38 @@ GEM
       ffi (>= 1.3.0)
     eventmachine (1.0.3)
     eventmachine (1.0.3-x86-mingw32)
+    evercam_actors (0.0.1)
+      3scale_client (~> 2.3)
+      activesupport (~> 4.0)
+      evercam_misc (~> 0.0)
+      evercam_models (~> 0.0)
+      evercam_sidekiq (~> 0.0)
+      faraday (~> 0.9)
+      logjam (~> 1.1)
+      mutations (~> 0.6)
+      pony (~> 1.8)
+      sequel (~> 4.9)
+      sidekiq (~> 2.17)
+    evercam_misc (0.0.1)
+      3scale_client (~> 2.3)
+      dotenv (~> 0.10)
+      sidekiq (~> 2.17)
+    evercam_models (0.0.1)
+      bcrypt (~> 3.1)
+      dotenv (~> 0.10)
+      evercam_misc (~> 0.0)
+      georuby (~> 2.2)
+      nokogiri (~> 1.6)
+      pg (~> 0.17)
+      sequel (~> 4.9)
+      simplecov (~> 0.8)
+      timezone (~> 0.3)
+      typhoeus (~> 0.6)
+    evercam_sidekiq (0.0.1)
+      aws-sdk (~> 1.38)
+      evercam_misc (~> 0.0)
+      evercam_models (~> 0.0)
+      sidekiq (~> 2.17)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
     faraday (0.9.0)
@@ -187,7 +165,6 @@ GEM
     nokogiri (1.6.1-x86-mingw32)
       mini_portile (~> 0.5.0)
     pg (0.17.1)
-    pg (0.17.1-x86-mingw32)
     polyglot (0.3.4)
     pony (1.8)
       mail (>= 2.0)
@@ -300,10 +277,10 @@ PLATFORMS
 
 DEPENDENCIES
   database_cleaner
-  evercam_actors!
-  evercam_misc!
-  evercam_models!
-  evercam_sidekiq!
+  evercam_actors (~> 0.0)
+  evercam_misc (~> 0.0)
+  evercam_models (~> 0.0)
+  evercam_sidekiq (~> 0.0)
   factory_girl
   grape
   grape-entity

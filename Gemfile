@@ -43,10 +43,10 @@ gem 'sinatra-partial',
 gem 'sinatra-jsonp',
   require: 'sinatra/jsonp'
 
-gem 'evercam_misc', git: 'git@github.com:evercam/evercam_misc.git', require: 'evercam_misc'
-gem 'evercam_models', git: 'git@github.com:evercam/evercam_models.git', require: 'evercam_models'
-gem 'evercam_sidekiq', git: 'git@github.com:evercam/evercam_sidekiq.git', require: 'evercam_sidekiq'
-gem 'evercam_actors', git: 'git@github.com:evercam/evercam_actors.git', require: 'evercam_actors'
+gem 'evercam_misc', '~> 0.0'
+gem 'evercam_models', '~> 0.0'
+gem 'evercam_sidekiq', '~> 0.0'
+gem 'evercam_actors', '~> 0.0'
 
 group :development do
   gem 'sqlite3'
