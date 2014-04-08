@@ -1,3 +1,2 @@
 #!/bin/sh
-bundle exec irb -r ./lib/config -r ./lib/models
-
+irb
