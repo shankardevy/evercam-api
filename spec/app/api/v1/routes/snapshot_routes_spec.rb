@@ -217,7 +217,7 @@ describe 'API routes/snapshots' do
   describe 'GET /cameras/:id/snapshots/latest' do
 
     let(:camera1) do
-      camera1 = create(:camera)
+      camera1 = create(:camera, is_public: false)
       camera1.values[:config].merge!({'external_host' => '89.101.225.158'})
       camera1.values[:config].merge!({'external_http_port' => 8105})
       camera1.save
@@ -238,6 +238,7 @@ describe 'API routes/snapshots' do
     let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
     let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
     let(:credentials) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
+    let(:other_user) { create(:user) }
 
     context 'when snapshot request is correct' do
       it 'latest snapshot for given camera is returned' do
@@ -264,7 +265,7 @@ describe 'API routes/snapshots' do
 
     context 'when not authorized' do
       it 'returns an unauthorized error' do
-        get("/cameras/#{camera1.exid}/snapshots/latest", api_keys)
+        get("/cameras/#{snap.camera.exid}/snapshots/latest", {api_id: other_user.api_id, api_key: other_user.api_key})
         expect(last_response.status).to eq(403)
         data = JSON.parse(last_response.body)
         expect(data.include?("message")).to eq(true)

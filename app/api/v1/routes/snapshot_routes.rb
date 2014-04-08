@@ -89,7 +89,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
           present camera.snapshots, with: Presenters::Snapshot, models: true
         end
@@ -101,14 +101,15 @@ module Evercam
           optional :with_data, type: Boolean, desc: "Should it send image data?"
         end
         get 'snapshots/latest' do
-          camera = ::Camera.by_exid!(params[:id])
-
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
-
-          snap = camera.snapshots.order(:created_at).last
-
-          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+          camera   = ::Camera.by_exid!(params[:id])
+          snapshot = camera.snapshots.order(:created_at).last
+          if snapshot
+            rights = requester_rights_for(snapshot)
+            raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+            present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
+          else
+            present [], with: Presenters::Snapshot, with_data: params[:with_data]
+          end
         end
 
         desc 'Returns list of snapshots between two timestamps'
@@ -123,7 +124,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
           from = Time.at(params[:from].to_i).to_s
           to = Time.at(params[:to].to_i).to_s
@@ -157,7 +158,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
@@ -187,7 +188,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
 
           hours = []
           (0..23).each do |hour|
@@ -212,12 +213,11 @@ module Evercam
         get 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])
 
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
+          snapshot = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
+          rights   = requester_rights_for(snapshot)
           raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
-          snap = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
-
-          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
+          present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
         desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
