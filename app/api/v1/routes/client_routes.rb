@@ -18,7 +18,7 @@ module Evercam
    		desc "Create a new client record in the system.", {hidden: true}
    		params do
    			requires :name, type: String, desc: "The name for the new client."
-   			requires :callback_uris, type: Array, desc: "A comma separated list of callback URIs and host names."
+   			requires :callback_uris, type: String, desc: "A comma separated list of callback URIs and host names."
    			requires :user_name, type: String, desc: "The user name to be assigned to the client."
    			requires :email, type: String, desc: "The primary contact email address for the client."
    			optional :password, type: String, desc: "The password to assign to the client (on 3Scale)."
@@ -33,7 +33,7 @@ module Evercam
    			uris   = nil
    			if params[:callback_uris]
    				uris = []
-   				params[:callback_uris].each {|entry| uris << entry.strip}
+   				params[:callback_uris].split(',').each {|entry| uris << entry.strip}
    			end
    			settings = {"3Scale" => {"account_id" => values[:account_id],
    				                      "email"      => values[:email],

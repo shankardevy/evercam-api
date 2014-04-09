@@ -16,6 +16,27 @@ describe 'API routes/users' do
     }
   end
 
+  let(:patch_params) do
+    {
+      forename: 'G',
+      lastname: 'H',
+      email: 'gh@evercam.io',
+      password: 'password123',
+      country: create(:country).iso3166_a2
+    }
+  end
+
+  let(:blank_params) do
+    {
+      forename: '',
+      lastname: '',
+      username: '',
+      email: '',
+      password: '',
+      country: ''
+    }
+  end
+
   let(:other_user) { create(:user) }
   let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
 
@@ -97,6 +118,13 @@ describe 'API routes/users' do
       it 'returns a 400 BAD Request status' do
         create(:user, username: 'xxxx')
         post('/users', params.merge(username: 'xxxx'))
+        expect(last_response.status).to eq(400)
+      end
+    end
+
+    context 'when params are blank' do
+      it 'returns a 400 BAD Request status' do
+        post('/users', blank_params)
         expect(last_response.status).to eq(400)
       end
     end
@@ -294,7 +322,7 @@ describe 'API routes/users' do
     context 'when valid params' do
 
       before do
-        patch("/users/#{user0.username}", params.merge(email: 'gh@evercam.io').merge(api_keys))
+        patch("/users/#{user0.username}", patch_params.merge(api_keys))
       end
 
       it 'returns a OK status' do
@@ -303,15 +331,26 @@ describe 'API routes/users' do
 
       it 'updates user in the system' do
         user = User.by_login(user0.username)
-        expect(user.forename).to eq(params[:forename])
-        expect(user.lastname).to eq(params[:lastname])
-        expect(user.email).to eq('gh@evercam.io')
-        expect(user.country.iso3166_a2).to eq(params[:country])
+        expect(user.forename).to eq(patch_params[:forename])
+        expect(user.lastname).to eq(patch_params[:lastname])
+        expect(user.email).to eq(patch_params[:email])
+        expect(user.country.iso3166_a2).to eq(patch_params[:country])
       end
 
       it 'returns the updated user' do
         expect(last_response.json['users'].map{ |s| s['id'] }).
           to eq([user0.username])
+      end
+    end
+
+    context 'when blank params' do
+
+      before do
+        patch("/users/#{user0.username}", blank_params.merge(api_keys))
+      end
+
+      it 'returns a 400 bad request status' do
+        expect(last_response.status).to eq(400)
       end
     end
 
