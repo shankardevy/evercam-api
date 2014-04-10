@@ -175,6 +175,13 @@ module Evercam
         end
       end
 
+      expose :discoverable, documentation: {
+        type: 'boolean',
+        desc: 'Whether the camera is publicly findable'
+      } do |c,o|
+         c.discoverable?
+      end
+
     end
   end
 end
