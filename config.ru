@@ -38,7 +38,7 @@ map '/v1' do
       origins '*'
       resource '*',
         :headers => :any,
-        :methods => [:get, :post, :put, :delete, :options]
+        :methods => [:get, :post, :put, :delete, :options, :patch]
     end
   end
 
