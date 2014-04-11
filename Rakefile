@@ -43,6 +43,8 @@ end
 
 namespace :workers do
 
+  db = Sequel.connect(Evercam::Config[:database])
+  require 'evercam_models'
   require 'evercam_sidekiq'
 
   task :enable do
