@@ -18,6 +18,36 @@ module Grape
 end
 
 module Evercam
+
+  def self.get_jpg(camera)
+    response = nil
+
+    unless camera.external_url.nil?
+      begin
+        auth = camera.config.fetch('auth', {}).fetch('basic', '')
+        if auth != ''
+          auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+        end
+        response  = Typhoeus::Request.get(camera.external_url + camera.config['snapshots']['jpg'],
+                                          userpwd: auth,
+                                          timeout: Evercam::Config[:api][:timeout],
+                                          connecttimeout: Evercam::Config[:api][:timeout])
+      rescue URI::InvalidURIError
+        raise BadRequestError, 'Invalid URL'
+      end
+    end
+
+    if response.nil?
+      raise CameraOfflineError, 'No public endpoint'
+    elsif response.success?
+      response
+    elsif response.code == 401
+      raise AuthorizationError, 'Please check camera username and password'
+    else
+      raise CameraOfflineError, 'Camera offline'
+    end
+  end
+
   class V1SnapshotJpgRoutes < Grape::API
     content_type :img, "image/jpg"
     formatter :img, lambda { |object, env| object.body }
@@ -34,33 +64,7 @@ module Evercam
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
-
-          response = nil
-
-          unless camera.external_url.nil?
-            begin
-              auth = camera.config.fetch('auth', {}).fetch('basic', '')
-              if auth != ''
-                auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
-              end
-              response  = Typhoeus::Request.get(camera.external_url + camera.config['snapshots']['jpg'],
-                                                userpwd: auth,
-                                                timeout: Evercam::Config[:api][:timeout],
-                                                connecttimeout: Evercam::Config[:api][:timeout])
-            rescue URI::InvalidURIError
-              raise BadRequestError, 'Invalid URL'
-            end
-          end
-
-          if response.nil?
-            raise CameraOfflineError, 'No public endpoint'
-          elsif response.success?
-            response
-          elsif response.code == 401
-            raise AuthorizationError, 'Please check camera username and password'
-          else
-            raise CameraOfflineError, 'Camera offline'
-          end
+          Evercam::get_jpg(camera)
         end
       end
     end
@@ -83,6 +87,22 @@ module Evercam
         requires :id, type: String, desc: "Camera Id."
       end
       route_param :id do
+
+        desc 'Returns base64 encoded jpg from the camera'
+        get 'live' do
+          camera = ::Camera.by_exid!(params[:id])
+
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
+          res = Evercam::get_jpg(camera)
+          data = Base64.encode64(res.body).gsub("\n", '')
+          {
+            camera: camera.exid,
+            created_at: Time.now.to_i,
+            timezone: camera.timezone.zone,
+            data: "data:image/jpeg;base64,#{data}"
+          }
+        end
 
         desc 'Returns the list of all snapshots currently stored for this camera'
         get 'snapshots' do

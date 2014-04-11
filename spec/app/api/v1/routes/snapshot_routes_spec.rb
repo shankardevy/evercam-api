@@ -237,7 +237,6 @@ describe 'API routes/snapshots' do
     let(:snap1) { create(:snapshot, camera: camera0, created_at: instant) }
     let(:snap2) { create(:snapshot, camera: camera0, created_at: instant - 1000) }
     let(:snap3) { create(:snapshot, camera: camera0, created_at: instant + 1000) }
-    let(:credentials) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
     let(:other_user) { create(:user) }
 
     context 'when snapshot request is correct' do
@@ -245,7 +244,7 @@ describe 'API routes/snapshots' do
         snap1
         snap2
         snap3
-        get("/cameras/#{snap.camera.exid}/snapshots/latest", credentials)
+        get("/cameras/#{snap.camera.exid}/snapshots/latest", api_keys)
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
         expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
@@ -270,6 +269,67 @@ describe 'API routes/snapshots' do
         data = JSON.parse(last_response.body)
         expect(data.include?("message")).to eq(true)
         expect(data["message"]).to eq("Unauthorized")
+      end
+    end
+
+  end
+
+  describe 'GET /cameras/:id/live' do
+
+    context 'when snapshot request is correct' do
+
+      context 'and camera is online' do
+        it 'returns snapshot jpg' do
+          VCR.use_cassette('API_snapshots/jpg_get') do
+            get("/cameras/#{snap.camera.exid}/live", api_keys)
+            expect(last_response.status).to eq(200)
+          end
+        end
+      end
+
+      context 'and camera is online and requires basic auth' do
+        context 'auth is not provided' do
+          it 'returns 403 error' do
+            VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
+              snap.camera.values[:config]['snapshots'] = { jpg: '/Streaming/channels/1/picture'};
+              snap.camera.values[:config]['auth'] = {};
+              snap.camera.save
+              get("/cameras/#{snap.camera.exid}/live", api_keys)
+              expect(last_response.status).to eq(403)
+            end
+          end
+        end
+
+        context 'auth is provided' do
+          it 'returns snapshot jpg' do
+            VCR.use_cassette('API_snapshots/jpg_get_basic_auth') do
+              snap.camera.values[:config]['snapshots'] =  { jpg: '/Streaming/channels/1/picture'}
+              snap.camera.values[:config]['auth'] = {basic: {username: 'admin', password: 'mehcam'}};
+              snap.camera.save
+              get("/cameras/#{snap.camera.exid}/live", api_keys)
+              expect(last_response.status).to eq(200)
+            end
+          end
+        end
+      end
+
+      context 'and camera is offline' do
+        it '503 error is returned' do
+          response = Typhoeus::Response.new({:return_code => :operation_timedout})
+          Typhoeus.stub(/#{camera0.external_url}/).and_return(response)
+          get("/cameras/#{snap.camera.exid}/live", api_keys)
+          expect(last_response.status).to eq(503)
+        end
+      end
+
+    end
+
+    context 'when snapshot request is not authorized' do
+      it 'request is not authorized' do
+        camera0.is_public = false
+        camera0.save
+        get("/cameras/#{snap.camera.exid}/live")
+        expect(last_response.status).to eq(401)
       end
     end
 
