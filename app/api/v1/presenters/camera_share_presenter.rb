@@ -22,13 +22,22 @@ module Evercam
     	  s.camera.exid
     	end
 
+      expose :sharer_id,
+             documentation: {
+                type: 'string',
+                desc: 'The unique identifier of the user who shared the camera.',
+                required: true
+             } do |s,o|
+         s.sharer ? s.sharer.username : nil
+      end
+
     	expose :user_id,
     	       documentation: {
-    	       	 type: 'integer',
+    	       	 type: 'string',
     	       	 desc: 'Unique user id of the user the camera is shared with.',
     	       	 required: true
     	       } do |s, o|
-    	  s.sharer.id
+    	  s.user.username
     	end
 
     	expose :email,
@@ -37,7 +46,7 @@ module Evercam
     	       	 desc: 'The email address of the user the camera is shared with.',
     	       	 required: true
     	       } do |s, o|
-    	  s.sharer.email
+    	  s.user.email
     	end
 
       expose :kind,
