@@ -122,49 +122,43 @@ describe 'API routes/cameras' do
 
     context 'when parameters are incorrect' do
       it 'returns a 400 bad request status' do
-        WebMock.allow_net_connect!
-        VCR.use_cassette('API_cameras/test') do
-          parameters = test_params_invalid.merge(external_url: '2.2.2.2:123',
-                                                 jpg_url: 'pancake').merge(api_keys)
-          get('/cameras/test', parameters)
-          expect(last_response.status).to eq(400)
-        end
+        parameters = test_params_invalid.merge(external_url: '2.2.2.2:123',
+                                               jpg_url: 'pancake').merge(api_keys)
+        get('/cameras/test', parameters)
+        expect(last_response.status).to eq(400)
       end
     end
 
     context 'when parameters are correct, but camera is offline' do
       it 'returns a 503 camera offline status' do
-        WebMock.allow_net_connect!
-        VCR.use_cassette('API_cameras/test') do
-          parameters = test_params_invalid.merge(api_keys)
-          get('/cameras/test', parameters)
-          expect(last_response.status).to eq(503)
-        end
-        WebMock.disable_net_connect!
+        stub_request(:get, "http://aaa:xxx@1.1.1.1/test.jpg").
+          to_return(:status => 500, :body => "", :headers => {})
+
+        parameters = test_params_invalid.merge(api_keys)
+        get('/cameras/test', parameters)
+        expect(last_response.status).to eq(503)
       end
     end
 
     context 'when auth is wrong' do
       it 'returns a 403 status' do
-        WebMock.allow_net_connect!
-        VCR.use_cassette('API_cameras/test') do
-          parameters = test_params_valid.merge(cam_password: 'xxx').merge(api_keys)
-          get('/cameras/test', parameters)
-          expect(last_response.status).to eq(403)
-        end
-        WebMock.disable_net_connect!
+        stub_request(:get, "http://admin:xxx@89.101.225.158:8105/Streaming/channels/1/picture").
+          to_return(:status => 401, :body => "", :headers => {})
+
+        parameters = test_params_valid.merge(cam_password: 'xxx').merge(api_keys)
+        get('/cameras/test', parameters)
+        expect(last_response.status).to eq(403)
       end
     end
 
     context 'when parameters are correct' do
       it 'returns a 200 status with image data' do
-        WebMock.allow_net_connect!
-        VCR.use_cassette('API_cameras/test') do
-          parameters = test_params_valid.merge(api_keys)
-          get('/cameras/test', parameters)
-          expect(last_response.status).to eq(200)
-        end
-        WebMock.disable_net_connect!
+        stub_request(:get, "http://admin:mehcam@89.101.225.158:8105/Streaming/channels/1/picture").
+          to_return(:status => 200, :body => "", :headers => {})
+
+        parameters = test_params_valid.merge(api_keys)
+        get('/cameras/test', parameters)
+        expect(last_response.status).to eq(200)
       end
     end
 
