@@ -563,7 +563,7 @@ describe 'API routes/cameras' do
 
       it "returns a full list of shares for a camera" do
         expect(shares.size).to eq(2)
-        expect(shares[0]).to have_keys('id', 'camera_id', 'user_id', 'email', 'kind', 'rights')
+        expect(shares[0]).to have_keys('id', 'camera_id', 'user_id', 'email', 'kind', 'rights', 'sharer_id')
       end
     end
   end
