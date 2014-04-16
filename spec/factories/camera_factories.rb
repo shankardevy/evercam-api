@@ -10,6 +10,7 @@ FactoryGirl.define do
 
     is_public true
     is_online true
+    discoverable true
 
     config({
       snapshots: {
