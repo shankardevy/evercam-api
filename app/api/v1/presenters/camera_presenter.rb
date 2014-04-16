@@ -182,6 +182,19 @@ module Evercam
          c.discoverable?
       end
 
+      expose :extra_urls do
+        expose :short_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'Short snapshot url using evr.cm alias'
+               } do |c,o|
+          port = c.config.fetch('external_http_port', nil)
+          host = "http://#{c.exid}.evr.cm"
+          host << ":#{port}" unless port.nil? or port == 80
+          host << c.jpg_url
+          host
+        end
+      end
+
     end
   end
 end
