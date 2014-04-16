@@ -24,7 +24,7 @@ module Evercam
     extend GrapeJSONFormatters
     extend GrapeErrorHandlers
 
-    # mount actual endpoints
+    # Mount actual endpoints
     mount V1UserRoutes
     mount V1CameraRoutes
     mount V1SnapshotRoutes
@@ -32,11 +32,17 @@ module Evercam
     mount V1ModelRoutes
     mount V1TestRoutes
     mount V1ClientRoutes
+    mount V1PublicRoutes
 
     # bring on the swagger
     add_swagger_documentation(
       Evercam::Config[:swagger][:v1]
     )
+
+    # Uncomment this to see a list of available routes on start up.
+    # self.routes.each do |api|
+    #   puts "#{api.route_method.ljust(10)} -> /v1#{api.route_path}"
+    # end
 
   end
 end
