@@ -183,6 +183,41 @@ module Evercam
       end
 
       expose :extra_urls do
+
+        expose :external_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'External snapshot url'
+               } do |c,o|
+          host = c.external_url
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host
+        end
+
+        expose :internal_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'Internal snapshot url'
+               } do |c,o|
+          host = c.internal_url
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host
+        end
+
+        expose :external_rtsp_url, documentation: {
+                 type: 'String',
+                 desc: 'External rtsp url'
+               } do |c,o|
+          host = c.external_url(port_type='rtsp')
+          host
+        end
+
+        expose :internal_rtsp_url, documentation: {
+                 type: 'String',
+                 desc: 'Internal rtsp url'
+               } do |c,o|
+          host = c.internal_url(port_type='rtsp')
+          host
+        end
+
         expose :short_jpg_url, documentation: {
                  type: 'String',
                  desc: 'Short snapshot url using evr.cm alias'
