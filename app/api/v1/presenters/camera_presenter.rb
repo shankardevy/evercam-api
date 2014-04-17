@@ -182,6 +182,54 @@ module Evercam
          c.discoverable?
       end
 
+      expose :extra_urls do
+
+        expose :external_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'External snapshot url'
+               } do |c,o|
+          host = c.external_url
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host
+        end
+
+        expose :internal_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'Internal snapshot url'
+               } do |c,o|
+          host = c.internal_url
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host
+        end
+
+        expose :external_rtsp_url, documentation: {
+                 type: 'String',
+                 desc: 'External RTSP url'
+               } do |c,o|
+          host = c.external_url(port_type='rtsp')
+          host
+        end
+
+        expose :internal_rtsp_url, documentation: {
+                 type: 'String',
+                 desc: 'Internal RTSP url'
+               } do |c,o|
+          host = c.internal_url(port_type='rtsp')
+          host
+        end
+
+        expose :short_jpg_url, documentation: {
+                 type: 'String',
+                 desc: 'Short snapshot url using evr.cm alias'
+               } do |c,o|
+          port = c.config.fetch('external_http_port', nil)
+          host = "http://#{c.exid}.evr.cm"
+          host << ":#{port}" unless port.nil? or port == 80
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host
+        end
+      end
+
     end
   end
 end
