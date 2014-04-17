@@ -204,7 +204,7 @@ module Evercam
 
         expose :external_rtsp_url, documentation: {
                  type: 'String',
-                 desc: 'External rtsp url'
+                 desc: 'External RTSP url'
                } do |c,o|
           host = c.external_url(port_type='rtsp')
           host
@@ -212,7 +212,7 @@ module Evercam
 
         expose :internal_rtsp_url, documentation: {
                  type: 'String',
-                 desc: 'Internal rtsp url'
+                 desc: 'Internal RTSP url'
                } do |c,o|
           host = c.internal_url(port_type='rtsp')
           host
@@ -225,7 +225,7 @@ module Evercam
           port = c.config.fetch('external_http_port', nil)
           host = "http://#{c.exid}.evr.cm"
           host << ":#{port}" unless port.nil? or port == 80
-          host << c.jpg_url
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
           host
         end
       end
