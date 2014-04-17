@@ -171,79 +171,7 @@ module Evercam
         camera.destroy
         {}
       end
-
-
-      #-------------------------------------------------------------------------
-      # GET /cameras/:id/shares
-      #-------------------------------------------------------------------------
-      desc 'Get the list of shares for a specified camera', {
-        entity: Evercam::Presenters::CameraShare
-      }
-      params do
-        requires :id, type: String, desc: "The unique identifier for a camera."
-      end
-      get '/:id/shares' do
-        authreport!('shares/get')
-
-        camera = ::Camera.by_exid!(params[:id])
-        rights = requester_rights_for(camera)
-        raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
-
-        shares = CameraShare.where(camera_id: camera.id).to_a
-        present shares, with: Presenters::CameraShare
-      end
-
-      #-------------------------------------------------------------------------
-      # POST /cameras/:id/share
-      #-------------------------------------------------------------------------
-      desc 'Create a new camera share', {
-        entity: Evercam::Presenters::CameraShare
-      }
-      params do
-        requires :email, type: String, desc: "Email address of user to share the camera with."
-        requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
-        optional :message, String, desc: "Not currently used."
-        optional :notify, type: Boolean, desc: "Not currently used."
-      end
-      post '/:id/share' do
-        authreport!('share/post')
-
-        camera = ::Camera.by_exid!(params[:id])
-        rights = requester_rights_for(camera)
-        raise AuthorizationError.new if !rights.is_owner?
-
-        outcome = Actors::ShareCreate.run(params)
-        present [outcome.result], with: Presenters::CameraShare
-      end
-
-      #-------------------------------------------------------------------------
-      # DELETE /cameras/:id/share
-      #-------------------------------------------------------------------------
-      desc 'Delete an existing camera share', {}
-      params do
-        requires :id, type: String, desc: "The unique identifier for a camera."
-        requires :share_id, type: Integer, desc: "The unique identifier of the share to be deleted."
-      end
-      delete '/:id/share' do
-        authreport!('share/delete')
-
-        camera = ::Camera.by_exid!(params[:id])
-        rights = requester_rights_for(camera)
-        raise AuthorizationError.new if !rights.is_owner?
-
-        Actors::ShareDelete.run(params)
-        {}
-      end
-
-      #-------------------------------------------------------------------------
-      # PATCH /cameras/share/:id
-      #-------------------------------------------------------------------------
-      desc 'Update an existing camera share (COMING SOON)'
-      patch '/share/:id' do
-        raise ComingSoonError
-      end
     end
-
   end
 end
 
