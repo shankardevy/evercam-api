@@ -235,7 +235,7 @@ describe 'API routes/users' do
 
       it 'only returns public and private cameras' do
         expect(last_response.json['cameras'].map{ |s| s['id'] }).
-          to eq([camera0.exid, camera1.exid])
+          to include(camera1.exid, camera0.exid)
       end
 
     end
