@@ -49,9 +49,7 @@ module Evercam
   end
 
   class V1SnapshotJpgRoutes < Grape::API
-    content_type :img, "image/jpg"
-    formatter :img, lambda { |object, env| object.body }
-    format :img
+    format :json
 
     namespace :cameras do
       params do
@@ -64,7 +62,19 @@ module Evercam
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
-          Evercam::get_jpg(camera)
+
+          require 'openssl'
+          require 'digest/sha1'
+          require "base64"
+          c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+          c.encrypt
+          # your pass is what is used to encrypt/decrypt
+          c.key = "yourpassyourpassyourpassyourpass"
+          c.iv = '1234567891011121'
+          t = c.update("crypt this")
+          t << c.final
+          puts t
+          redirect "http://local.evercam.io:3001/qqq.jpg?t=#{Base64.strict_encode64(t)}"
         end
       end
     end
