@@ -63,18 +63,30 @@ module Evercam
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
-          require 'openssl'
-          require 'digest/sha1'
-          require "base64"
-          c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
-          c.encrypt
-          # your pass is what is used to encrypt/decrypt
-          c.key = "yourpassyourpassyourpassyourpass"
-          c.iv = '1234567891011121'
-          t = c.update("crypt this")
-          t << c.final
-          puts t
-          redirect "http://local.evercam.io:3001/qqq.jpg?t=#{Base64.strict_encode64(t)}"
+          unless camera.external_url.nil?
+            require 'openssl'
+            require 'base64'
+            auth = camera.config.fetch('auth', {}).fetch('basic', '')
+            if auth != ''
+              auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+            end
+
+            c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+            c.encrypt
+            # your pass is what is used to encrypt/decrypt
+            c.key = 'yourpassyourpassyourpassyourpass'
+            c.iv = '1234567891011121'
+            c.padding = 0
+            msg = camera.external_url
+            msg << camera.jpg_url unless camera.jpg_url.nil?
+            msg << "|#{auth}|"
+            until msg.length % 16 == 0 do
+              msg << ' '
+            end
+            t = c.update(msg)
+            t << c.final
+            redirect "http://local.evercam.io:3001/qqq.jpg?t=#{Base64.strict_encode64(t)}"
+          end
         end
       end
     end
