@@ -16,7 +16,7 @@ module Evercam
 	      	result = {authenticated: false,
 	      	          source_ip: request.ip,
 	      	          timestamp: Time.now.to_s}
-	      	query = Client.where(exid: params[:api_id])
+	      	query = Client.where(api_id: params[:api_id])
 	      	if query.count == 0
 	      		user = User.where(api_id: params[:api_id]).first
 	      		if user.nil? && !user.api_id.nil?
