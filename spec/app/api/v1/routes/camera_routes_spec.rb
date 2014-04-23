@@ -542,7 +542,7 @@ describe 'API routes/cameras' do
     let(:private_camera) { create(:camera, is_public: false) }
     let(:other_camera) { create(:camera, is_public: false) }
     let(:credentials) {{api_id: private_camera.owner.api_id,
-                     api_key: private_camera.owner.api_key}}
+                        api_key: private_camera.owner.api_key}}
     let(:parameters) {{ids: "#{public_camera.exid},#{private_camera.exid},#{other_camera.exid}"}}
 
     it 'returns an error when no ids are specified' do
@@ -563,8 +563,10 @@ describe 'API routes/cameras' do
 
     it 'returns only public cameras when no authentication details are provided' do
       get("/cameras", parameters)
+      log.debug "ids: #{parameters[:ids]}"
       expect(last_response.status).to eq(200)
       data = last_response.json
+      log.debug "response: #{data}"
       expect(data.include?("cameras")).to eq(true)
       expect(data["cameras"].size).to eq(1)
       expect(data["cameras"][0]["id"]).to eq(public_camera.exid)
