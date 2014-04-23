@@ -563,10 +563,8 @@ describe 'API routes/cameras' do
 
     it 'returns only public cameras when no authentication details are provided' do
       get("/cameras", parameters)
-      log.debug "ids: #{parameters[:ids]}"
       expect(last_response.status).to eq(200)
       data = last_response.json
-      log.debug "response: #{data}"
       expect(data.include?("cameras")).to eq(true)
       expect(data["cameras"].size).to eq(1)
       expect(data["cameras"][0]["id"]).to eq(public_camera.exid)
