@@ -70,22 +70,21 @@ module Evercam
             if auth != ''
               auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
             end
-
             c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
             c.encrypt
-            # your pass is what is used to encrypt/decrypt
-            c.key = 'yourpassyourpassyourpassyourpass'
-            c.iv = '1234567891011121'
+            c.key = "#{Evercam::Config[:snapshots][:key]}"
+            c.iv = "#{Evercam::Config[:snapshots][:iv]}"
+            # Padding was incompatible with node padding
             c.padding = 0
             msg = camera.external_url
             msg << camera.jpg_url unless camera.jpg_url.nil?
-            msg << "|#{auth}|"
+            msg << "|#{auth}|#{Time.now.to_s}|"
             until msg.length % 16 == 0 do
               msg << ' '
             end
             t = c.update(msg)
             t << c.final
-            redirect "http://local.evercam.io:3001/qqq.jpg?t=#{Base64.strict_encode64(t)}"
+            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.strict_encode64(t)}"
           end
         end
       end
