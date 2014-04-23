@@ -48,7 +48,7 @@ module Evercam
 
               camera = ::Camera.by_exid!(params[:id])
               rights = requester_rights_for(camera)
-              if !camera.is_public? && !rights.is_owner?
+              if !(camera.is_public? && camera.discoverable?) && !rights.is_owner?
                  raise AuthorizationError.new
               end
 
