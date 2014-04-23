@@ -77,6 +77,34 @@ module Evercam
       present Array(camera), with: Presenters::Camera, minimal: !rights.allow?(AccessRight::VIEW)
     end
 
+    #---------------------------------------------------------------------------
+    # GET /cameras
+    #---------------------------------------------------------------------------
+    desc "Returns data for a specified set of cameras.", {
+      entity: Evercam::Presenters::Camera
+    }
+    params do
+      requires :ids, type: String, desc: "Comma separate list of camera identifiers for the cameras being queried."
+      optional :api_id, type: String, desc: "Caller API id used to authenticate the request."
+      optional :api_key, type: String, desc: "Caller API key used to authenticate the request."
+    end
+    get '/cameras' do
+      authreport!('cameras/get')
+
+      cameras = []
+      if params.include?(:ids) && params[:ids]
+        ids = params[:ids].split(",").inject([]) {|list, entry| list << entry.strip}
+        Camera.where(exid: ids).each do |camera|
+          rights = requester_rights_for(camera)
+          if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
+            presenter = Evercam::Presenters::Camera.new(camera)
+            cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW))
+          end
+        end
+      end
+      {cameras: cameras}
+    end
+
     resource :cameras do
       before do
         authorize!
