@@ -48,7 +48,9 @@ module Evercam
 
               camera = ::Camera.by_exid!(params[:id])
               rights = requester_rights_for(camera)
-              raise AuthorizationError.new if !rights.is_owner?
+              if !camera.is_public? && !rights.is_owner?
+                 raise AuthorizationError.new
+              end
 
               outcome = Actors::ShareCreate.run(params)
               raise OutcomeError, outcome unless outcome.success?

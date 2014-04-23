@@ -49,6 +49,7 @@ describe 'API routes/cameras' do
    describe 'POST /shares/camera/:id' do
       let(:sharer) { create(:user) }
       let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
+      let(:public_camera) { create(:camera, is_public: true) }
       let(:parameters) {{email: sharer.email, rights: "Snapshot,List"}}
 
       context "where an email address is not specified" do
@@ -85,12 +86,21 @@ describe 'API routes/cameras' do
          end
       end
 
-      context "where the caller is not the owner of the camera" do
+      context "where the caller is not the owner of the camera and the camera is not public" do
          it "returns an error" do
             not_owner = create(:user)
             parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
             response = post("/shares/camera/#{camera.exid}", parameters)
             expect(response.status).to eq(403)
+         end
+      end
+
+      context "where the caller is not the owner of the camera and the camera is public" do
+         it "returns an error" do
+            not_owner = create(:user)
+            parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
+            response = post("/shares/camera/#{public_camera.exid}", parameters)
+            expect(response.status).to eq(201)
          end
       end
 
