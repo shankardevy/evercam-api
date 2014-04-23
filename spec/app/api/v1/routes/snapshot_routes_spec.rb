@@ -20,9 +20,6 @@ describe 'API routes/snapshots' do
   let(:other_user) { create(:user) }
   let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
 
-  after(:each) { WebMock.allow_net_connect! }
-  before(:each) { WebMock.disable_net_connect! }
-
   describe('GET /cameras/:id/snapshots') do
 
     let(:snap1) { create(:snapshot, camera: camera0, created_at: Time.now) }
@@ -345,57 +342,11 @@ describe 'API routes/snapshots' do
   describe 'GET /cameras/:id/snapshot.jpg' do
 
     context 'when snapshot request is correct' do
-
-      context 'and camera is online' do
-        it 'returns snapshot jpg' do
-          stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
-            to_return(:status => 200, :body => "", :headers => {})
-
-          get("/cameras/#{snap.camera.exid}/snapshot.jpg")
-          expect(last_response.status).to eq(200)
-        end
+      it 'redirects to snapshot server' do
+        get("/cameras/#{snap.camera.exid}/snapshot.jpg")
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).to start_with("http://snap.evercam.io/#{snap.camera.exid}.jpg?t=")
       end
-
-      context 'and camera is online and requires basic auth' do
-        context 'auth is not provided' do
-          it 'returns 403 error' do
-            stub_request(:get, "http://89.101.225.158:8105/Streaming/channels/1/picture").
-              to_return(:status => 401, :body => "", :headers => {})
-
-            snap.camera.values[:config]['snapshots'] = { jpg: '/Streaming/channels/1/picture'};
-            snap.camera.values[:config]['auth'] = {};
-            snap.camera.save
-            get("/cameras/#{snap.camera.exid}/snapshot.jpg")
-            expect(last_response.status).to eq(403)
-          end
-        end
-
-        context 'auth is provided' do
-          it 'returns snapshot jpg' do
-            stub_request(:get, "http://admin:mehcam@89.101.225.158:8105/Streaming/channels/1/picture").
-              to_return(:status => 200, :body => "", :headers => {})
-
-            snap.camera.values[:config]['snapshots'] =  { jpg: '/Streaming/channels/1/picture'}
-            snap.camera.values[:config]['auth'] = {basic: {username: 'admin', password: 'mehcam'}};
-            snap.camera.save
-            get("/cameras/#{snap.camera.exid}/snapshot.jpg")
-            expect(last_response.status).to eq(200)
-          end
-        end
-      end
-
-      context 'and camera is offline' do
-        it '503 error is returned' do
-          stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
-            to_return(:status => 500, :body => "", :headers => {})
-
-          response = Typhoeus::Response.new({:return_code => :operation_timedout})
-          Typhoeus.stub(/#{camera0.external_url}/).and_return(response)
-          get("/cameras/#{snap.camera.exid}/snapshot.jpg")
-          expect(last_response.status).to eq(503)
-        end
-      end
-
     end
 
     context 'when snapshot request is not authorized' do

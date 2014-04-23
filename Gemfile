@@ -59,10 +59,9 @@ group :test do
   gem 'rack-test'
   gem 'factory_girl'
   gem 'nokogiri'
-  gem 'webmock', '1.15.2'
+  gem 'webmock', '~> 1.17.0'
   gem 'rspec'
   gem 'guard-rspec'
-  gem 'vcr'
   gem 'database_cleaner'
 
   gem 'mocha',

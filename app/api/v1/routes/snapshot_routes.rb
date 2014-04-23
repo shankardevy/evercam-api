@@ -49,9 +49,7 @@ module Evercam
   end
 
   class V1SnapshotJpgRoutes < Grape::API
-    content_type :img, "image/jpg"
-    formatter :img, lambda { |object, env| object.body }
-    format :img
+    format :json
 
     namespace :cameras do
       params do
@@ -64,7 +62,30 @@ module Evercam
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
-          Evercam::get_jpg(camera)
+
+          unless camera.external_url.nil?
+            require 'openssl'
+            require 'base64'
+            auth = camera.config.fetch('auth', {}).fetch('basic', '')
+            if auth != ''
+              auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+            end
+            c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+            c.encrypt
+            c.key = "#{Evercam::Config[:snapshots][:key]}"
+            c.iv = "#{Evercam::Config[:snapshots][:iv]}"
+            # Padding was incompatible with node padding
+            c.padding = 0
+            msg = camera.external_url
+            msg << camera.jpg_url unless camera.jpg_url.nil?
+            msg << "|#{auth}|#{Time.now.to_s}|"
+            until msg.length % 16 == 0 do
+              msg << ' '
+            end
+            t = c.update(msg)
+            t << c.final
+            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.strict_encode64(t)}"
+          end
         end
       end
     end
