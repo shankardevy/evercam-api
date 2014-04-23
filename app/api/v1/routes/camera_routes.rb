@@ -80,7 +80,9 @@ module Evercam
     #---------------------------------------------------------------------------
     # GET /cameras
     #---------------------------------------------------------------------------
-    desc "Returns data for a specified set of cameras.", {
+    desc "Returns data for a specified set of cameras. The ultimate intention "\
+         "would be to expand this functionality to be a more general search. "\
+         "The current implementation is as a basic absolute match list capability.", {
       entity: Evercam::Presenters::Camera
     }
     params do
