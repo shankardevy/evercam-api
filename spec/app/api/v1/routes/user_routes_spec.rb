@@ -101,16 +101,14 @@ describe 'API routes/users' do
 
     context 'when the params are valid' do
       it 'creates the user and returns the json' do
-        VCR.use_cassette('API_users/account_creation') do
-          post('/users', params)
+        post('/users', params)
 
-          expect(last_response.status).to eq(201)
-          response0 = last_response.json['users'][0]
+        expect(last_response.status).to eq(201)
+        response0 = last_response.json['users'][0]
 
-          expect(response0).to have_keys(
-            'id', 'forename', 'lastname', 'username', 'email',
-            'country', 'created_at', 'updated_at', 'confirmed_at')
-        end
+        expect(response0).to have_keys(
+          'id', 'forename', 'lastname', 'username', 'email',
+          'country', 'created_at', 'updated_at', 'confirmed_at')
       end
     end
 
@@ -138,11 +136,9 @@ describe 'API routes/users' do
 
     context 'when the country code is in capital letters' do
       it 'returns a 400 BAD Request status' do
-        VCR.use_cassette('API_users/account_creation') do
-          params[:country].upcase!
-          post('/users', params)
-          expect(last_response.status).to eq(201)
-        end
+        params[:country].upcase!
+        post('/users', params)
+        expect(last_response.status).to eq(201)
       end
     end
 
