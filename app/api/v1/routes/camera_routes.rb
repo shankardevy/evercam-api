@@ -84,7 +84,7 @@ module Evercam
       entity: Evercam::Presenters::Camera
     }
     params do
-      requires :ids, type: String, desc: "Comma separate list of camera identifiers for the cameras being queried."
+      requires :ids, type: String, desc: "Comma separated list of camera identifiers for the cameras being queried."
       optional :api_id, type: String, desc: "Caller API id used to authenticate the request."
       optional :api_key, type: String, desc: "Caller API key used to authenticate the request."
     end
