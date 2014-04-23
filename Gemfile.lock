@@ -16,7 +16,7 @@ GIT
 
 GIT
   remote: git://github.com/tobmatth/rack-ssl-enforcer.git
-  revision: 1ef4515a02c646cc0cbfff88d93c932694bb44e6
+  revision: baa6e4d07fbc5ce4b8121d9373d58329a7c9781b
   specs:
     rack-ssl-enforcer (0.2.6)
 
@@ -80,7 +80,7 @@ GEM
     evercam_misc (0.0.3)
       3scale_client (~> 2.3)
       dotenv (~> 0.10)
-    evercam_models (0.0.5)
+    evercam_models (0.0.6)
       bcrypt (~> 3.1)
       dotenv (~> 0.10)
       evercam_misc (~> 0.0)
@@ -156,7 +156,7 @@ GEM
     newrelic-grape (1.3.1)
       grape
       newrelic_rpm
-    newrelic_rpm (3.7.3.204)
+    newrelic_rpm (3.8.0.218)
     nio4r (1.0.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
@@ -196,7 +196,7 @@ GEM
     rspec-expectations (2.14.5)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.6)
-    safe_yaml (1.0.2)
+    safe_yaml (1.0.3)
     sequel (4.9.0)
     shotgun (0.9)
       rack (>= 1.0)
