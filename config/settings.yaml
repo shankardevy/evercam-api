@@ -44,6 +44,7 @@
   :mail:
     :from: evercam.io <noreply@evercam.io>
     :via: :test
+  :testserver: true
 
 :production: &production
   <<: *defaults

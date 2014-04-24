@@ -204,14 +204,16 @@ module Evercam
                  type: 'String',
                  desc: 'External RTSP url'
                } do |c,o|
-          c.external_url(port_type='rtsp')
+          host = c.external_url(port_type='rtsp')
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
         end
 
         expose :internal_rtsp_url, documentation: {
                  type: 'String',
                  desc: 'Internal RTSP url'
                } do |c,o|
-          c.internal_url(port_type='rtsp')
+          host = c.internal_url(port_type='rtsp')
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
         end
 
         expose :short_jpg_url, documentation: {
