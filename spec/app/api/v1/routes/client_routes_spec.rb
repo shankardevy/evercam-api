@@ -42,11 +42,11 @@ describe 'API routes/client' do
             client = Client.where(api_id: data["id"]).first
             expect(client).not_to be_nil
             expect(client.api_key).to eq(data["api_key"])
-            expect(client.callback_uris.include?("www.blah.com"))
-            expect(client.callback_uris.include?("https://www.other.com"))
-            expect(client.settings).to eq({"3Scale" => {"account_id" => "123456789012345",
-                                                        "email"      => parameters[:email],
-                                                        "user_name"  => parameters[:user_name]}})
+            expect(client.callback_uris.include?("www.blah.com")).to eq(true)
+            expect(client.callback_uris.include?("https://www.other.com")).to eq(true)
+            expect(client.settings["3Scale"]["email"]).to eq(parameters[:email])
+            expect(client.settings["3Scale"]["user_name"]).to eq(parameters[:user_name])
+            expect(client.settings["3Scale"].include?("account_id")).to eq(true)
          end
       end
 

@@ -24,14 +24,14 @@ module Evercam
       if Evercam::Config[:testserver]
         {app_id: SecureRandom.hex, app_key: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'}
       else
-        if params.include?('app_id')
-          {app_id: params['app_id'], app_key: params['app_key']}
+        if params.api_id?
+          {app_id: params.api_id, app_key: params.api_key}
         else
           credentials = nil
           token = access_token
           unless token.nil?
             entity = token.target
-            {app_id: entity.api_id, app_key: entity.api_key}
+            credentials = {app_id: entity.api_id, app_key: entity.api_key}
           end
           credentials
         end

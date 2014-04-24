@@ -444,7 +444,7 @@ describe 'API routes/cameras' do
           cam = Camera.by_exid(camera.exid)
           expect(cam.vendor_model).to be_nil
           expect(cam.mac_address).to be_nil
-          expect(cam.jpg_url).to be_nil
+          expect(cam.jpg_url).to eq('')
           expect(cam.cam_username).to be_nil
           expect(cam.cam_password).to be_nil
           expect(cam.config['external_host']).to be_nil
