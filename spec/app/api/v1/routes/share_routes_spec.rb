@@ -78,15 +78,6 @@ describe 'API routes/cameras' do
          end
       end
 
-      context "where the user email does not exist" do
-         it "returns an error" do
-            parameters[:email] = "noone@nowhere.com"
-            parameters.merge!(api_keys)
-            response = post("/shares/camera/blah", parameters)
-            expect(response.status).to eq(404)
-         end
-      end
-
       context "where the caller is not the owner of the camera and the camera is not public and discoverable" do
          it "returns an error" do
             not_owner = create(:user)
@@ -129,6 +120,15 @@ describe 'API routes/cameras' do
             expect(response.status).to eq(201)
          end
       end    
+
+      context "where the user email does not exist" do
+         it "returns success" do
+            parameters[:email] = "noone@nowhere.com"
+            parameters.merge!(api_keys)
+            response = post("/shares/camera/#{camera.exid}", parameters)
+            expect(response.status).to eq(201)
+         end
+      end
    end
 
    #----------------------------------------------------------------------------

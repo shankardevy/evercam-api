@@ -42,6 +42,7 @@ module Evercam
               requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
               optional :message, String, desc: "Not currently used."
               optional :notify, type: Boolean, desc: "Not currently used."
+              optional :grantor, type: String, desc: "The user name of the user who is creating the share."
             end
             post '/:id' do
               authreport!('share/post')
@@ -54,7 +55,12 @@ module Evercam
 
               outcome = Actors::ShareCreate.run(params)
               raise OutcomeError, outcome unless outcome.success?
-              present [outcome.result], with: Presenters::CameraShare
+
+              if outcome.result.class == CameraShare
+                present [outcome.result], with: Presenters::CameraShare
+              else
+                present [outcome.result], with: Presenters::CameraShareRequest
+              end
             end
 
             #-------------------------------------------------------------------
