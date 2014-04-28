@@ -55,6 +55,7 @@ module Evercam
         requires :country, type: String, desc: "Country."
         requires :email, type: String, desc: "Email."
         requires :password, type: String, desc: "Password."
+        optional :share_request_key, type: String, desc: "The key for a camera share request to be processed during the sign up."
       end
       post do
         authreport!('users/post')
@@ -63,6 +64,15 @@ module Evercam
         raise OutcomeError, outcome unless outcome.success?
 
         user = outcome.result
+        if params[:share_request_key]
+          outcome = Actors::ShareCreateForRequest.run({key: params[:share_request_key],
+                                                       email: params[:email]})
+          if !outcome.success?
+            Rails.logger.error "Failed to create camera share for camera share "\
+                               "request key '#{params[:share_request_key]}'."
+          end
+        end
+
         present Array(user), with: Presenters::User
       end
     end
