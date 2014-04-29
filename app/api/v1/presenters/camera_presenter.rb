@@ -200,6 +200,23 @@ module Evercam
           host << c.jpg_url unless c.jpg_url.nil? or host.nil?
         end
 
+        expose :dyndns_jpg_url, documentation: {
+          type: 'String',
+          desc: 'Snapshot url using evr.cm dynamic DNS'
+        } do |c,o|
+          port = c.config.fetch('external_http_port', nil)
+          host = "http://#{c.exid}.evr.cm"
+          host << ":#{port}" unless port.nil? or port == 80
+          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+        end
+
+        expose :short_jpg_url, documentation: {
+          type: 'String',
+          desc: 'Short snapshot url using evr.cm url shortener'
+        } do |c,o|
+          "http://evr.cm/#{c.exid}.jpg"
+        end
+
         expose :external_rtsp_url, documentation: {
                  type: 'String',
                  desc: 'External RTSP url'
@@ -216,15 +233,16 @@ module Evercam
           host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
         end
 
-        expose :short_jpg_url, documentation: {
-                 type: 'String',
-                 desc: 'Short snapshot url using evr.cm alias'
-               } do |c,o|
-          port = c.config.fetch('external_http_port', nil)
+        expose :dyndns_rtsp_url, documentation: {
+          type: 'String',
+          desc: 'RTSP url using evr.cm dynamic DNS'
+        } do |c,o|
+          port = c.config.fetch('external_rtsp_port', nil)
           host = "http://#{c.exid}.evr.cm"
           host << ":#{port}" unless port.nil? or port == 80
-          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
         end
+
       end
 
     end
