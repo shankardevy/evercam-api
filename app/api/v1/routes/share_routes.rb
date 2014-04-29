@@ -113,6 +113,41 @@ module Evercam
                present shares.to_a, with: Presenters::CameraShare
             end
          end
+
+         resource :requests do
+            #-------------------------------------------------------------------
+            # GET /shares/requests/:id
+            #-------------------------------------------------------------------
+            desc 'Fetch the list of share requests currently outstanding for a given camera.', {
+               entity: Evercam::Presenters::CameraShareRequest
+            }
+            params do
+               requires :id, type: String, desc: "The unique identifier of the camera to fetch share requests for."
+               optional :status, type: String, desc: "The request status to fetch, either 'PENDING', 'USED' or 'CANCELLED'."
+            end
+            get '/:id' do
+               authreport!('share_requests/get')
+
+               camera = Camera.by_exid!(params[:id])
+               rights = requester_rights_for(camera)
+               raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+
+               query = CameraShareRequest.where(camera_id: camera.id)
+               if params[:status]
+                  case params[:status].downcase
+                     when 'used'
+                        query = query.where(status: CameraShareRequest::USED)
+                     when 'cancelled'
+                        query = query.where(status: CameraShareRequest::CANCELLED)
+                     else
+                        query = query.where(status: CameraShareRequest::PENDING)
+                  end
+               end
+
+               log.debug "Query: #{query.sql}"
+               present (query.to_a || []), with: Presenters::CameraShareRequest
+            end
+         end
       end
    end
 end

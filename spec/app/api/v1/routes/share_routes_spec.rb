@@ -236,4 +236,135 @@ describe 'API routes/cameras' do
          expect(response.status).to eq(403)
       end
    end
+
+   #----------------------------------------------------------------------------
+
+   describe 'GET /shares/requests/:id' do
+      let!(:camera) {
+         create(:camera, is_public: false)
+      }
+
+      let!(:pending_request_1) {
+         create(:pending_camera_share_request, camera: camera)
+      }
+
+      let!(:pending_request_2) {
+         create(:pending_camera_share_request, camera: camera)
+      }
+
+      let!(:pending_request_3) {
+         create(:pending_camera_share_request)
+      }
+
+      let!(:used_request_1) {
+         create(:used_camera_share_request, camera: camera)
+      }
+
+      let!(:used_request_2) {
+         create(:used_camera_share_request, camera: camera)
+      }
+
+      let!(:used_request_3) {
+         create(:used_camera_share_request)
+      }
+
+      let!(:cancelled_request_1) {
+         create(:cancelled_camera_share_request, camera: camera)
+      }
+
+      let!(:cancelled_request_2) {
+         create(:cancelled_camera_share_request, camera: camera)
+      }
+
+      let!(:cancelled_request_3) {
+         create(:cancelled_camera_share_request)
+      }
+
+      let(:credentials) {
+         {api_id: camera.owner.api_id, api_key: camera.owner.api_key}
+      }
+
+      it 'returns a list of all relevant share requests for a given camera when no status is specified' do
+         response = get("/shares/requests/#{camera.exid}", credentials)
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("share_requests")).to eq(true)
+         list = data["share_requests"]
+         expect(list.size).to eq(6)
+         camera_ids = [pending_request_1.camera.exid,
+                       pending_request_2.camera.exid,
+                       used_request_1.camera.exid,
+                       used_request_2.camera.exid,
+                       cancelled_request_1.camera.exid,
+                       cancelled_request_2.camera.exid]
+         list.each do |request|
+            expect(camera_ids.include?(request["camera_id"])).to eq(true)
+         end
+      end
+
+      it 'returns only relevant listing when a status is specified' do
+         response = get("/shares/requests/#{camera.exid}", {status: 'Cancelled'}.merge(credentials))
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("share_requests")).to eq(true)
+         list = data["share_requests"]
+         expect(list.size).to eq(2)
+         camera_ids = [cancelled_request_1.camera.exid,
+                       cancelled_request_2.camera.exid]
+         list.each do |request|
+            expect(camera_ids.include?(request["camera_id"])).to eq(true)
+         end
+      end
+
+      it 'returns a not found error when an unknown camera id is specified' do
+         response = get("/shares/requests/this_does_not_exist", credentials)
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Camera does not exist")
+      end
+
+      it 'returns an empty list for a camera with no share requests' do
+         camera2 = create(:camera, is_public: false)
+         parameters = {api_id: camera2.owner.api_id, api_key: camera2.owner.api_key}
+         response = get("/shares/requests/#{camera2.exid}", parameters)
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("share_requests")).to eq(true)
+         list = data["share_requests"]
+         expect(list.size).to eq(0)
+      end
+
+      it 'returns an unauthorized error if the caller does not have sufficient permission on the camera' do
+         user = create(:user)
+         response = get("/shares/requests/#{camera.exid}", {api_id: user.api_id, api_key: user.api_key})
+         expect(response.status).to eq(403)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthorized")
+      end
+
+      it 'returns an unauthenticated error if the caller incorrect credentials are used' do
+         user = create(:user)
+         response = get("/shares/requests/#{camera.exid}", {api_id: "abcde", api_key: "12345"})
+         expect(response.status).to eq(401)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthenticated")
+      end
+
+      it 'returns pending requests when an invalid status is specified' do
+         response = get("/shares/requests/#{camera.exid}", {status: 'ningy!'}.merge(credentials))
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("share_requests")).to eq(true)
+         list = data["share_requests"]
+         expect(list.size).to eq(2)
+         camera_ids = [pending_request_1.camera.exid,
+                       pending_request_2.camera.exid]
+         list.each do |request|
+            expect(camera_ids.include?(request["camera_id"])).to eq(true)
+         end
+      end
+   end
 end
