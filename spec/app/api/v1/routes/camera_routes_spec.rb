@@ -241,7 +241,7 @@ describe 'API routes/cameras' do
 
     let(:auth) { env_for(session: { user: create(:user).id }) }
     let(:vendor) { create(:vendor)}
-    let(:vendor_model) { create(:vendor_model, name: '*')}
+    let(:vendor_model) { create(:vendor_model, name: VendorModel::DEFAULT)}
 
     let(:params) {
       {
@@ -449,10 +449,10 @@ describe 'API routes/cameras' do
           expect(cam.cam_password).to eq('')
           expect(cam.config['external_host']).to eq('')
           expect(cam.config['internal_host']).to eq('')
-          expect(cam.config['external_http_port']).to be_nil
-          expect(cam.config['internal_http_port']).to be_nil
-          expect(cam.config['external_rtsp_port']).to be_nil
-          expect(cam.config['internal_rtsp_port']).to be_nil
+          expect(cam.config['external_http_port']).to eq('')
+          expect(cam.config['internal_http_port']).to eq('')
+          expect(cam.config['external_rtsp_port']).to eq('')
+          expect(cam.config['internal_rtsp_port']).to eq('')
         end
       end
 
@@ -477,7 +477,7 @@ describe 'API routes/cameras' do
       it 'returns a OK status' do
         patch("/cameras/#{camera.exid}", {internal_http_port: ''}.merge(api_keys))
         expect(last_response.status).to eq(200)
-        expect(last_response.json['cameras'][0]["internal_http_port"]).to be_nil
+        expect(last_response.json['cameras'][0]["internal_http_port"]).to eq('')
       end
     end
 

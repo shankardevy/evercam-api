@@ -5,7 +5,7 @@ describe 'API routes/models' do
 
   let(:app) { Evercam::APIv1 }
 
-  let!(:model0) { create(:vendor_model, name: '*', config: {username:'aaa', password: 'xxx'}) }
+  let!(:model0) { create(:vendor_model, name: VendorModel::DEFAULT, config: {username:'aaa', password: 'xxx'}) }
   let!(:vendor0) { model0.vendor }
   let!(:model1) { create(:vendor_model, vendor: vendor0, name: 'v1', config: {jpg: '/aaa/snap', password: 'yyy'}) }
   let!(:vendor1) { create(:vendor) }
@@ -135,7 +135,7 @@ describe 'API routes/models' do
         end
 
         it 'returns the default model data' do
-          expect(last_response.json['models'][0]['name']).to eq('*')
+          expect(last_response.json['models'][0]['name']).to eq(VendorModel::DEFAULT)
         end
       end
     end
