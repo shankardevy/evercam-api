@@ -22,6 +22,9 @@ module Evercam
     desc 'Returns set of known models for a supported camera vendor', {
       entity: Evercam::Presenters::Vendor
     }
+    params do
+      requires :vendor, type: String, desc: "Unique identifier for the vendor"
+    end
     get '/models/:vendor' do
       authreport!('models/vendor/get')
       vendor = ::Vendor.supported.by_exid(params[:vendor]).first
@@ -32,6 +35,10 @@ module Evercam
     desc 'Returns data for a particular camera model', {
       entity: Evercam::Presenters::Model
     }
+    params do
+      requires :vendor, type: String, desc: "Unique identifier for the vendor"
+      requires :model, type: String, desc: "Name of the model"
+    end
     get '/models/:vendor/:model' do
       authreport!('models/vendor/model/get')
       vendor = ::Vendor.supported.by_exid(params[:vendor]).first
@@ -52,6 +59,9 @@ module Evercam
     desc 'Returns all known IP hardware vendors filtered by MAC prefix', {
       entity: Evercam::Presenters::Vendor
     }
+    params do
+      requires :mac, type: String, desc: "Mac address of camera"
+    end
     get '/vendors/:mac', requirements: { mac: Vendor::REGEX_MAC } do
       authreport!('vendors/mac/get')
       vendors = ::Vendor.by_mac(params[:mac][0,8]).eager(:vendor_models).all
