@@ -13,8 +13,7 @@ before_script:
 
 env:
   matrix:
-  - DATABASE_URL="postgres://localhost/evercam_tst"
-  - EVERCAM_ENV="test"
+  - DATABASE_URL="postgres://localhost/evercam_tst" EVERCAM_ENV="test"
   global:
   - secure: BTrnsgd5wuCTmOOCsFDZ4+JFUj6bvTmwkYvW3snzLBmA1g58mqA/HdqL50tKdRaCb2/Hw0VfNIRvuEmg3zXY4bwF6OpcLKnnwG78MCQqwkHcMaSIkH8xDSjpwkat/UQIHCGuz5U13nGbb6+7UAjQPufJ5S340y0RnrNSl8ZYUSs=
   - secure: PswTKqbdTSwg5Wh1bir4bh834BVqtBvBcTsPT+oIooi27irlsV1VqUOA/imanL36xaIjJjvqy1WzpnYoDRCU4UuQekqhREv4wI9NTVF7qFuy0A/kgeaGdtY2MzOWsCrL/bXH2/N24b3AWiW4B2O3QPCpWqsKb6b/leDdCO+6OW8=
