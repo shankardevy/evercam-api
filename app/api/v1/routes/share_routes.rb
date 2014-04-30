@@ -19,6 +19,8 @@ module Evercam
             }
             params do
               requires :id, type: String, desc: "The unique identifier for a camera."
+              optional :api_id, type: String, desc: "The Evercam API id for the requester."
+              optional :api_key, type: String, desc: "The Evercam API key for the requester."
             end
             get '/:id' do
               authreport!('shares/get')
@@ -43,6 +45,8 @@ module Evercam
               optional :message, String, desc: "Not currently used."
               optional :notify, type: Boolean, desc: "Not currently used."
               optional :grantor, type: String, desc: "The user name of the user who is creating the share."
+              optional :api_id, type: String, desc: "The Evercam API id for the requester."
+              optional :api_key, type: String, desc: "The Evercam API key for the requester."
             end
             post '/:id' do
               authreport!('share/post')
@@ -70,6 +74,8 @@ module Evercam
             params do
               requires :id, type: String, desc: "The unique identifier for a camera."
               requires :share_id, type: Integer, desc: "The unique identifier of the share to be deleted."
+              optional :api_id, type: String, desc: "The Evercam API id for the requester."
+              optional :api_key, type: String, desc: "The Evercam API key for the requester."
             end
             delete '/:id' do
               authreport!('share/delete')
@@ -100,6 +106,8 @@ module Evercam
             }
             params do
                requires :id, type: String, desc: "The unique identifier of the user to fetch the list of shares for."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
             end
             get '/:id' do
                authreport!('shares/get')
@@ -124,6 +132,8 @@ module Evercam
             params do
                requires :id, type: String, desc: "The unique identifier of the camera to fetch share requests for."
                optional :status, type: String, desc: "The request status to fetch, either 'PENDING', 'USED' or 'CANCELLED'."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
             end
             get '/:id' do
                authreport!('share_requests/get')
@@ -146,6 +156,35 @@ module Evercam
 
                log.debug "Query: #{query.sql}"
                present (query.to_a || []), with: Presenters::CameraShareRequest
+            end
+
+            #-------------------------------------------------------------------
+            # DELETE /shares/requests/:id
+            #-------------------------------------------------------------------
+            desc 'Cancels a pending camera share request for a given camera', {
+               entity: Evercam::Presenters::CameraShareRequest
+            }
+            params do
+               requires :id, type: String, desc: "The unique identifier of the camera to fetch share requests for."
+               requires :email, type: String, desc: "The email address of user the camera was shared with."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
+            end
+            delete '/:id' do
+               authreport!('share_requests/delete')
+
+               camera = Camera.by_exid!(params[:id])
+               rights = requester_rights_for(camera)
+               raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
+
+               share_request = CameraShareRequest.where(status: CameraShareRequest::PENDING,
+                                                        email: params[:email],
+                                                        camera: camera).first
+               raise NotFoundError.new if share_request.nil?
+
+               log.debug "Marking camera share request id #{share_request.id} as cancelled."
+               share_request.update(status: CameraShareRequest::CANCELLED)
+               {}
             end
          end
       end
