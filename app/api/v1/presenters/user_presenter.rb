@@ -62,7 +62,7 @@ module Evercam
 
       expose :country, documentation: {
         type: 'string',
-        desc: 'Two letter ISO country code',
+        desc: 'Two letter <a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements">ISO country code</a>',
         required: true
       } do |u,o|
         u.country.iso3166_a2

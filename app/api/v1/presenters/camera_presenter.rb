@@ -71,7 +71,7 @@ module Evercam
 
       expose :timezone, documentation: {
         type: 'string',
-        desc: 'Name of the IANA/tz timezone where this camera is located',
+        desc: 'Name of the <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">IANA/tz</a> timezone where this camera is located',
         required: true
       } do |s,o|
         s.timezone.zone
