@@ -445,10 +445,10 @@ describe 'API routes/cameras' do
           expect(cam.vendor_model).to be_nil
           expect(cam.mac_address).to be_nil
           expect(cam.jpg_url).to eq('')
-          expect(cam.cam_username).to be_nil
-          expect(cam.cam_password).to be_nil
-          expect(cam.config['external_host']).to be_nil
-          expect(cam.config['internal_host']).to be_nil
+          expect(cam.cam_username).to eq('')
+          expect(cam.cam_password).to eq('')
+          expect(cam.config['external_host']).to eq('')
+          expect(cam.config['internal_host']).to eq('')
           expect(cam.config['external_http_port']).to be_nil
           expect(cam.config['internal_http_port']).to be_nil
           expect(cam.config['external_rtsp_port']).to be_nil
