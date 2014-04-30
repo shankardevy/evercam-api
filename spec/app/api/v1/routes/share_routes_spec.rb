@@ -367,4 +367,92 @@ describe 'API routes/cameras' do
          end
       end
    end
+
+   #----------------------------------------------------------------------------
+
+   describe 'DELETE /shares/requests/:id' do
+      let!(:camera) {
+         create(:camera, is_public: false)
+      }
+
+      let!(:pending_request) {
+         create(:pending_camera_share_request, camera: camera)
+      }
+
+      let!(:used_request) {
+         create(:used_camera_share_request, camera: camera)
+      }
+
+      let!(:cancelled_request) {
+         create(:cancelled_camera_share_request, camera: camera)
+      }
+
+      let(:credentials) {
+         {api_id: camera.owner.api_id, api_key: camera.owner.api_key}
+      }
+
+      let(:parameters) {
+         {email: pending_request.email}
+      }
+
+      it 'returns success when provided with valid parameters' do
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge(credentials))
+         expect(response.status).to eq(200)
+         pending_request.reload
+         expect(pending_request.status).to eq(CameraShareRequest::CANCELLED)
+      end
+
+      it 'returns a not found error when an unknown camera id is specified' do
+         response = delete("/shares/requests/this_does_not_exist", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Camera does not exist")
+      end
+
+      it 'returns a not found error when an unknown email address is specified' do
+         parameters[:email] = "blather@dissy.chuck"
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Not Found")
+      end
+
+      it 'returns a not found error when called with details that match a used share request' do
+         parameters[:email] = used_request.email
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Not Found")
+      end
+
+      it 'returns a not found error when called with details that match a cancelled share request' do
+         parameters[:email] = cancelled_request.email
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Not Found")
+      end
+
+      it 'returns an unauthorized error if the caller does not have sufficient permission on the camera' do
+         user = create(:user)
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
+         expect(response.status).to eq(403)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthorized")
+      end
+
+      it 'returns an unauthenticated error if incorrect credentials are used' do
+         user = create(:user)
+         response = delete("/shares/requests/#{camera.exid}", parameters.merge({api_id: "abcde", api_key: "12345"}))
+         expect(response.status).to eq(401)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthenticated")
+      end
+   end
 end

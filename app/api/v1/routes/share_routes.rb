@@ -157,6 +157,35 @@ module Evercam
                log.debug "Query: #{query.sql}"
                present (query.to_a || []), with: Presenters::CameraShareRequest
             end
+
+            #-------------------------------------------------------------------
+            # DELETE /shares/requests/:id
+            #-------------------------------------------------------------------
+            desc 'Cancels a pending camera share request for a given camera', {
+               entity: Evercam::Presenters::CameraShareRequest
+            }
+            params do
+               requires :id, type: String, desc: "The unique identifier of the camera to fetch share requests for."
+               requires :email, type: String, desc: "The email address of user the camera was shared with."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
+            end
+            delete '/:id' do
+               authreport!('share_requests/delete')
+
+               camera = Camera.by_exid!(params[:id])
+               rights = requester_rights_for(camera)
+               raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
+
+               share_request = CameraShareRequest.where(status: CameraShareRequest::PENDING,
+                                                        email: params[:email],
+                                                        camera: camera).first
+               raise NotFoundError.new if share_request.nil?
+
+               log.debug "Marking camera share request id #{share_request.id} as cancelled."
+               share_request.update(status: CameraShareRequest::CANCELLED)
+               {}
+            end
          end
       end
    end
