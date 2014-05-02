@@ -91,9 +91,28 @@ module Evercam
             #-------------------------------------------------------------------
             # PATCH /shares/camera/:id
             #-------------------------------------------------------------------
-            desc 'Update an existing camera share (COMING SOON)'
+            desc 'Update an existing camera share.', {}
+            params do
+               requires :id, type: Integer, desc: "The unique identifier of the camera share to be updated."
+               requires :rights, type: String, desc: "A comma separate list of the rights to be set on the share."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
+            end
             patch '/:id' do
-              raise ComingSoonError
+               authreport!('share/update')
+
+               share  = CameraShare.where(id: params[:id]).first
+               raise NotFoundError.new if share.nil?
+
+               rights = requester_rights_for(share.camera)
+               if !(rights.is_public? && share.camera.discoverable?) && !rights.is_owner?
+                  raise AuthorizationError.new
+               end
+
+               outcome = Actors::ShareUpdate.run(params)
+               raise OutcomeError, outcome unless outcome.success?
+
+               present [outcome.result], with: Presenters::CameraShare
             end
          end
 
@@ -185,6 +204,37 @@ module Evercam
                log.debug "Marking camera share request id #{share_request.id} as cancelled."
                share_request.update(status: CameraShareRequest::CANCELLED)
                {}
+            end
+
+            #-------------------------------------------------------------------
+            # PATCH /shares/requests/:id
+            #-------------------------------------------------------------------
+            desc 'Updates a pending camera share request.', {
+               entity: Evercam::Presenters::CameraShareRequest
+            }
+            params do
+               requires :id, type: Integer, desc: "The unique identifier of the camera share request to update."
+               requires :rights, type: String, desc: "The new set of rights to be granted for the share."
+               optional :api_id, type: String, desc: "The Evercam API id for the requester."
+               optional :api_key, type: String, desc: "The Evercam API key for the requester."
+            end
+            patch '/:id' do
+               authreport!('share_requests/delete')
+
+               share_request = CameraShareRequest.where(id: params[:id]).first
+               raise NotFoundError.new if share_request.nil?
+
+               rights = requester_rights_for(share_request.camera)
+               if !(rights.is_public? && share_request.camera.discoverable?) || !rights.is_owner?
+                  raise AuthorizationError.new
+               end
+
+               params[:rights].split(",").each do |right|
+                  raise BadRequestError.new if !rights.valid_right?(right.strip.downcase)
+               end
+
+               share_request.update(rights: params[:rights])
+               present [share_request], with: Presenters::CameraShareRequest
             end
          end
       end
