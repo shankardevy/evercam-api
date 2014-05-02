@@ -26,6 +26,14 @@ FactoryGirl.define do
       external_http_port: 80
     })
 
+    factory :private_camera do
+      is_public false
+    end
+
+    factory :public_camera do
+      is_public true
+    end
+
   end
 
 end

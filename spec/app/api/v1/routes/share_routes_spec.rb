@@ -447,8 +447,144 @@ describe 'API routes/cameras' do
       end
 
       it 'returns an unauthenticated error if incorrect credentials are used' do
-         user = create(:user)
          response = delete("/shares/requests/#{camera.exid}", parameters.merge({api_id: "abcde", api_key: "12345"}))
+         expect(response.status).to eq(401)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthenticated")
+      end
+   end
+
+   #----------------------------------------------------------------------------
+
+   describe 'PATCH /shares/camera/:id' do
+      let!(:share) {
+         create(:private_camera_share)
+      }
+
+      let(:camera) {
+         share.camera
+      }
+
+      let(:user) {
+         share.user
+      }
+
+      let(:parameters) {
+         {rights: "list,view"}
+      }
+
+      let(:rights) {
+         AccessRightSet.for(camera, user)
+      }
+
+      let(:credentials) {
+         {api_id: camera.owner.api_id, api_key: camera.owner.api_key}
+      }
+
+      before(:each) {
+         rights.grant(AccessRight::DELETE, AccessRight::EDIT, AccessRight::SNAPSHOT, AccessRight::LIST)
+      }
+
+      it 'returns success when provided with valid parameters' do
+         response = patch("/shares/camera/#{share.id}", parameters.merge(credentials))
+         expect(response.status).to eq(200)
+         expect(rights.allow?(AccessRight::LIST)).to eq(true)
+         expect(rights.allow?(AccessRight::VIEW)).to eq(true)
+         expect(rights.allow?(AccessRight::DELETE)).to eq(false)
+         expect(rights.allow?(AccessRight::EDIT)).to eq(false)
+         expect(rights.allow?(AccessRight::SNAPSHOT)).to eq(false)
+      end
+
+      it 'returns a not found error for a non-existent share id' do
+         response = patch("/shares/camera/-1000", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Not Found")
+      end
+
+      it 'returns an error if invalid rights are specified' do
+         parameters[:rights] = "list,blah,view"
+         response = patch("/shares/camera/#{share.id}", parameters.merge(credentials))
+         expect(response.status).to eq(400)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq(["invalid rights specified in request"])
+      end
+
+      it 'returns an unauthorized error if the caller is not the owner of the camera associated with the share' do
+         user = create(:user)
+         response = patch("/shares/camera/#{share.id}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
+         expect(response.status).to eq(403)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthorized")
+      end
+
+      it 'returns an unauthenticated error if incorrect credentials are used' do
+         response = patch("/shares/camera/#{share.id}", parameters.merge({api_id: "abcde", api_key: "12345"}))
+         expect(response.status).to eq(401)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthenticated")
+      end
+   end
+
+   #----------------------------------------------------------------------------
+
+   describe 'PATCH /shares/requests/:id' do
+      let!(:share_request) {
+         create(:pending_camera_share_request)
+      }
+
+      let(:camera) {
+         share_request.camera
+      }
+
+      let(:parameters) {
+         {rights: "edit,delete,snapshot"}
+      }
+
+      let(:credentials) {
+         {api_id: camera.owner.api_id, api_key: camera.owner.api_key}
+      }
+
+      it 'returns success when provided with valid parameters' do
+         response = patch("/shares/requests/#{share_request.id}", parameters.merge(credentials))
+         expect(response.status).to eq(200)
+         share_request.reload
+         expect(share_request.rights).to eq("edit,delete,snapshot")
+      end
+
+      it 'returns a not found error for a non-existent share id' do
+         response = patch("/shares/requests/-1000", parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Not Found")
+      end
+
+      it 'returns an error if invalid rights are specified' do
+         parameters[:rights] = "list,blah,view"
+         response = patch("/shares/requests/#{share_request.id}", parameters.merge(credentials))
+         expect(response.status).to eq(400)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Bad Request")
+      end
+
+      it 'returns an unauthorized error if the caller is not the owner of the camera associated with the share' do
+         user = create(:user)
+         response = patch("/shares/requests/#{share_request.id}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
+         expect(response.status).to eq(403)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthorized")
+      end
+
+      it 'returns an unauthenticated error if incorrect credentials are used' do
+         response = patch("/shares/requests/#{share_request.id}", parameters.merge({api_id: "abcde", api_key: "12345"}))
          expect(response.status).to eq(401)
          data = response.json
          expect(data.include?("message")).to eq(true)
