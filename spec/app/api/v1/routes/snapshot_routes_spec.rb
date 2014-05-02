@@ -345,7 +345,7 @@ describe 'API routes/snapshots' do
       it 'redirects to snapshot server' do
         get("/cameras/#{snap.camera.exid}/snapshot.jpg")
         expect(last_response.status).to eq(302)
-        expect(last_response.location).to start_with("http://snap.evercam.io/#{snap.camera.exid}.jpg?t=")
+        expect(last_response.location).to start_with("#{Evercam::Config[:snapshots][:url]}#{snap.camera.exid}.jpg?t=")
       end
     end
 
