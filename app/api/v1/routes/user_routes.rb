@@ -34,7 +34,7 @@ module Evercam
           user = ::User.by_login(params[:id])
           raise NotFoundError, 'user does not exist' unless user
 
-          cameras = user.cameras.select do |camera|
+          cameras = user.cameras_dataset.order(:name).all.select do |camera|
             requester_rights_for(camera).allow?(AccessRight::LIST)
           end
 
