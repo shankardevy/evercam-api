@@ -551,7 +551,7 @@ describe 'API routes/cameras' do
       }
 
       it 'returns success when provided with valid parameters' do
-         response = patch("/shares/requests/#{share_request.id}", parameters.merge(credentials))
+         response = patch("/shares/requests/#{share_request.key}", parameters.merge(credentials))
          expect(response.status).to eq(200)
          share_request.reload
          expect(share_request.rights).to eq("edit,delete,snapshot")
@@ -567,7 +567,7 @@ describe 'API routes/cameras' do
 
       it 'returns an error if invalid rights are specified' do
          parameters[:rights] = "list,blah,view"
-         response = patch("/shares/requests/#{share_request.id}", parameters.merge(credentials))
+         response = patch("/shares/requests/#{share_request.key}", parameters.merge(credentials))
          expect(response.status).to eq(400)
          data = response.json
          expect(data.include?("message")).to eq(true)
@@ -576,7 +576,7 @@ describe 'API routes/cameras' do
 
       it 'returns an unauthorized error if the caller is not the owner of the camera associated with the share' do
          user = create(:user)
-         response = patch("/shares/requests/#{share_request.id}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
+         response = patch("/shares/requests/#{share_request.key}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
          expect(response.status).to eq(403)
          data = response.json
          expect(data.include?("message")).to eq(true)
@@ -584,7 +584,7 @@ describe 'API routes/cameras' do
       end
 
       it 'returns an unauthenticated error if incorrect credentials are used' do
-         response = patch("/shares/requests/#{share_request.id}", parameters.merge({api_id: "abcde", api_key: "12345"}))
+         response = patch("/shares/requests/#{share_request.key}", parameters.merge({api_id: "abcde", api_key: "12345"}))
          expect(response.status).to eq(401)
          data = response.json
          expect(data.include?("message")).to eq(true)
