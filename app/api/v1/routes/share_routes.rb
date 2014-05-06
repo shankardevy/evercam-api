@@ -213,7 +213,7 @@ module Evercam
                entity: Evercam::Presenters::CameraShareRequest
             }
             params do
-               requires :id, type: Integer, desc: "The unique identifier of the camera share request to update."
+               requires :id, type: String, desc: "The unique identifier of the camera share request to update."
                requires :rights, type: String, desc: "The new set of rights to be granted for the share."
                optional :api_id, type: String, desc: "The Evercam API id for the requester."
                optional :api_key, type: String, desc: "The Evercam API key for the requester."
@@ -221,7 +221,7 @@ module Evercam
             patch '/:id' do
                authreport!('share_requests/delete')
 
-               share_request = CameraShareRequest.where(id: params[:id]).first
+               share_request = CameraShareRequest.where(key: params[:id]).first
                raise NotFoundError.new if share_request.nil?
 
                rights = requester_rights_for(share_request.camera)
