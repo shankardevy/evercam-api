@@ -64,7 +64,7 @@ module Evercam
              	} do |s, o|
         list = []
         if s.kind == 'private'
-        	rights = AccessRightSet.for(s.camera, s.sharer)
+        	rights = AccessRightSet.for(s.camera, s.user)
         	list << "Snapshot" if rights.allow?(AccessRight::SNAPSHOT)
         	list << "View" if rights.allow?(AccessRight::VIEW)
         	list << "Edit" if rights.allow?(AccessRight::EDIT)
