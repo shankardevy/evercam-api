@@ -15,6 +15,12 @@ module Evercam
       include LoggingHelper
       include SessionHelper
       include ThreeScaleHelper
+      include ParameterMapper
+    end
+
+    # The position of this is important so beware of moving it!
+    before do
+      map_parameters!
     end
 
     # disable annoying I18n message
