@@ -534,12 +534,12 @@ describe 'API routes/cameras' do
    #----------------------------------------------------------------------------
 
    describe 'PATCH /shares/requests/:id' do
-      let!(:share_request) {
-         create(:pending_camera_share_request)
+      let(:camera) {
+         create(:camera, is_public: false)
       }
 
-      let(:camera) {
-         share_request.camera
+      let!(:share_request) {
+         create(:pending_camera_share_request, camera: camera)
       }
 
       let(:parameters) {
