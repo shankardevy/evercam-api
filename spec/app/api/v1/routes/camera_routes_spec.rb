@@ -236,7 +236,7 @@ describe 'API routes/cameras' do
     end
 
     context 'when data is not complete' do
-      it 'returns null external urls with only ' do
+      it 'returns null or valid partial url' do
         camera.values[:config].merge!({'external_http_port' =>  '123', 'external_host' => ''})
         camera.values[:config].merge!({'internal_rtsp_port' =>  '', 'internal_host' => '1.1.1.1', 'snapshots' => {'h264' =>'/h264'}})
         camera.save
