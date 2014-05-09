@@ -151,6 +151,14 @@ module Evercam
         c.jpg_url
       end
 
+      expose :rtsp_url, if: lambda {|instance, options| !options[:minimal]},
+             documentation: {
+        type: 'String',
+        desc: 'RTSP url'
+      } do |c,o|
+        c.rtsp_url
+      end
+
       expose :cam_username, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
         type: 'String',
@@ -196,7 +204,7 @@ module Evercam
                  desc: 'External snapshot url'
                } do |c,o|
           host = c.external_url
-          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
 
         expose :internal_jpg_url, documentation: {
@@ -204,7 +212,7 @@ module Evercam
                  desc: 'Internal snapshot url'
                } do |c,o|
           host = c.internal_url
-          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
 
         expose :dyndns_jpg_url, documentation: {
@@ -214,7 +222,7 @@ module Evercam
           port = c.config.fetch('external_http_port', nil)
           host = "http://#{c.exid}.evr.cm"
           host << ":#{port}" unless port.nil? or port == 80
-          host << c.jpg_url unless c.jpg_url.nil? or host.nil?
+          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
 
         expose :short_jpg_url, documentation: {
@@ -229,7 +237,7 @@ module Evercam
                  desc: 'External RTSP url'
                } do |c,o|
           host = c.external_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
         end
 
         expose :internal_rtsp_url, documentation: {
@@ -237,7 +245,7 @@ module Evercam
                  desc: 'Internal RTSP url'
                } do |c,o|
           host = c.internal_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
         end
 
         expose :dyndns_rtsp_url, documentation: {
@@ -247,7 +255,7 @@ module Evercam
           port = c.config.fetch('external_rtsp_port', nil)
           host = "http://#{c.exid}.evr.cm"
           host << ":#{port}" unless port.nil? or port == 80
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.nil?
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
         end
 
       end
