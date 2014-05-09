@@ -196,8 +196,11 @@ describe 'API routes/users' do
   describe 'GET /users/{username}/cameras' do
 
     let!(:user0) { create(:user) }
+    let!(:access_token) { create(:access_token, user: user0) }
     let!(:camera0) { create(:camera, owner: user0, is_public: true) }
     let!(:camera1) { create(:camera, owner: user0, is_public: false) }
+    let(:access_right) { create(:camera_access_right, token: access_token, right: AccessRight::LIST) }
+    let!(:share) { create(:private_camera_share, user: user0, camera: access_right.camera) }
     let(:api_keys) { {api_id: user0.api_id, api_key: user0.api_key} }
 
     context 'when the user does not exist' do
@@ -226,16 +229,31 @@ describe 'API routes/users' do
     end
 
     context 'when the authenticated user is the owner' do
+      context 'when include_shared is not set' do
+        before(:each) { get("/users/#{user0.username}/cameras", api_keys) }
 
-      before(:each) { get("/users/#{user0.username}/cameras", api_keys) }
-
-      it 'only returns public and private cameras' do
-        expect(last_response.json['cameras'].map{ |s| s['id'] }).
-          to include(camera1.exid, camera0.exid)
+        it 'only returns public and private cameras' do
+          cameras = last_response.json['cameras']
+          expect(cameras.map{ |s| s['id'] }).to include(camera1.exid, camera0.exid)
+          cameras.each {|c| expect(c['owned']).to eq(true)}
+        end
       end
 
-    end
+      context 'when include_shared is set to true' do
+        before(:each) {
+          get("/users/#{user0.username}/cameras", {include_shared: true}.merge(api_keys))
+        }
 
+        it 'returns shared and owned cameras for the user' do
+          cameras = last_response.json['cameras']
+          expect(cameras.map{ |s| s['id'] }).to include(camera1.exid, camera0.exid, share.camera.exid)
+          cameras.each {|c|
+            expect(c['owned']).to eq(true) if c['id'] != share.camera.exid
+            expect(c['owned']).to eq(false) if c['id'] == share.camera.exid
+          }
+        end
+      end
+    end
   end
 
   describe 'DELETE /users/:id' do

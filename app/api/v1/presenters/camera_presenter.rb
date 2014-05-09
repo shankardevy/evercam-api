@@ -252,6 +252,13 @@ module Evercam
 
       end
 
+      expose :owned, if: lambda {|instance, options| options.include?(:user)},
+                     documentation: {
+                       type: 'Boolean',
+                       desc: 'True if the user owns the camera, false otherwise'
+                     } do |c,o|
+         (c.owner.id == options[:user].id)
+      end
     end
   end
 end
