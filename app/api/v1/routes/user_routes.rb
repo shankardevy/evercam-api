@@ -26,19 +26,37 @@ module Evercam
         #-----------------------------------------------------------------------
         # GET /v1/users/:id/cameras
         #-----------------------------------------------------------------------
-        desc 'Returns the set of cameras owned by a particular user', {
+        desc 'Returns the set of cameras associated with a user', {
           entity: Evercam::Presenters::Camera
         }
+        params do
+          requires :id, type: String, desc: "The user name or email address of the user."
+          optional :include_shared, type: Boolean, desc: "Set to true to include cameras shared with the user in the fetch."
+        end
         get :cameras do
           authreport!('users/cameras/get')
           user = ::User.by_login(params[:id])
           raise NotFoundError, 'user does not exist' unless user
 
-          cameras = user.cameras_dataset.order(:name).all.select do |camera|
+          query = Camera.where(owner: user)
+          if params[:include_shared]
+            query = query.association_left_join(:shares).or(Sequel.qualify(:shares,
+                                                                           :user_id) => user.id)
+            query = query.select(Sequel.qualify(:cameras, :id),
+                                 Sequel.qualify(:cameras, :created_at),
+                                 Sequel.qualify(:cameras, :updated_at),
+                                 :exid,
+                                 :owner_id, :is_public, :config,
+                                 :name, :last_polled_at, :is_online,
+                                 :timezone, :last_online_at, :location,
+                                 :mac_address, :model_id, :discoverable)
+          end
+
+          cameras = query.order(:name).all.select do |camera|
             requester_rights_for(camera).allow?(AccessRight::LIST)
           end
 
-          present cameras, with: Presenters::Camera
+          present cameras, with: Presenters::Camera, user: user
         end
       end
 
