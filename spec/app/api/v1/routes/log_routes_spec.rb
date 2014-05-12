@@ -27,19 +27,9 @@ describe 'API routes/client', :focus=>true do
     end
 
     context 'when log amount is big'
-      before do
-        70.times do
-          get("/cameras/#{camera.exid}", api_keys)
-        end
-      end
 
       it 'limit is working' do
-        70.times do
-          get("/cameras/#{camera.exid}", api_keys)
-        end
-        get("/cameras/#{camera.exid}/logs", api_keys)
-        puts last_response.body
-        expect(last_response.status).to eq(200)
+
       end
 
       it 'pagination is working' do
