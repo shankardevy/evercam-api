@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'api/v1'
 
-describe 'API routes/client' do
+describe 'API routes/client', :focus => true do
   let(:app) {
     Evercam::APIv1
   }
@@ -14,12 +14,14 @@ describe 'API routes/client' do
 
     let(:api_keys) { {api_id: camera.owner.api_id, api_key: camera.owner.api_key} }
 
-    context 'when given a correct set of parameters' do
+    context 'when some parrameters are missing or incorrect' do
       it 'returns 401 when no api keys' do
         get("/cameras/#{camera.exid}/logs")
         expect(last_response.status).to eq(401)
       end
+    end
 
+    context 'when given a correct set of parameters' do
       it 'returns list of logs for given camera' do
         get("/cameras/#{camera.exid}/logs", api_keys)
         expect(last_response.status).to eq(200)
