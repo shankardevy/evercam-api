@@ -6,6 +6,42 @@ module Evercam
 
       root :logs
 
+      expose :name, documentation: {
+        type: 'string',
+        desc: 'Camera name',
+        required: true
+      } do |c,o|
+        c.camera.name
+      end
+
+      expose :exid, documentation: {
+        type: 'string',
+        desc: 'Camera exid',
+        required: true
+      } do |c,o|
+        c.camera.exid
+      end
+
+      expose :who, documentation: {
+        type: 'string',
+        desc: 'Username or Client name ',
+        required: true
+      } do |c,o|
+        if c.access_token.nil?
+          "Anonymous"
+        elsif c.access_token.user.present?
+          c.access_token.user.fullname
+        elsif c.access_token.client.present?
+          c.access_token.client.exid
+        end
+      end
+
+      expose :action, documentation: {
+        type: 'string',
+        desc: 'Camera action',
+        required: true
+      }
+
       with_options(format_with: :timestamp) do
         expose :done_at, documentation: {
           type: 'integer',

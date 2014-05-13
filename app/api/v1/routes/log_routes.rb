@@ -17,6 +17,7 @@ module Evercam
       optional :limit, type: Integer, desc: "Number of results per page. Defaults to #{DEFAULT_LIMIT}."
       optional :page, type: Integer, desc: "Page number, starting from 0"
       optional :types, type: String, desc: "Comma separated list of log types: created, accessed, edited, viewed, captured", default: ''
+      optional :objects, type: Boolean, desc: "Return objects instead of strings", default: false
     end
     get '/cameras/:id/logs' do
       camera = nil
@@ -31,10 +32,16 @@ module Evercam
       page = 0 if page < 0
       limit = DEFAULT_LIMIT if limit < 1
       types = params[:types].split(',').map(&:strip)
-      puts types
-      {
-        logs: camera.activities.where(:action => types).limit(limit, page*limit).all
-      }
+      results = camera.activities
+      results = results.where(:action => types) unless types.blank?
+      results = results.limit(limit, page*limit).all
+      if params[:objects]
+        present Array(results), with: Presenters::Log
+      else
+        {
+          logs: results
+        }
+      end
     end
 
   end

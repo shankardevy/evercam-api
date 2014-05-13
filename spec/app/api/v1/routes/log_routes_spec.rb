@@ -27,9 +27,15 @@ describe 'API routes/client', :focus=>true do
     end
 
     context 'when log amount is big'
+      before do
+        #5.times do
+        #  create(:camera_activity, camera: camera, access_token: nil)
+        #end
+      end
 
       it 'limit is working' do
-
+        get("/cameras/#{camera.exid}/logs", api_keys)
+        expect(last_response.status).to eq(200)
       end
 
       it 'pagination is working' do
