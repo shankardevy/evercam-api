@@ -5,7 +5,7 @@ module Evercam
 
     include WebErrors
 
-    DEFAULT_LIMIT = 5
+    DEFAULT_LIMIT = 20
 
     before do
       authorize!
@@ -35,15 +35,17 @@ module Evercam
       results = camera.activities
       results = results.where(:action => types) unless types.blank?
       results = results.limit(limit, page*limit).all
+      total_pages = camera.activities.count / limit
       if params[:objects]
         present(Array(results), with: Presenters::Log).merge!({
             :camera_exid => camera.exid,
-            :camera_name => camera.name
-
+            :camera_name => camera.name,
+            :pages => total_pages
           })
       else
         {
-          logs: results
+          logs: results,
+          pages: total_pages
         }
       end
     end

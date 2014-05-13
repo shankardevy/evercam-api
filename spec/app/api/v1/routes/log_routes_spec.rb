@@ -1,7 +1,7 @@
 require 'rack_helper'
 require_app 'api/v1'
 
-describe 'API routes/client', :focus=>true do
+describe 'API routes/client' do
   let(:app) {
     Evercam::APIv1
   }

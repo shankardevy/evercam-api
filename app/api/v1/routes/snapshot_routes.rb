@@ -84,6 +84,15 @@ module Evercam
             end
             t = c.update(msg)
             t << c.final
+
+            CameraActivity.create(
+              camera: camera,
+              access_token: access_token,
+              action: 'viewed',
+              done_at: Time.now,
+              ip: request.ip
+            )
+
             redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.strict_encode64(t)}"
           end
         end
@@ -274,6 +283,14 @@ module Evercam
           outcome = Actors::SnapshotFetch.run(params)
           raise OutcomeError, outcome unless outcome.success?
 
+          CameraActivity.create(
+            camera: camera,
+            access_token: access_token,
+            action: 'captured',
+            done_at: Time.now,
+            ip: request.ip
+          )
+
           present Array(outcome.result), with: Presenters::Snapshot
         end
 
@@ -292,6 +309,14 @@ module Evercam
           outcome = Actors::SnapshotCreate.run(params)
           raise OutcomeError, outcome unless outcome.success?
 
+          CameraActivity.create(
+            camera: camera,
+            access_token: access_token,
+            action: 'captured',
+            done_at: Time.now,
+            ip: request.ip
+          )
+
           present Array(outcome.result), with: Presenters::Snapshot
         end
 
@@ -304,6 +329,14 @@ module Evercam
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
           raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
+
+          CameraActivity.create(
+            camera: camera,
+            access_token: access_token,
+            action: 'deleted snapshot',
+            done_at: Time.now,
+            ip: request.ip
+          )
 
           camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i)).destroy
           {}
