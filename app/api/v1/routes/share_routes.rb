@@ -109,8 +109,13 @@ module Evercam
               authreport!('share/delete')
 
               camera = ::Camera.by_exid!(params[:id])
-              rights = requester_rights_for(camera)
-              raise AuthorizationError.new if !rights.is_owner?
+              share  = CameraShare.where(id: params[:share_id]).first
+              if share
+                requester = caller
+                if camera.owner_id != requester.id && share.user_id != requester.id
+                  raise AuthorizationError.new
+                end
+              end
 
               Actors::ShareDelete.run(params)
               {}
