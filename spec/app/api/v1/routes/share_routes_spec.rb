@@ -591,4 +591,90 @@ describe 'API routes/cameras' do
          expect(data["message"]).to eq("Unauthenticated")
       end
    end
+
+   #----------------------------------------------------------------------------
+
+   describe 'GET /shares' do
+      let(:share) {
+         create(:private_camera_share)
+      }
+
+      let(:user) {
+         share.user
+      }
+
+      let(:unshared_camera) {
+         create(:private_camera)
+      }
+
+      let(:credentials) {
+         {api_id: user.api_id, api_key: user.api_key}
+      }
+
+      let(:parameters) {
+         {camera_id: share.camera.exid, user_id: user.username}
+      }
+
+      it 'returns success and the camera share details when given valid parameters' do
+         response = get('/shares', parameters.merge(credentials))
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("shares")).to eq(true)
+         expect(data['shares'].size).to eq(1)
+         expect(data['shares'][0]['camera_id']).to eq(share.camera.exid)
+      end
+
+      it 'returns success if requested by the camera owner' do
+         response = get('/shares', parameters.merge({api_id: share.camera.owner.api_id, api_key: share.camera.owner.api_key}))
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("shares")).to eq(true)
+         expect(data['shares'].size).to eq(1)
+         expect(data['shares'][0]['camera_id']).to eq(share.camera.exid)
+      end
+
+      it 'returns an empty list where a share does not exist' do
+         parameters[:camera_id] = unshared_camera.exid
+         response = get('/shares', parameters.merge(credentials))
+         expect(response.status).to eq(200)
+         data = response.json
+         expect(data.include?("shares")).to eq(true)
+         expect(data['shares'].size).to eq(0)
+      end
+
+      it 'returns a not found error for an invalid camera id' do
+         parameters[:camera_id] = "this-does-not-exist"
+         response = get('/shares', parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Camera does not exist")
+      end
+
+      it 'returns a not found error for an invalid user id' do
+         parameters[:user_id] = "this-does-not-exist"
+         response = get('/shares', parameters.merge(credentials))
+         expect(response.status).to eq(404)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("User does not exist.")
+      end
+
+      it 'returns an unauthorized error if the caller is not the owner of the camera or the user the camera was shared with' do
+         parameters[:user_id] = create(:user).username
+         response = get('/shares', parameters.merge(credentials))
+         expect(response.status).to eq(403)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthorized")
+      end
+
+      it 'returns an unauthenticated error if incorrect credentials are used' do
+         response = get('/shares', parameters.merge({api_id: "abcde", api_key: "12345"}))
+         expect(response.status).to eq(401)
+         data = response.json
+         expect(data.include?("message")).to eq(true)
+         expect(data["message"]).to eq("Unauthenticated")
+      end
+   end
 end
