@@ -251,7 +251,7 @@ module Evercam
           desc: 'RTSP url using evr.cm dynamic DNS'
         } do |c,o|
           port = c.config.fetch('external_rtsp_port', nil)
-          host = "http://#{c.exid}.evr.cm"
+          host = "rtsp://#{c.exid}.evr.cm"
           host << ":#{port}" unless port.nil? or port == 80
           host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
         end
