@@ -197,9 +197,9 @@ module Evercam
          c.discoverable?
       end
 
-      expose :extra_urls do
+      expose :external, if: lambda {|instance, options| !options[:minimal]} do
 
-        expose :external_jpg_url, documentation: {
+        expose :jpg_url, documentation: {
                  type: 'String',
                  desc: 'External snapshot url'
                } do |c,o|
@@ -207,15 +207,36 @@ module Evercam
           host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
 
-        expose :internal_jpg_url, documentation: {
+        expose :rtsp_url, documentation: {
+          type: 'String',
+          desc: 'External RTSP url'
+        } do |c,o|
+          host = c.external_url(port_type='rtsp')
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
+        end
+
+      end
+
+      expose :internal, if: lambda {|instance, options| !options[:minimal]} do
+
+        expose :jpg_url, documentation: {
                  type: 'String',
                  desc: 'Internal snapshot url'
                } do |c,o|
           host = c.internal_url
           host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
+        expose :rtsp_url, documentation: {
+          type: 'String',
+          desc: 'Internal RTSP url'
+        } do |c,o|
+          host = c.internal_url(port_type='rtsp')
+          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
+        end
+      end
 
-        expose :dyndns_jpg_url, documentation: {
+      expose :dyndns, if: lambda {|instance, options| !options[:minimal]} do
+        expose :jpg_url, documentation: {
           type: 'String',
           desc: 'Snapshot url using evr.cm dynamic DNS'
         } do |c,o|
@@ -225,30 +246,7 @@ module Evercam
           host << c.jpg_url unless c.jpg_url.nil? or host.blank?
         end
 
-        expose :short_jpg_url, documentation: {
-          type: 'String',
-          desc: 'Short snapshot url using evr.cm url shortener'
-        } do |c,o|
-          "http://evr.cm/#{c.exid}.jpg"
-        end
-
-        expose :external_rtsp_url, documentation: {
-                 type: 'String',
-                 desc: 'External RTSP url'
-               } do |c,o|
-          host = c.external_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
-        end
-
-        expose :internal_rtsp_url, documentation: {
-                 type: 'String',
-                 desc: 'Internal RTSP url'
-               } do |c,o|
-          host = c.internal_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
-        end
-
-        expose :dyndns_rtsp_url, documentation: {
+        expose :rtsp_url, documentation: {
           type: 'String',
           desc: 'RTSP url using evr.cm dynamic DNS'
         } do |c,o|
@@ -258,6 +256,15 @@ module Evercam
           host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
         end
 
+      end
+
+      expose :short, if: lambda {|instance, options| !options[:minimal]} do
+        expose :jpg_url, documentation: {
+          type: 'String',
+          desc: 'Short snapshot url using evr.cm url shortener'
+        } do |c,o|
+          "http://evr.cm/#{c.exid}.jpg"
+        end
       end
 
       expose :owned, if: lambda {|instance, options| options.include?(:user)},
