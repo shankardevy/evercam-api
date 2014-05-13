@@ -36,7 +36,11 @@ module Evercam
       results = results.where(:action => types) unless types.blank?
       results = results.limit(limit, page*limit).all
       if params[:objects]
-        present Array(results), with: Presenters::Log
+        present(Array(results), with: Presenters::Log).merge!({
+            :camera_exid => camera.exid,
+            :camera_name => camera.name
+
+          })
       else
         {
           logs: results

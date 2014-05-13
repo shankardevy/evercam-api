@@ -6,22 +6,6 @@ module Evercam
 
       root :logs
 
-      expose :name, documentation: {
-        type: 'string',
-        desc: 'Camera name',
-        required: true
-      } do |c,o|
-        c.camera.name
-      end
-
-      expose :exid, documentation: {
-        type: 'string',
-        desc: 'Camera exid',
-        required: true
-      } do |c,o|
-        c.camera.exid
-      end
-
       expose :who, documentation: {
         type: 'string',
         desc: 'Username or Client name ',
