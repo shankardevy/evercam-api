@@ -52,7 +52,7 @@ module Evercam
                                  :mac_address, :model_id, :discoverable)
           end
 
-          cameras = query.order(:name).all.select do |camera|
+          cameras = query.order(:name).limit(20).all.select do |camera|
             requester_rights_for(camera).allow?(AccessRight::LIST)
           end
 
