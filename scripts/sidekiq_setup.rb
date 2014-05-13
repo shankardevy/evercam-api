@@ -2,7 +2,7 @@ require 'dotenv'
 require 'sequel'
 
 Dotenv.load
-Sequel::Model.db = Sequel.connect(ENV['DATABASE_URL'])
+Sequel::Model.db = Sequel.connect("#{ENV['DATABASE_URL']}?pool=25")
 
 require 'evercam_misc'
 require 'evercam_models'
