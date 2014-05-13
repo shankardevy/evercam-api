@@ -10,6 +10,34 @@ module Evercam
             authorize!
          end
 
+         #----------------------------------------------------------------------
+         # GET /shares
+         #----------------------------------------------------------------------
+         desc 'Get details for a share for a specific camera and user.', {
+            entity: Evercam::Presenters::CameraShare
+         }
+         params do
+            requires :camera_id, type: String, desc: 'The unique identifier for the camera in the share.'
+            requires :user_id, type: String, desc: 'The unique identifier for the user the camera is shared with.'
+         end
+         get do
+            authreport!('shares/get')
+
+            camera = Camera.by_exid!(params[:camera_id])
+            user   = User.by_login(params[:user_id])
+            raise NotFoundError.new("User does not exist.") if !user
+
+            rights    = requester_rights_for(camera)
+            requester = caller
+            if !rights.allow?(AccessRight::LIST) &&
+               (requester.email != params[:user_id] && requester.username != params[:user_id])
+               raise AuthorizationError.new
+            end
+
+            shares = CameraShare.where(camera_id: camera.id, user_id: user.id).to_a
+            present shares, with: Presenters::CameraShare
+         end
+
          resource :camera do
             #-------------------------------------------------------------------
             # GET /shares/camera/:id
