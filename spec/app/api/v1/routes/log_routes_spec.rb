@@ -28,11 +28,9 @@ describe 'API routes/client', :focus => true do
       end
     end
 
-    context 'when log amount is big'
+    context 'when log amount is big' do
       before do
-        #5.times do
-        #  create(:camera_activity, camera: camera, access_token: nil)
-        #end
+        #create(:camera_activity, camera: camera, access_token: nil)
       end
 
       it 'limit is working' do
@@ -47,5 +45,6 @@ describe 'API routes/client', :focus => true do
       it 'filters are working' do
 
       end
+    end
   end
 end
