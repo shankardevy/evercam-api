@@ -134,7 +134,7 @@ describe 'API routes/cameras' do
    #----------------------------------------------------------------------------
 
    describe 'DELETE /shares/camera/:id' do
-      let(:sharer) { create(:user) }
+      let(:sharee) { create(:user) }
       let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
       context "where the share specified does not exist" do
@@ -145,7 +145,7 @@ describe 'API routes/cameras' do
       end
 
       context "when deleting a share that exists" do
-         let(:share) { create(:private_camera_share, camera: camera, user: authorization_user, sharer: sharer).save }
+         let(:share) { create(:private_camera_share, camera: camera, user: sharee, sharer: authorization_user).save }
 
          context "where the camera specified does not exist" do
             it "returns a not found" do
@@ -154,7 +154,7 @@ describe 'API routes/cameras' do
             end
          end
 
-         context "when the caller does not own the camera" do
+         context "when the caller does not own the camera or is not the user the camera is shared with" do
             it "returns an error" do
                not_owner  = create(:user)
                parameters = {api_id: not_owner.api_id, api_key: not_owner.api_key, share_id: share.id}
@@ -163,9 +163,17 @@ describe 'API routes/cameras' do
             end
          end
 
-         context "when proper request is sent" do
+         context "when a proper request is sent by the camera owner" do
             it "returns success" do
                response = delete("/shares/camera/#{camera.exid}", {share_id: share.id}.merge(api_keys))
+               expect(response.status).to eq(200)
+            end
+         end
+
+         context "when a proper request is sent by the user the camera is shared with" do
+            it "returns success" do
+               credentials = {api_id: sharee.api_id, api_key: sharee.api_key}
+               response = delete("/shares/camera/#{camera.exid}", {share_id: share.id}.merge(credentials))
                expect(response.status).to eq(200)
             end
          end
