@@ -13,12 +13,12 @@ describe 'API routes/cameras' do
       {api_id: authorization_user.api_id, api_key: authorization_user.api_key}
    }
 
-   describe 'GET /shares/camera/:id' do
+   describe 'GET /shares/cameras/:id' do
       let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
       context "where shares don't exist" do
          let(:shares) {
-            get("/shares/camera/#{camera.exid}", api_keys).json['shares']
+            get("/shares/cameras/#{camera.exid}", api_keys).json['shares']
          }
 
          it "returns an empty list" do
@@ -34,7 +34,7 @@ describe 'API routes/cameras' do
          let(:shares) {
             create(:private_camera_share, camera: camera, user: sharer1).save
             create(:private_camera_share, camera: camera, user: sharer2).save
-            get("/shares/camera/#{camera.exid}", api_keys).json['shares']
+            get("/shares/cameras/#{camera.exid}", api_keys).json['shares']
          }
 
          it "returns a full list of shares for a camera" do
@@ -57,7 +57,7 @@ describe 'API routes/cameras' do
          it "returns an error" do
             parameters.delete(:email)
             parameters.merge!(api_keys)
-            response = post("/shares/camera/#{camera.exid}", parameters)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
             expect(response.status).to eq(400)
          end
       end
@@ -66,14 +66,14 @@ describe 'API routes/cameras' do
          it "returns an error" do
             parameters.delete(:rights)
             parameters.merge!(api_keys)
-            response = post("/shares/camera/#{camera.exid}", parameters)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
             expect(response.status).to eq(400)
          end
       end
 
       context "where the camera does not exist" do
          it "returns an error" do
-            response = post("/shares/camera/blahblah", parameters.merge(api_keys))
+            response = post("/shares/cameras/blahblah", parameters.merge(api_keys))
             expect(response.status).to eq(404)
          end
       end
@@ -82,7 +82,7 @@ describe 'API routes/cameras' do
          it "returns an error" do
             not_owner = create(:user)
             parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
-            response = post("/shares/camera/#{camera.exid}", parameters)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
             expect(response.status).to eq(403)
          end
       end
@@ -91,7 +91,7 @@ describe 'API routes/cameras' do
          it "returns an error" do
             not_owner = create(:user)
             parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
-            response = post("/shares/camera/#{public_camera.exid}", parameters)
+            response = post("/shares/cameras/#{public_camera.exid}", parameters)
             expect(response.status).to eq(403)
          end
       end
@@ -100,7 +100,7 @@ describe 'API routes/cameras' do
          it "returns an error" do
             not_owner = create(:user)
             parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
-            response = post("/shares/camera/#{discoverable_camera.exid}", parameters)
+            response = post("/shares/cameras/#{discoverable_camera.exid}", parameters)
             expect(response.status).to eq(201)
          end
       end
@@ -109,14 +109,14 @@ describe 'API routes/cameras' do
          it "returns an error" do
             parameters[:rights] = "blah, ningy"
             parameters.merge!(api_keys)
-            response = post("/shares/camera/#{camera.exid}", parameters)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
             expect(response.status).to eq(400)
          end
       end
 
       context "when a proper request is sent" do
          it "returns success" do
-            response = post("/shares/camera/#{camera.exid}", parameters.merge(api_keys))
+            response = post("/shares/cameras/#{camera.exid}", parameters.merge(api_keys))
             expect(response.status).to eq(201)
          end
       end    
@@ -125,7 +125,7 @@ describe 'API routes/cameras' do
          it "returns success" do
             parameters[:email] = "noone@nowhere.com"
             parameters.merge!(api_keys)
-            response = post("/shares/camera/#{camera.exid}", parameters)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
             expect(response.status).to eq(201)
          end
       end
@@ -133,13 +133,13 @@ describe 'API routes/cameras' do
 
    #----------------------------------------------------------------------------
 
-   describe 'DELETE /shares/camera/:id' do
+   describe 'DELETE /shares/cameras/:id' do
       let(:sharee) { create(:user) }
       let(:camera) { create(:camera, is_public: false, owner: authorization_user) }
 
       context "where the share specified does not exist" do
          it "returns success" do
-            response = delete("/shares/camera/#{camera.exid}", {share_id: -100}.merge(api_keys))
+            response = delete("/shares/cameras/#{camera.exid}", {share_id: -100}.merge(api_keys))
             expect(response.status).to eq(200)
          end
       end
@@ -149,7 +149,7 @@ describe 'API routes/cameras' do
 
          context "where the camera specified does not exist" do
             it "returns a not found" do
-               response = delete("/shares/camera/blahdeblah", {share_id: share.id}.merge(api_keys))
+               response = delete("/shares/cameras/blahdeblah", {share_id: share.id}.merge(api_keys))
                expect(response.status).to eq(404)
             end
          end
@@ -158,14 +158,14 @@ describe 'API routes/cameras' do
             it "returns an error" do
                not_owner  = create(:user)
                parameters = {api_id: not_owner.api_id, api_key: not_owner.api_key, share_id: share.id}
-               response = delete("/shares/camera/#{camera.exid}", parameters)
+               response = delete("/shares/cameras/#{camera.exid}", parameters)
                expect(response.status).to eq(403)
             end
          end
 
          context "when a proper request is sent by the camera owner" do
             it "returns success" do
-               response = delete("/shares/camera/#{camera.exid}", {share_id: share.id}.merge(api_keys))
+               response = delete("/shares/cameras/#{camera.exid}", {share_id: share.id}.merge(api_keys))
                expect(response.status).to eq(200)
             end
          end
@@ -173,7 +173,7 @@ describe 'API routes/cameras' do
          context "when a proper request is sent by the user the camera is shared with" do
             it "returns success" do
                credentials = {api_id: sharee.api_id, api_key: sharee.api_key}
-               response = delete("/shares/camera/#{camera.exid}", {share_id: share.id}.merge(credentials))
+               response = delete("/shares/cameras/#{camera.exid}", {share_id: share.id}.merge(credentials))
                expect(response.status).to eq(200)
             end
          end
@@ -203,7 +203,7 @@ describe 'API routes/cameras' do
       }
 
       it 'returns an empty list for a user with no shares' do
-         response = get("/shares/user/#{user3.username}", {api_id: user3.api_id, api_key: user3.api_key})
+         response = get("/shares/users/#{user3.username}", {api_id: user3.api_id, api_key: user3.api_key})
          expect(response.status).to eq(200)
          data = response.json
          expect(data.include?("shares")).to eq(true)
@@ -212,7 +212,7 @@ describe 'API routes/cameras' do
       end
 
       it 'returns a correct list of shares for a user with shares' do
-         response = get("/shares/user/#{user1.username}", {api_id: user1.api_id, api_key: user1.api_key})
+         response = get("/shares/users/#{user1.username}", {api_id: user1.api_id, api_key: user1.api_key})
          expect(response.status).to eq(200)
          data = response.json
          expect(data.include?("shares")).to eq(true)
@@ -225,22 +225,22 @@ describe 'API routes/cameras' do
       end
 
       it 'returns a not found error for a user that does not exist' do
-         response = get("/shares/user/idontexist", api_keys)
+         response = get("/shares/users/idontexist", api_keys)
          expect(response.status).to eq(404)
       end
 
       it 'returns an unauthenticated error when no credentials are supplied' do
-         response = get("/shares/user/#{user1.username}", {})
+         response = get("/shares/users/#{user1.username}", {})
          expect(response.status).to eq(401)
       end
 
       it 'returns an unauthenticated error when invalid credentials are supplied' do
-         response = get("/shares/user/#{user1.username}", {api_id: '12345', api_key: '54321'})
+         response = get("/shares/users/#{user1.username}", {api_id: '12345', api_key: '54321'})
          expect(response.status).to eq(401)
       end
 
       it 'returns an authorization error for a user with insufficient permissions' do
-         response = get("/shares/user/#{user1.username}", api_keys)
+         response = get("/shares/users/#{user1.username}", api_keys)
          expect(response.status).to eq(403)
       end
    end
@@ -465,7 +465,7 @@ describe 'API routes/cameras' do
 
    #----------------------------------------------------------------------------
 
-   describe 'PATCH /shares/camera/:id' do
+   describe 'PATCH /shares/cameras/:id' do
       let!(:share) {
          create(:private_camera_share)
       }
@@ -495,7 +495,7 @@ describe 'API routes/cameras' do
       }
 
       it 'returns success when provided with valid parameters' do
-         response = patch("/shares/camera/#{share.id}", parameters.merge(credentials))
+         response = patch("/shares/cameras/#{share.id}", parameters.merge(credentials))
          expect(response.status).to eq(200)
          expect(rights.allow?(AccessRight::LIST)).to eq(true)
          expect(rights.allow?(AccessRight::VIEW)).to eq(true)
@@ -505,7 +505,7 @@ describe 'API routes/cameras' do
       end
 
       it 'returns a not found error for a non-existent share id' do
-         response = patch("/shares/camera/-1000", parameters.merge(credentials))
+         response = patch("/shares/cameras/-1000", parameters.merge(credentials))
          expect(response.status).to eq(404)
          data = response.json
          expect(data.include?("message")).to eq(true)
@@ -514,7 +514,7 @@ describe 'API routes/cameras' do
 
       it 'returns an error if invalid rights are specified' do
          parameters[:rights] = "list,blah,view"
-         response = patch("/shares/camera/#{share.id}", parameters.merge(credentials))
+         response = patch("/shares/cameras/#{share.id}", parameters.merge(credentials))
          expect(response.status).to eq(400)
          data = response.json
          expect(data.include?("message")).to eq(true)
@@ -523,7 +523,7 @@ describe 'API routes/cameras' do
 
       it 'returns an unauthorized error if the caller is not the owner of the camera associated with the share' do
          user = create(:user)
-         response = patch("/shares/camera/#{share.id}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
+         response = patch("/shares/cameras/#{share.id}", parameters.merge({api_id: user.api_id, api_key: user.api_key}))
          expect(response.status).to eq(403)
          data = response.json
          expect(data.include?("message")).to eq(true)
@@ -531,7 +531,7 @@ describe 'API routes/cameras' do
       end
 
       it 'returns an unauthenticated error if incorrect credentials are used' do
-         response = patch("/shares/camera/#{share.id}", parameters.merge({api_id: "abcde", api_key: "12345"}))
+         response = patch("/shares/cameras/#{share.id}", parameters.merge({api_id: "abcde", api_key: "12345"}))
          expect(response.status).to eq(401)
          data = response.json
          expect(data.include?("message")).to eq(true)

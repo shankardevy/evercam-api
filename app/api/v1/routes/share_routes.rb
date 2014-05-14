@@ -38,9 +38,9 @@ module Evercam
             present shares, with: Presenters::CameraShare
          end
 
-         resource :camera do
+         resource :cameras do
             #-------------------------------------------------------------------
-            # GET /shares/camera/:id
+            # GET /shares/cameras/:id
             #-------------------------------------------------------------------
             desc 'Get the list of shares for a specified camera', {
               entity: Evercam::Presenters::CameraShare
@@ -62,7 +62,7 @@ module Evercam
             end
 
             #-------------------------------------------------------------------
-            # POST /shares/camera/:id
+            # POST /shares/cameras/:id
             #-------------------------------------------------------------------
             desc 'Create a new camera share', {
               entity: Evercam::Presenters::CameraShare
@@ -122,7 +122,7 @@ module Evercam
             end
 
             #-------------------------------------------------------------------
-            # PATCH /shares/camera/:id
+            # PATCH /shares/cameras/:id
             #-------------------------------------------------------------------
             desc 'Update an existing camera share.', {}
             params do
@@ -149,9 +149,9 @@ module Evercam
             end
          end
 
-         resource :user do
+         resource :users do
             #-------------------------------------------------------------------
-            # GET /shares/user/:id
+            # GET /shares/users/:id
             #-------------------------------------------------------------------
             desc 'Fetch the list of shares currently granted to a user.', {
                entity: Evercam::Presenters::CameraShare
