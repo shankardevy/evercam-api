@@ -34,8 +34,8 @@ module Evercam
       types = params[:types].split(',').map(&:strip)
       results = camera.activities
       results = results.where(:action => types) unless types.blank?
+      total_pages = results.count / limit
       results = results.limit(limit, page*limit).all
-      total_pages = camera.activities.count / limit
       if params[:objects]
         present(Array(results), with: Presenters::Log).merge!({
             :camera_exid => camera.exid,
