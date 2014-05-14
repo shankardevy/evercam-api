@@ -40,6 +40,7 @@ module Evercam
     mount V1ClientRoutes
     mount V1PublicRoutes
     mount V1ShareRoutes
+    mount V1LogRoutes
 
     # bring on the swagger
     add_swagger_documentation(
