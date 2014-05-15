@@ -93,6 +93,15 @@ module Evercam
               else
                 present [outcome.result], with: Presenters::CameraShareRequest
               end
+              grantor = (params[:grantor] ? User.where(username: params[:grantor]).first : camera.owner)
+              CameraActivity.create(
+                camera: camera,
+                access_token: grantor.token,
+                action: 'shared',
+                done_at: Time.now,
+                ip: request.ip,
+                extra: {:with => params[:email]}
+              )
             end
 
             #-------------------------------------------------------------------
@@ -117,7 +126,7 @@ module Evercam
                 end
               end
 
-              Actors::ShareDelete.run(params)
+              Actors::ShareDelete.run(params.merge!({:ip => request.ip}))
               {}
             end
 
@@ -142,7 +151,7 @@ module Evercam
                   raise AuthorizationError.new
                end
 
-               outcome = Actors::ShareUpdate.run(params)
+               outcome = Actors::ShareUpdate.run(params.merge!({:ip => request.ip}))
                raise OutcomeError, outcome unless outcome.success?
 
                present [outcome.result], with: Presenters::CameraShare
