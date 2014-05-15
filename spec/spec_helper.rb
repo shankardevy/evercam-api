@@ -47,3 +47,11 @@ Sidekiq::Testing.fake!
 
 # Stubbed requests
 require 'webmock/rspec'
+
+# Set up Airbrake.
+require 'airbrake'
+Airbrake.configure do |config|
+   config.api_key = Evercam::Config[:airbrake][:api_key]
+   config.environment_name = (ENV['RACK_ENV'] || 'test')
+end
+
