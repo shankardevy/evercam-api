@@ -32,6 +32,9 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    airbrake (3.1.16)
+      builder
+      multi_json
     aws-sdk (1.38.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
@@ -270,6 +273,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  airbrake
   database_cleaner
   evercam_actors (~> 0.0)
   evercam_misc (~> 0.0)

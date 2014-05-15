@@ -48,6 +48,8 @@ gem 'evercam_models', '~> 0.0'
 gem 'evercam_sidekiq', '~> 0.0'
 gem 'evercam_actors', '~> 0.0'
 
+gem 'airbrake'
+
 group :development do
   gem 'sqlite3'
   gem 'shotgun'

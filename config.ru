@@ -26,6 +26,12 @@ base = File.dirname(__FILE__)
   require File.join(base, 'app', app)
 end
 
+# Set up Airbrake.
+Airbrake.configure do |config|
+   config.api_key = Evercam::Config[:airbrake][:api_key]
+   config.environment_name = (ENV['RACK_ENV'] || 'development')
+end
+
 map '/v1' do
 
   # setup ssl requirements
@@ -45,6 +51,9 @@ map '/v1' do
   # ensure cookies work across subdomains
   use Rack::Session::Cookie,
     Evercam::Config[:cookies]
+
+  # Bring in Airbrake.
+  use Airbrake::Rack
 
   run Evercam::APIv1
 
