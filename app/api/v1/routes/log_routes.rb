@@ -29,7 +29,9 @@ module Evercam
         camera = Camera.where(exid: params[:id]).first
       end
       raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
-      raise(Evercam::BadRequestError, "From can't be higher than to") if params[:from].present? and params[:to].present? and params[:from].to_i > params[:to].to_i
+      if params[:from].present? and params[:to].present? and params[:from].to_i > params[:to].to_i
+        raise(Evercam::BadRequestError, "From can't be higher than to")
+      end
       from = Time.at(params[:from].to_i).to_s || 0
       to = Time.at(params[:to].to_i).to_s
       to = Time.now.to_s if params[:to].blank?
