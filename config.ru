@@ -26,6 +26,11 @@ base = File.dirname(__FILE__)
   require File.join(base, 'app', app)
 end
 
+# Set up Airbrake.
+Airbrake.configure do |config|
+   config.api_key = Evercam::Config[:airbrake][:api_key]
+end
+
 map '/v1' do
 
   # setup ssl requirements

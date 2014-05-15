@@ -3,60 +3,47 @@ module Evercam
 
     include WebErrors
 
+    EXCEPTION_CLASSES = [
+        AuthorizationError,
+        AuthenticationError,
+        BadRequestError,
+        CameraOfflineError,
+        ComingSoonError,
+        ConflictError,
+        Grape::Exceptions::ValidationErrors,
+        OutcomeError,
+        NotFoundError]
+
+    CLASS_STATUS_MAP = {
+      AuthorizationError                  => 403,
+      AuthenticationError                 => 401,
+      BadRequestError                     => 400,
+      CameraOfflineError                  => 503,
+      ComingSoonError                     => 501,
+      ConflictError                       => 409,
+      Grape::Exceptions::ValidationErrors => 400,
+      OutcomeError                        => 400,
+      NotFoundError                       => 404
+    }
+
     def self.extended(base)
-
-      # errors where the user has made a mistake
-      base.rescue_from BadRequestError, OutcomeError,
-        Grape::Exceptions::ValidationErrors do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 400, message: e.message })
+      base.rescue_from :all do |exception|
+        log.error "Exception caught processing request.\nType: "\
+                  "#{exception.class.name}\nMessage: #{exception.message}\n" +
+                  exception.backtrace.join("\n")
+        Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
+        code    = (CLASS_STATUS_MAP[exception.class] || 500)
+        message = "Sorry, we dropped the ball."
+        if exception.kind_of?(ComingSoonError)
+          message = "Sorry, this method is not implemented yet."
+        elsif EXCEPTION_CLASSES.include?(exception.class)
+          message = exception.message
+        end
+        log.info "HTTP Return Status: #{code}, Message: '#{message}'"
+        Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
+        error_response(status: code, message: message)
       end
-
-      # errors where user has failed to provide authentication
-      base.rescue_from AuthenticationError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 401, message: e.message })
-      end
-
-      # errors where user does not have sufficient rights
-      base.rescue_from AuthorizationError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 403, message: e.message })
-      end
-
-      # errors where something does not exist
-      base.rescue_from NotFoundError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 404, message: e.message })
-      end
-
-      # errors where a conflict exists
-      base.rescue_from ConflictError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 409, message: e.message })
-      end
-
-      # errors where camera is offline
-      base.rescue_from CameraOfflineError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 503, message: e.message })
-      end
-
-      # errors where the endpoint is not implemented yet
-      base.rescue_from ComingSoonError do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        error_response({ status: 501, message: 'Sorry, this method is not implemented yet' })
-      end
-
-      # woops, we broke something, go crazy...
-      base.rescue_from :all do |e|
-        log.error "Exception caught processing request.\nCause: #{e}\n" + e.backtrace.join("\n")
-        Grape::API.logger.error e
-        error_response({ status: 500, message: 'Sorry, we dropped the ball' })
-      end
-
     end
-
   end
 end
 
