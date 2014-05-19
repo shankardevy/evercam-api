@@ -195,7 +195,7 @@ module Evercam
       get '/:id/credentials' do
         authreport!('users/credentials')
         user = User.by_login(params[:id])
-        raise NotFoundError.new('User does not exist.') if user.nil?
+        raise NotFoundError.new("No user with an id of #{param[:id]} exists.") if user.nil?
 
         if user.password != params[:password]
           raise AuthenticationError.new("Invalid user name and/or password.")

@@ -32,6 +32,7 @@ Airbrake.configure do |config|
    config.environment_name = (ENV['RACK_ENV'] || 'development')
    config.ignore << "Evercam::CameraOfflineError"
    config.ignore << "Evercam::AuthorizationError"
+   config.ignore << "Evercam::NotFoundError"
 end
 
 map '/v1' do
