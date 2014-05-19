@@ -433,7 +433,7 @@ describe 'API routes/users' do
           data = last_response.json
           expect(data).not_to be_nil
           expect(data.include?("message")).to eq(true)
-          expect(data["message"]).to eq("User does not exist.")
+          expect(data["message"]).to eq("No user with an id of blah exists.")
         end
       end
 

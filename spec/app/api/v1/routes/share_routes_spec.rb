@@ -329,7 +329,7 @@ describe 'API routes/cameras' do
          expect(response.status).to eq(404)
          data = response.json
          expect(data.include?("message")).to eq(true)
-         expect(data["message"]).to eq("Camera does not exist")
+         expect(data["message"]).to eq("The 'this_does_not_exist' camera does not exist.")
       end
 
       it 'returns an empty list for a camera with no share requests' do
@@ -415,7 +415,7 @@ describe 'API routes/cameras' do
          expect(response.status).to eq(404)
          data = response.json
          expect(data.include?("message")).to eq(true)
-         expect(data["message"]).to eq("Camera does not exist")
+         expect(data["message"]).to eq("The 'this_does_not_exist' camera does not exist.")
       end
 
       it 'returns a not found error when an unknown email address is specified' do
@@ -656,7 +656,7 @@ describe 'API routes/cameras' do
          expect(response.status).to eq(404)
          data = response.json
          expect(data.include?("message")).to eq(true)
-         expect(data["message"]).to eq("Camera does not exist")
+         expect(data["message"]).to eq("The 'this-does-not-exist' camera does not exist.")
       end
 
       it 'returns a not found error for an invalid user id' do
