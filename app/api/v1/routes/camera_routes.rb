@@ -30,8 +30,8 @@ module Evercam
                                           userpwd: auth,
                                           timeout: TIMEOUT,
                                           connecttimeout: TIMEOUT)
-      rescue URI::InvalidURIError, Addressable::URI::InvalidURIError
-        raise BadRequestError, 'Invalid URL'
+      rescue URI::InvalidURIError, Addressable::URI::InvalidURIError => error
+        raise BadRequestError, "Invalid URL. Cause: #{error}"
       end
       if response.success?
         data = Base64.encode64(response.body).gsub("\n", '')
@@ -58,7 +58,7 @@ module Evercam
       else
         camera = Camera.where(exid: params[:id]).first
       end
-      raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
+      raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
 
       rights = requester_rights_for(camera)
       if !rights.allow?(AccessRight::LIST)
