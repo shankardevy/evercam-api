@@ -137,7 +137,17 @@ module Evercam
         raise BadRequestError.new("Requester is not a user.") if caller.nil? || !caller.instance_of?(User)
         parameters = {}.merge(params).merge(username: caller.username)
         outcome    = Actors::CameraCreate.run(parameters)
-        raise OutcomeError, outcome unless outcome.success?
+        unless outcome.success?
+          Intercom::Event.create({
+             :event_name => 'failed-creating-camera',
+             :user => Intercom::User.find(:email => caller.email)
+           })
+          raise OutcomeError, outcome
+        end
+        Intercom::Event.create({
+           :event_name => 'created-camera',
+           :user => Intercom::User.find(:email => caller.email)
+         })
         present Array(outcome.result), with: Presenters::Camera
       end
 
@@ -179,6 +189,12 @@ module Evercam
             done_at: Time.now,
             ip: request.ip
           )
+        end
+        if params[:is_public]
+          Intercom::Event.create({
+             :event_name => 'made-camera-public',
+             :user => Intercom::User.find(:email => caller.email)
+          })
         end
 
         present Array(camera.reload), with: Presenters::Camera
