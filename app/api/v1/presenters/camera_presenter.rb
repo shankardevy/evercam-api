@@ -258,7 +258,7 @@ module Evercam
 
       end
 
-      expose :short, if: lambda {|instance, options| !options[:minimal]} do
+      expose :short do
         expose :jpg_url, documentation: {
           type: 'String',
           desc: 'Short snapshot url using evr.cm url shortener'
@@ -272,7 +272,7 @@ module Evercam
                        type: 'Boolean',
                        desc: 'True if the user owns the camera, false otherwise'
                      } do |c,o|
-         (c.owner.id == options[:user].id)
+        (c.owner.id == o[:user].id)
       end
     end
   end

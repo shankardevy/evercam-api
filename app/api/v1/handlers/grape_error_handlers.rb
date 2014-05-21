@@ -38,6 +38,8 @@ module Evercam
           message = "Sorry, this method is not implemented yet."
         elsif EXCEPTION_CLASSES.include?(exception.class)
           message = exception.message
+        elsif Evercam::Config.env == :test
+          raise exception
         end
         log.info "HTTP Return Status: #{code}, Message: '#{message}'"
         Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
