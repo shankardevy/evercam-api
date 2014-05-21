@@ -38,6 +38,9 @@ RSpec.configure do |c|
 
   c.before :each do
     Typhoeus::Expectation.clear
+    #Stub intercom.io requests
+    stub_request(:get, /.*api.intercom.io.*/).
+      to_return(:status => 200, :body => "", :headers => {})
   end
 end
 

@@ -97,10 +97,14 @@ module Evercam
                 ip: request.ip,
                 extra: {:with => params[:email]}
               )
-              Intercom::Event.create({
-                 :event_name => 'shared-camera',
-                 :user => Intercom::User.find(:email => caller.email)
-               })
+              begin
+                Intercom::Event.create({
+                   :event_name => 'shared-camera',
+                   :user => Intercom::User.find(:email => caller.email)
+                 })
+              rescue => e
+                log.info "Intercom exception: #{e.message}"
+              end
               if outcome.result.class == CameraShare
                 present [outcome.result], with: Presenters::CameraShare
               else
