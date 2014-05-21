@@ -88,11 +88,6 @@ module Evercam
               outcome = Actors::ShareCreate.run(params)
               raise OutcomeError, outcome unless outcome.success?
 
-              if outcome.result.class == CameraShare
-                present [outcome.result], with: Presenters::CameraShare
-              else
-                present [outcome.result], with: Presenters::CameraShareRequest
-              end
               grantor = (params[:grantor] ? User.where(username: params[:grantor]).first : camera.owner)
               CameraActivity.create(
                 camera: camera,
@@ -102,6 +97,19 @@ module Evercam
                 ip: request.ip,
                 extra: {:with => params[:email]}
               )
+              begin
+                Intercom::Event.create({
+                   :event_name => 'shared-camera',
+                   :user => Intercom::User.find(:email => caller.email)
+                 })
+              rescue => e
+                log.info "Intercom exception: #{e.message}"
+              end
+              if outcome.result.class == CameraShare
+                present [outcome.result], with: Presenters::CameraShare
+              else
+                present [outcome.result], with: Presenters::CameraShareRequest
+              end
             end
 
             #-------------------------------------------------------------------
