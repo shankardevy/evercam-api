@@ -29,9 +29,10 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'discoverable', 'vendor_name')
+            'timezone', 'location', 'discoverable', 'vendor_name', 'short')
           expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
-                                        'auth', 'mac_address')
+                                        'auth', 'mac_address', 'external',
+                                        'internal', 'dyndns')
         end
 
       end
@@ -49,7 +50,8 @@ describe 'API routes/cameras' do
             'last_polled_at', 'is_public', 'is_online', 'last_online_at',
             'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
             'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-            'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable')
+            'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
+            'external', 'internal', 'dyndns', 'short')
         end
       end
 
@@ -65,9 +67,10 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location')
+            'timezone', 'location', 'short')
           expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
-                                        'auth', 'mac_address')
+                                        'auth', 'mac_address', 'external',
+                                        'internal', 'dyndns')
         end
       end
 

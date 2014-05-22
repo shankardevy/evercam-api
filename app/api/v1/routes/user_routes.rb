@@ -53,11 +53,16 @@ module Evercam
                                  :mac_address, :model_id, :discoverable)
           end
 
-          cameras = query.order(:name).all.select do |camera|
-            requester_rights_for(camera).allow?(AccessRight::LIST)
+          cameras = []
+          query.order(:name).all.select do |camera|
+            rights = requester_rights_for(camera)
+            if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
+              presenter = Evercam::Presenters::Camera.new(camera)
+              cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW), user: user)
+            end
           end
 
-          present cameras, with: Presenters::Camera, user: user
+          {cameras: cameras}
         end
       end
 

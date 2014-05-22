@@ -224,6 +224,15 @@ describe 'API routes/users' do
         expect(content).not_to be_nil
         expect(content.include?("cameras")).to eq(true)
         expect(content["cameras"].map {|s| s['id']}).to eq([camera0.exid])
+        content["cameras"].each do |c|
+          expect(c).to have_keys(
+                            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
+                            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
+                            'timezone', 'location', 'discoverable', 'vendor_name', 'short')
+          expect(c).to not_have_keys('owner', 'external_host', 'snapshots',
+                                        'auth', 'mac_address', 'external',
+                                        'internal', 'dyndns')
+        end
       end
 
     end
@@ -235,7 +244,16 @@ describe 'API routes/users' do
         it 'only returns public and private cameras' do
           cameras = last_response.json['cameras']
           expect(cameras.map{ |s| s['id'] }).to include(camera1.exid, camera0.exid)
-          cameras.each {|c| expect(c['owned']).to eq(true)}
+          cameras.each {|c|
+            expect(c['owned']).to eq(true)
+            expect(c).to have_keys(
+              'id', 'name', 'owner', 'created_at', 'updated_at',
+              'last_polled_at', 'is_public', 'is_online', 'last_online_at',
+              'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
+              'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
+              'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
+              'external', 'internal', 'dyndns', 'short')
+          }
         end
       end
 
