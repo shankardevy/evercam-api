@@ -34,6 +34,20 @@ module Evercam
         }
       end
 
+      expose :extra, documentation: {
+        type: 'string',
+        desc: 'Camera action',
+        required: true
+      } do |c,o|
+        unless c.extra['with'].nil?
+          user = ::User.by_login(c.extra['with'])
+          unless user.nil?
+            c.extra['with'] = user.fullname
+          end
+        end
+        c.extra
+      end
+
     end
   end
 end

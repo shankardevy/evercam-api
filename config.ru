@@ -58,6 +58,9 @@ map '/v1' do
   # Bring in Airbrake.
   use Airbrake::Rack
 
+  # Enable gzip
+  use Rack::Deflater
+
   run Evercam::APIv1
 
 end
