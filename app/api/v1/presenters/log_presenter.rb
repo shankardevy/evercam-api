@@ -39,7 +39,7 @@ module Evercam
         desc: 'Camera action',
         required: true
       } do |c,o|
-        unless c.extra['with'].nil?
+        unless c.extra.nil? or c.extra['with'].nil?
           user = ::User.by_login(c.extra['with'])
           unless user.nil?
             c.extra['with'] = user.fullname
