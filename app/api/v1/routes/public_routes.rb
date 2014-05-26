@@ -29,7 +29,6 @@ module Evercam
                case_sensitive = (params.include?(:case_sensitive) ? params[:case_sensitive] : true)
 
                query = Camera.where(is_public: true, discoverable: true)
-               query = query.offset(params[:offset] || DEFAULT_OFFSET)
 
                if params.include?(:id_starts_with) && params[:id_starts_with]
                   if case_sensitive
@@ -56,10 +55,15 @@ module Evercam
                end
 
                limit = (params[:limit] || DEFAULT_LIMIT)
+               total_pages = query.count / limit
+               query = query.offset(params[:offset] || DEFAULT_OFFSET)
+
                query = query.limit(limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : limit)
 
                log.debug "SQL: #{query.sql}"
-               present query.all.to_a, with: Presenters::Camera, minimal: true
+               present(query.all.to_a, with: Presenters::Camera, minimal: true).merge!({
+                 :pages => total_pages
+               })
             end
          end
       end
