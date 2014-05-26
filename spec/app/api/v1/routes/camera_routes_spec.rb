@@ -601,4 +601,71 @@ describe 'API routes/cameras' do
     end
   end
 
+  describe 'PUT /cameras/:id' do
+    let(:camera) { create(:camera, is_public: false) }
+    let(:owner) { camera.owner }
+    let(:new_owner) { create(:user) }
+
+    let(:credentials) {{api_id: owner.api_id, api_key: owner.api_key}}
+
+    it 'returns success and the camera details when given valid parameters' do
+      put "/cameras/#{camera.exid}", {user_id: new_owner.username}.merge(credentials)
+      expect(last_response.status).to eq(200)
+      expect(last_response.body.blank?).to eq(false)
+      data = last_response.json
+      expect(data).not_to be_nil
+      expect(data.class).to eq(Hash)
+      expect(data.include?("cameras")).to eq(true)
+      expect(data["cameras"]).not_to be_nil
+      expect(data["cameras"].class).to eq(Array)
+      expect(data["cameras"].size).to eq(1)
+      data = data["cameras"].first
+      expect(data["id"]).to eq(camera.exid)
+      expect(data["owner"]).to eq(new_owner.username)
+    end
+
+    it 'returns an unauthorized error if the caller is not the camera owner' do
+      parameters = {api_id: new_owner.api_id, api_key: new_owner.api_key, user_id: new_owner.username}
+      put "/cameras/#{camera.exid}", parameters
+      expect(last_response.status).to eq(403)
+      expect(last_response.body.blank?).to eq(false)
+      data = last_response.json
+      expect(data.class).to eq(Hash)
+      expect(data.include?("message")).to eq(true)
+      expect(data["message"]).to eq("Unauthorized")
+    end
+
+    it 'returns a not found error for a camera that does not exist' do
+      put "/cameras/does_not_exist", {user_id: new_owner.username}.merge(credentials)
+      expect(last_response.status).to eq(404)
+      expect(last_response.body.blank?).to eq(false)
+      data = last_response.json
+      expect(data).not_to be_nil
+      expect(data.class).to eq(Hash)
+      expect(data.include?("message")).to eq(true)
+      expect(data["message"]).to eq("The 'does_not_exist' camera does not exist.")
+    end
+
+    it 'returns a not found error when the new owner does not exist' do
+      put "/cameras/#{camera.exid}", {user_id: 'unknown_user'}.merge(credentials)
+      expect(last_response.status).to eq(404)
+      expect(last_response.body.blank?).to eq(false)
+      data = last_response.json
+      expect(data).not_to be_nil
+      expect(data.class).to eq(Hash)
+      expect(data.include?("message")).to eq(true)
+      expect(data["message"]).to eq("Specified user does not exist.")
+    end
+
+    it 'returns an unauthenticated error when no authentication details are provided' do
+      put "/cameras/#{camera.exid}", {user_id: new_owner.username}
+      expect(last_response.status).to eq(401)
+      expect(last_response.body.blank?).to eq(false)
+      data = last_response.json
+      expect(data).not_to be_nil
+      expect(data.class).to eq(Hash)
+      expect(data.include?("message")).to eq(true)
+      expect(data["message"]).to eq("Unauthenticated")
+    end
+  end
 end
