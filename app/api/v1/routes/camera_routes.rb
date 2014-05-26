@@ -229,6 +229,30 @@ module Evercam
         camera.destroy
         {}
       end
+
+      #-------------------------------------------------------------------------
+      # PUT /cameras/:id
+      #-------------------------------------------------------------------------
+      desc 'Transfers the ownership of a camera from one user to another', {
+        entity: Evercam::Presenters::Camera
+      }
+      params do
+         requires :id, type: String, desc: "The unique identifier for the camera."
+         requires :user_id, type: String, desc: "The Evercam user name or email address for the new camera owner."
+      end
+      put '/:id' do
+        authreport!('cameras/transfer')
+
+        camera = Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.is_owner?
+
+        new_owner = User.by_login(params[:user_id])
+        raise NotFoundError.new("Specified user does not exist.") if new_owner.nil?
+
+        camera.update(owner: new_owner)
+        present Array(camera), with: Presenters::Camera
+      end
     end
   end
 end
