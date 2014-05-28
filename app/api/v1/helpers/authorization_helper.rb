@@ -17,6 +17,13 @@ module Evercam
          else
             caller = token.target
          end
+         if !caller.nil?
+            if caller.kind_of?(Client)
+               log.debug "Caller is a client with the name '#{caller.name}' (id: #{caller.id})."
+            else
+               log.debug "Caller is a user with the name '#{caller.fullname}' (id: #{caller.id})."
+            end
+         end
    		caller
    	end
 

@@ -55,9 +55,10 @@ module Evercam
 
               camera = ::Camera.by_exid!(params[:id])
               rights = requester_rights_for(camera)
-              raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
-
-              shares = CameraShare.where(camera_id: camera.id).to_a
+              shares = []
+              if rights.allow?(AccessRight::VIEW)
+                shares = CameraShare.where(camera_id: camera.id).to_a
+              end
               present shares, with: Presenters::CameraShare
             end
 
@@ -209,22 +210,23 @@ module Evercam
 
                camera = Camera.by_exid!(params[:id])
                rights = requester_rights_for(camera)
-               raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
-
-               query = CameraShareRequest.where(camera_id: camera.id)
-               if params[:status]
-                  case params[:status].downcase
-                     when 'used'
-                        query = query.where(status: CameraShareRequest::USED)
-                     when 'cancelled'
-                        query = query.where(status: CameraShareRequest::CANCELLED)
-                     else
-                        query = query.where(status: CameraShareRequest::PENDING)
-                  end
+               list   = []
+               if rights.allow?(AccessRight::VIEW)
+                 query = CameraShareRequest.where(camera_id: camera.id)
+                 if params[:status]
+                    case params[:status].downcase
+                       when 'used'
+                          query = query.where(status: CameraShareRequest::USED)
+                       when 'cancelled'
+                          query = query.where(status: CameraShareRequest::CANCELLED)
+                       else
+                          query = query.where(status: CameraShareRequest::PENDING)
+                    end
+                 end
+                 log.debug "Query: #{query.sql}"
+                 list = query.to_a
                end
-
-               log.debug "Query: #{query.sql}"
-               present (query.to_a || []), with: Presenters::CameraShareRequest
+               present list, with: Presenters::CameraShareRequest
             end
 
             #-------------------------------------------------------------------

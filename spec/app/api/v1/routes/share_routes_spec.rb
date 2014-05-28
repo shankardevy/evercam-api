@@ -41,6 +41,16 @@ describe 'API routes/cameras' do
             expect(shares.size).to eq(2)
             expect(shares[0]).to have_keys('id', 'camera_id', 'user_id', 'email', 'kind', 'rights', 'sharer_id')
          end
+
+         it "returns an empty list for a user with insufficient permissions on the camera" do
+            user = create(:user)
+            get("/shares/cameras/#{camera.exid}", {api_id: user.api_id, api_key: user.api_key})
+            expect(last_response.status).to eq(200)
+            data = last_response.json
+            expect(data.include?("shares"))
+            expect(data["shares"]).not_to be_nil
+            expect(data["shares"].size).to eq(0)
+         end
       end
    end
 
@@ -343,13 +353,14 @@ describe 'API routes/cameras' do
          expect(list.size).to eq(0)
       end
 
-      it 'returns an unauthorized error if the caller does not have sufficient permission on the camera' do
+      it 'returns an empty list if the caller does not have sufficient permission on the camera' do
          user = create(:user)
          response = get("/shares/requests/#{camera.exid}", {api_id: user.api_id, api_key: user.api_key})
-         expect(response.status).to eq(403)
+         expect(response.status).to eq(200)
          data = response.json
-         expect(data.include?("message")).to eq(true)
-         expect(data["message"]).to eq("Unauthorized")
+         expect(data.include?("share_requests")).to eq(true)
+         list = data["share_requests"]
+         expect(list.size).to eq(0)
       end
 
       it 'returns an unauthenticated error if the caller incorrect credentials are used' do
