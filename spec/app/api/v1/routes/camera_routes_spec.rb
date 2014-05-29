@@ -282,7 +282,7 @@ describe 'API routes/cameras' do
     let(:params) {
       {
         id: 'my-new-camera',
-        name: "Garrett's Super New Camera",
+        name: "Super New Camera",
         external_host: 'super.camera',
         internal_host: '192.168.1.101',
         internal_rtsp_port: 9101,
@@ -299,7 +299,7 @@ describe 'API routes/cameras' do
     let(:params_blank) {
       {
         id: 'my-new-camera',
-        name: "Garrett's Super New Camera",
+        name: "Super New Camera",
         external_host: '',
         internal_host: '',
         internal_rtsp_port: '',
@@ -370,6 +370,13 @@ describe 'API routes/cameras' do
       end
     end
 
+    context 'when name is too long' do
+      it 'returns a BAD REQUEST status' do
+        post('/cameras', params.merge(name: 'super long camera name over 21 characters').merge(api_keys))
+        expect(last_response.status).to eq(400)
+      end
+    end
+
     context 'when :external_url key is missing' do
       it 'returns a ok status' do
         post('/cameras', params.merge(external_url: nil).merge(api_keys), auth)
@@ -399,7 +406,7 @@ describe 'API routes/cameras' do
 
     let(:params) {
       {
-        name: "Garrett's Super New Camera v2",
+        name: "Super New Camera v2",
         external_host: 'www.evercam.io',
         internal_host: 'localhost',
         internal_http_port: 4321,
@@ -416,7 +423,7 @@ describe 'API routes/cameras' do
 
     let(:params_blank) {
       {
-        name: "Garrett's Super New Camera",
+        name: "Super New Camera",
         external_host: '',
         internal_host: '',
         internal_rtsp_port: '',
@@ -514,6 +521,13 @@ describe 'API routes/cameras' do
         patch("/cameras/#{camera.exid}", {internal_http_port: ''}.merge(api_keys))
         expect(last_response.status).to eq(200)
         expect(last_response.json['cameras'][0]["internal_http_port"]).to eq('')
+      end
+    end
+
+    context 'when name is too long' do
+      it 'returns a 400 status' do
+        patch("/cameras/#{camera.exid}", {name: 'Over 21 characters very long camera name'}.merge(api_keys))
+        expect(last_response.status).to eq(400)
       end
     end
 

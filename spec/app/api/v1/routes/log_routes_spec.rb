@@ -19,6 +19,11 @@ describe 'API routes/client' do
         get("/cameras/#{camera.exid}/logs")
         expect(last_response.status).to eq(401)
       end
+
+      it 'returns 400 when from > to' do
+        get("/cameras/#{camera.exid}/logs", api_keys.merge!({from: 100, to: 50}))
+        expect(last_response.status).to eq(400)
+      end
     end
 
     context 'when given a correct set of parameters' do
@@ -31,9 +36,9 @@ describe 'API routes/client' do
     context 'when log amount is big' do
       before do
         create(:camera_activity, camera: camera, action: 'aaa')
-        now = Time.now - 1.minute
+        time = Time.at(100)
         60.times do |i|
-          create(:camera_activity, camera: camera, access_token: nil, done_at: now - i)
+          create(:camera_activity, camera: camera, access_token: nil, done_at: time - i)
         end
       end
 
@@ -56,6 +61,18 @@ describe 'API routes/client' do
         get("/cameras/#{camera.exid}/logs", api_keys.merge!({types: 'aaa, Test', limit: 999}))
         expect(last_response.status).to eq(200)
         expect(last_response.json['logs'].length).to eq(61)
+      end
+
+      it 'date range is working' do
+        get("/cameras/#{camera.exid}/logs", api_keys.merge!({from: 90}))
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['logs'].length).to eq(12)
+        get("/cameras/#{camera.exid}/logs", api_keys.merge!({from: 50, to: 60}))
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['logs'].length).to eq(11)
+        get("/cameras/#{camera.exid}/logs", api_keys.merge!({from: nil, to: 70, objects: true}))
+        expect(last_response.status).to eq(200)
+        expect(last_response.json['logs'].length).to eq(30)
       end
     end
   end

@@ -6,7 +6,7 @@ FactoryGirl.define do
 
     action 'Test'
     ip '1.1.1.1'
-    done_at Time.now
+    done_at Time.now - 1.minute
 
   end
 
