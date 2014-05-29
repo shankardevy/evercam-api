@@ -74,7 +74,10 @@ module Evercam
         ip: request.ip
       )
 
-      present Array(camera), with: Presenters::Camera, minimal: !rights.allow?(AccessRight::VIEW)
+      options        = {minimal: !rights.allow?(AccessRight::VIEW),
+                        with:    Presenters::Camera}
+      options[:user] = rights.requester if !rights.requester.nil?
+      present([camera], options)
     end
 
     #---------------------------------------------------------------------------

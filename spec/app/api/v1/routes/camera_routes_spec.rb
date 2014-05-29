@@ -29,7 +29,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'discoverable', 'vendor_name', 'short')
+            'timezone', 'location', 'discoverable', 'vendor_name', 'short',
+            'owned', 'rights')
           expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
@@ -51,7 +52,16 @@ describe 'API routes/cameras' do
             'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
             'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
             'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
-            'external', 'internal', 'dyndns', 'short')
+            'external', 'internal', 'dyndns', 'short', 'owned', 'rights')
+        end
+
+        it 'indicates that the owner has full rights' do
+          rights = json["rights"].split(",")
+          expect(rights.length).to eq(AccessRight::BASE_RIGHTS.length * 2)
+          AccessRight::BASE_RIGHTS.each do |right|
+            expect(rights.include?(right)).to eq(true)
+            expect(rights.include?("#{AccessRight::GRANT}~#{right}")).to eq(true)
+          end
         end
       end
 
@@ -67,10 +77,17 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'short')
+            'timezone', 'location', 'short', 'owned', 'rights')
           expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
+        end
+
+        it 'indicates that the user has minimal rights' do
+          rights = json["rights"].split(",")
+          expect(rights.length).to eq(2)
+          expect(rights.include?(AccessRight::LIST)).to eq(true)
+          expect(rights.include?(AccessRight::SNAPSHOT)).to eq(true)
         end
       end
 

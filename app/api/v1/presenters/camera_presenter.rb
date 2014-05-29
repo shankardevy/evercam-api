@@ -274,6 +274,22 @@ module Evercam
                      } do |c,o|
         (c.owner.id == o[:user].id)
       end
+
+      expose :rights, if: lambda {|instance, options| options.include?(:user)},
+                      documentation: {
+                        type: 'String',
+                        desc: 'A comma separated list of the users rights on the camera'
+                      } do |camera, options|
+        list   = []
+        grants = []
+        rights = AccessRightSet.for(camera, options[:user])
+        AccessRight::BASE_RIGHTS.each do |right|
+          list << right if rights.allow?(right)
+          grants << "#{AccessRight::GRANT}~#{right}" if rights.allow?("#{AccessRight::GRANT}~#{right}")
+        end
+        list.concat(grants) if !grants.empty?
+        list.join(",")
+      end
     end
   end
 end
