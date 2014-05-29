@@ -14,9 +14,7 @@ module Evercam
     #---------------------------------------------------------------------------
     # GET /cameras/test
     #---------------------------------------------------------------------------
-    desc 'Tests if given camera parameters are correct', {
-      entity: Evercam::Presenters::Camera
-    }
+    desc 'Tests if given camera parameters are correct'
     params do
       requires :external_url, type: String, desc: "External camera url."
       requires :jpg_url, type: String, desc: "Snapshot url."
