@@ -55,10 +55,14 @@ module Evercam
                end
 
                limit = (params[:limit] || DEFAULT_LIMIT)
+               if !(1..MAXIMUM_LIMIT).include?(limit)
+                  limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT)
+               end
                total_pages = query.count / limit
-               query = query.offset(params[:offset] || DEFAULT_OFFSET)
+               offset      = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
+               query = query.offset(offset)
 
-               query = query.limit(limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : limit)
+               query = query.limit(limit)
 
                log.debug "SQL: #{query.sql}"
                present(query.all.to_a, with: Presenters::Camera, minimal: true).merge!({
