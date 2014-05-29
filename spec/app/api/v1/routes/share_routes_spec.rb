@@ -88,7 +88,7 @@ describe 'API routes/cameras' do
          end
       end
 
-      context "where the caller is not the owner of the camera and the camera is not public and discoverable" do
+      context "where the caller is not the owner of the camera and does not possess edit right on the camera" do
          it "returns an error" do
             not_owner = create(:user)
             parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
@@ -97,25 +97,7 @@ describe 'API routes/cameras' do
          end
       end
 
-      context "where the caller is not the owner of the camera and the camera is public but not discoverable" do
-         it "returns an error" do
-            not_owner = create(:user)
-            parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
-            response = post("/shares/cameras/#{public_camera.exid}", parameters)
-            expect(response.status).to eq(403)
-         end
-      end
-
-      context "where the caller is not the owner of the camera and the camera is public and discoverable" do
-         it "returns an error" do
-            not_owner = create(:user)
-            parameters.merge!(api_id: not_owner.api_id, api_key: not_owner.api_key)
-            response = post("/shares/cameras/#{discoverable_camera.exid}", parameters)
-            expect(response.status).to eq(201)
-         end
-      end
-
-      context "where the invalid rights are requested" do
+      context "where invalid rights are requested" do
          it "returns an error" do
             parameters[:rights] = "blah, ningy"
             parameters.merge!(api_keys)
@@ -123,13 +105,6 @@ describe 'API routes/cameras' do
             expect(response.status).to eq(400)
          end
       end
-
-      context "when a proper request is sent" do
-         it "returns success" do
-            response = post("/shares/cameras/#{camera.exid}", parameters.merge(api_keys))
-            expect(response.status).to eq(201)
-         end
-      end    
 
       context "where the user email does not exist" do
          it "returns success" do
@@ -139,6 +114,35 @@ describe 'API routes/cameras' do
             expect(response.status).to eq(201)
          end
       end
+
+      context "when a proper request is sent" do
+         context "by the camera owner" do
+            it "returns success" do
+               response = post("/shares/cameras/#{camera.exid}", parameters.merge(api_keys))
+               expect(response.status).to eq(201)
+            end
+         end
+
+         context "by a user with edit rights on the camera" do
+            let!(:authorized_user) {
+               create(:user)
+            }
+
+            let!(:credentials) {
+               {api_id: authorized_user.api_id, api_key: authorized_user.api_key}
+            }
+
+            before(:each) do
+               rights = AccessRightSet.for(camera, authorized_user)
+               rights.grant(AccessRight::EDIT)
+            end
+
+            it "returns success" do
+               response = post("/shares/cameras/#{camera.exid}", parameters.merge(credentials))
+               expect(response.status).to eq(201)
+            end
+         end
+      end    
    end
 
    #----------------------------------------------------------------------------
