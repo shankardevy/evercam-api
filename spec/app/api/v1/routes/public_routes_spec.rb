@@ -54,6 +54,11 @@ describe 'API routes/cameras' do
             cameras = data["cameras"]
             expect(cameras.size).to eq(2)
          end
+
+         it "accepts non-sensible limit values but ignores them" do
+            get('/public/cameras', {limit: 0})
+            expect(last_response.status).to eq(200)
+         end
       end
 
       context "where an offset is specified" do
@@ -64,6 +69,11 @@ describe 'API routes/cameras' do
             expect(data.include?("cameras")).to eq(true)
             cameras = data["cameras"]
             expect(cameras.size).to eq(1)
+         end
+
+         it "accepts non-sensible offset values but ignores them" do
+            get('/public/cameras', {offset: -1})
+            expect(last_response.status).to eq(200)
          end
       end
 
