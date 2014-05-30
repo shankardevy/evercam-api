@@ -30,7 +30,7 @@ module Evercam
       end
       raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
       if params[:from].present? and params[:to].present? and params[:from].to_i > params[:to].to_i
-        raise(Evercam::BadRequestError, "From can't be higher than to")
+        raise(BadRequestError, "From can't be higher than to")
       end
       from = Time.at(params[:from].to_i).to_s || 0
       to = Time.at(params[:to].to_i).to_s
