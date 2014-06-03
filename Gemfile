@@ -62,7 +62,7 @@ group :test do
   gem 'factory_girl'
   gem 'nokogiri'
   gem 'webmock', '~> 1.17.0'
-  gem 'rspec'
+  gem 'rspec', '= 2.14.1'
   gem 'guard-rspec'
   gem 'database_cleaner'
 
