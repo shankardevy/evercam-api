@@ -1,11 +1,15 @@
-Dear <%= user.fullname %>
+Hi <%= user.fullname %>,
 
-Welcome to Evercam. To complete the signup process and activate your account we need you to confirm your email. To do this simply click on the link below and complete the final step on the evercam.io site.
+Welcome to Evercam and thank for creating an account!
+
+You can complete the signup process by following the url below to verify your email address
 
 https://dashboard.evercam.io/confirm?u=<%= user.username %>&c=<%= code %>
 
-Thanks again and we hope you enjoy your Evercam experience.
+We're still in Beta and greatly appreiciate any feedback so if you have any suggestions or if there is anything we can do to improve your Evercam experience please let us know!
 
-Best regards
+Thanks again for the joining us,
+
 The Evercam Team
+support@evercam.io
 
