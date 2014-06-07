@@ -24,6 +24,11 @@ def require_lib(name)
   require_relative "../lib/#{name}"
 end
 
+LogJam.configure({
+  # turn the noise down to separate problems from messages
+  loggers: { default: true, level: ENV['LOG'] || 'INFO' }
+})
+
 RSpec.configure do |c|
   c.expect_with :stdlib, :rspec
   c.filter_run :focus => true
