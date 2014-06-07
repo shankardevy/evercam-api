@@ -26,7 +26,7 @@ end
 
 LogJam.configure({
   # turn the noise down to separate problems from messages
-  loggers: { default: true, level: ENV['LOG'] || 'INFO' }
+  loggers: { default: true, file: 'STDOUT', level: ENV['LOG'] || 'FATAL' }
 })
 
 RSpec.configure do |c|
