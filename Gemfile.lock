@@ -81,7 +81,7 @@ GEM
     evercam_misc (0.0.4)
       3scale_client (~> 2.3)
       dotenv (~> 0.10)
-    evercam_models (0.1.11)
+    evercam_models (0.1.12)
       activesupport (~> 4.1)
       bcrypt (~> 3.1)
       dotenv (~> 0.10)
