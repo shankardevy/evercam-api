@@ -20,7 +20,7 @@ module Evercam
             params do
                optional :offset, type: Integer, desc: "The offset into the list of cameras to start the fetch from. Defaults to #{DEFAULT_OFFSET}."
                optional :limit, type: Integer, desc: "The maximum number of cameras to retrieve. Defaults to #{DEFAULT_LIMIT}, cannot be more than #{MAXIMUM_LIMIT}."
-               optional :case_sensitive, type: Boolean, desc: "Set whether search terms are case sensitive. Defaults to true."
+               optional :case_sensitive, type: 'Boolean', desc: "Set whether search terms are case sensitive. Defaults to true."
                optional :id_starts_with, type: String, desc: "Search for cameras whose id starts with the given value."
                optional :id_ends_with, type: String, desc: "Search for cameras whose id ends with the given value."
                optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
