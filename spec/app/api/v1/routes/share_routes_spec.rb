@@ -533,7 +533,8 @@ describe 'API routes/cameras' do
          expect(response.status).to eq(400)
          data = response.json
          expect(data.include?("message")).to eq(true)
-         expect(data["message"]).to eq(["invalid rights specified in request"])
+         expect(data["message"]).to eq("Invalid parameters specified for request.")
+         expect(data["context"]).to eq(["rights"])
       end
 
       it 'returns an unauthorized error if the caller is not the owner of the camera associated with the share' do

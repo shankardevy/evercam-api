@@ -161,7 +161,11 @@ module Evercam
                end
 
                outcome = Actors::ShareUpdate.run(params.merge!({:ip => request.ip}))
-               raise OutcomeError, outcome unless outcome.success?
+               if !outcome.success?
+                  raise_error(400, "invalid_parameters",
+                              "Invalid parameters specified for request.",
+                              *(outcome.errors.keys))
+               end
 
                present [outcome.result], with: Presenters::CameraShare
             end

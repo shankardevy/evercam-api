@@ -66,7 +66,7 @@ module Evercam
 
         log.info "Response:\n#{JSON.pretty_generate(details)}"
         Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
-        Rack::Response.new(details.to_json, status).finish
+        Rack::Response.new(details.to_json, status, "Content-Type" => "application/json").finish
       end
     end
   end

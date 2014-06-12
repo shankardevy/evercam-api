@@ -113,10 +113,20 @@ describe 'API routes/users' do
     end
 
     context 'when the username or email already exists' do
-      it 'returns a 400 BAD Request status' do
+      it 'returns a conflict error for a duplicate user name' do
         create(:user, username: 'xxxx')
         post('/users', params.merge(username: 'xxxx'))
-        expect(last_response.status).to eq(400)
+        expect(last_response.status).to eq(409)
+        data = last_response.json
+        expect(data["message"]).to eq("The 'xxxx' user name is already registered.")
+      end
+
+      it 'returns a conflict error for a duplicate email address' do
+        user = create(:user)
+        post('/users', params.merge(email: user.email))
+        expect(last_response.status).to eq(409)
+        data = last_response.json
+        expect(data["message"]).to eq("The '#{user.email}' email address is already registered.")
       end
     end
 
@@ -130,7 +140,9 @@ describe 'API routes/users' do
     context 'when the country code does not exist' do
       it 'returns a 400 BAD Request status' do
         post('/users', params.merge(country: 'xx'))
-        expect(last_response.status).to eq(400)
+        expect(last_response.status).to eq(404)
+        data = last_response.json
+        expect(data["message"]).to eq("The country code 'xx' is not valid.")
       end
     end
 
@@ -463,7 +475,8 @@ describe 'API routes/users' do
           data = last_response.json
           expect(data).not_to be_nil
           expect(data.include?("message")).to eq(true)
-          expect(data["message"]).to eq("password is missing")
+          expect(data["message"]).to eq("Invalid parameters specified for request.")
+          expect(data["context"]).to eq(["password"])
         end
       end
 

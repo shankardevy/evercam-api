@@ -78,7 +78,7 @@ GEM
       pony (~> 1.8)
       sequel (~> 4.9)
       sidekiq (~> 3.0)
-    evercam_misc (0.0.6)
+    evercam_misc (0.0.8)
       3scale_client (~> 2.3)
       dotenv (~> 0.10)
     evercam_models (0.1.12)
