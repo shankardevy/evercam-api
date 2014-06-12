@@ -12,6 +12,7 @@ module Evercam
         WithAuth.new(env)
       end
       include AuthorizationHelper
+      include ErrorsHelper
       include LoggingHelper
       include SessionHelper
       include ThreeScaleHelper
