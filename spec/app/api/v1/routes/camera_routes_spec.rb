@@ -600,7 +600,8 @@ describe 'API routes/cameras' do
       expect(last_response.status).to eq(400)
       data = last_response.json
       expect(data.include?("message")).to eq(true)
-      expect(data["message"]).to eq("ids is missing")
+      expect(data["message"]).to eq("Invalid parameters specified for request.")
+      expect(data["context"]).to eq(["ids"])
     end
 
     it 'returns an empty list of cameras when no ids are specified' do

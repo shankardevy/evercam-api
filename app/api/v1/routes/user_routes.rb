@@ -36,7 +36,11 @@ module Evercam
         get :cameras do
           authreport!('users/cameras/get')
           user = ::User.by_login(params[:id])
-          raise NotFoundError, 'user does not exist' unless user
+          if user.nil?
+            raise_error(404, "user_not_found",
+                        "Unable to locate the '#{params[:id]}' user.",
+                        params[:id])
+          end
 
           query = Camera.where(owner: user)
           if params[:include_shared]
@@ -85,7 +89,11 @@ module Evercam
         authreport!('users/post')
         params[:country].downcase!
         outcome = Actors::UserSignup.run(params)
-        raise OutcomeError, outcome unless outcome.success?
+        if !outcome.success?
+          raise_error(400, "invalid_parameters",
+                      "Invalid parameters specified to request.",
+                      *(outcome.errors.keys))
+        end
 
         user = outcome.result
         if params[:share_request_key]

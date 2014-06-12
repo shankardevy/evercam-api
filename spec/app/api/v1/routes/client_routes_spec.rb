@@ -57,7 +57,8 @@ describe 'API routes/client' do
 				expect(last_response.status).to eq(400)
 				data = last_response.json
 				expect(data.include?("message"))
-				expect(data["message"]).to eq("name is missing")
+				expect(data["message"]).to eq("Invalid parameters specified for request.")
+            expect(data["context"]).to eq(["name"])
 			end
 		end
 
@@ -68,7 +69,8 @@ describe 'API routes/client' do
 				expect(last_response.status).to eq(400)
 				data = last_response.json
 				expect(data.include?("message"))
-				expect(data["message"]).to eq("user_name is missing")
+            expect(data["message"]).to eq("Invalid parameters specified for request.")
+            expect(data["context"]).to eq(["user_name"])
 			end
 		end
 
@@ -79,7 +81,8 @@ describe 'API routes/client' do
 				expect(last_response.status).to eq(400)
 				data = last_response.json
 				expect(data.include?("message"))
-				expect(data["message"]).to eq("email is missing")
+            expect(data["message"]).to eq("Invalid parameters specified for request.")
+            expect(data["context"]).to eq(["email"])
 			end
 		end
 
@@ -90,7 +93,8 @@ describe 'API routes/client' do
 				expect(last_response.status).to eq(400)
 				data = last_response.json
 				expect(data.include?("message"))
-				expect(data["message"]).to eq("callback_uris is missing")
+            expect(data["message"]).to eq("Invalid parameters specified for request.")
+            expect(data["context"]).to eq(["callback_uris"])
 			end
 		end
 
