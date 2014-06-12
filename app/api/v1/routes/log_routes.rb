@@ -19,7 +19,7 @@ module Evercam
       optional :limit, type: Integer, desc: "Number of results per page. Defaults to #{DEFAULT_LIMIT}."
       optional :page, type: Integer, desc: "Page number, starting from 0"
       optional :types, type: String, desc: "Comma separated list of log types: created, accessed, edited, viewed, captured", default: ''
-      optional :objects, type: Boolean, desc: "Return objects instead of strings", default: false
+      optional :objects, type: 'Boolean', desc: "Return objects instead of strings", default: false
     end
     get '/cameras/:id/logs' do
       camera = nil

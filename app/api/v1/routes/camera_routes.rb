@@ -122,7 +122,7 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
-        requires :is_public, type: Boolean, desc: "Is camera public?"
+        requires :is_public, type: 'Boolean', desc: "Is camera public?"
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."
@@ -169,7 +169,7 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         optional :name, type: String, desc: "Camera name."
-        optional :is_public, type: Boolean, desc: "Is camera public?"
+        optional :is_public, type: 'Boolean', desc: "Is camera public?"
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."

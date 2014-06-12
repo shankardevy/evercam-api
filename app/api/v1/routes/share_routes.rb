@@ -72,7 +72,7 @@ module Evercam
               requires :email, type: String, desc: "Email address of user to share the camera with."
               requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
               optional :message, String, desc: "Not currently used."
-              optional :notify, type: Boolean, desc: "Not currently used."
+              optional :notify, type: 'Boolean', desc: "Not currently used."
               optional :grantor, type: String, desc: "The user name of the user who is creating the share."
               optional :api_id, type: String, desc: "The Evercam API id for the requester."
               optional :api_key, type: String, desc: "The Evercam API key for the requester."

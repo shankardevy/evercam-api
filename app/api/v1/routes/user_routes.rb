@@ -31,7 +31,7 @@ module Evercam
         }
         params do
           requires :id, type: String, desc: "The user name or email address of the user."
-          optional :include_shared, type: Boolean, desc: "Set to true to include cameras shared with the user in the fetch."
+          optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
         end
         get :cameras do
           authreport!('users/cameras/get')

@@ -363,9 +363,9 @@ describe 'API routes/cameras' do
       end
     end
 
-    context 'when is_public is null' do
+    context 'when is_public is invalid' do
       it 'returns a BAD REQUEST status' do
-        post('/cameras', params.merge(is_public: nil).merge(api_keys))
+        post('/cameras', params.merge(is_public: 'Asfdg').merge(api_keys))
         expect(last_response.status).to eq(400)
       end
     end
