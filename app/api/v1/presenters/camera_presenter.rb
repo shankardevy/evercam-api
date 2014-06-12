@@ -20,8 +20,7 @@ module Evercam
         required: true
       }
 
-      expose :owner, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
+      expose :owner, documentation: {
         type: 'string',
         desc: 'Username of camera owner',
         required: true

@@ -228,8 +228,8 @@ describe 'API routes/users' do
           expect(c).to have_keys(
                             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
                             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-                            'timezone', 'location', 'discoverable', 'vendor_name', 'short')
-          expect(c).to not_have_keys('owner', 'external_host', 'snapshots',
+                            'timezone', 'location', 'discoverable', 'vendor_name', 'short', 'owner')
+          expect(c).to not_have_keys('external_host', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
         end

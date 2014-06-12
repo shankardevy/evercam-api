@@ -30,8 +30,8 @@ describe 'API routes/cameras' do
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
             'timezone', 'location', 'discoverable', 'vendor_name', 'short',
-            'owned', 'rights')
-          expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
+            'owned', 'rights', 'owner')
+          expect(json).to not_have_keys('external_host', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
         end
@@ -77,8 +77,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'short', 'owned', 'rights')
-          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+            'timezone', 'location', 'short', 'owned', 'rights', 'owner')
+          expect(json).to not_have_keys('endpoints', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
         end
