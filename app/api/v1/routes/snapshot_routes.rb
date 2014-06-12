@@ -242,7 +242,7 @@ module Evercam
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
           optional :with_data, type: 'Boolean', desc: "Should it send image data?"
-          optional :range, type: Integer, desc: "Time range in seconds around specified timestamp"
+          optional :range, type: Integer, desc: "Time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp)."
         end
         get 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])
