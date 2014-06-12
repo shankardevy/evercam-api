@@ -1,22 +1,6 @@
 require 'typhoeus'
 require_relative '../presenters/snapshot_presenter'
 
-# Disable File validation, it doesn't work
-module Grape
-  module Validations
-    class CoerceValidator < SingleOptionValidator
-      alias_method :validate_param_old!, :validate_param!
-
-      def validate_param!(attr_name, params)
-        unless @option.to_s == 'File'
-          validate_param_old!(attr_name, params)
-        end
-
-      end
-    end
-  end
-end
-
 module Evercam
 
   def self.get_jpg(camera)
@@ -148,7 +132,7 @@ module Evercam
           entity: Evercam::Presenters::Snapshot
         }
         params do
-          optional :with_data, type: Boolean, desc: "Should it send image data?"
+          optional :with_data, type: 'Boolean', desc: "Should it send image data?"
         end
         get 'snapshots/latest' do
           camera   = ::Camera.by_exid!(params[:id])
@@ -166,7 +150,7 @@ module Evercam
         params do
           requires :from, type: Integer, desc: "From Unix timestamp."
           requires :to, type: Integer, desc: "To Unix timestamp."
-          optional :with_data, type: Boolean, desc: "Should it send image data?"
+          optional :with_data, type: 'Boolean', desc: "Should it send image data?"
           optional :limit, type: Integer, desc: "Limit number of results, default 100 with no data, 10 with data"
           optional :page, type: Integer, desc: "Page number"
         end
@@ -257,8 +241,8 @@ module Evercam
         }
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
-          optional :with_data, type: Boolean, desc: "Should it send image data?"
-          optional :range, type: Integer, desc: "Time range in seconds around specified timestamp"
+          optional :with_data, type: 'Boolean', desc: "Should it send image data?"
+          optional :range, type: Integer, desc: "Time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp)."
         end
         get 'snapshots/:timestamp' do
           camera = ::Camera.by_exid!(params[:id])

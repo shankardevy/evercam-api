@@ -25,12 +25,11 @@ module Evercam
           optional :id_starts_with, type: String, desc: "Search for cameras whose id starts with the given value."
           optional :id_ends_with, type: String, desc: "Search for cameras whose id ends with the given value."
           optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
-          optional :is_near_to, type: String, desc: "Search for cameras within 1000 meters of a given address or longitude latitiude point."
+          optional :is_near_to, type: String, desc: "Search for cameras within #{DEFAULT_DISTANCE} meters of a given address or longitude latitiude point."
           optional :within_distance, type: Float, desc: "Search for cameras within a greater range of the specified is_near_to point in meters."
         end
         get do
           case_sensitive = (params.include?(:case_sensitive) ? params[:case_sensitive] : true)
-
           query = Camera.where(is_public: true, discoverable: true)
 
           if params.include?(:id_starts_with) && params[:id_starts_with]

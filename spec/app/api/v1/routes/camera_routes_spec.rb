@@ -30,8 +30,8 @@ describe 'API routes/cameras' do
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
             'timezone', 'location', 'discoverable', 'vendor_name', 'short',
-            'owned', 'rights')
-          expect(json).to not_have_keys('owner', 'external_host', 'snapshots',
+            'owned', 'rights', 'owner')
+          expect(json).to not_have_keys('external_host', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
         end
@@ -77,8 +77,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'short', 'owned', 'rights')
-          expect(json).to not_have_keys('owner', 'endpoints', 'snapshots',
+            'timezone', 'location', 'short', 'owned', 'rights', 'owner')
+          expect(json).to not_have_keys('endpoints', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
         end
@@ -363,9 +363,9 @@ describe 'API routes/cameras' do
       end
     end
 
-    context 'when is_public is null' do
+    context 'when is_public is invalid' do
       it 'returns a BAD REQUEST status' do
-        post('/cameras', params.merge(is_public: nil).merge(api_keys))
+        post('/cameras', params.merge(is_public: 'Asfdg').merge(api_keys))
         expect(last_response.status).to eq(400)
       end
     end
@@ -600,7 +600,8 @@ describe 'API routes/cameras' do
       expect(last_response.status).to eq(400)
       data = last_response.json
       expect(data.include?("message")).to eq(true)
-      expect(data["message"]).to eq("ids is missing")
+      expect(data["message"]).to eq("Invalid parameters specified for request.")
+      expect(data["context"]).to eq(["ids"])
     end
 
     it 'returns an empty list of cameras when no ids are specified' do
