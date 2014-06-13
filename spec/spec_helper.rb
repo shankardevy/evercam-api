@@ -24,6 +24,11 @@ def require_lib(name)
   require_relative "../lib/#{name}"
 end
 
+LogJam.configure({
+  # turn the noise down to separate problems from messages
+  loggers: { default: true, file: 'STDOUT', level: ENV['LOG'] || 'FATAL' }
+})
+
 RSpec.configure do |c|
   c.expect_with :stdlib, :rspec
   c.filter_run :focus => true
@@ -33,7 +38,7 @@ RSpec.configure do |c|
   c.fail_fast = true if ENV['FAIL_FAST']
 
   c.after(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with :truncation, except: %w[spatial_ref_sys]
   end
 
   c.before :each do
@@ -54,7 +59,7 @@ require 'webmock/rspec'
 # Set up Airbrake.
 require 'airbrake'
 Airbrake.configure do |config|
-   config.api_key = Evercam::Config[:airbrake][:api_key]
-   config.environment_name = (ENV['RACK_ENV'] || 'test')
+  config.api_key = Evercam::Config[:airbrake][:api_key]
+  config.environment_name = (ENV['RACK_ENV'] || 'test')
 end
 
