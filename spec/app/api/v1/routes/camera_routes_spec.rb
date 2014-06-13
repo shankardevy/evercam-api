@@ -352,7 +352,9 @@ describe 'API routes/cameras' do
     context 'when vendor doesnt have default model' do
       it 'returns a BAD REQUEST status' do
         post('/cameras', params.merge(api_keys).merge({vendor: vendor.exid}))
-        expect(last_response.status).to eq(400)
+        expect(last_response.status).to eq(404)
+        data = last_response.json
+        expect(data["code"]).to eq("model_not_found_error")
       end
     end
 
