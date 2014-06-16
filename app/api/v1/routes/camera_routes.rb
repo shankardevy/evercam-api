@@ -18,8 +18,8 @@ module Evercam
     params do
       requires :external_url, type: String, desc: "External camera url."
       requires :jpg_url, type: String, desc: "Snapshot url."
-      requires :cam_username, type: String, desc: "Camera username."
-      requires :cam_password, type: String, desc: "Camera password."
+      optional :cam_username, type: String, desc: "Camera username."
+      optional :cam_password, type: String, desc: "Camera password."
     end
     get '/cameras/test' do
       auth = "#{params[:cam_username]}:#{params[:cam_password]}"
