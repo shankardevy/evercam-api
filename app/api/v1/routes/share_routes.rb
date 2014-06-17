@@ -69,7 +69,7 @@ module Evercam
               entity: Evercam::Presenters::CameraShare
             }
             params do
-              requires :email, type: String, desc: "Email address of user to share the camera with."
+              requires :email, type: String, desc: "Email address or user name of the user to share the camera with."
               requires :rights, type: String, desc: "A comma separate list of the rights to be granted with the share."
               optional :message, String, desc: "Not currently used."
               optional :notify, type: 'Boolean', desc: "Not currently used."
