@@ -19,7 +19,7 @@ gem 'grape-swagger', '0.7.2',
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
 
-gem 'intercom', require: 'intercom'
+gem 'intercom', '= 1.0.0', require: 'intercom'
 gem 'logjam'
 
 gem 'mutations',

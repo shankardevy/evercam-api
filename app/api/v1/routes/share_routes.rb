@@ -87,7 +87,11 @@ module Evercam
               end
 
               outcome = Actors::ShareCreate.run(params)
-              raise OutcomeError, outcome unless outcome.success?
+              if !outcome.success?
+                raise_error(400, "invalid_parameters",
+                            "Invalid parameters specified to request.",
+                            *(outcome.errors.keys))
+              end
 
               grantor = (params[:grantor] ? User.where(username: params[:grantor]).first : camera.owner)
               CameraActivity.create(
@@ -104,7 +108,7 @@ module Evercam
                    :user => Intercom::User.find(:email => caller.email)
                  })
               rescue => e
-                log.info "Intercom exception: #{e.message}"
+                log.warn "Intercom exception: #{e.message}"
               end
               if outcome.result.class == CameraShare
                 present [outcome.result], with: Presenters::CameraShare
