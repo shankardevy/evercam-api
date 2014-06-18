@@ -287,7 +287,7 @@ module Evercam
         redirect_uri = params[:redirect_uri]
         grant_type   = params[:grant_type]
 
-        raise INVALID_REQUEST if !['authorization_code', 'refresh_code'].include?(grant_type)
+        raise INVALID_REQUEST if !['authorization_code', 'refresh_token', 'refresh_code'].include?(grant_type)
         raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:code]
         raise INVALID_REQUEST if grant_type == "refresh_code" && !params[:refresh_token]
         raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:client_id]
