@@ -318,13 +318,14 @@ module Evercam
         token = AccessToken.where(refresh: code).first if token.nil?
         raise ACCESS_DENIED if token.nil? || token.is_revoked?
 
-        if redirect_uri
-          redirect generate_response_uri(redirect_uri, token,
-                                         'authorization_code',
-                                         params[:state]).to_s
-        else
-          jsonp generate_response(token, 'authorization_code', params[:state])
-        end
+        # if redirect_uri
+        #   redirect generate_response_uri(redirect_uri, token,
+        #                                  'authorization_code',
+        #                                  params[:state]).to_s
+        # else
+        #   jsonp generate_response(token, 'authorization_code', params[:state])
+        # end
+        jsonp generate_response(token, 'authorization_code', params[:state])
       rescue => error
       	log.error "#{error}\n" + error.backtrace.join("\n")
         redirect_uri = '/oauth2/error' if redirect_uri.nil?
