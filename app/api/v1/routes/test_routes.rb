@@ -16,16 +16,18 @@ module Evercam
 	      	result = {authenticated: false,
 	      	          source_ip: request.ip,
 	      	          timestamp: Time.now.to_s}
-	      	query = Client.where(api_id: params[:api_id])
-	      	if query.count == 0
-	      		user = User.where(api_id: params[:api_id]).first
-	      		if !user.nil?
-	      		   result[:authenticated] = (user.api_key == params[:api_key])
-	      		end
-	      	else
-	      		client = query.first
-	      		result[:authenticated] = (client.api_key == params[:api_key]) if !client.nil?
-	      	end
+            if params[:api_id]
+   	      	query = Client.where(api_id: params[:api_id])
+   	      	if query.count == 0
+   	      		user = User.where(api_id: params[:api_id]).first
+   	      		if !user.nil?
+   	      		   result[:authenticated] = (user.api_key == params[:api_key])
+   	      		end
+   	      	else
+   	      		client = query.first
+   	      		result[:authenticated] = (client.api_key == params[:api_key]) if !client.nil?
+   	      	end
+            end
 	      	result
 	      end
 	   end
