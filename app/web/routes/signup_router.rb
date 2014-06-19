@@ -18,7 +18,7 @@ module Evercam
           %(Congratulations, we've sent you a confirmation email to complete the next step in the process)
       else
 
-        session[:signup] = { forename: params[:forename], lastname: params[:lastname], country: params[:country], username: params[:username], email: params[:email] }
+        session[:signup] = { firstname: params[:firstname], lastname: params[:lastname], country: params[:country], username: params[:username], email: params[:email] }
 
         redirect '/signup', error:
           outcome.errors

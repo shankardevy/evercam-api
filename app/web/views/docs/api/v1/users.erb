@@ -17,7 +17,7 @@ This operation starts the process of creating a new user. It expects the basic u
 <div class="tab-content">
   <div class="tab-pane active" id="curl">
     <pre><code class='http'>curl -X POST https://api.evercam.io/v1/users \
-  -d "forename=Joe" \
+  -d "firstname=Joe" \
   -d "lastname=Bloggs" \
   -d "email=joe.bloggs@example.org" \
   -d "username=joeyb" \
@@ -27,7 +27,7 @@ This operation starts the process of creating a new user. It expects the basic u
 <pre><code class='json'>{
   "users": [{
     "id": "joeyb",
-    "forename": "Joe",
+    "firstname": "Joe",
     "lastname": "Bloggs",
     "email": "joe.bloggs@example.org",
     "country": "us",

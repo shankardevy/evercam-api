@@ -7,7 +7,7 @@ describe 'API routes/users' do
 
   let(:params) do
     {
-      forename: 'Garrett',
+      firstname: 'Garrett',
       lastname: 'Heaver',
       username: 'garrettheaver',
       email: 'garrett@evercam.io',
@@ -18,7 +18,7 @@ describe 'API routes/users' do
 
   let(:patch_params) do
     {
-      forename: 'G',
+      firstname: 'G',
       lastname: 'H',
       email: 'gh@evercam.io',
       password: 'password123',
@@ -28,7 +28,7 @@ describe 'API routes/users' do
 
   let(:blank_params) do
     {
-      forename: '',
+      firstname: '',
       lastname: '',
       username: '',
       email: '',
@@ -107,7 +107,7 @@ describe 'API routes/users' do
         response0 = last_response.json['users'][0]
 
         expect(response0).to have_keys(
-          'id', 'forename', 'lastname', 'username', 'email',
+          'id', 'firstname', 'lastname', 'username', 'email',
           'country', 'created_at', 'updated_at', 'confirmed_at')
       end
     end
@@ -356,7 +356,7 @@ describe 'API routes/users' do
       it 'returns same user' do
         expect(last_response.status).to eq(200)
         user = User.by_login(user0.username)
-        expect(user.forename).to eq(user0.forename)
+        expect(user.firstname).to eq(user0.firstname)
         expect(user.lastname).to eq(user0.lastname)
         expect(user.email).to eq(user0.email)
         expect(user.country).to eq(user0.country)
@@ -375,7 +375,7 @@ describe 'API routes/users' do
 
       it 'updates user in the system' do
         user = User.by_login(user0.username)
-        expect(user.forename).to eq(patch_params[:forename])
+        expect(user.firstname).to eq(patch_params[:firstname])
         expect(user.lastname).to eq(patch_params[:lastname])
         expect(user.email).to eq(patch_params[:email])
         expect(user.country.iso3166_a2).to eq(patch_params[:country])
