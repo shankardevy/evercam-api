@@ -96,6 +96,14 @@ describe 'API routes/cameras' do
             expect(response.status).to eq(403)
          end
       end
+      context "where the target is the owner of the camera" do
+         it "returns an error" do
+            parameters.merge!(email: camera.owner.email)
+            parameters.merge!(api_keys)
+            response = post("/shares/cameras/#{camera.exid}", parameters)
+            expect(response.status).to eq(400)
+         end
+      end
 
       context "where invalid rights are requested" do
          it "returns an error" do

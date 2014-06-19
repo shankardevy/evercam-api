@@ -86,6 +86,12 @@ module Evercam
                  raise AuthorizationError.new
               end
 
+              if User.by_login(params[:email]) == camera.owner
+                raise BadRequestError.new("You can't share with yourself",
+                                          "cant_share_with_yourself",
+                                          params[:email])
+              end
+
               outcome = Actors::ShareCreate.run(params)
               if !outcome.success?
                 raise_error(400, "invalid_parameters",
