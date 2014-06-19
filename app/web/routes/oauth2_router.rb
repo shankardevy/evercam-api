@@ -287,15 +287,15 @@ module Evercam
         redirect_uri = params[:redirect_uri]
         grant_type   = params[:grant_type]
 
-        raise INVALID_REQUEST if !['authorization_code', 'refresh_token', 'refresh_code'].include?(grant_type)
+        raise INVALID_REQUEST if !['authorization_code', 'refresh_token'].include?(grant_type)
         raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:code]
-        raise INVALID_REQUEST if grant_type == "refresh_code" && !params[:refresh_token]
+        raise INVALID_REQUEST if grant_type == "refresh_token" && !params[:refresh_token]
         raise INVALID_REQUEST if grant_type == "authorization_code" && !params[:client_id]
         raise INVALID_REQUEST if !params[:client_secret]
 
         client = nil
         token  = nil
-        if grant_type == 'refresh_code'
+        if grant_type == 'refresh_token'
           token = AccessToken.where(refresh: params[:refresh_token]).first
           raise UNAUTHORIZED_CLIENT if token.nil?
           raise INVALID_REQUEST if token.client_id.nil?
@@ -304,7 +304,7 @@ module Evercam
           client = Client.where(api_id: params[:client_id]).first
         end
         raise UNAUTHORIZED_CLIENT if client.nil?
-        raise INVALID_REDIRECT_URI if redirect_uri && !valid_redirect_uri?(client, redirect_uri)
+        raise INVALID_REDIRECT_URI if redirect_uri.nil? || !valid_redirect_uri?(client, redirect_uri)
 
         log.debug "Making call to 3Scale to authorize client."
         provider_key = Evercam::Config[:threescale][:provider_key]
@@ -318,13 +318,6 @@ module Evercam
         token = AccessToken.where(refresh: code).first if token.nil?
         raise ACCESS_DENIED if token.nil? || token.is_revoked?
 
-        # if redirect_uri
-        #   redirect generate_response_uri(redirect_uri, token,
-        #                                  'authorization_code',
-        #                                  params[:state]).to_s
-        # else
-        #   jsonp generate_response(token, 'authorization_code', params[:state])
-        # end
         jsonp generate_response(token, 'authorization_code', params[:state])
       rescue => error
       	log.error "#{error}\n" + error.backtrace.join("\n")

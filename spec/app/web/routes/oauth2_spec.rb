@@ -460,14 +460,12 @@ describe 'WebApp routes/oauth2_router' do
         end
 
         context 'when a redirect URI is included in the request' do
-          it 'hits the redirect URI with appropriate parameters' do
+          it 'returns success and includes data in the response body' do
             post('/oauth2/authorize', parameters)
 
-            expect(last_response.status).to eq(302)
-            uri = URI.parse(last_response.location)
-            expect(uri.host).to eq('www.google.com')
-            expect([nil, ''].include?(uri.query)).to eq(false)
-            map = URI.decode_www_form(uri.query).inject({}) {|t,a| t[a[0]] = a[1]; t}
+            expect(last_response.status).to eq(200)
+            expect([nil, ''].include?(last_response.body)).to eq(false)
+            map = JSON.parse(last_response.body)
             expect(map.include?("access_token")).to eq(true)
             expect(map.include?("refresh_token")).to eq(true)
             expect(map.include?("expires_in")).to eq(true)
@@ -480,13 +478,22 @@ describe 'WebApp routes/oauth2_router' do
             parameters.delete(:redirect_uri)
             post('/oauth2/authorize', parameters)
 
-            expect(last_response.status).to eq(200)
-            expect([nil, ''].include?(last_response.body)).to eq(false)
-            map = JSON.parse(last_response.body)
-            expect(map.include?("access_token")).to eq(true)
-            expect(map.include?("refresh_token")).to eq(true)
-            expect(map.include?("expires_in")).to eq(true)
-            expect(map.include?("token_type")).to eq(true)
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            expect(uri.path).to eq('/oauth2/error')
+            expect(uri.query).to eq('error=invalid_redirect_uri')
+          end
+        end
+
+        context 'when an invalid redirect URI is included in the request' do
+          it 'returns success and includes data in the response body' do
+            parameters[:redirect_uri] = "https://www.nowhere.com/blah"
+            post('/oauth2/authorize', parameters)
+
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            expect(uri.path).to eq('/oauth2/error')
+            expect(uri.query).to eq('error=invalid_redirect_uri')
           end
         end
       end
@@ -495,7 +502,7 @@ describe 'WebApp routes/oauth2_router' do
     context 'for the refresh token flow' do
       let(:access_token) { create(:access_token, client: client0, refresh: SecureRandom.base64(24)) }
       let(:parameters) { {redirect_uri:  'http://www.google.com/blah',
-                          grant_type:    'refresh_code',
+                          grant_type:    'refresh_token',
                           refresh_token: access_token.refresh_code,
                           client_secret: 'client0_secret'} }
 
@@ -537,12 +544,8 @@ describe 'WebApp routes/oauth2_router' do
           it 'returns success and includes data in the redirect URL' do
             post('/oauth2/authorize', parameters)
 
-            expect(last_response.status).to eq(302)
-            uri = URI.parse(last_response.location)
-            map = URI.decode_www_form(uri.query).inject({}) do |hash, entry|
-              hash[entry[0]] = entry[1]
-              hash
-            end
+            expect(last_response.status).to eq(200)
+            map = last_response.json
             expect(map.include?("access_token")).to eq(true)
             expect(map.include?("refresh_token")).to eq(true)
             expect(map.include?("expires_in")).to eq(true)
@@ -555,13 +558,10 @@ describe 'WebApp routes/oauth2_router' do
             parameters.delete(:redirect_uri)
             post('/oauth2/authorize', parameters)
 
-            expect(last_response.status).to eq(200)
-            expect([nil, ''].include?(last_response.body)).to eq(false)
-            map = JSON.parse(last_response.body)
-            expect(map.include?("access_token")).to eq(true)
-            expect(map.include?("refresh_token")).to eq(true)
-            expect(map.include?("expires_in")).to eq(true)
-            expect(map.include?("token_type")).to eq(true)
+            expect(last_response.status).to eq(302)
+            uri = URI.parse(last_response.location)
+            expect(uri.path).to eq('/oauth2/error')
+            expect(uri.query).to eq('error=invalid_redirect_uri')
           end
         end
       end
