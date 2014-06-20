@@ -69,6 +69,7 @@ module Evercam
             limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT)
           end
           total_pages = query.count / limit
+          total_pages += 1 unless query.count % limit == 0
           offset      = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
           query = query.offset(offset)
 
