@@ -31,31 +31,15 @@ module Evercam
         get do
           query = Camera.where(is_public: true, discoverable: true)
           case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
+          is_like = case_sensitive ? :like : :ilike
 
-          if params[:id_starts_with]
-            query = case_sensitive ?
-              query.where(Sequel.like(:exid, "#{params[:id_starts_with]}%")) :
-              query.where(Sequel.like(Sequel.function(:lower, :exid), "#{params[:id_starts_with].downcase}%"))
-          end
-
-          if params[:id_ends_with]
-            query = case_sensitive ?
-              query.where(Sequel.like(:exid, "%#{params[:id_ends_with]}")) :
-              query.where(Sequel.like(Sequel.function(:lower, :exid), "%#{params[:id_ends_with].downcase}"))
-          end
-
-          if params[:id_includes]
-            query = case_sensitive ?
-              query.where(Sequel.like(:exid, "%#{params[:id_includes]}%")) :
-              query.where(Sequel.like(Sequel.function(:lower, :exid), "%#{params[:id_includes].downcase}%"))
-          end
-
-          if params[:is_near_to]
-            begin
-              query = query.by_distance(params[:is_near_to], params[:within_distance] || DEFAULT_DISTANCE)
-            rescue ArgumentError => ex
-              raise_error(400, 400, ex.message)
-            end
+          begin
+            query = query.where(Sequel.send(is_like, :exid, "#{params[:id_starts_with]}%")) if params[:id_starts_with]
+            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_ends_with]}")) if params[:id_ends_with]
+            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_includes]}%")) if params[:id_includes]
+            query = query.by_distance(params[:is_near_to], params[:within_distance] || DEFAULT_DISTANCE) if params[:is_near_to]
+          rescue Exception => ex
+            raise_error(400, 400, ex.message)
           end
 
           limit = (params[:limit] || DEFAULT_LIMIT)
