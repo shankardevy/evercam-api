@@ -104,6 +104,13 @@ describe 'API routes/cameras' do
           expect(cameras.size).to eq(0)
         end
 
+        it "surfaces an error when address cannot be geocoded" do
+          get("/public/cameras", { is_near_to: 'No Such Address' })
+          expect(last_response.status).to eq(400)
+          expect(last_response.json['message']).
+            to eq('Unable to geocode "No Such Address"')
+        end
+
       end
 
       context "as a lng lat point" do

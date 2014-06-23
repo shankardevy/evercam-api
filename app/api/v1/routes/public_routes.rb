@@ -57,11 +57,20 @@ module Evercam
           end
 
           if params.include?(:is_near_to) && params[:is_near_to]
+
+            coords =
+              begin
+                Geocoding.as_point(params[:is_near_to])
+              rescue Exception => ex
+                raise_error(400, 400, ex.message)
+              end
+
             if params.include?(:within_distance) && params[:within_distance]
-              query = query.by_distance(params[:is_near_to], params[:within_distance])
+              query = query.by_distance(coords, params[:within_distance])
             else
-              query = query.by_distance(params[:is_near_to], DEFAULT_DISTANCE)
+              query = query.by_distance(coords, DEFAULT_DISTANCE)
             end
+
           end
 
           limit = (params[:limit] || DEFAULT_LIMIT)
