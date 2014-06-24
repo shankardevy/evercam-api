@@ -268,6 +268,16 @@ describe 'API routes/cameras' do
         expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
         expect(data['dyndns']['rtsp_url']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
         expect(data['internal']['rtsp_url']).to eq('rtsp://1.1.1.1/h264')
+
+        camera.values[:config].merge!({'external_http_port' =>  '123', 'external_host' => ''})
+        camera.values[:config].merge!({'internal_rtsp_port' =>  '', 'internal_host' => '1.1.1.1', 'snapshots' => {'h264' =>''}})
+        camera.save
+        response = get("/cameras/#{camera.exid}", api_keys)
+        data     = response.json['cameras'][0]
+        expect(data['external']['jpg_url']).to be_nil
+        expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
+        expect(data['dyndns']['rtsp_url']).to be_nil
+        expect(data['internal']['rtsp_url']).to be_nil
       end
     end
 

@@ -203,7 +203,7 @@ module Evercam
                  desc: 'External snapshot url'
                } do |c,o|
           host = c.external_url
-          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
+          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
         end
 
         expose :rtsp_url, documentation: {
@@ -211,7 +211,7 @@ module Evercam
           desc: 'External RTSP url'
         } do |c,o|
           host = c.external_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
+          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
         end
 
       end
@@ -223,14 +223,14 @@ module Evercam
                  desc: 'Internal snapshot url'
                } do |c,o|
           host = c.internal_url
-          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
+          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
         end
         expose :rtsp_url, documentation: {
           type: 'String',
           desc: 'Internal RTSP url'
         } do |c,o|
           host = c.internal_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
+          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
         end
       end
 
@@ -241,8 +241,8 @@ module Evercam
         } do |c,o|
           port = c.config.fetch('external_http_port', nil)
           host = "http://#{c.exid}.evr.cm"
-          host << ":#{port}" unless port.nil? or port == 80
-          host << c.jpg_url unless c.jpg_url.nil? or host.blank?
+          host << ":#{port}" unless port.blank? or port == 80
+          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
         end
 
         expose :rtsp_url, documentation: {
@@ -251,8 +251,8 @@ module Evercam
         } do |c,o|
           port = c.config.fetch('external_rtsp_port', nil)
           host = "rtsp://#{c.exid}.evr.cm"
-          host << ":#{port}" unless port.nil? or port == 80
-          host << c.rtsp_url unless c.rtsp_url.nil? or host.blank?
+          host << ":#{port}" unless port.blank? or port == 80
+          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
         end
 
       end
