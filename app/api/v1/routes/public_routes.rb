@@ -26,54 +26,30 @@ module Evercam
           optional :id_ends_with, type: String, desc: "Search for cameras whose id ends with the given value."
           optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
           optional :is_near_to, type: String, desc: "Search for cameras within #{DEFAULT_DISTANCE} meters of a given address or longitude latitiude point."
-          optional :within_distance, type: Float, desc: "Search for cameras within a greater range of the specified is_near_to point in meters."
+          optional :within_distance, type: Float, desc: "Search for cameras within a specific range, in meters, of the is_near_to point."
         end
         get do
-          case_sensitive = (params.include?(:case_sensitive) ? params[:case_sensitive] : true)
           query = Camera.where(is_public: true, discoverable: true)
+          case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
+          is_like = case_sensitive ? :like : :ilike
 
-          if params.include?(:id_starts_with) && params[:id_starts_with]
-            if case_sensitive
-              query = query.where(Sequel.like(:exid, "#{params[:id_starts_with]}%"))
-            else
-              query = query.where(Sequel.like(Sequel.function(:lower, :exid), "#{params[:id_starts_with].downcase}%"))
-            end
-          end
-
-          if params.include?(:id_ends_with) && params[:id_ends_with]
-            if case_sensitive
-              query = query.where(Sequel.like(:exid, "%#{params[:id_ends_with]}"))
-            else
-              query = query.where(Sequel.like(Sequel.function(:lower, :exid), "%#{params[:id_starts_with].downcase}"))
-            end
-          end
-
-          if params.include?(:id_includes) && params[:id_includes]
-            if case_sensitive
-              query = query.where(Sequel.like(:exid, "%#{params[:id_includes]}%"))
-            else
-              query = query.where(Sequel.like(Sequel.function(:lower, :exid), "%#{params[:id_includes].downcase}%"))
-            end
-          end
-
-          if params.include?(:is_near_to) && params[:is_near_to]
-            if params.include?(:within_distance) && params[:within_distance]
-              query = query.by_distance(params[:is_near_to], params[:within_distance])
-            else
-              query = query.by_distance(params[:is_near_to], DEFAULT_DISTANCE)
-            end
+          begin
+            query = query.where(Sequel.send(is_like, :exid, "#{params[:id_starts_with]}%")) if params[:id_starts_with]
+            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_ends_with]}")) if params[:id_ends_with]
+            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_includes]}%")) if params[:id_includes]
+            query = query.by_distance(params[:is_near_to], params[:within_distance] || DEFAULT_DISTANCE) if params[:is_near_to]
+          rescue Exception => ex
+            raise_error(400, 400, ex.message)
           end
 
           limit = (params[:limit] || DEFAULT_LIMIT)
-          if !(1..MAXIMUM_LIMIT).include?(limit)
-            limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT)
-          end
+          limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT) unless (1..MAXIMUM_LIMIT).include?(limit)
+
           total_pages = query.count / limit
           total_pages += 1 unless query.count % limit == 0
-          offset      = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
-          query = query.offset(offset)
 
-          query = query.limit(limit)
+          offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
+          query = query.offset(offset).limit(limit)
 
           log.debug "SQL: #{query.sql}"
           present(query.all.to_a, with: Presenters::Camera, minimal: true).merge!({
@@ -84,3 +60,4 @@ module Evercam
     end
   end
 end
+
