@@ -2,7 +2,7 @@
 
 <h4>POST /v1/users</h4>
 <p>
-This operation starts the process of creating a new user. It expects the basic user information such as forename, lastname, email, etc and will begin the process of signing up a new user by sending a confirmation link to the supplied email. If the supplied information is valid the server will respond with a <%= code(201) %> status. Any invalid information will cause the server to respond with a <%= code(400) %> status.
+This operation starts the process of creating a new user. It expects the basic user information such as firstname, lastname, email, etc and will begin the process of signing up a new user by sending a confirmation link to the supplied email. If the supplied information is valid the server will respond with a <%= code(201) %> status. Any invalid information will cause the server to respond with a <%= code(400) %> status.
 </p>
 <h5>Example Request</h5>
 <!-- Nav tabs -->
@@ -17,7 +17,7 @@ This operation starts the process of creating a new user. It expects the basic u
 <div class="tab-content">
   <div class="tab-pane active" id="curl">
     <pre><code class='http'>curl -X POST https://api.evercam.io/v1/users \
-  -d "forename=Joe" \
+  -d "firstname=Joe" \
   -d "lastname=Bloggs" \
   -d "email=joe.bloggs@example.org" \
   -d "username=joeyb" \
@@ -27,7 +27,7 @@ This operation starts the process of creating a new user. It expects the basic u
 <pre><code class='json'>{
   "users": [{
     "id": "joeyb",
-    "forename": "Joe",
+    "firstname": "Joe",
     "lastname": "Bloggs",
     "email": "joe.bloggs@example.org",
     "country": "us",
@@ -55,7 +55,7 @@ This operation starts the process of creating a new user. It expects the basic u
   <div class="tab-pane" id="node">
     <pre><code class='javascript'>var evercam = require("evercam");
 evercam.user.create({
-    forename: 'Joe',
+    firstname: 'Joe',
     lastname: 'Bloggs',
     email: 'joe.bloggs@example.org',
     username: 'joeyb',
@@ -70,7 +70,7 @@ evercam.user.create({
     <pre><code class='json'>
 {
   "id": "joeyb",
-  "forename": "Joe",
+  "firstname": "Joe",
   "lastname": "Bloggs",
   "email": "joe.bloggs@example.org",
   "country": "us",
@@ -87,7 +87,7 @@ evercam.user.create({
   <div class="tab-pane" id="python">
     <pre><code class='python'>import evercam
 user = evercam.User.create_user({
-  'forename': 'Joe',
+  'firstname': 'Joe',
   'lastname': 'Bloggs',
   'email': 'joe.bloggs@example.org',
   'username': 'joeyb',
@@ -98,7 +98,7 @@ user = evercam.User.create_user({
     <pre><code class='json'>
 &lt;evercam.User object&gt; JSON: {
   "id": "joeyb",
-  "forename": "Joe",
+  "firstname": "Joe",
   "lastname": "Bloggs",
   "email": "joe.bloggs@example.org",
   "country": "us",

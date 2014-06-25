@@ -3,12 +3,12 @@
     <form id="userProfile" role="form" class="center-block">
 
       <div class="form-group">
-        <label for="userForename">Forename</label>
-        <input type="text" value="<%= @user.forename -%>" class="form-control" id="userForename" placeholder="Enter forename">
+        <label for="userFirstname">First Name</label>
+        <input type="text" value="<%= @user.firstname -%>" class="form-control" id="userFirstname" placeholder="Enter firstname">
       </div>
 
       <div class="form-group">
-        <label for="userLastname">Lastname</label>
+        <label for="userLastname">Last Name</label>
         <input type="text" value="<%= @user.lastname -%>" class="form-control" id="userLastname" placeholder="Enter lastname">
       </div>
 
@@ -54,9 +54,9 @@
         $('#loader').show();
 
         var toUpdate= [];
-        if (user.data.forename !== $('#userForename').val()) {
-          user.data.forename = $('#userForename').val();
-          toUpdate.push('forename');
+        if (user.data.firstname !== $('#userFirstname').val()) {
+          user.data.firstname = $('#userFirstname').val();
+          toUpdate.push('firstname');
         }
         if (user.data.lastname !== $('#userLastname').val()) {
           user.data.lastname = $('#userLastname').val();

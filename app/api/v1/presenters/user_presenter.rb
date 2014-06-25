@@ -36,9 +36,9 @@ module Evercam
 
       end
 
-      expose :forename, documentation: {
+      expose :firstname, documentation: {
         type: 'string',
-        desc: 'Users forename',
+        desc: 'Users firstname',
         required: true
       }
 

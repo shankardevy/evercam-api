@@ -77,8 +77,8 @@ module Evercam
         entity: Evercam::Presenters::User
       }
       params do
-        requires :forename, type: String, desc: "Forename."
-        requires :lastname, type: String, desc: "Lastname."
+        requires :firstname, type: String, desc: "First Name."
+        requires :lastname, type: String, desc: "Last Name."
         requires :username, type: String, desc: "Username."
         requires :country, type: String, desc: "Country."
         requires :email, type: String, desc: "Email."
@@ -159,8 +159,8 @@ module Evercam
       }
       params do
         requires :id, type: String, desc: "Username."
-        optional :forename, type: String, desc: "Forename."
-        optional :lastname, type: String, desc: "Lastname."
+        optional :firstname, type: String, desc: "First Name."
+        optional :lastname, type: String, desc: "Last Name."
         optional :username, type: String, desc: "Username."
         optional :country, type: String, desc: "Country."
         optional :email, type: String, desc: "Email."

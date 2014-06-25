@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :user do
-    sequence(:forename) { |n| "forename#{n}" }
+    sequence(:firstname) { |n| "firstname#{n}" }
     sequence(:lastname) { |n| "lastname#{n}" }
     sequence(:username) { |n| "username#{n}" }
     sequence(:password) { |n| "password#{n}" }

@@ -85,7 +85,7 @@ module Evercam
 
       content_type :json
       {id:         user.username,
-       forename:   user.forename,
+       firstname:   user.firstname,
        lastname:   user.lastname,
        username:   user.username,
        email:      user.email,
