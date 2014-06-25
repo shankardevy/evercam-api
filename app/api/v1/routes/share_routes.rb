@@ -82,7 +82,9 @@ module Evercam
 
               camera = ::Camera.by_exid!(params[:id])
               rights = requester_rights_for(camera)
-              if !rights.is_owner? && !rights.allow?(AccessRight::EDIT)
+              if !rights.is_owner? && !rights.allow?(AccessRight::EDIT) &&
+                # Quick hack to allow following public cameras
+                !(camera.is_public && params[:rights] == 'list,snapshot')
                  raise AuthorizationError.new
               end
 
