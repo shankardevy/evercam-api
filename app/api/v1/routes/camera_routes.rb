@@ -22,19 +22,23 @@ module Evercam
       optional :cam_password, type: String, desc: "Camera password."
     end
     get '/cameras/test' do
-      auth = "#{params[:cam_username]}:#{params[:cam_password]}"
       begin
-        response  = Typhoeus::Request.get(params[:external_url] + params[:jpg_url],
-                                          userpwd: auth,
-                                          timeout: TIMEOUT,
-                                          connecttimeout: TIMEOUT)
+        conn = Faraday.new(:url => params[:external_url]) do |faraday|
+          faraday.adapter  :net_http  # make requests with Net::HTTP
+          faraday.options.timeout = 5           # open/read timeout in seconds
+          faraday.options.open_timeout = 5      # connection open timeout in seconds
+        end
+        conn.basic_auth(params[:cam_username], params[:cam_password])
+        response  = conn.get do |req|
+          req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
+        end
       rescue URI::InvalidURIError, Addressable::URI::InvalidURIError => error
         raise BadRequestError, "Invalid URL. Cause: #{error}"
       end
       if response.success?
         data = Base64.encode64(response.body).gsub("\n", '')
-        { status: 'ok', data: "data:image/jpeg;base64,#{data}"}
-      elsif response.code == 401
+        { status: 'ok', data: "data:#{response.headers.fetch('content-type', 'image/jpg')};base64,#{data}"}
+      elsif response.status == 401
         raise AuthorizationError, 'Please check camera username and password'
       else
         raise CameraOfflineError, 'Camera offline'
