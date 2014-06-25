@@ -98,15 +98,11 @@ GEM
       aws-sdk (~> 1.38)
       evercam_misc (~> 0.0)
       evercam_models (~> 0.2)
-      faraday (~> 0.9)
-      faraday_middleware (~> 0.9)
       sidekiq (~> 3.0)
     factory_girl (4.4.0)
       activesupport (>= 3.0.0)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.9.1)
-      faraday (>= 0.7.4, < 0.10)
     ffi (1.9.3)
     formatador (0.2.5)
     geocoder (1.1.9)
@@ -167,7 +163,7 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     pg (0.17.1)
-    pony (1.8)
+    pony (1.9)
       mail (>= 2.0)
     pry (0.10.0)
       coderay (~> 1.1.0)
@@ -269,10 +265,10 @@ PLATFORMS
 DEPENDENCIES
   airbrake
   database_cleaner
-  evercam_actors (~> 0.1.0)
+  evercam_actors (~> 0.2.0)
   evercam_misc (~> 0.0)
-  evercam_models (~> 0.1.0)
-  evercam_sidekiq (~> 0.0.0)
+  evercam_models (~> 0.2.0)
+  evercam_sidekiq (~> 0.1.0)
   factory_girl
   grape
   grape-entity
