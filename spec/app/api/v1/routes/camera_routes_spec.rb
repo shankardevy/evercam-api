@@ -162,7 +162,7 @@ describe 'API routes/cameras' do
 
     context 'when auth is wrong' do
       it 'returns a 403 status' do
-        stub_request(:get, "http://admin:xxx@89.101.225.158:8105/Streaming/channels/1/picture").
+        stub_request(:get, "http://89.101.225.158:8105/Streaming/channels/1/picture").
           to_return(:status => 401, :body => "", :headers => {})
 
         parameters = test_params_valid.merge(cam_password: 'xxx').merge(api_keys)
@@ -173,7 +173,7 @@ describe 'API routes/cameras' do
 
     context 'when parameters are correct' do
       it 'returns a 200 status with image data' do
-        stub_request(:get, "http://admin:mehcam@89.101.225.158:8105/Streaming/channels/1/picture").
+        stub_request(:get, "http://89.101.225.158:8105/Streaming/channels/1/picture").
           to_return(:status => 200, :body => "", :headers => {})
 
         parameters = test_params_valid.merge(api_keys)
