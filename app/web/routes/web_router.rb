@@ -33,7 +33,7 @@ module Evercam
 
     # configure intercom.io
     Intercom.app_id = Evercam::Config[:intercom][:app_id]
-    Intercom.api_key = Evercam::Config[:intercom][:api_key]
+    Intercom.app_api_key  = Evercam::Config[:intercom][:api_key]
 
     # enable partial helpers and default to erb
     register Sinatra::Partial

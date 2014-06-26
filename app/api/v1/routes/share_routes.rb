@@ -1,3 +1,4 @@
+require "evercam_sidekiq"
 require_relative '../presenters/camera_presenter'
 require_relative '../presenters/camera_share_presenter'
 
@@ -79,7 +80,6 @@ module Evercam
             end
             post '/:id' do
               authreport!('share/post')
-
               camera = ::Camera.by_exid!(params[:id])
               rights = requester_rights_for(camera)
               if !rights.is_owner? && !rights.allow?(AccessRight::EDIT) &&
@@ -87,7 +87,6 @@ module Evercam
                 !(camera.is_public && params[:rights] == 'list,snapshot')
                  raise AuthorizationError.new
               end
-
               if User.by_login(params[:email]) == camera.owner
                 raise BadRequestError.new("You can't share with yourself",
                                           "cant_share_with_yourself",
@@ -110,14 +109,7 @@ module Evercam
                 ip: request.ip,
                 extra: {:with => params[:email]}
               )
-              begin
-                Intercom::Event.create({
-                   :event_name => 'shared-camera',
-                   :user => Intercom::User.find(:email => caller.email)
-                 })
-              rescue => e
-                log.warn "Intercom exception: #{e.message}"
-              end
+              IntercomEventsWorker.perform_async('shared-camera', caller.email)
               if outcome.result.class == CameraShare
                 present [outcome.result], with: Presenters::CameraShare
               else

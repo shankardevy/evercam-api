@@ -143,24 +143,10 @@ module Evercam
         parameters = {}.merge(params).merge(username: caller.username)
         outcome    = Actors::CameraCreate.run(parameters)
         unless outcome.success?
-          begin
-            Intercom::Event.create({
-               :event_name => 'failed-creating-camera',
-               :user => Intercom::User.find(:email => caller.email)
-             })
-          rescue => e
-            log.info "Intercom exception: #{e.message}"
-          end
+          IntercomEventsWorker.perform_async('failed-creating-camera', caller.email)
           raise OutcomeError, outcome
         end
-        begin
-        Intercom::Event.create({
-           :event_name => 'created-camera',
-           :user => Intercom::User.find(:email => caller.email)
-         })
-        rescue => e
-          log.info "Intercom exception: #{e.message}"
-        end
+        IntercomEventsWorker.perform_async('created-camera', caller.email)
         present Array(outcome.result), with: Presenters::Camera
       end
 
@@ -204,14 +190,7 @@ module Evercam
           )
         end
         if params[:is_public]
-          begin
-          Intercom::Event.create({
-             :event_name => 'made-camera-public',
-             :user => Intercom::User.find(:email => caller.email)
-          })
-          rescue => e
-            log.info "Intercom exception: #{e.message}"
-          end
+          IntercomEventsWorker.perform_async('made-camera-public', caller.email)
         end
 
         present Array(camera.reload), with: Presenters::Camera
