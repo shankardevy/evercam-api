@@ -32,8 +32,10 @@ module Evercam
         response  = conn.get do |req|
           req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
         end
-      rescue URI::InvalidURIError, Addressable::URI::InvalidURIError => error
+      rescue URI::InvalidURIError => error
         raise BadRequestError, "Invalid URL. Cause: #{error}"
+      rescue Faraday::TimeoutError
+        raise CameraOfflineError, 'Camera offline'
       end
       if response.success?
         data = Base64.encode64(response.body).gsub("\n", '')

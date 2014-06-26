@@ -39,7 +39,7 @@ module Evercam
                     "Code: #{exception.code}\n"\
                     "HTTP Status Code: #{exception.status_code}\n"\
                     "Context: #{exception.context}\nStack Trace:\n" +
-                    exception.backtrace.join("\n")
+                    exception.backtrace[0, 5].join("\n")
           status             = exception.status_code
           if exception.class == OutcomeError
              details["message"] = exception.message.first
@@ -51,7 +51,7 @@ module Evercam
         elsif exception.kind_of?(Grape::Exceptions::ValidationErrors)
           log.error "Grape validation exception caught processing request.\n"\
                     "Message: #{exception.message}\n" +
-                    exception.backtrace.join("\n")
+                    exception.backtrace[0, 5].join("\n")
           status             = 400
           details["message"] = "Invalid parameters specified for request."
           details["code"]    = "invalid_parameters"
@@ -62,10 +62,10 @@ module Evercam
                     "Message: #{exception.message}\n" +
                     exception.backtrace.join("\n")
           status = CLASS_STATUS_MAP[exception.class] if CLASS_STATUS_MAP.include?(exception.class)
+          Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
         end
 
         log.info "Response:\n#{JSON.pretty_generate(details)}"
-        Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
         Rack::Response.new(details.to_json, status, "Content-Type" => "application/json").finish
       end
     end
