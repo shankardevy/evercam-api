@@ -1,5 +1,6 @@
 require_relative '../presenters/camera_presenter'
 require_relative '../presenters/camera_share_presenter'
+require "typhoeus/adapters/faraday"
 
 module Evercam
   class V1CameraRoutes < Grape::API
@@ -24,11 +25,11 @@ module Evercam
     get '/cameras/test' do
       begin
         conn = Faraday.new(:url => params[:external_url]) do |faraday|
-          faraday.adapter  :net_http  # make requests with Net::HTTP
+          faraday.request :basic_auth, params[:cam_username], params[:cam_password]
+          faraday.adapter  :typhoeus
           faraday.options.timeout = 5           # open/read timeout in seconds
           faraday.options.open_timeout = 5      # connection open timeout in seconds
         end
-        conn.basic_auth(params[:cam_username], params[:cam_password])
         response  = conn.get do |req|
           req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
         end
