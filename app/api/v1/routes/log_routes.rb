@@ -22,7 +22,6 @@ module Evercam
       optional :objects, type: 'Boolean', desc: "Return objects instead of strings", default: false
     end
     get '/cameras/:id/logs' do
-      camera = nil
       if Camera.is_mac_address?(params[:id])
         camera = camera_for_mac(caller, params[:id])
       else
