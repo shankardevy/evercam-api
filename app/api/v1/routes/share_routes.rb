@@ -58,7 +58,7 @@ module Evercam
               rights = requester_rights_for(camera)
               shares = []
               if rights.allow?(AccessRight::VIEW)
-                shares = CameraShare.where(camera_id: camera.id).to_a
+                shares = CameraShare.eager(:camera, :user, :sharer).where(camera_id: camera.id).association_join(:camera).all.to_a
               end
               present shares, with: Presenters::CameraShare
             end
