@@ -10,7 +10,6 @@ gem 'rack-ssl-enforcer',
 gem 'rake'
 gem 'sinatra'
 gem 'json'
-gem 'rack-cache'
 gem 'dalli'
 gem 'kgio'
 
