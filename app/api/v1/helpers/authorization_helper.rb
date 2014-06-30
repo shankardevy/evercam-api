@@ -58,6 +58,11 @@ module Evercam
         log.debug "No authorization header found, checking for API credentials."
         credentials = get_api_credentials
         unless credentials.nil?
+          cached_token = Evercam::APIv1.dc.get(credentials.to_s)
+          unless cached_token.nil?
+            log.info "Token taken from cache."
+            return cached_token
+          end
           owner = get_api_id_owner(credentials)
           unless owner.nil?
             if owner.instance_of?(User)
@@ -65,6 +70,7 @@ module Evercam
             else
               token = AccessToken.where(client_id: owner.id).order(Sequel.desc(:created_at)).first
             end
+            Evercam::APIv1.dc.set(credentials.to_s, token, 5 * 60)
           end
         end
       end

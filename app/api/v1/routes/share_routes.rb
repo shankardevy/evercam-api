@@ -94,7 +94,7 @@ module Evercam
               end
 
               outcome = Actors::ShareCreate.run(params)
-              if !outcome.success?
+              unless outcome.success?
                 raise_error(400, "invalid_parameters",
                             "Invalid parameters specified to request.",
                             *(outcome.errors.keys))

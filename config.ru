@@ -1,5 +1,7 @@
 require 'bundler'
 require 'rack/rewrite'
+require 'dalli'
+require 'rack/cache'
 require 'evercam_misc'
 require 'sequel'
 
@@ -60,6 +62,12 @@ map '/v1' do
 
   # Enable gzip
   use Rack::Deflater
+
+  # Memcached
+  use Rack::Cache,
+      :verbose => true,
+      :metastore   => "memcached://localhost:11211/meta",
+      :entitystore => "memcached://localhost:11211/body"
 
   run Evercam::APIv1
 

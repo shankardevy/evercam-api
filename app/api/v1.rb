@@ -48,10 +48,16 @@ module Evercam
       Evercam::Config[:swagger][:v1]
     )
 
+    # Dalli cache
+    options = { :namespace => "app_v1", :compress => true }
+    class << self; attr_accessor :dc end
+    @dc = Dalli::Client.new('localhost:11211', options)
+
     # Uncomment this to see a list of available routes on start up.
     # self.routes.each do |api|
     #   puts "#{api.route_method.ljust(10)} -> /v1#{api.route_path}"
     # end
+    #Sequel::Model.db.loggers << Logger.new($stdout)
 
   end
 end
