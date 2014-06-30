@@ -51,7 +51,12 @@ module Evercam
     # Dalli cache
     options = { :namespace => "app_v1", :compress => true }
     class << self; attr_accessor :dc end
-    @dc = Dalli::Client.new('localhost:11211', options)
+    if ENV["MEMCACHEDCLOUD_SERVERS"]
+      @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
+    else
+      @dc = Dalli::Client.new('localhost:11211', options)
+    end
+
 
     # Uncomment this to see a list of available routes on start up.
     # self.routes.each do |api|

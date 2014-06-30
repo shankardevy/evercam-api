@@ -1,5 +1,8 @@
 language: ruby
 
+services:
+- memcached
+
 cache: bundler
 
 rvm:
