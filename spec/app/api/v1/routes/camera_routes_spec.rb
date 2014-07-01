@@ -268,6 +268,7 @@ describe 'API routes/cameras' do
         expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
         expect(data['dyndns']['rtsp_url']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
         expect(data['internal']['rtsp_url']).to eq('rtsp://1.1.1.1/h264')
+        expect(data['internal_rtsp_port']).to be_nil
 
         camera.values[:config].merge!({'external_http_port' =>  '123', 'external_host' => ''})
         camera.values[:config].merge!({'internal_rtsp_port' =>  '', 'internal_host' => '1.1.1.1', 'snapshots' => {'h264' =>''}})
@@ -278,6 +279,7 @@ describe 'API routes/cameras' do
         expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
         expect(data['dyndns']['rtsp_url']).to be_nil
         expect(data['internal']['rtsp_url']).to be_nil
+        expect(data['internal_rtsp_port']).to be_nil
       end
     end
 
@@ -532,7 +534,7 @@ describe 'API routes/cameras' do
       it 'returns a OK status' do
         patch("/cameras/#{camera.exid}", {internal_http_port: ''}.merge(api_keys))
         expect(last_response.status).to eq(200)
-        expect(last_response.json['cameras'][0]["internal_http_port"]).to eq('')
+        expect(last_response.json['cameras'][0]["internal_http_port"]).to be_nil
       end
     end
 

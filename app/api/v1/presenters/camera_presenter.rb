@@ -115,7 +115,7 @@ module Evercam
         type: 'Integer',
         desc: 'External http port of the camera'
       } do |c,o|
-        c.config['external_http_port']
+        c.config['external_http_port'] unless c.config['external_http_port'].blank?
       end
 
       expose :internal_http_port, if: lambda {|instance, options| !options[:minimal]},
@@ -123,23 +123,23 @@ module Evercam
         type: 'Integer',
         desc: 'Internal http port of the camera'
       } do |c,o|
-        c.config['internal_http_port']
+        c.config['internal_http_port'] unless c.config['internal_http_port'].blank?
       end
 
       expose :external_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
         type: 'Integer',
-        desc: 'Internal rtsp port of the camera'
+        desc: 'External rtsp port of the camera'
       } do |c,o|
-        c.config['external_rtsp_port']
+        c.config['external_rtsp_port'] unless c.config['external_rtsp_port'].blank?
       end
 
       expose :internal_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
         type: 'Integer',
-        desc: 'External rtsp port of the camera'
+        desc: 'Internal rtsp port of the camera'
        } do |c,o|
-        c.config['internal_rtsp_port']
+        c.config['internal_rtsp_port'] unless c.config['internal_rtsp_port'].blank?
       end
 
       expose :jpg_url, if: lambda {|instance, options| !options[:minimal]},
