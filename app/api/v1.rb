@@ -54,7 +54,7 @@ module Evercam
     if ENV["MEMCACHEDCLOUD_SERVERS"]
       @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
     else
-      @dc = Dalli::Client.new('localhost:11211', options)
+      @dc = Dalli::Client.new('127.0.0.1:11211', options)
     end
 
 
