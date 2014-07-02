@@ -192,7 +192,7 @@ module Evercam
             ip: request.ip
           )
         end
-        if params[:is_public]
+        if params[:is_public] and not caller.kind_of?(Client)
           IntercomEventsWorker.perform_async('made-camera-public', caller.email)
         end
 
