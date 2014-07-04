@@ -1,0 +1,960 @@
+{"id"=>"ds-2cd4012f-a-p-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4012fwd-a-p-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4024f-a-p-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4032fwd-a-p-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4112f-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4124f-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd6026fhwd-a", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4132fwd-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4332fwd-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4212f-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4212fwd-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4224f-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4232fwd-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4312f-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4312fwd-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd4324f-i-z-h-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd883f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd854f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd855f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd853f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd864fwd-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd864f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd893pf-nf-wd-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd893pf-nf-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd833f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd783f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd754f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd754fwd-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd755f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd753f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd764fwd-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd764f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd793p-n-fwd-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd793p-n-f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd733f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2712f-i-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2732f-i-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2112-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2132-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2332-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2312-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7254f-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7283f-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7254fwd-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7253f-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7255f-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7264fwd-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7233f-e-i-z-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2532-i-s-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2512-i-s-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7153-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7164-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2232-i5", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2212-i5", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2632f-i-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2612f-i-s", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2032-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2012-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd864-ei3", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8253f-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd855-ei3-ei5", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8254f-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8254fwd-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8255f-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8264f-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8264fwd-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd8233f-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2432f-i-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2412f-i-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8464f-eiw", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd6412fwd", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2415f-iw-r", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2515-iws-r", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2715f-is-r", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2615-is-r", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2115-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2135-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2035-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd2015-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd893pf-e-version-no-dot-1", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8153f-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd876bf-mf-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd863p-n-f-e-w-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd802-slash-812p-n-f-e-w-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir5-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir3-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir1-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7353f-e-i-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd7133-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd763p-n-f-e-i-z-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd8133f-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd752mf-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd832f-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd702-slash-712p-n-f-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd752mf-i-fb-h-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd762mf-i-fb-h-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"ds-2cd732f-e-discontinued", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"snb-6010", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-7002", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-7001", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-6004", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-6003", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-5004", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-5000", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-5001", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-3002", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-3000", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-1001", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snb-2000", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snz-5200", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"sno-7084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"sno-7082r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"sno-7080r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"sno-6084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"sno-6011r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snf-7010", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snf-7010v", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snf-7010-vm", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-5084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-6083", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-6084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-6084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-6011r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7082", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7061", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-7011", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-5080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-5061", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-5011", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-3082", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-3080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-3080c", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-1080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snd-1011", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-6013", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-7084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-7084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-6012m", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-5084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-6084", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-6084r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-7080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-7082", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-7080r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-5080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-5010", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-3082", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-3120", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-3080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-1080", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snv-1080r", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6320", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6320h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6200rh", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-5300", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-5300h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6201", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6201h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6200h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-6200", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-5200", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-5200h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3371th", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3371", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3302h", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3120", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3121", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snp-3122", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snh-p6410bn", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"snh-1011", "vendor"=>"samsung", "snapshots"=>{"jpg"=>"stw-cgi/video.cgi?msubmenu=snapshot&action=view", "h264"=>"H.264/media.smp", "mjpg"=>"stw-cgi/video.cgi?msubmenu=stream&action=view"}}
+{"id"=>"m1004-w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1013", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1014", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1033-w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1034-w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1054", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1103", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1104", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1113-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1113-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1114-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1114-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1143-l", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1144-l", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m2014-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1204", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1214-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1214", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1224-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1353-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1353-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1354-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1354-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1355-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1355-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1357-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1357-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1602-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1602-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1604-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1604-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1614-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1614-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1755-a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1755-e-b", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1765-le", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p8514", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3004-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3005-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3006-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3007-p", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3007-pv", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3024-lve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3025-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3026-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3027-pve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3014", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3113-r", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3114-r", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3113-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3114-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3203", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3203-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3204", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m3204-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3301", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3301-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3304", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3304-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3353", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3363-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3363-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3354", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3364-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3364-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3384-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3384-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3346", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3346-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3346-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3367-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p3367-ve", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"212-ptz", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"212-ptz-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m5013", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m5013-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m5014", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m5014-v", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"214-ptz", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5414-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5415-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5512", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5512-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5522", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5522-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5532", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5532-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5534", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5534-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p5544", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6042", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6042-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6042-c", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6042-s", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6044", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6044-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6044-c", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6044-s", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6045", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6045-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6045-c", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q6045-s", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q8721-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q8722-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1910", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1910-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1921", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1921-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1922", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1922-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1931-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"209fd", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"216fd", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"216mfd", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"215-ptz", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"215-ptz-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1025", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"211w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"221", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"233d", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"210a", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"None"}}
+{"id"=>"205", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"213-ptz", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1011", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"207mw", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"207w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1031-w", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"207", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"None", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"white-s-poe", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"black-sd-poe", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"bullet-black", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"bullet-white", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"eyeball", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"black-sd", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"white-sd", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"white-s", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"black-s", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"knight-s", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"knight-sd", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"None", "mjpg"=>"stream.jpg"}}
+{"id"=>"ds-2cd8264fwd-ei-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream"}}
+{"id"=>"bullet-hd-720", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"live_h264.sdp", "mjpg"=>"stream.jpg"}}
+{"id"=>"bullet-hd-1080", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"snapshot.jpg", "h264"=>"v01", "mjpg"=>"cgi-bin/snapshot.fcgi"}}
+{"id"=>"cube", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"live/0/jpeg.jpg", "h264"=>"live/0/h264.sdp", "mjpg"=>"live/0/mjpeg.jpg"}}
+{"id"=>"cube-hd-720", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"live/0/jpeg.jpg", "h264"=>"live/0/h264.sdp", "mjpg"=>"live/0/mjpeg.jpg"}}
+{"id"=>"cube-hd-1080", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"live/0/jpeg.jpg", "h264"=>"live/0/h264.sdp", "mjpg"=>"live/0/mjpeg.jpg"}}
+{"id"=>"bullet-hd-720-2nd-gen", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"live/0/jpeg.jpg", "h264"=>"live/0/h264.sdp", "mjpg"=>"live/0/mjpeg.jpg"}}
+{"id"=>"bullet-hd-1080-2nd-gen", "vendor"=>"ycam", "snapshots"=>{"jpg"=>"live/0/jpeg.jpg", "h264"=>"live/0/h264.sdp", "mjpg"=>"live/0/mjpeg.jpg"}}
+{"id"=>"gxv3672-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3672-fhd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3672-hd-36", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3672-fhd-36", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3674-hd-vf", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3674-fhd-vf", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3610-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3610-fhd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3651-fhd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3662-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3662-fhd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3615wp-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3615", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3615w", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3611-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3601-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"default", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-1000", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"video.cgi"}}
+{"id"=>"dcs-1000w", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"video.cgi"}}
+{"id"=>"dcs-1130", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2000", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"cgi-bin/video.jpg", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2100-plus", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"cgi-bin/video.jpg", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2100g", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"cgi-bin/video.jpg"}}
+{"id"=>"dcs-3010", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpeg.cgi"}}
+{"id"=>"dcs-3110", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"cgi-bin/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-3430", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-3710", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-3716", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6010l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6110", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6111", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6113", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6210", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6314", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6511", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6513", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6616", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6815", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6818", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-6915", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7010l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7110", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7410", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7413", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7510", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-7513", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"b5010", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"b5111", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"b5210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"b7210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"b7320", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"b7510", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d3100", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d3200", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d4210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d5113", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d5210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d7111", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d7210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d7320", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"d7510", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f7210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"p5111", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"p5116", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"p5210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"p6210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"s15", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"q24", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"m12", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"m24", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"d15", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"d24", "vendor"=>"mobotix", "snapshots"=>{"jpg"=>"record/current.jpg", "mjpg"=>"cgi-bin/faststream.jpg"}}
+{"id"=>"wv-sp102", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sp105", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sp305", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sp306", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw172", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-st162", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw175", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-st165", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw314", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw316", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sp508", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sp509", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw316l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw174w", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfn611l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfn631l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf332", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf335", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf336", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf132", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf135", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf138", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-cp300", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf538", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf539", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf548", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf549", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-cp310", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sc385", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw395", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw396", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sc384", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sc386", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf438", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw458", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw598", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw396a", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw395a", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-cw594a", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sc588", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-nw502s", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf342", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sf346", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw355", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw352", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw152", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw155", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw558", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw559", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw158", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfv611l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfv631l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfr631l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sfr611l", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"wv-sw115", "vendor"=>"panasonic", "snapshots"=>{"jpg"=>"SnapshotJPEG", "mjpg"=>"nphMotionJpeg"}}
+{"id"=>"ab5353h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"af5127", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"af5127v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bb5116", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bb5315", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bd5115", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bd5336", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bs5332e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8131", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8131v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8133", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8133v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8134", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8134v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8135h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8136", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8137h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8137hv", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8151v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8154", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8154v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8156", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8161", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8162", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8163", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8164", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8164v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8166", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8168", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8171", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8335h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8355ehv", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8361", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8361l", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8362", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8362e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8363", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8365ehv", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8371ev", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8371v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fd8372", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8171v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8172", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8172v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8173", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8174", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe8174v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ib8156", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ib8168", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ib8354-c", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip7160", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"n/a", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip7161", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"n/a", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip7361", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"n/a", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8151", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8151p", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8152", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8161", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8162", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8162p", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8172", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8172p", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8173h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8331", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8332", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8332-c", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8335h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8337h-c", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8352", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8355eh", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8361", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8362", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8364-c", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8365eh", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8371", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8371e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8372", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"md7560", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"n/a", "mjpg"=>"video.mjpg"}}
+{"id"=>"md7560x", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"n/a", "mjpg"=>"video.mjpg"}}
+{"id"=>"md8531h", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"md8562", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pd8136", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8111", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8121", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8311e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8312e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8313e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8314e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8316e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8321e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8322e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8323e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8324e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8326e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8362e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8362e-ss", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sd8363e", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sf8172", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sf8172v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sf8174", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"sf8174v", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"cc8130", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8130", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8130w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8131", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8131w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8133", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8133w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip8336w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pt8133", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pt8133w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pz8111", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pz8111w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pz8121", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"pz8121w", "vendor"=>"vivotek", "snapshots"=>{"jpg"=>"cgi-bin/viewer/video.jpg", "h264"=>"live.sdp", "mjpg"=>"video.mjpg"}}
+{"id"=>"f1100", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f1105", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3000", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3005", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3102", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3107", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3110", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3115", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3201", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3206", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3210", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"f3215", "vendor"=>"zavio", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"video.pro[profile_number]", "mjpg"=>"video.mjpg"}}
+{"id"=>"dcs-2120", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"cgi-bin/video.jpg"}}
+{"id"=>"dcs-2121", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2130", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2132l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2136l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2210", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2230", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2310l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2330l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-2332l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"live.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-5020l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-5222l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"play.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-5230", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"play.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-5605", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "h264"=>"play.sdp", "mjpg"=>"video/mjpg.cgi"}}
+{"id"=>"dcs-900", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-930", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-930l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-932", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-932l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-933l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image.jpg", "mjpg"=>"mjpeg.cgi"}}
+{"id"=>"dcs-942l", "vendor"=>"dlink", "snapshots"=>{"jpg"=>"image/jpeg.cgi", "mjpg"=>"video/mjpeg.cgi"}}
+{"id"=>"sncch110-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch110-slash-s", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch120", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch140", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch210-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch210-slash-s", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch220", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch240", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snccx600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snccx600w", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snceb600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snceb600b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snceb630", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snceb630b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvb600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvb600b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvb630", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvb635", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch160", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch180", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch260", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncch280", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh110-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh110-slash-w", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh110t-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh110t-slash-w", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh120", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh120t", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh140", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh140t", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh160", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh180", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh210-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh210-slash-w", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh210t-slash-b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh210t-slash-w", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh220", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh220t", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh240", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh240t", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh260", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncdh280", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncem600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncem601", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncem602r", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncem631", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncem632r", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"snchm662", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncrh124", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncrh164", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm600b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm601", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm601b", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm602r", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm630", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm631", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncvm632r", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncwr600", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncwr602", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncwr630", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncwr632", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncxm632", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncxm636", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"sncxm637", "vendor"=>"sony", "snapshots"=>{"jpg"=>"oneshotimage.jpg", "h264"=>"media/video1", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av1115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av1115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av1115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av2115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av2115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av2115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av3115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av3115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av3115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av5115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av5115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av5115v1-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av1115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av1115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av1115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av2115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av2115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av2115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av3115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av3115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av3115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4f-av5115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4s-av5115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"d4so-av5115-3312", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3135", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1300", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1300m", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1305", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2100", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2100m", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2105", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2805", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3100", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3100m", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3105", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3130", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5100", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5105", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10005", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1115v1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1310", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "mjpg"=>"mjpeg"}}
+{"id"=>"av2110", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "mjpg"=>"mjpeg"}}
+{"id"=>"av2115v1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2116dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3110", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "mjpg"=>"mjpeg"}}
+{"id"=>"av3115v1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3116dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3236dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5110", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "mjpg"=>"mjpeg"}}
+{"id"=>"av5115v1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10115v1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1115", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1315", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2115", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2116dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2815", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3115", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5115", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10115", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1145dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1145dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1145dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2145dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2145dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2145dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2146dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2146dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2146dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3145dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3145dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3145dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3146dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3146dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3146dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5145dn-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5145dn-3310-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5145dn-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1145-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1145-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2145-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2145-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3145-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3145-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5145-3310-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5145-3310-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2245pm-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2245pm-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2246pm-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2246pm-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2246pm-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2245pm-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3245pm-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3245pm-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3245pm-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3246pm-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3246pm-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3246pm-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245dn-01-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245dn-01-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245dn-01-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245pm-d", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245pm-d-lg", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5245pm-w", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125dnv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125irv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2125dnv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2125irv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3125dnv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3125irv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5125dnv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5125irv1x", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125ir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1125irv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1325", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2125", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2125dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2125irv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2825", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3125", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3125dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3125irv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5125", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5125dnv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5125irv1", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2225pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2225pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2226pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2226pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3225pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3225pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3226pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3226pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5225pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5225pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10225pmir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10225pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1355", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2155", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3155", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5155", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1255am", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2255am", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2255pmtir-h", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2256pm", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2256pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3255am", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3255pmtir-h", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3256pm", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3256pmtir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5255am", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5255pmtir-h", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10255amir", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av10255pmtir-h", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1455dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av1455dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2455dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2455dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2456dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av2456dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3455dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3455dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3456dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av3456dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5455dn-f", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av5455dn-s", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8185co", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8185dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8365co", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8365dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av12186dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av12366dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av20185co", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av20185dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av20365co", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av20365dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av40185dn", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8180", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8185", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8360", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"av8365", "vendor"=>"arecont-vision", "snapshots"=>{"jpg"=>"image", "h264"=>"h264.sdp", "mjpg"=>"mjpeg"}}
+{"id"=>"bc-5010", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/h264.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"poe-5010hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/h264.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"poe-100hd-icr", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"mjpg/video.mjpg"}}
+{"id"=>"md-3025-ivs", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/h264.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"md-3025", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/h264.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"sd-2020", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image.cgi?", "h264"=>"h264", "mjpg"=>"cgi-bin/jpg/image.cgi?"}}
+{"id"=>"md-720", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "h264"=>"video.pro1", "mjpg"=>"Unknown"}}
+{"id"=>"od-2050hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe-200vd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/admin/snapshot.cgi", "h264"=>"Unknown", "mjpg"=>"Unknown"}}
+{"id"=>"fe-200dm", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/admin/snapshot.cgi", "h264"=>"Unknown", "mjpg"=>"Unknown"}}
+{"id"=>"od-2060hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"dm-720", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "h264"=>"video.pro1", "mjpg"=>"Unknown"}}
+{"id"=>"poe-2600hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"wn-2600hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"poe-260cam", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "mjpg"=>"video.mjpg"}}
+{"id"=>"poe-250hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"jpg/image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"mjpg/video.mjpg"}}
+{"id"=>"poe-200cam-v2", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "mjpg"=>"video.mjpg"}}
+{"id"=>"bu-3026-ivs", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp?videocodec=h264", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"bu-3026", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp?videocodec=h264", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"bu-2015", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/stream1.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"bu-3025v2", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/stream1.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"bu-3025", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi/jpg/image.cgi", "h264"=>"cgi/h264/stream1.cgi", "mjpg"=>"cgi/mjpg/mjpeg.cgi"}}
+{"id"=>"od-2025hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"bu-720", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "h264"=>"video.pro1", "mjpg"=>"Unknown"}}
+{"id"=>"wl-350hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "h264"=>"video.h264", "mjpg"=>"video.mjpg"}}
+{"id"=>"cw-720", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"wn-200hd", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"ip-200phd-24", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"cu-720pir", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"image.jpg", "h264"=>"h264/media.amp", "mjpg"=>"video.mjpg"}}
+{"id"=>"wn-150cam", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/jpg/image", "mjpg"=>"video.mjpg"}}
+{"id"=>"fe-200cu", "vendor"=>"airlive", "snapshots"=>{"jpg"=>"cgi-bin/admin/snapshot.cgi", "h264"=>"Unknown", "mjpg"=>"Unknown"}}
+{"id"=>"ds-2cd8153f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd876bf-mf", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd863p-n-f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd802-slash-812p-n-f-e-w", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir5", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir3", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd802-slash-812-slash-892p-n-ir1", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd7353f-e-i", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd7133-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd763p-n-f-e-i-z", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd8133f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd752mf-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd832f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd702-slash-712p-n-f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd752mf-i-fb-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd762mf-i-fb-h", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"ds-2cd732f-e", "vendor"=>"hikvision", "snapshots"=>{"jpg"=>"Streaming/Channels/1/picture", "h264"=>"h264/ch1/main/av_stream", "mjpg"=>"None"}}
+{"id"=>"m1113", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1113-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1114", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"m1114-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1353", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1353-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1354", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1354-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1355", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1355-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1357", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"p1357-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1602", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1602-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1604", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1604-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1614", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1614-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1755", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"q1755-e", "vendor"=>"axis", "snapshots"=>{"jpg"=>"axis-cgi/jpg/image.cgi", "h264"=>"axis-media/media.amp", "mjpg"=>"axis-cgi/mjpg/video.cgi"}}
+{"id"=>"avm265", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn363v", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn362v", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm365a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm565a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm561", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm357a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm457a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn257", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm359a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm552c", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm459b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm552b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm403", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm459c", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm358c", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm458c", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avp571", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm583", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm328b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avo403", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn805", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm411", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm521a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm311", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm542a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm511", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm328d", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm428d", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm542b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm402", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm503", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn420", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn320", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm401", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm332", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn806", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm317b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm400b", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn216", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avo402", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm417a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm500", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn80x", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn812", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avm302a", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn815ez", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn701ez", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"avn803ez", "vendor"=>"avtech", "snapshots"=>{"jpg"=>"cgi-bin/guest/Video.cgi?media=jpeg", "h264"=>"live/h264", "mjpg"=>"live/mjpeg"}}
+{"id"=>"gxv3615wp-hd", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
+{"id"=>"gxv3615w", "vendor"=>"grandstream", "snapshots"=>{"jpg"=>"snapshot/view[CHANNEL].jpg", "h264"=>"ipcam_h264.sdp", "mjpg"=>"goform/stream?cmd=get&channel=[CHANNEL]"}}
