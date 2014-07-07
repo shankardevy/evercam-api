@@ -297,6 +297,23 @@ describe 'API routes/users' do
           }
         end
       end
+      context 'when thumbnail and include_shared is set to true' do
+        before(:each) {
+          camera1.update(preview: 'aaa')
+          get("/users/#{user0.username}/cameras", {thumbnail: true, include_shared: true}.merge(api_keys))
+        }
+
+        it 'returns cameras for the user with thumbnails' do
+          cameras = last_response.json['cameras']
+          cameras.each {|c|
+            expect(c).to have_keys('thumbnail')
+            if c['id'] == camera1.exid
+              expect(c['thumbnail']).to_not be_nil
+              expect(c['thumbnail']).to start_with('data:image/jpeg;base64,')
+            end
+          }
+        end
+      end
 
     end
   end
