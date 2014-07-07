@@ -111,6 +111,37 @@ describe 'API routes/cameras' do
           end
         end
       end
+
+      describe "when preview" do
+        context 'is nil' do
+          it 'returns preview as empty string' do
+            camera.update(preview: nil)
+            json = get("/cameras/#{camera.exid}?thumbnail=true", api_keys).json
+            json = json['cameras'] ? json['cameras'][0] : {}
+            expect(json['thumbnail']).to be_nil
+          end
+        end
+
+        context 'is not nil' do
+          it 'returns base 64 encoded camera preview' do
+            camera.update(preview: 'aaa')
+            json = get("/cameras/#{camera.exid}?thumbnail=true", api_keys).json
+            json = json['cameras'] ? json['cameras'][0] : {}
+            expect(json['thumbnail']).to_not be_nil
+            expect(json['thumbnail']).to start_with('data:image/jpeg;base64,')
+          end
+        end
+
+        context 'is not requested' do
+          it 'returns camera object without thumbnail key' do
+            camera.update(preview: 'aaa')
+            json = get("/cameras/#{camera.exid}", api_keys).json
+            json = json['cameras'] ? json['cameras'][0] : {}
+            expect(json).to not_have_keys('thumbnail')
+          end
+        end
+      end
+
     end
   end
 

@@ -265,6 +265,7 @@ describe 'API routes/users' do
               'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
               'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
               'external', 'internal', 'dyndns', 'short')
+            expect(c).to not_have_keys('thumbnail')
           }
         end
       end
@@ -283,6 +284,20 @@ describe 'API routes/users' do
           }
         end
       end
+
+      context 'when thumbnail is set to true' do
+        before(:each) {
+          get("/users/#{user0.username}/cameras", {thumbnail: true}.merge(api_keys))
+        }
+
+        it 'returns cameras for the user with thumbnails' do
+          cameras = last_response.json['cameras']
+          cameras.each {|c|
+            expect(c).to have_keys('thumbnail')
+          }
+        end
+      end
+
     end
   end
 

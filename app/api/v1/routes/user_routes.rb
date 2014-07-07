@@ -32,6 +32,7 @@ module Evercam
         params do
           requires :id, type: String, desc: "The user name or email address of the user."
           optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
+          optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
         end
         get :cameras do
           authreport!('users/cameras/get')
@@ -62,7 +63,9 @@ module Evercam
             rights = requester_rights_for(camera)
             if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
               presenter = Evercam::Presenters::Camera.new(camera)
-              cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW), user: user)
+              cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
+                                           user: user,
+                                           thumbnail: params[:thumbnail])
             end
           end
 

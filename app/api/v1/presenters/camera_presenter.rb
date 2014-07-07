@@ -289,6 +289,16 @@ module Evercam
         list.concat(grants) if !grants.empty?
         list.join(",")
       end
+
+      expose :thumbnail, if: lambda {|instance, options| options[:thumbnail]},
+             documentation: {
+               type: 'Image',
+               desc: '150x150 preview of camera view'
+             } do |c,o|
+        data = Base64.encode64(c.preview).gsub("\n", '') unless c.preview.nil?
+        c.preview.nil? ? nil : "data:image/jpeg;base64,#{data}"
+      end
+
     end
   end
 end

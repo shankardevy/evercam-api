@@ -54,10 +54,13 @@ module Evercam
     desc 'Returns all data for a given camera', {
       entity: Evercam::Presenters::Camera
     }
+    params do
+      requires :id, type: String, desc: "Camera Id."
+      optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
+    end
     get '/cameras/:id' do
       authreport!('cameras/get')
 
-      camera = nil
       if Camera.is_mac_address?(params[:id])
         camera = camera_for_mac(caller, params[:id])
       else
@@ -66,9 +69,9 @@ module Evercam
       raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
 
       rights = requester_rights_for(camera)
-      if !rights.allow?(AccessRight::LIST)
+      unless rights.allow?(AccessRight::LIST)
         raise AuthorizationError.new if camera.is_public?
-        raise NotFoundError.new if !camera.is_public?
+        raise NotFoundError.new unless camera.is_public?
       end
 
       CameraActivity.create(
@@ -79,9 +82,10 @@ module Evercam
         ip: request.ip
       )
 
-      options        = {minimal: !rights.allow?(AccessRight::VIEW),
-                        with:    Presenters::Camera}
-      options[:user] = rights.requester if !rights.requester.nil?
+      options = {minimal: !rights.allow?(AccessRight::VIEW),
+                 with: Presenters::Camera,
+                 thumbnail: params[:thumbnail]}
+      options[:user] = rights.requester unless rights.requester.nil?
       present([camera], options)
     end
 
