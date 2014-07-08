@@ -52,7 +52,7 @@ module Evercam
               elsif outcome_key == "country"
                 details["code"] = 'country_invalid_error'
               else
-                details["code"]  = "invalid_parameters"
+                details["code"]  = "unknown_error"
               end
             else
               details["message"] = exception.message.first
