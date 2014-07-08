@@ -177,7 +177,7 @@ module Evercam
         raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
         outcome = Actors::UserUpdate.run(params)
-        raise OutcomeError, outcome unless outcome.success?
+        raise OutcomeError, outcome.to_json unless outcome.success?
 
         present Array(target.reload), with: Presenters::User
       end
