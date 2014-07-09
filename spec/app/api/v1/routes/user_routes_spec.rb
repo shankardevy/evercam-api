@@ -238,13 +238,12 @@ describe 'API routes/users' do
         expect(content["cameras"].map {|s| s['id']}).to eq([camera0.exid])
         content["cameras"].each do |c|
           expect(c).to have_keys(
-            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
-            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location_lat', 'location_lng', 'discoverable',
-            'vendor_name', 'short', 'owner')
-          expect(c).to not_have_keys(
-            'external_host', 'snapshots', 'auth', 'mac_address', 'external',
-            'internal', 'dyndns')
+           'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+           'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+           'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+           'proxy_url', 'rights')
+          expect(c).to not_have_keys('external', 'internal', 'snapshots',
+                                     'auth', 'mac_address', 'dyndns')
         end
       end
 
@@ -260,12 +259,10 @@ describe 'API routes/users' do
           cameras.each {|c|
             expect(c['owned']).to eq(true)
             expect(c).to have_keys(
-              'id', 'name', 'owner', 'created_at', 'updated_at',
-              'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-              'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
-              'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-              'cam_username', 'cam_password', 'location_lng', 'location_lat', 'mac_address',
-              'discoverable', 'external', 'internal', 'dyndns', 'short')
+             'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+             'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+             'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+             'external', 'internal','dyndns', 'proxy_url', 'rights')
             expect(c).to not_have_keys('thumbnail')
           }
         end

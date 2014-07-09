@@ -87,6 +87,7 @@ module Evercam
                     exception.backtrace.join("\n")
           status = CLASS_STATUS_MAP[exception.class] if CLASS_STATUS_MAP.include?(exception.class)
           Airbrake.notify_or_ignore(exception, cgi_data: ENV.to_hash)
+          raise exception
         end
 
         log.info "Response:\n#{JSON.pretty_generate(details)}"

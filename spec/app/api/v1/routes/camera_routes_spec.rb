@@ -27,13 +27,12 @@ describe 'API routes/cameras' do
 
         it 'returns a subset the cameras details' do
           expect(json).to have_keys(
-            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
-            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location_lng', 'location_lng', 'discoverable',
-            'vendor_name', 'short', 'owned', 'rights', 'owner')
-          expect(json).to not_have_keys('external_host', 'snapshots',
-                                        'auth', 'mac_address', 'external',
-                                        'internal', 'dyndns')
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+            'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+            'proxy_url', 'rights')
+          expect(json).to not_have_keys('external', 'internal', 'snapshots',
+                                        'auth', 'mac_address', 'dyndns')
         end
 
       end
@@ -47,12 +46,10 @@ describe 'API routes/cameras' do
 
         it 'returns the full camera details' do
           expect(json).to have_keys(
-            'id', 'name', 'owner', 'created_at', 'updated_at',
-            'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-            'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
-            'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-            'cam_username', 'cam_password', 'location_lng', 'location_lat', 'mac_address', 'discoverable',
-            'external', 'internal', 'dyndns', 'short', 'owned', 'rights')
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+            'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+            'external', 'internal','dyndns', 'proxy_url', 'rights')
         end
 
         it 'indicates that the owner has full rights' do
@@ -75,13 +72,12 @@ describe 'API routes/cameras' do
 
         it 'returns s subset of the cameras details' do
           expect(json).to have_keys(
-            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
-            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location_lng', 'location_lat', 'short', 'owned',
-            'rights', 'owner')
-          expect(json).to not_have_keys('endpoints', 'snapshots',
-                                        'auth', 'mac_address', 'external',
-                                        'internal', 'dyndns')
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+            'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+            'proxy_url', 'rights')
+          expect(json).to not_have_keys('external', 'internal', 'snapshots',
+                                        'auth', 'mac_address', 'dyndns')
         end
 
         it 'indicates that the user has minimal rights' do
@@ -276,7 +272,7 @@ describe 'API routes/cameras' do
       response = get("/cameras/#{camera.exid}", api_keys)
       data = response.json['cameras'][0]
 
-      expect(data['vendor']).to eq(model.vendor.exid)
+      expect(data['vendor_id']).to eq(model.vendor.exid)
       expect(data['model']).to eq(model.name)
     end
 
@@ -298,22 +294,22 @@ describe 'API routes/cameras' do
         camera.save
         response = get("/cameras/#{camera.exid}", api_keys)
         data     = response.json['cameras'][0]
-        expect(data['external']['jpg_url']).to be_nil
-        expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
-        expect(data['dyndns']['rtsp_url']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
-        expect(data['internal']['rtsp_url']).to eq('rtsp://1.1.1.1/h264')
-        expect(data['internal_rtsp_port']).to be_nil
+        expect(data['external']['http']['jpg']).to be_nil
+        expect(data['proxy_url']['jpg']).to eq("http://evr.cm/#{camera.exid}.jpg")
+        expect(data['dyndns']['rtsp']['h264']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
+        expect(data['internal']['rtsp']['h264']).to eq('rtsp://1.1.1.1/h264')
+        expect(data['internal']['rtsp']['port']).to be_nil
 
         camera.values[:config].merge!({'external_http_port' =>  '123', 'external_host' => ''})
         camera.values[:config].merge!({'internal_rtsp_port' =>  '', 'internal_host' => '1.1.1.1', 'snapshots' => {'h264' =>''}})
         camera.save
         response = get("/cameras/#{camera.exid}", api_keys)
         data     = response.json['cameras'][0]
-        expect(data['external']['jpg_url']).to be_nil
-        expect(data['short']['jpg_url']).to eq("http://evr.cm/#{camera.exid}.jpg")
-        expect(data['dyndns']['rtsp_url']).to be_nil
-        expect(data['internal']['rtsp_url']).to be_nil
-        expect(data['internal_rtsp_port']).to be_nil
+        expect(data['external']['http']['jpg']).to be_nil
+        expect(data['proxy_url']['jpg']).to eq("http://evr.cm/#{camera.exid}.jpg")
+        expect(data['dyndns']['rtsp']['h264']).to be_nil
+        expect(data['internal']['rtsp']['h264']).to be_nil
+        expect(data['internal']['rtsp']['port']).to be_nil
       end
     end
 
@@ -379,11 +375,11 @@ describe 'API routes/cameras' do
         res = last_response.json['cameras'][0]
         expect(res['id']).to eq(Camera.first.exid)
         expect(res['name']).to eq(Camera.first.name)
-        expect(res['external_host']).to eq(Camera.first.config['external_host'])
-        expect(res['internal_host']).to eq(Camera.first.config['internal_host'])
-        expect(res['internal_rtsp_port']).to eq(Camera.first.config['internal_rtsp_port'])
-        expect(res['external_rtsp_port']).to eq(Camera.first.config['external_rtsp_port'])
-        expect(res['vendor']).to eq(Camera.first.vendor.exid)
+        expect(res['external']['host']).to eq(Camera.first.config['external_host'])
+        expect(res['internal']['host']).to eq(Camera.first.config['internal_host'])
+        expect(res['internal']['rtsp']['port']).to eq(Camera.first.config['internal_rtsp_port'])
+        expect(res['external']['rtsp']['port']).to eq(Camera.first.config['external_rtsp_port'])
+        expect(res['vendor_id']).to eq(Camera.first.vendor.exid)
       end
 
     end
@@ -509,7 +505,7 @@ describe 'API routes/cameras' do
         expect(cam.vendor_model).to eq(model)
         expect(cam.mac_address).to eq(params[:mac_address])
         expect(cam.timezone.zone).to eq('Etc/GMT+1')
-        expect(cam.jpg_url).to eq(params[:jpg_url])
+        expect(cam.res_url('jpg')).to eq(params[:jpg_url])
         expect(cam.cam_username).to eq(params[:cam_username])
         expect(cam.cam_password).to eq(params[:cam_password])
         expect(cam.external_url).to eq('http://www.evercam.io')
@@ -535,7 +531,7 @@ describe 'API routes/cameras' do
           cam = Camera.by_exid(camera.exid)
           expect(cam.vendor_model).to be_nil
           expect(cam.mac_address).to be_nil
-          expect(cam.jpg_url).to eq('')
+          expect(cam.res_url('jpg')).to eq('')
           expect(cam.cam_username).to eq('')
           expect(cam.cam_password).to eq('')
           expect(cam.config['external_host']).to eq('')
@@ -559,8 +555,8 @@ describe 'API routes/cameras' do
         expect(content['cameras']).not_to be_nil
         expect(content['cameras'].length).not_to eq(0)
         expect(content['cameras'][0]).not_to be_nil
-        expect(content['cameras'][0].include?("jpg_url")).to eq(true)
-        expect(content['cameras'][0]["jpg_url"]).to eq("/image.jpg")
+        expect(content['cameras'][0]['external']['http'].include?('jpg')).to eq(true)
+        expect(content['cameras'][0]['external']['http']['jpg']).to end_with("/image.jpg")
       end
     end
 

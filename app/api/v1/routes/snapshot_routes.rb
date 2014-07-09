@@ -46,7 +46,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
 
           unless camera.external_url.nil?
             require 'openssl'
@@ -62,7 +62,7 @@ module Evercam
             # Padding was incompatible with node padding
             c.padding = 0
             msg = camera.external_url
-            msg << camera.jpg_url unless camera.jpg_url.nil?
+            msg << camera.res_url('jpg') unless camera.res_url('jpg').blank?
             msg << "|#{auth}|#{Time.now.to_s}|"
             until msg.length % 16 == 0 do
               msg << ' '
