@@ -50,7 +50,7 @@ gem 'sinatra-jsonp',
 gem 'evercam_misc', '~> 0.0'
 gem 'evercam_models', '~> 0.3.0'
 gem 'evercam_sidekiq', '~> 0.1.0'
-gem 'evercam_actors', '~> 0.2.0'
+gem 'evercam_actors', '~> 0.3.0'
 
 gem 'airbrake'
 

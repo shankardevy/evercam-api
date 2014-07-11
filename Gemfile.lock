@@ -66,12 +66,12 @@ GEM
     ethon (0.7.1)
       ffi (>= 1.3.0)
     eventmachine (1.0.3)
-    evercam_actors (0.2.2)
+    evercam_actors (0.3.0)
       3scale_client (~> 2.3)
       activesupport (~> 4.0)
       evercam_misc (~> 0.0)
-      evercam_models (~> 0.2)
-      evercam_sidekiq (~> 0.0)
+      evercam_models (~> 0.3)
+      evercam_sidekiq (~> 0.1)
       faraday (~> 0.9)
       logjam (~> 1.1)
       mutations (~> 0.6)
@@ -280,7 +280,7 @@ DEPENDENCIES
   airbrake
   dalli
   database_cleaner
-  evercam_actors (~> 0.2.0)
+  evercam_actors (~> 0.3.0)
   evercam_misc (~> 0.0)
   evercam_models (~> 0.3.0)
   evercam_sidekiq (~> 0.1.0)
