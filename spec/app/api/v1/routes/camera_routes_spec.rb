@@ -29,8 +29,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'discoverable', 'vendor_name', 'short',
-            'owned', 'rights', 'owner')
+            'timezone', 'location_lng', 'location_lng', 'discoverable',
+            'vendor_name', 'short', 'owned', 'rights', 'owner')
           expect(json).to not_have_keys('external_host', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
@@ -51,7 +51,7 @@ describe 'API routes/cameras' do
             'last_polled_at', 'is_public', 'is_online', 'last_online_at',
             'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
             'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-            'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
+            'cam_username', 'cam_password', 'location_lng', 'location_lat', 'mac_address', 'discoverable',
             'external', 'internal', 'dyndns', 'short', 'owned', 'rights')
         end
 
@@ -77,7 +77,8 @@ describe 'API routes/cameras' do
           expect(json).to have_keys(
             'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
             'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location', 'short', 'owned', 'rights', 'owner')
+            'timezone', 'location_lng', 'location_lat', 'short', 'owned',
+            'rights', 'owner')
           expect(json).to not_have_keys('endpoints', 'snapshots',
                                         'auth', 'mac_address', 'external',
                                         'internal', 'dyndns')
@@ -97,7 +98,8 @@ describe 'API routes/cameras' do
             camera.update(location: nil)
             json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
-            expect(json['location']).to be_nil
+            expect(json['location_lng']).to be_nil
+            expect(json['location_lat']).to be_nil
           end
         end
 
@@ -107,7 +109,8 @@ describe 'API routes/cameras' do
             authorization_user.save
             json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
-            expect(json['location']).to have_keys('lng', 'lat')
+            expect(json['location_lng']).be 10
+            expect(json['location_lat']).be 20
           end
         end
       end

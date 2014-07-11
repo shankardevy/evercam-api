@@ -143,6 +143,8 @@ module Evercam
         optional :jpg_url, type: String, desc: "Snapshot url."
         optional :cam_username, type: String, desc: "Camera username."
         optional :cam_password, type: String, desc: "Camera password."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
       end
       post do
         authreport!('cameras/post')
@@ -176,6 +178,8 @@ module Evercam
         optional :jpg_url, type: String, desc: "Snapshot url."
         optional :cam_username, type: String, desc: "Camera username."
         optional :cam_password, type: String, desc: "Camera password."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
       end
       patch '/:id' do
         authreport!('cameras/patch')
