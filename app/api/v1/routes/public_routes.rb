@@ -27,6 +27,7 @@ module Evercam
           optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
           optional :is_near_to, type: String, desc: "Search for cameras within #{DEFAULT_DISTANCE} meters of a given address or longitude latitiude point."
           optional :within_distance, type: Float, desc: "Search for cameras within a specific range, in meters, of the is_near_to point."
+          optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
         end
         get do
           query = Camera.where(is_public: true, discoverable: true)
@@ -52,7 +53,7 @@ module Evercam
           query = query.offset(offset).limit(limit)
 
           log.debug "SQL: #{query.sql}"
-          present(query.all.to_a, with: Presenters::Camera, minimal: true).merge!({
+          present(query.all.to_a, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
             :pages => total_pages
           })
         end

@@ -7,7 +7,7 @@ describe 'API routes/cameras' do
 
   describe 'GET /public/cameras' do
     let!(:public_camera_1) {
-      create(:camera, exid: 'exid_A_1')
+      create(:camera, exid: 'exid_A_1', preview: 'aaa')
     }
 
     let!(:public_camera_2) {
@@ -42,6 +42,20 @@ describe 'API routes/cameras' do
         expect(data.include?("cameras")).to eq(true)
         cameras = data["cameras"]
         expect(cameras.size).to eq(3)
+      end
+    end
+
+    context "where thumbnails is true" do
+      it "returns success" do
+        get('/public/cameras', {thumbnail: true})
+        expect(last_response.status).to eq(200)
+        data = last_response.json
+        expect(data.include?("cameras")).to eq(true)
+        cameras = data["cameras"]
+        expect(cameras.size).to eq(3)
+        cameras.each do |camera|
+          expect(camera.include?('thumbnail')).to eq(true)
+        end
       end
     end
 
