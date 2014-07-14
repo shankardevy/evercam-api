@@ -18,6 +18,9 @@ gem 'grape-entity'
 gem 'grape-swagger', '0.7.2',
   github: 'tim-vandecasteele/grape-swagger'
 
+gem 'faraday-digestauth', '~> 0.1.0',
+  github: 'evercam/faraday-digestauth'
+
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
 
