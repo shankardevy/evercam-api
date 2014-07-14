@@ -180,13 +180,18 @@ module Evercam
         desc: 'The physical network MAC address of the camera'
       }
 
-      expose :location, documentation: {
-        type: 'hash',
-        desc: 'GPS lng and lat coordinates of the camera location'
+      expose :location_lng, documentation: {
+        type: 'float',
+        desc: 'GPS longitude coordinate of the camera'
       } do |c,o|
-        if c.location
-          { lng: c.location.x, lat: c.location.y }
-        end
+        c.location.x if c.location
+      end
+
+      expose :location_lat, documentation: {
+        type: 'float',
+        desc: 'GPS latitude coordinate of the camera'
+      } do |c,o|
+        c.location.y if c.location
       end
 
       expose :discoverable, documentation: {

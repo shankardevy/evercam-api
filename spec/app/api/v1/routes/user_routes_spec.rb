@@ -42,10 +42,10 @@ describe 'API routes/users' do
 
   before(:each) do
     body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
-           "<status>\n"\
-           "  <authorized>true</authorized>\n"\
-           "  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n"\
-           "</status>"
+      "<status>\n"\
+      "  <authorized>true</authorized>\n"\
+      "  <plan>Pay As You Go ($20 for 10,000 hits)</plan>\n"\
+      "</status>"
     stub_request(:post, 'https://evercam-admin.3scale.net/admin/api/signup.xml').to_return(status: 200,
                                                                                            body: body,
                                                                                            headers: {})
@@ -238,12 +238,13 @@ describe 'API routes/users' do
         expect(content["cameras"].map {|s| s['id']}).to eq([camera0.exid])
         content["cameras"].each do |c|
           expect(c).to have_keys(
-                            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
-                            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-                            'timezone', 'location', 'discoverable', 'vendor_name', 'short', 'owner')
-          expect(c).to not_have_keys('external_host', 'snapshots',
-                                        'auth', 'mac_address', 'external',
-                                        'internal', 'dyndns')
+            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
+            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
+            'timezone', 'location_lat', 'location_lng', 'discoverable',
+            'vendor_name', 'short', 'owner')
+          expect(c).to not_have_keys(
+            'external_host', 'snapshots', 'auth', 'mac_address', 'external',
+            'internal', 'dyndns')
         end
       end
 
@@ -263,8 +264,8 @@ describe 'API routes/users' do
               'last_polled_at', 'is_public', 'is_online', 'last_online_at',
               'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
               'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-              'cam_username', 'cam_password', 'location', 'mac_address', 'discoverable',
-              'external', 'internal', 'dyndns', 'short')
+              'cam_username', 'cam_password', 'location_lng', 'location_lat', 'mac_address',
+              'discoverable', 'external', 'internal', 'dyndns', 'short')
             expect(c).to not_have_keys('thumbnail')
           }
         end
