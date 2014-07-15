@@ -34,7 +34,7 @@ GEM
     airbrake (4.0.0)
       builder
       multi_json
-    aws-sdk (1.45.0)
+    aws-sdk (1.47.0)
       json (~> 1.4)
       nokogiri (>= 1.4.4)
     axiom-types (0.1.1)
@@ -94,10 +94,10 @@ GEM
       simplecov (~> 0.8)
       timezone (~> 0.3)
       typhoeus (~> 0.6)
-    evercam_sidekiq (0.1.4)
+    evercam_sidekiq (0.1.5)
       aws-sdk (~> 1.38)
       evercam_misc (~> 0.0)
-      evercam_models (~> 0.2)
+      evercam_models (~> 0.2.0)
       faraday (~> 0.9)
       faraday_middleware (~> 0.9)
       intercom (~> 2.0)
@@ -213,7 +213,7 @@ GEM
     sequel (4.10.0)
     shotgun (0.9)
       rack (>= 1.0)
-    sidekiq (3.1.4)
+    sidekiq (3.2.1)
       celluloid (>= 0.15.2)
       connection_pool (>= 2.0.0)
       json
