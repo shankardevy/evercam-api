@@ -15,8 +15,7 @@ gem 'kgio'
 
 gem 'grape'
 gem 'grape-entity'
-gem 'grape-swagger', '0.7.2',
-  github: 'tim-vandecasteele/grape-swagger'
+gem 'grape-swagger', '= 0.7.2'
 
 gem 'faraday-digestauth', '~> 0.1.0',
   github: 'evercam/faraday-digestauth'
