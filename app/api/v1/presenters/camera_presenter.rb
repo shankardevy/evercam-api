@@ -132,13 +132,6 @@ module Evercam
         end
       end
 
-      expose :location_lat, documentation: {
-        type: 'float',
-        desc: 'GPS latitude coordinate of the camera'
-      } do |c,o|
-        c.location.y if c.location
-      end
-
       expose :external, if: lambda {|instance, options| !options[:minimal]} do
 
         expose :host, documentation: {
