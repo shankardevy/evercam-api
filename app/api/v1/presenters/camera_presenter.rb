@@ -20,6 +20,14 @@ module Evercam
         required: true
       }
 
+      expose :owned, if: lambda {|instance, options| options.include?(:user)},
+             documentation: {
+               type: 'Boolean',
+               desc: 'True if the user owns the camera, false otherwise'
+             } do |c,o|
+        (c.owner.id == o[:user].id)
+      end
+
       expose :owner, documentation: {
         type: 'string',
         desc: 'Username of camera owner',
@@ -347,14 +355,6 @@ module Evercam
         } do |c,o|
           "http://evr.cm/#{c.exid}.jpg"
         end
-      end
-
-      expose :owned, if: lambda {|instance, options| options.include?(:user)},
-                     documentation: {
-                       type: 'Boolean',
-                       desc: 'True if the user owns the camera, false otherwise'
-                     } do |c,o|
-        (c.owner.id == o[:user].id)
       end
 
       expose :rights, if: lambda {|instance, options| options.include?(:user)},
