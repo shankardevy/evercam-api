@@ -105,8 +105,8 @@ describe 'API routes/cameras' do
             authorization_user.save
             json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
-            expect(json['location_lng']).to eq(10)
-            expect(json['location_lat']).to eq(20)
+            expect(json['location']['lng']).to eq(10)
+            expect(json['location']['lat']).to eq(20)
           end
         end
       end

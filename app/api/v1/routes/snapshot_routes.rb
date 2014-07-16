@@ -16,7 +16,7 @@ module Evercam
           faraday.options.open_timeout = Evercam::Config[:api][:timeout]      # connection open timeout in seconds
         end
         response = conn.get do |req|
-          req.url camera.jpg_url
+          req.url camera.res_url('jpg')
         end
       rescue URI::InvalidURIError => error
         raise BadRequestError, "Invalid URL. Cause: #{error}"
