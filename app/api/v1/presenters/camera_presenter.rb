@@ -20,7 +20,7 @@ module Evercam
         required: true
       }
 
-      expose :owned, if: lambda {|instance, options| options.include?(:user)},
+      expose :owned, if: lambda {|instance, options| !options[:user].nil? },
              documentation: {
                type: 'Boolean',
                desc: 'True if the user owns the camera, false otherwise'
@@ -357,7 +357,7 @@ module Evercam
         end
       end
 
-      expose :rights, if: lambda {|instance, options| options.include?(:user)},
+      expose :rights, if: lambda {|instance, options| !options[:user].nil?},
                       documentation: {
                         type: 'String',
                         desc: 'A comma separated list of the users rights on the camera'

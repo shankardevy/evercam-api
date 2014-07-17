@@ -64,7 +64,7 @@ module Evercam
             if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
               presenter = Evercam::Presenters::Camera.new(camera)
               cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
-                                           user: user,
+                                           user: caller,
                                            thumbnail: params[:thumbnail])
             end
           end
