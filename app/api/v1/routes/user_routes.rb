@@ -22,7 +22,7 @@ module Evercam
     end
 
     resource :users do
-      route_param :id do
+      route_param :id, requirements: { id: /[^\/]*/ } do
         #-----------------------------------------------------------------------
         # GET /v1/users/:id/cameras
         #-----------------------------------------------------------------------
@@ -143,7 +143,7 @@ module Evercam
       # GET /v1/users/:id
       #-------------------------------------------------------------------------
       desc 'Returns available information for the user'
-      get '/:id' do
+      get '/:id', requirements: { id: /[^\/]*/ } do
         authreport!('users/get')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -168,7 +168,7 @@ module Evercam
         optional :country, type: String, desc: "Country."
         optional :email, type: String, desc: "Email."
       end
-      patch '/:id' do
+      patch '/:id', requirements: { id: /[^\/]*/ } do
         authreport!('users/patch')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -188,7 +188,7 @@ module Evercam
       desc 'Delete your account, any cameras you own and all stored media', {
         entity: Evercam::Presenters::User
       }
-      delete '/:id' do
+      delete '/:id', requirements: { id: /[^\/]*/ } do
         authreport!('users/delete')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -208,7 +208,7 @@ module Evercam
         requires :id, type: String, desc: "User name for the user to fetch credentials for."
         requires :password, type: String, desc: "Password for the user to fetch credentials for."
       end
-      get '/:id/credentials' do
+      get '/:id/credentials', requirements: { id: /[^\/]*/ } do
         authreport!('users/credentials')
         user = User.by_login(params[:id])
         raise NotFoundError.new("No user with an id of #{params[:id]} exists.") if user.nil?

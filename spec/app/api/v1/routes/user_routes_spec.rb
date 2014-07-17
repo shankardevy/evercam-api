@@ -486,6 +486,19 @@ describe 'API routes/users' do
         end
       end
 
+      context 'and a valid email and password are provided' do
+        it 'returns success and provides valid user credentials' do
+          get("/users/#{user.email}/credentials", parameters)
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("api_id")).to eq(true)
+          expect(data.include?("api_key")).to eq(true)
+          expect(data["api_id"]).to eq(user.api_id)
+          expect(data["api_key"]).to eq(user.api_key)
+        end
+      end
+
       context 'when a non-existent user name is specified' do
         it 'returns a not found error' do
           get("/users/blah/credentials", parameters)
