@@ -144,6 +144,9 @@ module Evercam
       #-------------------------------------------------------------------------
       desc 'Returns available information for the user'
       get '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/get')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -169,6 +172,9 @@ module Evercam
         optional :email, type: String, desc: "Email."
       end
       patch '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/patch')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -189,6 +195,9 @@ module Evercam
         entity: Evercam::Presenters::User
       }
       delete '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/delete')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
