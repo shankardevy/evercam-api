@@ -135,7 +135,17 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
+        optional :vendor, type: String, desc: "Camera vendor id."
+        optional :model, type: String, desc: "Camera model name."
+        optional :timezone, type: String, desc: "Camera timezone."
         requires :is_public, type: 'Boolean', desc: "Is camera public?"
+        optional :is_online, type: 'Boolean', desc: "Is camera online? (If you leave it empty it will be automatically checked)"
+        optional :discoverable, type: 'Boolean', desc: "Is camera discoverable in our piblic cameras page?"
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+        optional :mac_address, type: String, desc: "Camera MAC address."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."
@@ -147,10 +157,6 @@ module Evercam
         optional :mpeg_url, type: String, desc: "MPEG url."
         optional :audio_url, type: String, desc: "Audio url."
         optional :h264_url, type: String, desc: "H264 url."
-        optional :cam_username, type: String, desc: "Camera username."
-        optional :cam_password, type: String, desc: "Camera password."
-        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
-        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
       end
       post do
         authreport!('cameras/post')
@@ -174,7 +180,17 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         optional :name, type: String, desc: "Camera name."
+        optional :vendor, type: String, desc: "Camera vendor id."
+        optional :model, type: String, desc: "Camera model name."
+        optional :timezone, type: String, desc: "Camera timezone."
         optional :is_public, type: 'Boolean', desc: "Is camera public?"
+        optional :is_online, type: 'Boolean', desc: "Is camera online? (If you leave it empty it will be automatically checked)"
+        optional :discoverable, type: 'Boolean', desc: "Is camera discoverable in our piblic cameras page?"
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+        optional :mac_address, type: String, desc: "Camera MAC address."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."
@@ -186,10 +202,6 @@ module Evercam
         optional :mpeg_url, type: String, desc: "MPEG url."
         optional :audio_url, type: String, desc: "Audio url."
         optional :h264_url, type: String, desc: "H264 url."
-        optional :cam_username, type: String, desc: "Camera username."
-        optional :cam_password, type: String, desc: "Camera password."
-        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
-        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
       end
       patch '/:id' do
         authreport!('cameras/patch')
