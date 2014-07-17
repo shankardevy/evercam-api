@@ -32,6 +32,8 @@
     :iv: <%= ENV['SNAP_IV'] %>
   :airbrake:
      :api_key: 40b9c667b991a7e0530f07523cebb573
+  :hls:
+     :base_path: http://localhost:9999
 
 :development:
   <<: *defaults
