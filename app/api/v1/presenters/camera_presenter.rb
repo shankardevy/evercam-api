@@ -136,7 +136,7 @@ module Evercam
           desc: 'GPS lng and lat coordinates of the camera location'
       } do |c,o|
         if c.location
-          { lng: c.location.x, lat: c.location.y }
+          { lat: c.location.y, lng: c.location.x }
         end
       end
 
