@@ -122,7 +122,7 @@ module Evercam
         ip: request.ip
       )
 
-	  redirect hls_url_for_camera(camera)
+      redirect hls_url_for_camera(camera)
     end
 
     #---------------------------------------------------------------------------
