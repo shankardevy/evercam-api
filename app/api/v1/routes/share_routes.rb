@@ -87,7 +87,8 @@ module Evercam
                 !(camera.is_public && params[:rights] == 'list,snapshot')
                  raise AuthorizationError.new
               end
-              if User.by_login(params[:email]) == camera.owner
+              target_user = User.by_login(params[:email])
+              if target_user == camera.owner
                 raise BadRequestError.new("You can't share with yourself",
                                           "cant_share_with_yourself",
                                           params[:email])
@@ -100,10 +101,9 @@ module Evercam
                             *(outcome.errors.keys))
               end
 
-              grantor = (params[:grantor] ? User.where(username: params[:grantor]).first : camera.owner)
               CameraActivity.create(
                 camera: camera,
-                access_token: grantor.token,
+                access_token: caller.token,
                 action: 'shared',
                 done_at: Time.now,
                 ip: request.ip,
@@ -111,8 +111,12 @@ module Evercam
               )
               IntercomEventsWorker.perform_async('shared-camera', caller.email)
               if outcome.result.class == CameraShare
+                # Send email to user
+                Mailers::UserMailer.share(user: caller, email: target_user.email, camera: camera) unless caller.email == params[:email]
                 present [outcome.result], with: Presenters::CameraShare
               else
+                # Send email to email
+                Mailers::UserMailer.share_request(user: caller, email: params[:email], camera: camera, key: outcome.result.id ) unless caller.email == params[:email]
                 present [outcome.result], with: Presenters::CameraShareRequest
               end
             end
