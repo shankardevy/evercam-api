@@ -8,27 +8,28 @@ module Evercam
 
     unless camera.external_url.nil?
       begin
-        auth = camera.config.fetch('auth', {}).fetch('basic', '')
-        if auth != ''
-          auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+        conn = Faraday.new(:url => camera.external_url) do |faraday|
+          faraday.request :basic_auth, camera.cam_username, camera.cam_password
+          faraday.request :digest, camera.cam_username, camera.cam_password
+          faraday.adapter  :typhoeus
+          faraday.options.timeout = Evercam::Config[:api][:timeout]           # open/read timeout in seconds
+          faraday.options.open_timeout = Evercam::Config[:api][:timeout]      # connection open timeout in seconds
         end
-        response  = Typhoeus::Request.get(camera.external_url + camera.config['snapshots']['jpg'],
-                                          userpwd: auth,
-                                          timeout: Evercam::Config[:api][:timeout],
-                                          connecttimeout: Evercam::Config[:api][:timeout])
-      rescue URI::InvalidURIError
-        raise BadRequestError, 'Invalid URL'
+        response = conn.get do |req|
+          req.url camera.res_url('jpg')
+        end
+      rescue URI::InvalidURIError => error
+        raise BadRequestError, "Invalid URL. Cause: #{error}"
+      rescue Faraday::TimeoutError
+        raise CameraOfflineError, 'Camera offline'
       end
-    end
-
-    if response.nil?
-      raise CameraOfflineError, 'No public endpoint'
-    elsif response.success?
-      response
-    elsif response.code == 401
-      raise AuthorizationError, 'Please check camera username and password'
-    else
-      raise CameraOfflineError, 'Camera offline'
+      if response.success?
+        response
+      elsif response.status == 401
+        raise AuthorizationError, 'Please check camera username and password'
+      else
+        raise CameraOfflineError, 'Camera offline'
+      end
     end
   end
 
@@ -45,7 +46,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
 
           unless camera.external_url.nil?
             require 'openssl'
@@ -61,7 +62,7 @@ module Evercam
             # Padding was incompatible with node padding
             c.padding = 0
             msg = camera.external_url
-            msg << camera.jpg_url unless camera.jpg_url.nil?
+            msg << camera.res_url('jpg') unless camera.res_url('jpg').blank?
             msg << "|#{auth}|#{Time.now.to_s}|"
             until msg.length % 16 == 0 do
               msg << ' '

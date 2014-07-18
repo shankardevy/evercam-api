@@ -22,7 +22,7 @@ module Evercam
     end
 
     resource :users do
-      route_param :id do
+      route_param :id, requirements: { id: /[^\/]*/ } do
         #-----------------------------------------------------------------------
         # GET /v1/users/:id/cameras
         #-----------------------------------------------------------------------
@@ -64,7 +64,7 @@ module Evercam
             if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
               presenter = Evercam::Presenters::Camera.new(camera)
               cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
-                                           user: user,
+                                           user: caller,
                                            thumbnail: params[:thumbnail])
             end
           end
@@ -143,7 +143,10 @@ module Evercam
       # GET /v1/users/:id
       #-------------------------------------------------------------------------
       desc 'Returns available information for the user'
-      get '/:id' do
+      get '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/get')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -168,7 +171,10 @@ module Evercam
         optional :country, type: String, desc: "Country."
         optional :email, type: String, desc: "Email."
       end
-      patch '/:id' do
+      patch '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/patch')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -188,7 +194,10 @@ module Evercam
       desc 'Delete your account, any cameras you own and all stored media', {
         entity: Evercam::Presenters::User
       }
-      delete '/:id' do
+      delete '/:id', requirements: { id: /[^\/]*/ } do
+        # I can't find cleaner way to do it with current grape version
+        params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+        params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         authreport!('users/delete')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
@@ -208,7 +217,7 @@ module Evercam
         requires :id, type: String, desc: "User name for the user to fetch credentials for."
         requires :password, type: String, desc: "Password for the user to fetch credentials for."
       end
-      get '/:id/credentials' do
+      get '/:id/credentials', requirements: { id: /[^\/]*/ } do
         authreport!('users/credentials')
         user = User.by_login(params[:id])
         raise NotFoundError.new("No user with an id of #{params[:id]} exists.") if user.nil?

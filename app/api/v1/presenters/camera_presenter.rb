@@ -20,6 +20,14 @@ module Evercam
         required: true
       }
 
+      expose :owned, if: lambda {|instance, options| !options[:user].nil? },
+             documentation: {
+               type: 'Boolean',
+               desc: 'True if the user owns the camera, false otherwise'
+             } do |c,o|
+        (c.owner.id == o[:user].id)
+      end
+
       expose :owner, documentation: {
         type: 'string',
         desc: 'Username of camera owner',
@@ -28,7 +36,7 @@ module Evercam
         s.owner.username
       end
 
-      expose :vendor, documentation: {
+      expose :vendor_id, documentation: {
         type: 'string',
         desc: 'Unique identifier for the camera vendor'
       } do |c,o|
@@ -94,192 +102,262 @@ module Evercam
         required: true
       }
 
-      expose :external_host, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'String',
-        desc: 'External host of the camera'
+      expose :discoverable, documentation: {
+          type: 'boolean',
+          desc: 'Whether the camera is publicly findable'
       } do |c,o|
-        c.config['external_host']
-      end
-
-      expose :internal_host, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'String',
-        desc: 'Internal host of the camera'
-      } do |c,o|
-        c.config['internal_host']
-      end
-
-      expose :external_http_port, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'Integer',
-        desc: 'External http port of the camera'
-      } do |c,o|
-        c.config['external_http_port'] unless c.config['external_http_port'].blank?
-      end
-
-      expose :internal_http_port, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'Integer',
-        desc: 'Internal http port of the camera'
-      } do |c,o|
-        c.config['internal_http_port'] unless c.config['internal_http_port'].blank?
-      end
-
-      expose :external_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'Integer',
-        desc: 'External rtsp port of the camera'
-      } do |c,o|
-        c.config['external_rtsp_port'] unless c.config['external_rtsp_port'].blank?
-      end
-
-      expose :internal_rtsp_port, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'Integer',
-        desc: 'Internal rtsp port of the camera'
-       } do |c,o|
-        c.config['internal_rtsp_port'] unless c.config['internal_rtsp_port'].blank?
-      end
-
-      expose :jpg_url, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'String',
-        desc: 'Snapshot url'
-      } do |c,o|
-        c.jpg_url
-      end
-
-      expose :rtsp_url, if: lambda {|instance, options| !options[:minimal]},
-             documentation: {
-        type: 'String',
-        desc: 'RTSP url'
-      } do |c,o|
-        c.rtsp_url
+        c.discoverable?
       end
 
       expose :cam_username, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
-        type: 'String',
-        desc: 'Camera username'
-      } do |c,o|
+                 type: 'String',
+                 desc: 'Camera username'
+             } do |c,o|
         c.cam_username
       end
 
       expose :cam_password, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
-        type: 'String',
-        desc: 'Camera password'
-      } do |c,o|
+                 type: 'String',
+                 desc: 'Camera password'
+             } do |c,o|
         c.cam_password
       end
 
       expose :mac_address, if: lambda {|instance, options| !options[:minimal]},
              documentation: {
-        type: 'string',
-        desc: 'The physical network MAC address of the camera'
-      }
+                 type: 'string',
+                 desc: 'The physical network MAC address of the camera'
+             }
 
-      expose :location_lng, documentation: {
-        type: 'float',
-        desc: 'GPS longitude coordinate of the camera'
+      expose :location, documentation: {
+          type: 'hash',
+          desc: 'GPS lng and lat coordinates of the camera location'
       } do |c,o|
-        c.location.x if c.location
-      end
-
-      expose :location_lat, documentation: {
-        type: 'float',
-        desc: 'GPS latitude coordinate of the camera'
-      } do |c,o|
-        c.location.y if c.location
-      end
-
-      expose :discoverable, documentation: {
-        type: 'boolean',
-        desc: 'Whether the camera is publicly findable'
-      } do |c,o|
-         c.discoverable?
+        if c.location
+          { lat: c.location.y, lng: c.location.x }
+        end
       end
 
       expose :external, if: lambda {|instance, options| !options[:minimal]} do
 
-        expose :jpg_url, documentation: {
-                 type: 'String',
-                 desc: 'External snapshot url'
+        expose :host, documentation: {
+                   type: 'String',
+                   desc: 'External host of the camera'
                } do |c,o|
-          host = c.external_url
-          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
+          c.config['external_host']
         end
 
-        expose :rtsp_url, documentation: {
-          type: 'String',
-          desc: 'External RTSP url'
-        } do |c,o|
-          host = c.external_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
+        expose :http do
+
+          expose :port, documentation: {
+                     type: 'Integer',
+                     desc: 'External http port of the camera'
+                 } do |c,o|
+            c.config['external_http_port'] unless c.config['external_http_port'].blank?
+          end
+
+          expose :camera, documentation: {
+              type: 'String',
+              desc: 'External camera url'
+          } do |c,o|
+            c.external_url
+          end
+
+          expose :jpg, documentation: {
+              type: 'String',
+              desc: 'External snapshot url'
+          } do |c,o|
+            host = c.external_url
+            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+          end
+
         end
 
+        expose :rtsp do
+
+          expose :port, documentation: {
+                     type: 'Integer',
+                     desc: 'External rtsp port of the camera'
+                 } do |c,o|
+            c.config['external_rtsp_port'] unless c.config['external_rtsp_port'].blank?
+          end
+
+          expose :mpeg, documentation: {
+              type: 'String',
+              desc: 'External mpeg url'
+          } do |c,o|
+            host = c.external_url('rtsp')
+            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+          end
+
+          expose :audio, documentation: {
+              type: 'String',
+              desc: 'External audio url'
+          } do |c,o|
+            host = c.external_url('rtsp')
+            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+          end
+
+          expose :h264, documentation: {
+              type: 'String',
+              desc: 'External h264 url'
+          } do |c,o|
+            host = c.external_url('rtsp')
+            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+          end
+
+        end
       end
 
       expose :internal, if: lambda {|instance, options| !options[:minimal]} do
 
-        expose :jpg_url, documentation: {
-                 type: 'String',
-                 desc: 'Internal snapshot url'
+        expose :host, documentation: {
+                   type: 'String',
+                   desc: 'Internal host of the camera'
                } do |c,o|
-          host = c.internal_url
-          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
+          c.config['internal_host']
         end
-        expose :rtsp_url, documentation: {
-          type: 'String',
-          desc: 'Internal RTSP url'
-        } do |c,o|
-          host = c.internal_url(port_type='rtsp')
-          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
+
+        expose :http do
+          expose :port, documentation: {
+                     type: 'Integer',
+                     desc: 'Internal http port of the camera'
+                 } do |c,o|
+            c.config['internal_http_port'] unless c.config['internal_http_port'].blank?
+          end
+
+          expose :camera, documentation: {
+              type: 'String',
+              desc: 'Internal camera url'
+          } do |c,o|
+            c.internal_url
+          end
+
+          expose :jpg, documentation: {
+              type: 'String',
+              desc: 'Internal snapshot url'
+          } do |c,o|
+            host = c.internal_url
+            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+          end
+
+          expose :mjpg, documentation: {
+              type: 'String',
+              desc: 'Mjpg url using evr.cm dynamic DNS'
+          } do |c,o|
+            host = c.internal_url
+            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+          end
+
+        end
+
+        expose :rtsp do
+
+          expose :port, documentation: {
+                     type: 'Integer',
+                     desc: 'Internal rtsp port of the camera'
+                 } do |c,o|
+            c.config['internal_rtsp_port'] unless c.config['internal_rtsp_port'].blank?
+          end
+
+          expose :mpeg, documentation: {
+              type: 'String',
+              desc: 'External mpeg url'
+          } do |c,o|
+            host = c.internal_url('rtsp')
+            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+          end
+
+          expose :audio, documentation: {
+              type: 'String',
+              desc: 'External audio url'
+          } do |c,o|
+            host = c.internal_url('rtsp')
+            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+          end
+
+          expose :h264, documentation: {
+              type: 'String',
+              desc: 'External h264 url'
+          } do |c,o|
+            host = c.internal_url('rtsp')
+            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+          end
+
         end
       end
 
       expose :dyndns, if: lambda {|instance, options| !options[:minimal]} do
-        expose :jpg_url, documentation: {
-          type: 'String',
-          desc: 'Snapshot url using evr.cm dynamic DNS'
+
+        expose :host, documentation: {
+            type: 'String',
+            desc: 'Internal host of the camera'
         } do |c,o|
-          port = c.config.fetch('external_http_port', nil)
-          host = "http://#{c.exid}.evr.cm"
-          host << ":#{port}" unless port.blank? or port == 80
-          host << c.jpg_url unless c.jpg_url.blank? or host.blank?
+          "http://#{c.exid}.evr.cm"
         end
 
-        expose :rtsp_url, documentation: {
-          type: 'String',
-          desc: 'RTSP url using evr.cm dynamic DNS'
-        } do |c,o|
-          port = c.config.fetch('external_rtsp_port', nil)
-          host = "rtsp://#{c.exid}.evr.cm"
-          host << ":#{port}" unless port.blank? or port == 80
-          host << c.rtsp_url unless c.rtsp_url.blank? or host.blank?
+        expose :http do
+
+          expose :jpg, documentation: {
+              type: 'String',
+              desc: 'Snapshot url using evr.cm dynamic DNS'
+          } do |c,o|
+            host = c.dyndns_url
+            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+          end
+
+          expose :mjpg, documentation: {
+              type: 'String',
+              desc: 'Mjpg url using evr.cm dynamic DNS'
+          } do |c,o|
+            host = c.dyndns_url
+            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+          end
+
+        end
+
+        expose :rtsp do
+
+          expose :mpeg, documentation: {
+              type: 'String',
+              desc: 'Dynamis DNS mpeg url'
+          } do |c,o|
+            host = c.dyndns_url('rtsp')
+            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+          end
+
+          expose :audio, documentation: {
+              type: 'String',
+              desc: 'Dynamis DNS audio url'
+          } do |c,o|
+            host = c.dyndns_url('rtsp')
+            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+          end
+
+          expose :h264, documentation: {
+              type: 'String',
+              desc: 'Dynamis DNS h264 url'
+          } do |c,o|
+            host = c.dyndns_url('rtsp')
+            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+          end
+
         end
 
       end
 
-      expose :short do
-        expose :jpg_url, documentation: {
+      expose :proxy_url do
+        expose :jpg, documentation: {
           type: 'String',
-          desc: 'Short snapshot url using evr.cm url shortener'
+          desc: 'Short snapshot url using evr.cm url shortener and proxy'
         } do |c,o|
           "http://evr.cm/#{c.exid}.jpg"
         end
       end
 
-      expose :owned, if: lambda {|instance, options| options.include?(:user)},
-                     documentation: {
-                       type: 'Boolean',
-                       desc: 'True if the user owns the camera, false otherwise'
-                     } do |c,o|
-        (c.owner.id == o[:user].id)
-      end
-
-      expose :rights, if: lambda {|instance, options| options.include?(:user)},
+      expose :rights, if: lambda {|instance, options| !options[:user].nil?},
                       documentation: {
                         type: 'String',
                         desc: 'A comma separated list of the users rights on the camera'
@@ -291,7 +369,7 @@ module Evercam
           list << right if rights.allow?(right)
           grants << "#{AccessRight::GRANT}~#{right}" if rights.allow?("#{AccessRight::GRANT}~#{right}")
         end
-        list.concat(grants) if !grants.empty?
+        list.concat(grants) unless grants.empty?
         list.join(",")
       end
 

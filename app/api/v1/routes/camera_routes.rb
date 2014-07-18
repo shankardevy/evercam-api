@@ -1,6 +1,7 @@
 require_relative '../presenters/camera_presenter'
 require_relative '../presenters/camera_share_presenter'
-require "typhoeus/adapters/faraday"
+require 'faraday/digestauth'
+require 'typhoeus/adapters/faraday'
 
 require 'uri'
 
@@ -28,9 +29,10 @@ module Evercam
       begin
         conn = Faraday.new(:url => params[:external_url]) do |faraday|
           faraday.request :basic_auth, params[:cam_username], params[:cam_password]
-          faraday.adapter  :typhoeus
-          faraday.options.timeout = 5           # open/read timeout in seconds
-          faraday.options.open_timeout = 5      # connection open timeout in seconds
+          faraday.request :digest, params[:cam_username], params[:cam_password]
+          faraday.adapter :typhoeus
+          faraday.options.timeout = Evercam::Config[:api][:timeout]           # open/read timeout in seconds
+          faraday.options.open_timeout = Evercam::Config[:api][:timeout]      # connection open timeout in seconds
         end
         response  = conn.get do |req|
           req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
@@ -169,7 +171,17 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
+        optional :vendor, type: String, desc: "Camera vendor id."
+        optional :model, type: String, desc: "Camera model name."
+        optional :timezone, type: String, desc: "Camera timezone."
         requires :is_public, type: 'Boolean', desc: "Is camera public?"
+        optional :is_online, type: 'Boolean', desc: "Is camera online? (If you leave it empty it will be automatically checked)"
+        optional :discoverable, type: 'Boolean', desc: "Is camera discoverable in our piblic cameras page?"
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+        optional :mac_address, type: String, desc: "Camera MAC address."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."
@@ -177,10 +189,10 @@ module Evercam
         optional :external_rtsp_port, type: String, desc: "External camera rtsp port."
         optional :internal_rtsp_port, type: String, desc: "Internal camera rtsp port."
         optional :jpg_url, type: String, desc: "Snapshot url."
-        optional :cam_username, type: String, desc: "Camera username."
-        optional :cam_password, type: String, desc: "Camera password."
-        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
-        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
+        optional :mjpg_url, type: String, desc: "Mjpg url."
+        optional :mpeg_url, type: String, desc: "MPEG url."
+        optional :audio_url, type: String, desc: "Audio url."
+        optional :h264_url, type: String, desc: "H264 url."
       end
       post do
         authreport!('cameras/post')
@@ -204,7 +216,17 @@ module Evercam
       params do
         requires :id, type: String, desc: "Camera Id."
         optional :name, type: String, desc: "Camera name."
+        optional :vendor, type: String, desc: "Camera vendor id."
+        optional :model, type: String, desc: "Camera model name."
+        optional :timezone, type: String, desc: "Camera timezone."
         optional :is_public, type: 'Boolean', desc: "Is camera public?"
+        optional :is_online, type: 'Boolean', desc: "Is camera online? (If you leave it empty it will be automatically checked)"
+        optional :discoverable, type: 'Boolean', desc: "Is camera discoverable in our piblic cameras page?"
+        optional :cam_username, type: String, desc: "Camera username."
+        optional :cam_password, type: String, desc: "Camera password."
+        optional :mac_address, type: String, desc: "Camera MAC address."
+        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
+        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
         optional :external_host, type: String, desc: "External camera host."
         optional :internal_host, type: String, desc: "Internal camera host."
         optional :external_http_port, type: String, desc: "External camera http port."
@@ -212,10 +234,10 @@ module Evercam
         optional :external_rtsp_port, type: String, desc: "External camera rtsp port."
         optional :internal_rtsp_port, type: String, desc: "Internal camera rtsp port."
         optional :jpg_url, type: String, desc: "Snapshot url."
-        optional :cam_username, type: String, desc: "Camera username."
-        optional :cam_password, type: String, desc: "Camera password."
-        optional :location_lng, type: Float, desc: "Camera GPS longitude location."
-        optional :location_lat, type: Float, desc: "Camera GPS latitude location."
+        optional :mjpg_url, type: String, desc: "Mjpg url."
+        optional :mpeg_url, type: String, desc: "MPEG url."
+        optional :audio_url, type: String, desc: "Audio url."
+        optional :h264_url, type: String, desc: "H264 url."
       end
       patch '/:id' do
         authreport!('cameras/patch')

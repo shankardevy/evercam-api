@@ -15,8 +15,10 @@ gem 'kgio'
 
 gem 'grape'
 gem 'grape-entity'
-gem 'grape-swagger', '0.7.2',
-  github: 'tim-vandecasteele/grape-swagger'
+gem 'grape-swagger', '= 0.7.2'
+
+gem 'faraday-digestauth', '~> 0.1.0',
+  github: 'evercam/faraday-digestauth'
 
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
@@ -46,9 +48,9 @@ gem 'sinatra-jsonp',
   require: 'sinatra/jsonp'
 
 gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.2.0'
+gem 'evercam_models', '~> 0.3.0'
 gem 'evercam_sidekiq', '~> 0.1.0'
-gem 'evercam_actors', '~> 0.2.0'
+gem 'evercam_actors', '~> 0.3.0'
 
 gem 'airbrake'
 

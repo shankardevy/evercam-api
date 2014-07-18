@@ -278,7 +278,7 @@ describe 'API routes/snapshots' do
 
       context 'and camera is online' do
         it 'returns snapshot jpg' do
-          stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
+          stub_request(:get, /.*89.101.225.158:8105.*/).
             to_return(:status => 200, :body => "", :headers => {})
 
           get("/cameras/#{snap.camera.exid}/live", api_keys)
@@ -289,7 +289,7 @@ describe 'API routes/snapshots' do
       context 'and camera is online and requires basic auth' do
         context 'auth is not provided' do
           it 'returns 403 error' do
-            stub_request(:get, "http://89.101.225.158:8105/Streaming/channels/1/picture").
+            stub_request(:get, /.*89.101.225.158:8105.*/).
               to_return(:status => 401, :body => "", :headers => {})
 
             snap.camera.values[:config]['snapshots'] = { jpg: '/Streaming/channels/1/picture'};
@@ -302,7 +302,7 @@ describe 'API routes/snapshots' do
 
         context 'auth is provided' do
           it 'returns snapshot jpg' do
-            stub_request(:get, "http://admin:mehcam@89.101.225.158:8105/Streaming/channels/1/picture").
+            stub_request(:get, /.*89.101.225.158:8105.*/).
               to_return(:status => 200, :body => "", :headers => {})
 
             snap.camera.values[:config]['snapshots'] =  { jpg: '/Streaming/channels/1/picture'}

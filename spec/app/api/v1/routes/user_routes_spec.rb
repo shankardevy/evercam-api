@@ -238,13 +238,12 @@ describe 'API routes/users' do
         expect(content["cameras"].map {|s| s['id']}).to eq([camera0.exid])
         content["cameras"].each do |c|
           expect(c).to have_keys(
-            'id', 'name', 'created_at', 'updated_at', 'last_polled_at',
-            'is_public', 'is_online', 'last_online_at', 'vendor', 'model',
-            'timezone', 'location_lat', 'location_lng', 'discoverable',
-            'vendor_name', 'short', 'owner')
-          expect(c).to not_have_keys(
-            'external_host', 'snapshots', 'auth', 'mac_address', 'external',
-            'internal', 'dyndns')
+           'id', 'name', 'owner', 'vendor_id', 'vendor_name', 'model',
+           'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+           'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+           'proxy_url')
+          expect(c).to not_have_keys('owned', 'external', 'internal', 'snapshots',
+                                     'auth', 'mac_address', 'dyndns', 'rights')
         end
       end
 
@@ -260,12 +259,10 @@ describe 'API routes/users' do
           cameras.each {|c|
             expect(c['owned']).to eq(true)
             expect(c).to have_keys(
-              'id', 'name', 'owner', 'created_at', 'updated_at',
-              'last_polled_at', 'is_public', 'is_online', 'last_online_at',
-              'external_host', 'internal_host', 'external_http_port', 'internal_http_port',
-              'external_rtsp_port', 'internal_rtsp_port', 'vendor', 'model', 'timezone', 'jpg_url',
-              'cam_username', 'cam_password', 'location_lng', 'location_lat', 'mac_address',
-              'discoverable', 'external', 'internal', 'dyndns', 'short')
+             'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+             'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
+             'timezone', 'is_public', 'is_online', 'discoverable', 'location',
+             'external', 'internal','dyndns', 'proxy_url', 'rights')
             expect(c).to not_have_keys('thumbnail')
           }
         end
@@ -479,6 +476,19 @@ describe 'API routes/users' do
       context 'and a valid user name and password are provided' do
         it 'returns success and provides valid user credentials' do
           get("/users/#{user.username}/credentials", parameters)
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data).not_to be_nil
+          expect(data.include?("api_id")).to eq(true)
+          expect(data.include?("api_key")).to eq(true)
+          expect(data["api_id"]).to eq(user.api_id)
+          expect(data["api_key"]).to eq(user.api_key)
+        end
+      end
+
+      context 'and a valid email and password are provided' do
+        it 'returns success and provides valid user credentials' do
+          get("/users/#{user.email}/credentials", parameters)
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data).not_to be_nil
