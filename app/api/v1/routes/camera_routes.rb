@@ -110,11 +110,11 @@ module Evercam
       end
       raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
 
-      rights = requester_rights_for(camera)
-      unless rights.allow?(AccessRight::LIST)
-        raise AuthorizationError.new if camera.is_public?
-        raise NotFoundError.new unless camera.is_public?
-      end
+      # rights = requester_rights_for(camera)
+      # unless rights.allow?(AccessRight::LIST)
+      #   raise AuthorizationError.new if camera.is_public?
+      #   raise NotFoundError.new unless camera.is_public?
+      # end
 
       CameraActivity.create(
         camera: camera,
