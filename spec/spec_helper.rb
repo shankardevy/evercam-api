@@ -20,9 +20,7 @@ def require_app(name)
   require_relative "../app/#{name}"
 end
 
-def require_lib(name)
-  require_relative "../lib/#{name}"
-end
+require_relative "../lib/actors"
 
 LogJam.configure({
   # turn the noise down to separate problems from messages
@@ -43,9 +41,11 @@ RSpec.configure do |c|
 
   c.before :each do
     Typhoeus::Expectation.clear
-    #Stub intercom.io requests
+    #Stub external requests
     stub_request(:get, /.*api.intercom.io.*/).
       to_return(:status => 200, :body => "", :headers => {})
+    stub_request(:post, /.*evercam-admin.3scale.net.*/).
+      to_return(:status => 201, :body => "", :headers => {})
   end
 end
 

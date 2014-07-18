@@ -1,6 +1,8 @@
 Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).sort.
   each { |f| require f }
 
+require_relative '../../lib/actors'
+
 module Evercam
   class APIv1 < Grape::API
 

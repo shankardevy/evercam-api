@@ -37,16 +37,16 @@
   <<: *defaults
   :database: <%= ENV['DATABASE_URL'] %>
   :mail:
-    :from: evercam.io <noreply@evercam.io>
+    :from: evercam.io <support@evercam.io>
     :via: :sendmail
 
 :test:
   <<: *defaults
   :database: postgres://localhost/evercam_tst
   :mail:
-    :from: evercam.io <noreply@evercam.io>
+    :from: evercam.io <support@evercam.io>
     :via: :test
-  :testserver: true
+  :testserver: false
 
 :production: &production
   <<: *defaults
@@ -67,7 +67,7 @@
     :url: <%= ENV['REDISCLOUD_URL'] %>
     :namespace: sidekiq
   :mail:
-    :from: evercam.io <noreply@evercam.io>
+    :from: evercam.io <support@evercam.io>
     :via: :smtp
     :via_options:
       :authentication: :plain
