@@ -53,7 +53,7 @@
         <table style="font-family: Arial, Helvetica, sans-serif; width: 100%; margin: 0; padding: 0;"><tr style="font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0;">
           <td style="font-family: Arial, Helvetica, sans-serif; font-weight: normal; font-size: 14px; margin: 0; padding: 0;">
 
-            <p class="lead" style="line-height: 1.6; margin: 0 0 10px; padding: 0;">Hi <%= @user.fullname %>, </p>
+            <p class="lead" style="line-height: 1.6; margin: 0 0 10px; padding: 0;">Hi <%= user.fullname %>, </p>
             <p style="line-height: 1.6; margin: 0 0 10px; padding: 0;">Welcome to Evercam and thank you for creating an account!
             </p>
 
@@ -62,10 +62,6 @@
             <p class="callout" style="color:#428bca; line-height: 1.6; background: #f5f5f5;  margin: 0 0 15px; padding: 15px;">
               <a style="color:#428bca; text-decoration:none;" href="https://dashboard.evercam.io/confirm?u=<%= user.username %>&c=<%= code %>">https://dashboard.evercam.io/confirm?u=<%= user.username %>&c=<%= code %></a>
             </p><!-- /Callout Panel -->
-            <% if @add_snap %>
-              <br>
-              <%= image_tag attachments['snapshot.jpg'].url, alt: 'Camera Preview', :style => "max-width: 550px; display:block; margin:0 auto;" -%>
-            <% end %>
             <br>
             <p style="line-height: 1.6; margin: 0 0 10px; padding: 0;">We're still in beta and greatly appreciate any feedback so if you have any suggestions or if there is anything we can do to improve your Evercam experience, please let us know!</p><br>
             <p style="line-height: 1.6; margin: 0 0 10px; padding: 0;">Thanks againg for joining us,</p><br>

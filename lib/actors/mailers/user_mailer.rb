@@ -6,7 +6,7 @@ module Evercam
         {
           to: user.email,
           subject: 'Evercam Confirmation',
-          html_body: erb('templates/emails/user/confirm.html.txt'),
+          html_body: erb('templates/emails/user/confirm.html.erb'),
           body: erb('templates/emails/user/confirm.txt')
         }
       end
