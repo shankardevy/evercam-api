@@ -13,5 +13,13 @@ module Evercam
    		end
    		camera
    	end
+    def hls_url_for_camera(camera)
+	  auth = camera.config['auth']['basic']
+	  port = camera.config['external_rtsp_port']
+	  port = "554" if port == ""
+	  port = ":" + port.to_s
+	  rtsp_url = "rtsp://#{auth['username']}:#{auth['password']}@#{camera.config['external_host']}#{port}#{camera.res_url('h264')}"
+	  Evercam::Config[:hls][:base_path] + "/hls/m3u8_" + URI.escape(rtsp_url, ":/?.")
+    end
    end
 end

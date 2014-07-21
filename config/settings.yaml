@@ -25,13 +25,15 @@
   :threescale:
     :url: https://evercam-admin.3scale.net/
     :provider_key: <%= ENV['THREESCALE_PROVIDER_KEY'] %>
-  :testserver: true
+  :testserver: false
   :snapshots:
     :url: https://snap.evercam.io/
     :key: <%= ENV['SNAP_KEY'] %>
     :iv: <%= ENV['SNAP_IV'] %>
   :airbrake:
      :api_key: 40b9c667b991a7e0530f07523cebb573
+  :hls:
+     :base_path: http://localhost:9999
 
 :development:
   <<: *defaults

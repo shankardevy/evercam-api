@@ -3,6 +3,8 @@ require_relative '../presenters/camera_share_presenter'
 require 'faraday/digestauth'
 require 'typhoeus/adapters/faraday'
 
+require 'uri'
+
 module Evercam
   class V1CameraRoutes < Grape::API
 
@@ -89,6 +91,40 @@ module Evercam
                  thumbnail: params[:thumbnail]}
       options[:user] = rights.requester unless rights.requester.nil?
       present([camera], options)
+    end
+
+    #---------------------------------------------------------------------------
+    # GET /cameras/hls/:id
+    #---------------------------------------------------------------------------
+    desc 'Redirects to HLS playlist for a given camera'
+    params do
+      requires :id, type: String, desc: "Camera Id."
+    end
+    get '/cameras/hls/:id' do
+      authreport!('cameras/get')
+
+      if Camera.is_mac_address?(params[:id])
+        camera = camera_for_mac(caller, params[:id])
+      else
+        camera = Camera.where(exid: params[:id]).first
+      end
+      raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
+
+      # rights = requester_rights_for(camera)
+      # unless rights.allow?(AccessRight::LIST)
+      #   raise AuthorizationError.new if camera.is_public?
+      #   raise NotFoundError.new unless camera.is_public?
+      # end
+
+      CameraActivity.create(
+        camera: camera,
+        access_token: access_token,
+        action: 'accessed',
+        done_at: Time.now,
+        ip: request.ip
+      )
+
+      redirect hls_url_for_camera(camera)
     end
 
     #---------------------------------------------------------------------------
