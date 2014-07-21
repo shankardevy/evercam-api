@@ -173,6 +173,14 @@ module Evercam
             host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
           end
 
+          expose :mjpg, documentation: {
+            type: 'String',
+            desc: 'External mjpg url.'
+          } do |c,o|
+            host = c.external_url
+            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+          end
+
         end
 
         expose :rtsp do
