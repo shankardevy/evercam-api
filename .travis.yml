@@ -2,6 +2,7 @@ language: ruby
 
 services:
 - memcached
+- redis-server
 
 cache: bundler
 
