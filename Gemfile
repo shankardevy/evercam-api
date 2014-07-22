@@ -24,7 +24,7 @@ gem 'faraday-digestauth', '~> 0.1.0',
 gem 'newrelic_rpm'
 gem 'newrelic-grape'
 
-gem 'intercom', '~> 2.0.0', require: 'intercom'
+gem 'intercom', '~> 2.1.1', require: 'intercom'
 gem 'logjam'
 
 gem 'mutations',

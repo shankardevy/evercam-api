@@ -61,6 +61,23 @@ module Evercam
           code = Digest::SHA1.hexdigest(user.username + user.created_at.to_s)
           Mailers::UserMailer.confirm(user: user, code: code)
         end
+
+        # Create intercom user
+        if Evercam::Config.env == :production
+          begin
+            ic_user = Intercom::User.find(:email => inputs[:email])
+          rescue Intercom::ResourceNotFound
+            # Ignore it
+          end
+          if ic_user.nil?
+            # Create ic user
+            begin
+              Intercom::User.create(:email => inputs[:email], :name => user.fullname)
+            rescue
+              # Ignore it
+            end
+          end
+        end
         user
       end
 
