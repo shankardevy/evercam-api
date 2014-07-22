@@ -95,7 +95,13 @@ describe 'API routes/cameras' do
 
       context "as an address string" do
 
-        WebMock.allow_net_connect!
+        before(:each) do
+          WebMock.allow_net_connect!
+        end
+
+        after(:each) do
+          WebMock.disable_net_connect!(:allow_localhost => true)
+        end
 
         it "returns success and the correct camera entries" do
           get("/public/cameras", { is_near_to: 'The North Pole' })

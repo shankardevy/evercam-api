@@ -13,6 +13,9 @@ gem 'json'
 gem 'dalli'
 gem 'kgio'
 gem 'pony'
+gem 'aws-sdk'
+gem 'sidekiq'
+gem 'mini_magick'
 
 gem 'grape'
 gem 'grape-entity'
@@ -50,7 +53,6 @@ gem 'sinatra-jsonp',
 
 gem 'evercam_misc', '~> 0.0'
 gem 'evercam_models', '~> 0.3.0'
-gem 'evercam_sidekiq', '~> 0.1.0'
 
 gem 'airbrake'
 

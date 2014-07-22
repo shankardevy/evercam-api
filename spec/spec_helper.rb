@@ -46,6 +46,10 @@ RSpec.configure do |c|
       to_return(:status => 200, :body => "", :headers => {})
     stub_request(:post, /.*evercam-admin.3scale.net.*/).
       to_return(:status => 201, :body => "", :headers => {})
+    stub_request(:get, "https://route53.amazonaws.com/2013-04-01/hostedzone/Z15MY0AN5PFWCW/rrset?name=unit-test-1234.evr.cm.&type=A").
+      to_return(:status => 200, :body => "", :headers => {})
+
+    WebMock.disable_net_connect!(:allow_localhost => true)
   end
 end
 

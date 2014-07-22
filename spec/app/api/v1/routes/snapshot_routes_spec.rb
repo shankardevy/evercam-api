@@ -316,7 +316,7 @@ describe 'API routes/snapshots' do
 
       context 'and camera is offline' do
         it '503 error is returned' do
-          stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
+          stub_request(:get, "http://89.101.225.158:8105/onvif/snapshot").
             to_return(:status => 500, :body => nil, :headers => {})
 
           response = Typhoeus::Response.new({:return_code => :operation_timedout})

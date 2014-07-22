@@ -1,4 +1,4 @@
-require "evercam_sidekiq"
+require_relative '../../../../lib/workers'
 require_relative '../presenters/camera_presenter'
 require_relative '../presenters/camera_share_presenter'
 

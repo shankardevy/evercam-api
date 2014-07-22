@@ -181,7 +181,7 @@ describe 'API routes/cameras' do
 
     context 'when parameters are correct, but camera is offline' do
       it 'returns a 503 camera offline status' do
-        stub_request(:get, "http://aaa:xxx@1.1.1.1/test.jpg").
+        stub_request(:get, "http://1.1.1.1/test.jpg").
           to_return(:status => 500, :body => "", :headers => {})
 
         parameters = test_params_invalid.merge(api_keys)

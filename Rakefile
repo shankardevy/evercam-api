@@ -45,7 +45,7 @@ namespace :workers do
 
   db = Sequel.connect(Evercam::Config[:database])
   require 'evercam_models'
-  require 'evercam_sidekiq'
+  require_relative 'lib/workers'
 
   task :enable do
     Evercam::ScheduleWorker.enable
