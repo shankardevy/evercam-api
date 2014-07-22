@@ -1,6 +1,6 @@
 Hello from Evercam,
 
-<%= user.fullname %> has shared the camera <%= camera.id %> with you.
+<%= user.fullname %> has shared the camera <%= camera['name'] %> (<%= camera.id %>) with you.
 
 Click on the link below to access this camera.
 
