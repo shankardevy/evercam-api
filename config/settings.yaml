@@ -33,7 +33,7 @@
   :airbrake:
      :api_key: 40b9c667b991a7e0530f07523cebb573
   :hls:
-     :base_path: http://localhost:9999
+     :base_path: http://ec2-54-74-40-134.eu-west-1.compute.amazonaws.com:9999
 
 :development:
   <<: *defaults
