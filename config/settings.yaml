@@ -84,12 +84,15 @@
   <<: *production
   :mail:
     :to: env.staging@evercam.io
-    :from: evercam.io <noreply@evercam.io>
+    :from: evercam.io <env.staging@evercam.io>
     :via: :sendmail
+  :sidekiq:
+    :url: redis://localhost:6379/0
+    :namespace: sidekiq
   :swagger:
     :v1:
       :api_version: '1.0'
       :mount_path: swagger
       :hide_documentation_path: true
-      :base_path: https://qqq.evercam.io/v1
+      :base_path: http://proxy.ever.cm:9292/v1
 
