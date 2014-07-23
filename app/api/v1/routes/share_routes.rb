@@ -112,11 +112,11 @@ module Evercam
               IntercomEventsWorker.perform_async('shared-camera', caller.email)
               if outcome.result.class == CameraShare
                 # Send email to user
-                Mailers::UserMailer.share(user: caller, email: target_user.email, camera: camera) unless caller.email == params[:email]
+                EmailWorker.perform_async({type: 'share', user: caller.username, email: target_user.email, camera: camera}) unless caller.email == params[:email]
                 present [outcome.result], with: Presenters::CameraShare
               else
                 # Send email to email
-                Mailers::UserMailer.share_request(user: caller, email: params[:email], camera: camera, key: outcome.result.id ) unless caller.email == params[:email]
+                EmailWorker.perform_async({type: 'share_request', user: caller.username, email: params[:email], camera: camera.exid, key: outcome.result.id}) unless caller.email == params[:email]
                 present [outcome.result], with: Presenters::CameraShareRequest
               end
             end

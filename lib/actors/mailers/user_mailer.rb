@@ -1,3 +1,5 @@
+require_relative 'mailer'
+
 module Evercam
   module Mailers
     class UserMailer < Mailer
@@ -25,7 +27,8 @@ module Evercam
           to: email,
           subject: "#{user.username} has shared a camera with you",
           html_body: erb('templates/emails/user/sign_up_to_share_email.html.erb'),
-          body: erb('templates/emails/user/sign_up_to_share_email.txt')
+          body: erb('templates/emails/user/sign_up_to_share_email.txt'),
+          attachments: attachments
         }
       end
 

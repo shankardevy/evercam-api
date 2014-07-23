@@ -1,7 +1,10 @@
+require 'logjam'
+require 'pony'
+
 module Evercam
   module Mailers
     class Mailer
-      LogJam.apply(self, "evercam_actors")
+      LogJam.apply(self, "actors")
 
       @@templates = {}
 
