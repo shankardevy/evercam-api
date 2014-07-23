@@ -16,6 +16,8 @@ module Evercam
       camera = Camera.by_exid(params['camera'])
       user = User.by_login(params['user'])
       response = nil
+      add_snap = false
+      snap = nil
 
       # Get image if needed
       if ['share_request', 'share'].include?(params['type']) and !camera.nil? && !camera.external_url.nil?
@@ -51,19 +53,19 @@ module Evercam
         end
 
       end
-      add_snap = false
+
       unless response.nil?
         add_snap = true
+        snap = response.body
       end
 
       if params['type'] == 'share_request'
         Mailers::UserMailer.share_request(user: user, email: params['email'], camera: camera,
-                                        attachments: {'snapshot.jpg' => response.body},
+                                        attachments: {'snapshot.jpg' => snap}, key: params['key'],
                                         add_snap: add_snap, socket: Socket.gethostname)
       elsif params['type'] == 'share'
-        Mailers::UserMailer.share(user: user, email: params['email'],
-                                        camera:camera, key: params['key'],
-                                        attachments: {'snapshot.jpg' => response.body}, add_snap: add_snap)
+        Mailers::UserMailer.share(user: user, email: params['email'], camera: camera,
+                                  attachments: {'snapshot.jpg' => snap}, add_snap: add_snap)
       end
     end
 
