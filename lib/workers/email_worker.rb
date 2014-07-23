@@ -65,7 +65,8 @@ module Evercam
                                         add_snap: add_snap, socket: Socket.gethostname)
       elsif params['type'] == 'share'
         Mailers::UserMailer.share(user: user, email: params['email'], camera: camera,
-                                  attachments: {'snapshot.jpg' => snap}, add_snap: add_snap)
+                                  attachments: {'snapshot.jpg' => snap}, add_snap: add_snap,
+                                  socket: Socket.gethostname)
       end
     end
 
