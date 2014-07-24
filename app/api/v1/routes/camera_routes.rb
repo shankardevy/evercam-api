@@ -201,7 +201,7 @@ module Evercam
         outcome    = Actors::CameraCreate.run(parameters)
         unless outcome.success?
           IntercomEventsWorker.perform_async('failed-creating-camera', caller.email)
-          raise OutcomeError, outcome
+          raise OutcomeError, outcome.to_json
         end
         IntercomEventsWorker.perform_async('created-camera', caller.email)
         present Array(outcome.result), with: Presenters::Camera
@@ -248,7 +248,9 @@ module Evercam
 
         Camera.db.transaction do
           outcome = Actors::CameraUpdate.run(params)
-          raise OutcomeError, outcome unless outcome.success?
+          unless outcome.success?
+            raise OutcomeError, outcome.to_json
+          end
 
           CameraActivity.create(
             camera: camera,

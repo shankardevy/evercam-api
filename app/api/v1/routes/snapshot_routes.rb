@@ -266,7 +266,9 @@ module Evercam
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
           outcome = Actors::SnapshotFetch.run(params)
-          raise OutcomeError, outcome unless outcome.success?
+          unless outcome.success?
+            raise OutcomeError, outcome.to_json
+          end
 
           CameraActivity.create(
             camera: camera,
@@ -292,7 +294,9 @@ module Evercam
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
           outcome = Actors::SnapshotCreate.run(params)
-          raise OutcomeError, outcome unless outcome.success?
+          unless outcome.success?
+            raise OutcomeError, outcome.to_json
+          end
 
           CameraActivity.create(
             camera: camera,
