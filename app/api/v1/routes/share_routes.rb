@@ -89,9 +89,14 @@ module Evercam
               end
               target_user = User.by_login(params[:email])
               if target_user == camera.owner
-                raise BadRequestError.new("You can't share with yourself",
-                                          "cant_share_with_yourself",
-                                          params[:email])
+                if caller == camera.owner
+                  raise BadRequestError.new("You can't share with yourself",
+                                            "cant_share_with_yourself",
+                                            params[:email])
+                else
+                  raise BadRequestError.new("User #{camera.owner.username} is the camera owner - you cannot remove their rights",
+                                            params[:email])
+                end
               end
 
               outcome = Actors::ShareCreate.run(params)
