@@ -30,30 +30,39 @@ module Evercam
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
         end
         get do
-          query = Camera.where(is_public: true, discoverable: true)
-          case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
-          is_like = case_sensitive ? :like : :ilike
+          params_copy = params.clone
+          params_copy.delete(:route_info)
+          cache_key = "public/#{params_copy.flatten.join('|')}"
+          query_result = APIv1::dc.get(cache_key)
+          total_pages = APIv1::dc.get("#{cache_key}/pages")
+          if query_result.nil? or total_pages.nil?
+            query = Camera.where(is_public: true, discoverable: true)
+            case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
+            is_like = case_sensitive ? :like : :ilike
 
-          begin
-            query = query.where(Sequel.send(is_like, :exid, "#{params[:id_starts_with]}%")) if params[:id_starts_with]
-            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_ends_with]}")) if params[:id_ends_with]
-            query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_includes]}%")) if params[:id_includes]
-            query = query.by_distance(params[:is_near_to], params[:within_distance] || DEFAULT_DISTANCE) if params[:is_near_to]
-          rescue Exception => ex
-            raise_error(400, 400, ex.message)
+            begin
+              query = query.where(Sequel.send(is_like, :exid, "#{params[:id_starts_with]}%")) if params[:id_starts_with]
+              query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_ends_with]}")) if params[:id_ends_with]
+              query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_includes]}%")) if params[:id_includes]
+              query = query.by_distance(params[:is_near_to], params[:within_distance] || DEFAULT_DISTANCE) if params[:is_near_to]
+            rescue Exception => ex
+              raise_error(400, 400, ex.message)
+            end
+
+            limit = (params[:limit] || DEFAULT_LIMIT)
+            limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT) unless (1..MAXIMUM_LIMIT).include?(limit)
+
+            count = query.count
+            total_pages = count / limit
+            total_pages += 1 unless count % limit == 0
+
+            offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
+            query = query.offset(offset).limit(limit)
+            query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
+            APIv1::dc.set(cache_key, query_result)
+            APIv1::dc.set("#{cache_key}/pages", total_pages)
           end
-
-          limit = (params[:limit] || DEFAULT_LIMIT)
-          limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT) unless (1..MAXIMUM_LIMIT).include?(limit)
-
-          total_pages = query.count / limit
-          total_pages += 1 unless query.count % limit == 0
-
-          offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
-          query = query.offset(offset).limit(limit)
-
-          log.debug "SQL: #{query.sql}"
-          present(query.all.to_a, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
+          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
             :pages => total_pages
           })
         end
