@@ -96,38 +96,40 @@ module Evercam
     #---------------------------------------------------------------------------
     # GET /cameras/hls/:id
     #---------------------------------------------------------------------------
+    content_type :m3u8, "application/vnd.apple.mpegurl"
+    format :m3u8
     desc 'Redirects to HLS playlist for a given camera'
     params do
       requires :id, type: String, desc: "Camera Id."
     end
     get '/cameras/hls/:id' do
-	  if params[:format] == "ts"
-		redirect Evercam::Config[:hls][:base_path] + "/hls/" + params[:id] + ".ts"
-	  else
-		authreport!('cameras/get')
+      if params[:format] == "ts"
+        redirect Evercam::Config[:hls][:base_path] + "/hls/" + params[:id] + ".ts"
+      else
+        authreport!('cameras/get')
 
-		if Camera.is_mac_address?(params[:id])
-		  camera = camera_for_mac(caller, params[:id])
-		else
-		  camera = Camera.where(exid: params[:id]).first
-		end
-		raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
+        if Camera.is_mac_address?(params[:id])
+          camera = camera_for_mac(caller, params[:id])
+        else
+          camera = Camera.where(exid: params[:id]).first
+        end
+        raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
 
-		# rights = requester_rights_for(camera)
-		# unless rights.allow?(AccessRight::LIST)
-		#   raise AuthorizationError.new if camera.is_public?
-		#   raise NotFoundError.new unless camera.is_public?
-		# end
+        # rights = requester_rights_for(camera)
+        # unless rights.allow?(AccessRight::LIST)
+        #   raise AuthorizationError.new if camera.is_public?
+        #   raise NotFoundError.new unless camera.is_public?
+        # end
 
-		CameraActivity.create(
-							  camera: camera,
-							  access_token: access_token,
-							  action: 'accessed',
-							  done_at: Time.now,
-							  ip: request.ip
-							  )
+        CameraActivity.create(
+                              camera: camera,
+                              access_token: access_token,
+                              action: 'accessed',
+                              done_at: Time.now,
+                              ip: request.ip
+                              )
 
-		redirect hls_url_for_camera(camera)
+        redirect hls_url_for_camera(camera)
       end
 
     end
@@ -135,35 +137,37 @@ module Evercam
     #---------------------------------------------------------------------------
     # GET /cameras/rtmp/:id
     #---------------------------------------------------------------------------
+    content_type :json, "application/json"
+    format :json
     desc 'Get RTMP URL for a given camera'
     params do
       requires :id, type: String, desc: "Camera Id."
     end
     get '/cameras/rtmp/:id' do
-		authreport!('cameras/get')
+        authreport!('cameras/get')
 
-		if Camera.is_mac_address?(params[:id])
-		  camera = camera_for_mac(caller, params[:id])
-		else
-		  camera = Camera.where(exid: params[:id]).first
-		end
-		raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
+        if Camera.is_mac_address?(params[:id])
+          camera = camera_for_mac(caller, params[:id])
+        else
+          camera = Camera.where(exid: params[:id]).first
+        end
+        raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
 
-		# rights = requester_rights_for(camera)
-		# unless rights.allow?(AccessRight::LIST)
-		#   raise AuthorizationError.new if camera.is_public?
-		#   raise NotFoundError.new unless camera.is_public?
-		# end
+        # rights = requester_rights_for(camera)
+        # unless rights.allow?(AccessRight::LIST)
+        #   raise AuthorizationError.new if camera.is_public?
+        #   raise NotFoundError.new unless camera.is_public?
+        # end
 
-		CameraActivity.create(
-							  camera: camera,
-							  access_token: access_token,
-							  action: 'accessed',
-							  done_at: Time.now,
-							  ip: request.ip
-							  )
+        CameraActivity.create(
+                              camera: camera,
+                              access_token: access_token,
+                              action: 'accessed',
+                              done_at: Time.now,
+                              ip: request.ip
+                              )
 
-		redirect rtmp_url_for_camera(camera)
+        redirect rtmp_url_for_camera(camera)
     end
 
     #---------------------------------------------------------------------------

@@ -4,6 +4,10 @@ Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).sort.
 module Evercam
   class APIv1 < Grape::API
 
+	formatter :m3u8, lambda { |object, env| object }
+
+	content_type :json, "application/json"
+
     # use JSON if accept header empty
     default_format :json
 
