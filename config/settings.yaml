@@ -82,6 +82,9 @@
 
 :staging:
   <<: *production
+  :api:
+    :ssl:
+      :only_environments: production
   :mail:
     :to: env.staging@evercam.io
     :from: evercam.io <env.staging@evercam.io>
