@@ -108,7 +108,7 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           rights = requester_rights_for(camera)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
           res = Evercam::get_jpg(camera)
           data = Base64.encode64(res.body).gsub("\n", '')
           {
@@ -123,8 +123,8 @@ module Evercam
         get 'snapshots' do
           camera = ::Camera.by_exid!(params[:id])
 
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
           present camera.snapshots, with: Presenters::Snapshot, models: true
         end
@@ -139,8 +139,8 @@ module Evercam
           camera   = ::Camera.by_exid!(params[:id])
           snapshot = camera.snapshots.order(:created_at).last
           if snapshot
-            rights = requester_rights_for(snapshot)
-            raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+            rights = requester_rights_for(camera)
+            raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
             present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
           else
             present [], with: Presenters::Snapshot, with_data: params[:with_data]
@@ -158,8 +158,8 @@ module Evercam
         get 'snapshots/range' do
           camera = ::Camera.by_exid!(params[:id])
 
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
           from = Time.at(params[:from].to_i).to_s
           to = Time.at(params[:to].to_i).to_s
@@ -192,8 +192,8 @@ module Evercam
           end
           camera = ::Camera.by_exid!(params[:id])
 
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
@@ -222,8 +222,8 @@ module Evercam
           end
           camera = ::Camera.by_exid!(params[:id])
 
-          rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::LIST)
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
           hours = []
           (0..23).each do |hour|
@@ -249,8 +249,8 @@ module Evercam
           camera = ::Camera.by_exid!(params[:id])
 
           snapshot = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
-          rights   = requester_rights_for(snapshot)
-          raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+          rights   = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
           present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
         end

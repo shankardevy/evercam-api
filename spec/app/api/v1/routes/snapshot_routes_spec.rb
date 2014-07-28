@@ -43,13 +43,11 @@ describe 'API routes/snapshots' do
       end
     end
 
-    context 'when unauthorized' do
-      it 'returns an unauthorized error' do
+    context 'when camera is public' do
+      it 'doesnt return an unauthorized error' do
         get("/cameras/#{snap.camera.exid}/snapshots", alt_keys)
-        expect(last_response.status).to eq(403)
+        expect(last_response.status).to eq(200)
         data = JSON.parse(last_response.body)
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -110,13 +108,11 @@ describe 'API routes/snapshots' do
         end
       end
 
-      context 'when unauthorized' do
-        it 'returns an unauthorized error' do
+      context 'when camera is public' do
+        it 'doesnt return an unauthorized error' do
           get("/cameras/#{@exid}/snapshots/1970/01/days", api_keys)
-          expect(last_response.status).to eq(403)
+          expect(last_response.status).to eq(200)
           data = JSON.parse(last_response.body)
-          expect(data.include?("message")).to eq(true)
-          expect(data["message"]).to eq("Unauthorized")
         end
       end
     end
@@ -158,13 +154,11 @@ describe 'API routes/snapshots' do
         end
       end
 
-      context 'when unauthorized' do
-        it 'returns an unauthorized error' do
+      context 'when camera is public' do
+        it 'doesnt return an unauthorized error' do
           get("/cameras/#{@exid}/snapshots/1970/01/01/hours", api_keys)
-          expect(last_response.status).to eq(403)
+          expect(last_response.status).to eq(200)
           data = JSON.parse(last_response.body)
-          expect(data.include?("message")).to eq(true)
-          expect(data["message"]).to eq("Unauthorized")
         end
       end
     end
@@ -260,13 +254,11 @@ describe 'API routes/snapshots' do
       end
     end
 
-    context 'when not authorized' do
-      it 'returns an unauthorized error' do
+    context 'when camera is public' do
+      it 'doesnt return an unauthorized error' do
         get("/cameras/#{snap.camera.exid}/snapshots/latest", {api_id: other_user.api_id, api_key: other_user.api_key})
-        expect(last_response.status).to eq(403)
+        expect(last_response.status).to eq(200)
         data = JSON.parse(last_response.body)
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthorized")
       end
     end
 
@@ -420,15 +412,13 @@ describe 'API routes/snapshots' do
         end
       end
 
-      context 'when unauthorized' do
-        it 'returns an unauthorized error' do
+      context 'when camera is public' do
+        it 'doesnt return an unauthorized error' do
           other_user = create(:user)
           parameters = {range: 10, api_id: other_user.api_id, api_key: other_user.api_key}
           get("/cameras/#{camera0.exid}/snapshots/#{s0.created_at.to_i}", parameters)
-          expect(last_response.status).to eq(403)
+          expect(last_response.status).to eq(200)
           data = JSON.parse(last_response.body)
-          expect(data.include?("message")).to eq(true)
-          expect(data["message"]).to eq("Unauthorized")
         end
       end
 
