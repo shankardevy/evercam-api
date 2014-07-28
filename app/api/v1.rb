@@ -6,6 +6,10 @@ require_relative '../../lib/actors'
 module Evercam
   class APIv1 < Grape::API
 
+	formatter :m3u8, lambda { |object, env| object }
+
+	content_type :json, "application/json"
+
     # use JSON if accept header empty
     default_format :json
 
