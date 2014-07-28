@@ -85,6 +85,8 @@
   :api:
     :ssl:
       :only_environments: production
+  :cookies:
+      :secret: qwertyuiop
   :mail:
     :to: env.staging@evercam.io
     :from: evercam.io <env.staging@evercam.io>
@@ -92,6 +94,10 @@
   :sidekiq:
     :url: redis://localhost:6379/0
     :namespace: sidekiq
+  :snapshots:
+      :url: http://proxy.evercam.io:/
+      :key: <%= ENV['SNAP_KEY'] %>
+      :iv: <%= ENV['SNAP_IV'] %>
   :swagger:
     :v1:
       :api_version: '1.0'
