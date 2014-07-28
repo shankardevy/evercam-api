@@ -125,8 +125,12 @@ module Evercam
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-
-          present camera.snapshots, with: Presenters::Snapshot, models: true
+          # TODO - make one query here somehow
+          snaps = Snapshot.where(:camera_id => camera.id).select(:created_at, :notes).all
+          snaps.each do |s|
+            s.camera = camera
+          end
+          present snaps, with: Presenters::Snapshot
         end
 
         desc 'Returns latest snapshot stored for this camera', {
