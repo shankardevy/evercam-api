@@ -103,5 +103,5 @@
       :api_version: '1.0'
       :mount_path: swagger
       :hide_documentation_path: true
-      :base_path: http://proxy.ever.cm:9292/v1
+      :base_path: http://proxy.evr.cm:9292/v1
 
