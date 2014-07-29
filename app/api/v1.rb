@@ -18,6 +18,7 @@ module Evercam
         WithAuth.new(env)
       end
       include AuthorizationHelper
+      include CameraHelper
       include ErrorsHelper
       include LoggingHelper
       include SessionHelper
@@ -55,7 +56,7 @@ module Evercam
     )
 
     # Dalli cache
-    options = { :namespace => "app_v1", :compress => true }
+    options = { :namespace => "app_v1", :compress => true, :expires_in => 60*5 }
     class << self; attr_accessor :dc end
     if ENV["MEMCACHEDCLOUD_SERVERS"]
       @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])

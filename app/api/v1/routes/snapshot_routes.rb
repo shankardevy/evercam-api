@@ -43,7 +43,7 @@ module Evercam
       route_param :id do
         desc 'Returns jpg from the camera'
         get 'snapshot.jpg' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
@@ -105,7 +105,7 @@ module Evercam
 
         desc 'Returns base64 encoded jpg from the camera'
         get 'live' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
@@ -121,12 +121,16 @@ module Evercam
 
         desc 'Returns the list of all snapshots currently stored for this camera'
         get 'snapshots' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-
-          present camera.snapshots, with: Presenters::Snapshot, models: true
+          # TODO - make one query here somehow
+          snaps = Snapshot.where(:camera_id => camera.id).select(:created_at, :notes).all
+          snaps.each do |s|
+            s.camera = camera
+          end
+          present snaps, with: Presenters::Snapshot
         end
 
         desc 'Returns latest snapshot stored for this camera', {
@@ -136,7 +140,7 @@ module Evercam
           optional :with_data, type: 'Boolean', desc: "Should it send image data?"
         end
         get 'snapshots/latest' do
-          camera   = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
           snapshot = camera.snapshots.order(:created_at).last
           if snapshot
             rights = requester_rights_for(camera)
@@ -156,7 +160,7 @@ module Evercam
           optional :page, type: Integer, desc: "Page number"
         end
         get 'snapshots/range' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
@@ -190,7 +194,7 @@ module Evercam
           unless (1..12).include?(params[:month])
             raise BadRequestError, 'Invalid month value'
           end
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
@@ -220,7 +224,7 @@ module Evercam
           unless (1..31).include?(params[:day])
             raise BadRequestError, 'Invalid day value'
           end
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
@@ -246,7 +250,7 @@ module Evercam
           optional :range, type: Integer, desc: "Time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp)."
         end
         get 'snapshots/:timestamp' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           snapshot = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
           rights   = requester_rights_for(camera)
@@ -260,7 +264,7 @@ module Evercam
           optional :notes, type: String, desc: "Optional text note for this snapshot"
         end
         post 'snapshots' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
@@ -288,7 +292,7 @@ module Evercam
           optional :notes, type: String, desc: "Optional text note for this snapshot"
         end
         post 'snapshots/:timestamp' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
@@ -314,7 +318,7 @@ module Evercam
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
         end
         delete 'snapshots/:timestamp' do
-          camera = ::Camera.by_exid!(params[:id])
+          camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
           raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)

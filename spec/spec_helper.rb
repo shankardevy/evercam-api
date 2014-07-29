@@ -41,6 +41,7 @@ RSpec.configure do |c|
 
   c.before :each do
     Typhoeus::Expectation.clear
+    Evercam::APIv1::dc.flush_all
     #Stub external requests
     stub_request(:get, /.*api.intercom.io.*/).
       to_return(:status => 200, :body => "", :headers => {})
