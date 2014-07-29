@@ -57,9 +57,16 @@ module Evercam
     end
 
     def perform(camera_name)
+      # Dalli cache
+      options = { :namespace => "app_v1", :compress => true, :expires_in => 60*5 }
+      if ENV["MEMCACHEDCLOUD_SERVERS"]
+        @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
+      else
+        @dc = Dalli::Client.new('127.0.0.1:11211', options)
+      end
       logger.info("Started update for camera #{camera_name}")
       instant = Time.now
-      camera = Sidekiq::MEMCACHED.get(camera_name)
+      camera = @dc.get(camera_name)
       camera = Camera.by_exid(camera_name) if camera.nil?
       return if camera.nil?
       updates = { is_online: false, last_polled_at: instant }
@@ -91,7 +98,7 @@ module Evercam
           )
         end
         camera.update(updates)
-        Sidekiq::MEMCACHED.set(camera_name, camera, 0)
+        @dc.set(camera_name, camera, 0)
       rescue => e
         # we weren't expecting this (famous last words)
         logger.warn(e.message)

@@ -12,13 +12,6 @@ end
 
 Sidekiq.configure_client do |c|
   c.redis = Evercam::Config[:sidekiq]
-  # Dalli cache
-  options = { :namespace => "app_v1", :compress => true, :expires_in => 60*5 }
-  if ENV["MEMCACHEDCLOUD_SERVERS"]
-    Sidekiq::MEMCACHED = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
-  else
-    Sidekiq::MEMCACHED = Dalli::Client.new('127.0.0.1:11211', options)
-  end
 end
 
 require_relative "zone_manager"
