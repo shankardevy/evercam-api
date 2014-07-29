@@ -62,11 +62,7 @@ module Evercam
     get '/cameras/:id' do
       authreport!('cameras/get')
 
-      camera = APIv1::dc.get(params[:id])
-      if camera.nil?
-        camera = Camera.by_exid!(params[:id])
-        APIv1::dc.set(params[:id], camera, 0)
-      end
+      camera = get_cam(params[:id])
       rights = requester_rights_for(camera)
       unless rights.allow?(AccessRight::LIST)
         raise AuthorizationError.new if camera.is_public?
@@ -103,12 +99,7 @@ module Evercam
       else
         authreport!('cameras/get')
 
-        if Camera.is_mac_address?(params[:id])
-          camera = camera_for_mac(caller, params[:id])
-        else
-          camera = Camera.where(exid: params[:id]).first
-        end
-        raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
+        camera = get_cam(params[:id])
 
         # rights = requester_rights_for(camera)
         # unless rights.allow?(AccessRight::LIST)
@@ -141,12 +132,7 @@ module Evercam
     get '/cameras/rtmp/:id' do
         authreport!('cameras/get')
 
-        if Camera.is_mac_address?(params[:id])
-          camera = camera_for_mac(caller, params[:id])
-        else
-          camera = Camera.where(exid: params[:id]).first
-        end
-        raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
+        camera = get_cam(params[:id])
 
         # rights = requester_rights_for(camera)
         # unless rights.allow?(AccessRight::LIST)
@@ -318,10 +304,7 @@ module Evercam
       delete '/:id' do
         authreport!('cameras/delete')
 
-        camera = APIv1::dc.get(params[:id])
-        if camera.nil?
-          camera = Camera.by_exid!(params[:id])
-        end
+        camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
         APIv1::dc.delete(params[:id])
@@ -342,8 +325,7 @@ module Evercam
       put '/:id' do
         authreport!('cameras/transfer')
 
-        camera = APIv1::dc.get(params[:id])
-        camera = Camera.by_exid!(params[:id]) if camera.nil?
+        camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.is_owner?
 
