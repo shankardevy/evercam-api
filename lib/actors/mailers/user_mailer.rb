@@ -18,7 +18,6 @@ module Evercam
           to: email,
           subject: "#{user.username} has shared a camera with you",
           html_body: erb('templates/emails/user/camera_shared_notification.html.erb'),
-          body: erb('templates/emails/user/camera_shared_notification.txt'),
           attachments: attachments
         }
       end
@@ -28,7 +27,6 @@ module Evercam
           to: email,
           subject: "#{user.username} has shared a camera with you",
           html_body: erb('templates/emails/user/sign_up_to_share_email.html.erb'),
-          body: erb('templates/emails/user/sign_up_to_share_email.txt'),
           attachments: attachments
         }
       end
