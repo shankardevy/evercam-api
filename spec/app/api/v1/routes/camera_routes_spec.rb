@@ -276,15 +276,6 @@ describe 'API routes/cameras' do
       expect(data['model']).to eq(model.name)
     end
 
-    it 'can fetch details for a camera via MAC address' do
-      camera.update(owner: authorization_user)
-      response = get("/cameras/#{camera.mac_address}", api_keys)
-      data     = response.json['cameras'][0]
-
-      expect(data['id']).to eq(camera.exid)
-      expect(data['mac_address']).to eq(camera.mac_address)
-    end
-
     context 'when data is not complete' do
       let(:camera) { create(:camera, owner: authorization_user) }
 
@@ -299,7 +290,9 @@ describe 'API routes/cameras' do
         expect(data['dyndns']['rtsp']['h264']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
         expect(data['internal']['rtsp']['h264']).to eq('rtsp://1.1.1.1/h264')
         expect(data['internal']['rtsp']['port']).to be_nil
+      end
 
+      it 'returns null or valid partial url' do
         camera.values[:config].merge!({'external_http_port' =>  '123', 'external_host' => ''})
         camera.values[:config].merge!({'internal_rtsp_port' =>  '', 'internal_host' => '1.1.1.1', 'snapshots' => {'h264' =>''}})
         camera.save

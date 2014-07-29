@@ -22,12 +22,7 @@ module Evercam
       optional :objects, type: 'Boolean', desc: "Return objects instead of strings", default: false
     end
     get '/cameras/:id/logs' do
-      if Camera.is_mac_address?(params[:id])
-        camera = camera_for_mac(caller, params[:id])
-      else
-        camera = Camera.where(exid: params[:id]).first
-      end
-      raise(Evercam::NotFoundError, "Camera not found") if camera.nil?
+      camera = get_cam(params[:id])
       if params[:from].present? and params[:to].present? and params[:from].to_i > params[:to].to_i
         raise(BadRequestError, "From can't be higher than to")
       end

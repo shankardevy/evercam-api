@@ -11,9 +11,6 @@ module Evercam
     TIMEOUT = 5
 
     include WebErrors
-    helpers do
-      include CameraHelper
-    end
 
     #---------------------------------------------------------------------------
     # GET /cameras/test
@@ -65,13 +62,11 @@ module Evercam
     get '/cameras/:id' do
       authreport!('cameras/get')
 
-      if Camera.is_mac_address?(params[:id])
-        camera = camera_for_mac(caller, params[:id])
-      else
-        camera = Camera.where(exid: params[:id]).first
+      camera = APIv1::dc.get(params[:id])
+      if camera.nil?
+        camera = Camera.by_exid!(params[:id])
+        APIv1::dc.set(params[:id], camera, 0)
       end
-      raise(Evercam::NotFoundError, "Camera not found for camera id '#{params[:id]}'.") if camera.nil?
-
       rights = requester_rights_for(camera)
       unless rights.allow?(AccessRight::LIST)
         raise AuthorizationError.new if camera.is_public?
@@ -285,7 +280,8 @@ module Evercam
       patch '/:id' do
         authreport!('cameras/patch')
 
-        camera = ::Camera.by_exid!(params[:id])
+        camera = APIv1::dc.get(params[:id])
+        camera = ::Camera.by_exid!(params[:id]) if camera.nil?
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
@@ -307,7 +303,9 @@ module Evercam
           IntercomEventsWorker.perform_async('made-camera-public', caller.email)
         end
 
-        present Array(camera.reload), with: Presenters::Camera
+        camera = ::Camera.by_exid!(params[:id])
+        APIv1::dc.set(params[:id], camera)
+        present Array(camera), with: Presenters::Camera
       end
 
 
@@ -320,10 +318,13 @@ module Evercam
       delete '/:id' do
         authreport!('cameras/delete')
 
-        camera = ::Camera.by_exid!(params[:id])
+        camera = APIv1::dc.get(params[:id])
+        if camera.nil?
+          camera = Camera.by_exid!(params[:id])
+        end
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
-
+        APIv1::dc.delete(params[:id])
         camera.destroy
         {}
       end
@@ -341,7 +342,8 @@ module Evercam
       put '/:id' do
         authreport!('cameras/transfer')
 
-        camera = Camera.by_exid!(params[:id])
+        camera = APIv1::dc.get(params[:id])
+        camera = Camera.by_exid!(params[:id]) if camera.nil?
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.is_owner?
 
@@ -349,6 +351,7 @@ module Evercam
         raise NotFoundError.new("Specified user does not exist.") if new_owner.nil?
 
         camera.update(owner: new_owner)
+        APIv1::dc.set(params[:id], camera, 0)
         present Array(camera), with: Presenters::Camera
       end
     end
