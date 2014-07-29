@@ -16,12 +16,10 @@ module Evercam
     end
 
     def self.execute
-      puts "Executing Heartbeat"
       HeartbeatWorker.run
     end
 
     def self.requeue
-      puts "Rescheduling Heartbeat run at #{Time.now + (60 * 5)}"
       perform_in(60 * 5)
     end
 

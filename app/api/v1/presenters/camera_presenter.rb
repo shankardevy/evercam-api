@@ -3,6 +3,7 @@ require_relative './presenter'
 module Evercam
   module Presenters
     class Camera < Presenter
+      include CameraHelper
 
       root :cameras
 
@@ -363,6 +364,23 @@ module Evercam
         } do |c,o|
           "http://evr.cm/#{c.exid}.jpg"
         end
+
+        expose :hls, documentation: {
+          type: 'String',
+          desc: 'Hls url'
+        } do |c,o|
+          host = hls_url_for_camera(c)
+          host unless host.blank?
+        end
+
+        expose :rtmp, documentation: {
+          type: 'String',
+          desc: 'RTMP url'
+        } do |c,o|
+          host = rtmp_url_for_camera(c)
+          host unless host.blank?
+        end
+
       end
 
       expose :rights, if: lambda {|instance, options| !options[:user].nil?},
