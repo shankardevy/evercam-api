@@ -103,20 +103,25 @@ module Evercam
       end
       route_param :id do
 
-        desc 'Returns base64 encoded jpg from the camera'
+        desc 'Returns base64 encoded jpg from the online camera'
         get 'live' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
-          res = Evercam::get_jpg(camera)
-          data = Base64.encode64(res.body).gsub("\n", '')
-          {
-            camera: camera.exid,
-            created_at: Time.now.to_i,
-            timezone: camera.timezone.zone,
-            data: "data:image/jpeg;base64,#{data}"
-          }
+
+          if camera.is_online
+            res = Evercam::get_jpg(camera)
+            data = Base64.encode64(res.body).gsub("\n", '')
+            {
+              camera: camera.exid,
+              created_at: Time.now.to_i,
+              timezone: camera.timezone.zone,
+              data: "data:image/jpeg;base64,#{data}"
+            }
+          else
+            {message: 'camera is offline'}
+          end
         end
 
         desc 'Returns the list of all snapshots currently stored for this camera'
