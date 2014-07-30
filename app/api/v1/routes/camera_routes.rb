@@ -101,16 +101,16 @@ module Evercam
 
         camera = get_cam(params[:id])
 
-        # rights = requester_rights_for(camera)
-        # unless rights.allow?(AccessRight::LIST)
-        #   raise AuthorizationError.new if camera.is_public?
-        #   raise NotFoundError.new unless camera.is_public?
-        # end
+        rights = requester_rights_for(camera)
+        unless rights.allow?(AccessRight::LIST)
+          raise AuthorizationError.new if camera.is_public?
+          raise NotFoundError.new unless camera.is_public?
+        end
 
         CameraActivity.create(
                               camera: camera,
                               access_token: access_token,
-                              action: 'accessed',
+                              action: 'accessed hls',
                               done_at: Time.now,
                               ip: request.ip
                               )
@@ -134,16 +134,16 @@ module Evercam
 
         camera = get_cam(params[:id])
 
-        # rights = requester_rights_for(camera)
-        # unless rights.allow?(AccessRight::LIST)
-        #   raise AuthorizationError.new if camera.is_public?
-        #   raise NotFoundError.new unless camera.is_public?
-        # end
+        rights = requester_rights_for(camera)
+        unless rights.allow?(AccessRight::LIST)
+          raise AuthorizationError.new if camera.is_public?
+          raise NotFoundError.new unless camera.is_public?
+        end
 
         CameraActivity.create(
                               camera: camera,
                               access_token: access_token,
-                              action: 'accessed',
+                              action: 'accessed rtmp',
                               done_at: Time.now,
                               ip: request.ip
                               )
