@@ -88,7 +88,7 @@ module Grape
       end
 
       def validate_param!(attr_name, params)
-        unless @option.to_s == 'File'
+        unless @option.to_s == 'File' or @option.to_s == 'Float'
           if @option == 'Boolean'
             params[attr_name] = to_bool(params[attr_name])
             if params[attr_name].nil?

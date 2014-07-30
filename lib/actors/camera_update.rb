@@ -34,8 +34,8 @@ module Evercam
         string :cam_username, :empty => true
         string :cam_password, :empty => true
 
-        float :location_lng
-        float :location_lat
+        string :location_lng, :empty => true
+        string :location_lat, :empty => true
 
         boolean :discoverable
       end
@@ -143,8 +143,16 @@ module Evercam
         end
 
         # setup camera GPS location
-        if location_lng && location_lat
-          camera.location = { lng: location_lng, lat: location_lat }
+        if location_lng.blank? && location_lat.blank?
+          camera.location = nil
+        else
+          begin
+            camera.location = { lng: location_lng.to_f, lat: location_lat.to_f }
+          rescue ArgumentError
+            add_error(location_lng, :valid, "#{location_lng} is invalid")
+            add_error(location_lat, :valid, "#{location_lat} is invalid")
+            return
+          end
         end
 
         if privacy_changed && !camera.is_public?

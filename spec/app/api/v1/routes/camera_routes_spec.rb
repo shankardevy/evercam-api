@@ -474,6 +474,8 @@ describe 'API routes/cameras' do
         cam_password: '',
         vendor: '',
         model: '',
+        location_lat: '',
+        location_lng: '',
         jpg_url: ''
       }
     }
@@ -529,6 +531,7 @@ describe 'API routes/cameras' do
           expect(cam.res_url('jpg')).to eq('')
           expect(cam.cam_username).to eq('')
           expect(cam.cam_password).to eq('')
+          expect(cam.location).to be_nil
           expect(cam.config['external_host']).to eq('')
           expect(cam.config['internal_host']).to eq('')
           expect(cam.config['external_http_port']).to eq('')
