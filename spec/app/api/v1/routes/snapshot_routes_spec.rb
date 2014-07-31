@@ -239,8 +239,7 @@ describe 'API routes/snapshots' do
         get("/cameras/#{snap.camera.exid}/snapshots/latest", api_keys)
         expect(last_response.status).to eq(200)
         expect(last_response.json['snapshots'][0]['created_at']).to eq(snap3.created_at.to_i)
-        expect(last_response.json['snapshots'][0]['camera']).to eq(snap3.camera.exid)
-        expect(last_response.json['snapshots'][0]['timezone']).to eq('Etc/UTC')
+        expect(last_response.json['timezone']).to eq('Etc/UTC')
       end
     end
 
@@ -381,7 +380,6 @@ describe 'API routes/snapshots' do
           get("/cameras/#{camera0.exid}/snapshots/#{s1.created_at.to_i}", api_keys)
           expect(last_response.json['snapshots'][0]['data']).to be_nil
           expect(last_response.json['snapshots'][0]['created_at']).to eq(s1.created_at.to_i)
-          expect(last_response.json['snapshots'][0]['camera']).to eq(s1.camera.exid)
           expect(last_response.status).to eq(200)
         end
       end
@@ -461,7 +459,6 @@ describe 'API routes/snapshots' do
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
         res = last_response.json['snapshots'][0]
-        expect(res['camera']).to eq(camera0.exid)
         expect(res['notes']).to eq(params[:notes])
         expect(Time.at(res['created_at'])).to be_around_now
       end

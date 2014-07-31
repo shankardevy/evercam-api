@@ -118,6 +118,10 @@ module Evercam
               if outcome.result.class == CameraShare
                 # Send email to user
                 EmailWorker.perform_async({type: 'share', user: caller.username, email: target_user.email, camera: camera.exid}) unless caller.email == params[:email]
+                # Invalidate cache
+                key = "camera-rights/#{camera.exid}/#{target_user.username}"
+                invalidate_for_user(target_user.username)
+                Evercam::APIv1::dc.delete(key)
                 present [outcome.result], with: Presenters::CameraShare
               else
                 # Send email to email
@@ -145,6 +149,13 @@ module Evercam
                 requester = caller
                 if camera.owner_id != requester.id && share.user_id != requester.id
                   raise AuthorizationError.new
+                end
+
+                unless share.user.nil?
+                  # Invalidate cache
+                  key = "camera-rights/#{camera.exid}/#{share.user.username}"
+                  Evercam::APIv1::dc.delete(key)
+                  invalidate_for_user(share.user.username)
                 end
               end
 
@@ -179,6 +190,11 @@ module Evercam
                               "Invalid parameters specified for request.",
                               *(outcome.errors.keys))
                end
+
+               # Invalidate cache
+               key = "camera-rights/#{share.camera.exid}/#{share.user.username}"
+               Evercam::APIv1::dc.delete(key)
+               invalidate_for_user(share.user.username)
 
                present [outcome.result], with: Presenters::CameraShare
             end

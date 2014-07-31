@@ -130,12 +130,10 @@ module Evercam
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-          # TODO - make one query here somehow
-          snaps = Snapshot.where(:camera_id => camera.id).select(:created_at, :notes).all
-          snaps.each do |s|
-            s.camera = camera
-          end
-          present snaps, with: Presenters::Snapshot
+          snap_q = Snapshot.where(:camera_id => camera.id).select(:created_at, :notes).all
+          present(snap_q, with: Presenters::Snapshot).merge!({
+            timezone: camera.timezone.zone
+          })
         end
 
         desc 'Returns latest snapshot stored for this camera', {
@@ -150,9 +148,13 @@ module Evercam
           if snapshot
             rights = requester_rights_for(camera)
             raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-            present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
+            present(Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]).merge!({
+              timezone: camera.timezone.zone
+            })
           else
-            present [], with: Presenters::Snapshot, with_data: params[:with_data]
+            present([], with: Presenters::Snapshot, with_data: params[:with_data]).merge!({
+              timezone: camera.timezone.zone
+            })
           end
         end
 

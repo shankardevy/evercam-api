@@ -28,9 +28,6 @@ module Evercam
     use Rack::Session::Cookie,
       Evercam::Config[:cookies]
 
-    # enable flash hash
-    register Sinatra::Flash
-
     # configure intercom.io
     Intercom.app_id = Evercam::Config[:intercom][:app_id]
     Intercom.app_api_key  = Evercam::Config[:intercom][:api_key]
@@ -74,7 +71,6 @@ module Evercam
     end
 
     helpers Sinatra::Cookies
-    helpers Sinatra::RedirectWithFlash
     helpers Sinatra::ContentFor
     
   end  

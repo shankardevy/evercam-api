@@ -37,6 +37,16 @@ module Evercam
           total_pages = APIv1::dc.get("#{cache_key}/pages")
           if query_result.nil? or total_pages.nil?
             query = Camera.where(is_public: true, discoverable: true)
+            unless params[:thumbnail]
+              query = query.select(Sequel.qualify(:cameras, :id),
+                    Sequel.qualify(:cameras, :created_at),
+                    Sequel.qualify(:cameras, :updated_at),
+                    :exid,
+                    :owner_id, :is_public, :config,
+                    :name, :last_polled_at, :is_online,
+                    :timezone, :last_online_at, :location,
+                    :mac_address, :model_id, :discoverable)
+            end
             case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
             is_like = case_sensitive ? :like : :ilike
 

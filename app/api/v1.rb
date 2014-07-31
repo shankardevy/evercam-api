@@ -19,6 +19,7 @@ module Evercam
       end
       include AuthorizationHelper
       include CameraHelper
+      include CacheHelper
       include ErrorsHelper
       include LoggingHelper
       include SessionHelper

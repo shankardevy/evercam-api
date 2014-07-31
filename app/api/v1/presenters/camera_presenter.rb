@@ -388,15 +388,21 @@ module Evercam
                         type: 'String',
                         desc: 'A comma separated list of the users rights on the camera'
                       } do |camera, options|
-        list   = []
-        grants = []
-        rights = AccessRightSet.for(camera, options[:user])
-        AccessRight::BASE_RIGHTS.each do |right|
-          list << right if rights.allow?(right)
-          grants << "#{AccessRight::GRANT}~#{right}" if rights.allow?("#{AccessRight::GRANT}~#{right}")
+        key = "camera-rights/#{camera.exid}/#{options[:user].username}"
+        rights_string = Evercam::APIv1::dc.get(key)
+        if rights_string.nil?
+          list   = []
+          grants = []
+          rights = AccessRightSet.for(camera, options[:user])
+          AccessRight::BASE_RIGHTS.each do |right|
+            list << right if rights.allow?(right)
+            grants << "#{AccessRight::GRANT}~#{right}" if rights.allow?("#{AccessRight::GRANT}~#{right}")
+          end
+          list.concat(grants) unless grants.empty?
+          rights_string = list.join(",")
+          Evercam::APIv1::dc.set(key, rights_string, 5*60)
         end
-        list.concat(grants) unless grants.empty?
-        list.join(",")
+        rights_string
       end
 
       expose :thumbnail, if: lambda {|instance, options| options[:thumbnail]},

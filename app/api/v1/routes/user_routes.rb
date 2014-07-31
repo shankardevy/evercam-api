@@ -42,33 +42,36 @@ module Evercam
                         "Unable to locate the '#{params[:id]}' user.",
                         params[:id])
           end
-
-          query = Camera.where(owner: user)
-          if params[:include_shared]
-            query = query.association_left_join(:shares).or(Sequel.qualify(:shares,
-                                                                           :user_id) => user.id)
-            query = query.group(Sequel.qualify(:cameras, :id))
-            query = query.select(Sequel.qualify(:cameras, :id),
-                                 Sequel.qualify(:cameras, :created_at),
-                                 Sequel.qualify(:cameras, :updated_at),
-                                 :exid,
-                                 :owner_id, :is_public, :config,
-                                 :name, :last_polled_at, :is_online,
-                                 :timezone, :last_online_at, :location,
-                                 :mac_address, :model_id, :discoverable, :preview)
-          end
-
-          cameras = []
-          query.order(:name).all.select do |camera|
-            rights = requester_rights_for(camera)
-            if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
-              presenter = Evercam::Presenters::Camera.new(camera)
-              cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
-                                           user: caller,
-                                           thumbnail: params[:thumbnail])
+          key = "user/cameras/#{params[:id]}/#{params[:include_shared]}/#{params[:thumbnail]}"
+          cameras = APIv1::dc.get(key)
+          if cameras.nil?
+            query = Camera.where(owner: user)
+            if params[:include_shared]
+              query = query.association_left_join(:shares).or(Sequel.qualify(:shares,
+                                                                             :user_id) => user.id)
+              query = query.group(Sequel.qualify(:cameras, :id))
+              query = query.select(Sequel.qualify(:cameras, :id),
+                                   Sequel.qualify(:cameras, :created_at),
+                                   Sequel.qualify(:cameras, :updated_at),
+                                   :exid,
+                                   :owner_id, :is_public, :config,
+                                   :name, :last_polled_at, :is_online,
+                                   :timezone, :last_online_at, :location,
+                                   :mac_address, :model_id, :discoverable, :preview)
             end
-          end
 
+            cameras = []
+            query.order(:name).eager(:owner, :vendor_model=>:vendor).all.select do |camera|
+              rights = requester_rights_for(camera)
+              if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
+                presenter = Evercam::Presenters::Camera.new(camera)
+                cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
+                                             user: caller,
+                                             thumbnail: params[:thumbnail])
+              end
+            end
+            APIv1::dc.set(key, cameras)
+          end
           {cameras: cameras}
         end
       end

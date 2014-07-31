@@ -40,16 +40,10 @@ gem 'sinatra-flash',
   require: 'sinatra/flash'
 
 gem 'sinatra-contrib',
-  require: 'sinatra/contrib'  
-
-gem 'sinatra-redirect-with-flash',
-  require: 'sinatra/redirect_with_flash'
+  require: 'sinatra/contrib'
 
 gem 'sinatra-partial',
   require: 'sinatra/partial'
-
-gem 'sinatra-jsonp',
-  require: 'sinatra/jsonp'
 
 gem 'evercam_misc', '~> 0.0'
 gem 'evercam_models', '~> 0.3.0'
