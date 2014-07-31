@@ -17,13 +17,13 @@ module Evercam
       else
         caller = token.target
       end
-      unless caller.nil?
-        if caller.kind_of?(Client)
-          log.debug "Caller is a client with the name '#{caller.name}' (id: #{caller.id})."
-        else
-          log.debug "Caller is a user with the name '#{caller.fullname}' (id: #{caller.id})."
-        end
-      end
+      # unless caller.nil?
+      #   if caller.kind_of?(Client)
+      #     log.debug "Caller is a client with the name '#{caller.name}' (id: #{caller.id})."
+      #   else
+      #     log.debug "Caller is a user with the name '#{caller.fullname}' (id: #{caller.id})."
+      #   end
+      # end
       caller
     end
 
@@ -44,23 +44,23 @@ module Evercam
     # data available.
     def access_token
       token = nil
-      log.debug "Fetching access token. Checking for an authorization header in the request."
+      #log.debug "Fetching access token. Checking for an authorization header in the request."
       if request.headers.include?("Authorization")
-        log.debug "Found an authorization header."
+        #log.debug "Found an authorization header."
         values = request.headers["Authorization"].split
         values[0] = values[0].downcase
-        log.debug "Authorization header type: #{values[0]}"
+        #log.debug "Authorization header type: #{values[0]}"
         if values[0] == "bearer"
-          log.debug "Fetching the access token for '#{values[1]}'."
+          #log.debug "Fetching the access token for '#{values[1]}'."
           token = AccessToken.where(request: values[1]).first
         end
       else
-        log.debug "No authorization header found, checking for API credentials."
+        #log.debug "No authorization header found, checking for API credentials."
         credentials = get_api_credentials
         unless credentials.nil?
           cached_token = Evercam::APIv1.dc.get(credentials.to_s)
           unless cached_token.nil?
-            log.info "Token taken from cache."
+            #log.info "Token taken from cache."
             return cached_token
           end
           owner = get_api_id_owner(credentials)
@@ -75,7 +75,7 @@ module Evercam
         end
       end
       token = nil if token && token.is_revoked?
-      log.info "An valid access token was NOT found for request." if token.nil?
+      #log.info "An valid access token was NOT found for request." if token.nil?
       token
     end
 
@@ -84,7 +84,7 @@ module Evercam
     def get_api_credentials
       credentials = nil
       parameters = request.params
-      log.debug "Checking request parameters for API credentials."
+      #log.debug "Checking request parameters for API credentials."
       if parameters.include?(:api_id) && parameters.include?(:api_key)
         credentials = {api_id: parameters[:api_id],
                        api_key: parameters[:api_key]}
@@ -96,18 +96,18 @@ module Evercam
     # incorporates a check that the api_key is valid, returning nil if this
     # is not the case.
     def get_api_id_owner(credentials)
-      log.debug "Fetching owner for API id '#{credentials[:api_id]}'."
+      #log.debug "Fetching owner for API id '#{credentials[:api_id]}'."
       query = Client.where(api_id: credentials[:api_id])
       if query.count == 0
-        log.debug "API id does not belong to a client, checking for a user."
+        #log.debug "API id does not belong to a client, checking for a user."
         owner = User.where(api_id: credentials[:api_id]).first
       else
-        log.debug "API credentials belong to a client, fetching their details."
+        #log.debug "API credentials belong to a client, fetching their details."
         owner = query.first
       end
       owner = nil if !owner.nil? && !valid_api_credentials?(owner, credentials)
 
-      log.info "No owner found for API credentials." if owner.nil?
+      #log.info "No owner found for API credentials." if owner.nil?
       owner
     end
 
