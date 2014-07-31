@@ -74,9 +74,7 @@ module Evercam
     end
 
     helpers Sinatra::Cookies
-    helpers Sinatra::RedirectWithFlash    
-    helpers Evercam::FormHelpers
-    helpers Evercam::TemplateHelpers
+    helpers Sinatra::RedirectWithFlash
     helpers Sinatra::ContentFor
     
   end  

@@ -58,7 +58,7 @@ module Evercam
 
     def perform(camera_name)
       # Dalli cache
-      options = { :namespace => "app_v1", :compress => true, :expires_in => 60*5 }
+      options = { :namespace => "app_v1", :compress => true }
       if ENV["MEMCACHEDCLOUD_SERVERS"]
         @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
       else
