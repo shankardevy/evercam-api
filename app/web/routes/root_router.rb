@@ -5,7 +5,7 @@ module Evercam
 
 
     get '/' do
-      erb 'index'.to_sym
+      redirect 'http://www.evercam.io/develop/'
     end
 
     get %r{/oauth2*} do

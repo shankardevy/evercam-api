@@ -66,8 +66,7 @@ module Evercam
       end
       logger.info("Started update for camera #{camera_name}")
       instant = Time.now
-      camera = @dc.get(camera_name)
-      camera = Camera.by_exid(camera_name) if camera.nil?
+      camera = Camera.by_exid(camera_name)
       return if camera.nil?
       updates = { is_online: false, last_polled_at: instant }
 
