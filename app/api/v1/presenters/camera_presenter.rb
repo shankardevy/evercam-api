@@ -388,7 +388,11 @@ module Evercam
                         type: 'String',
                         desc: 'A comma separated list of the users rights on the camera'
                       } do |camera, options|
-        key = "camera-rights/#{camera.exid}/#{options[:user].username}"
+        if options[:user].instance_of?(User)
+          key = "camera-rights/#{camera.exid}/#{options[:user].username}"
+        else
+          key = "camera-rights/#{camera.exid}/#{options[:user].name}"
+        end
         rights_string = Evercam::APIv1::dc.get(key)
         if rights_string.nil?
           list   = []

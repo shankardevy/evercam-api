@@ -12,10 +12,6 @@ module Evercam
       { expires: Time.now + 3 * 365 * 24 * 60 * 60 }
     end
 
-    configure do
-      set :erb, layout: 'layouts/default'.to_sym, trim: '-'      
-    end
-
     configure :development do
       require 'sinatra/reloader'
       
