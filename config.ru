@@ -3,6 +3,7 @@ require 'rack/rewrite'
 require 'dalli'
 require 'evercam_misc'
 require 'sequel'
+require 'sidekiq/web'
 
 # Establish a connection to the database.
 db = Sequel.connect(Evercam::Config[:database])
@@ -74,3 +75,13 @@ map '/' do
   run Evercam::WebApp
 end
 
+map '/sidekiq' do
+  use Rack::SslEnforcer,
+      Evercam::Config[:api][:ssl]
+
+  use Rack::Auth::Basic, "Protected Area" do |username, password|
+    username == 'sidekiq' && password == 'mehcam'
+  end
+
+  run Sidekiq::Web
+end
