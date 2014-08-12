@@ -227,6 +227,7 @@ module Evercam
           IntercomEventsWorker.perform_async('failed-creating-camera', caller.email)
           raise OutcomeError, outcome.to_json
         end
+        invalidate_for_user(caller.username)
         IntercomEventsWorker.perform_async('created-camera', caller.email)
         present Array(outcome.result), with: Presenters::Camera
       end
@@ -291,6 +292,7 @@ module Evercam
 
         camera = ::Camera.by_exid!(params[:id])
         APIv1::dc.set(params[:id], camera)
+        invalidate_for_user(camera.owner.username)
         present Array(camera), with: Presenters::Camera
       end
 
@@ -308,6 +310,7 @@ module Evercam
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
         APIv1::dc.delete(params[:id])
+        invalidate_for_user(camera.owner.username)
         camera.destroy
         {}
       end
@@ -331,7 +334,7 @@ module Evercam
 
         new_owner = User.by_login(params[:user_id])
         raise NotFoundError.new("Specified user does not exist.") if new_owner.nil?
-
+        invalidate_for_user(camera.owner.username)
         camera.update(owner: new_owner)
         APIv1::dc.set(params[:id], camera, 0)
         present Array(camera), with: Presenters::Camera
