@@ -106,6 +106,29 @@ module Evercam
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
 
+    def trigger_webhook(camera)
+      webhooks = camera.webhooks
+      return if webhooks.empty?
+      
+      webhooks.each do |webhook|
+        hook_conn = Faraday.new(:url => webhook.url) do |faraday|
+          faraday.adapter Faraday.default_adapter
+          faraday.options.timeout = 5
+          faraday.options.open_timeout = 2
+        end
+
+        parameters = {
+          id: camera.exid,
+          last_polled_at: camera.last_polled_at,
+          last_online_at: camera.last_online_at,
+          is_online: camera.is_online,
+          owner: camera.owner
+        }
+
+        response = hook_conn.post '', parameters
+      end 
+    end
+
   end
 end
 
