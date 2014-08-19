@@ -125,7 +125,7 @@ module Evercam
                 present [outcome.result], with: Presenters::CameraShare
               else
                 # Send email to email
-                EmailWorker.perform_async({type: 'share_request', user: caller.username, email: params[:email], camera: camera.exid, key: outcome.result.id}) unless caller.email == params[:email]
+                EmailWorker.perform_async({type: 'share_request', user: caller.username, email: params[:email], camera: camera.exid, key: outcome.result.key}) unless caller.email == params[:email]
                 present [outcome.result], with: Presenters::CameraShareRequest
               end
             end
