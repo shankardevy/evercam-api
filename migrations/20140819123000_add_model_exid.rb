@@ -13,7 +13,7 @@ Sequel.migration do
 
     used = []
 
-    # convert each model name to exid
+    # convert each model name to exid and extract urls
     from(:vendor_models).each do |m|
       name = m[:name].to_url
       if name == 'default'
@@ -23,10 +23,14 @@ Sequel.migration do
 
       if used.include?(name)
         name = name + '-2'
-        puts name
       end
       from(:vendor_models).where(id: m[:id]).
-        update(exid: name)
+        update(
+          exid: name,
+          jpg_url: m[:config].fetch('snapshots', {}).fetch('jpg', ''),
+          h264_url: m[:config].fetch('snapshots', {}).fetch('h264', ''),
+          mjpg_url: m[:config].fetch('snapshots', {}).fetch('mjpg', '')
+        )
       used.push(name)
 
     end
