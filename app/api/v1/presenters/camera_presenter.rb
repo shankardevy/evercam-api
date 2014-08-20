@@ -51,7 +51,14 @@ module Evercam
         nil == c.vendor ? nil : c.vendor.name
       end
 
-      expose :model, documentation: {
+      expose :model_id, documentation: {
+        type: 'string',
+        desc: 'Unique identifier for the camera model'
+      } do |c,o|
+        nil == c.vendor_model ? nil : c.vendor_model.exid
+      end
+
+      expose :model_name, documentation: {
         type: 'string',
         desc: 'Name of the camera model'
       } do |c,o|

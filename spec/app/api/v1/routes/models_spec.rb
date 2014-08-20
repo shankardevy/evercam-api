@@ -26,7 +26,7 @@ describe 'API routes/models' do
 
       it 'returns the vendor data' do
         expect(json[0]).to have_keys(
-          'id', 'name', 'known_macs', 'models')
+          'id', 'name', 'known_macs')
       end
 
       it 'only returns supported vendors' do
@@ -60,17 +60,11 @@ describe 'API routes/models' do
           expect(last_response.status).to eq(200)
         end
 
-        it 'returns the vendor data' do
-          expect(last_response.json['vendors'][0]).to have_keys(
-            'id', 'name', 'known_macs', 'models')
+        it 'returns the model data' do
+          expect(last_response.json['models'][0]).to have_keys(
+            'id', 'name', 'defaults')
         end
 
-      end
-
-      context 'when the vendor is not supported' do
-        it 'returns a NOT FOUND status' do
-          expect(get("/models/#{vendor1.exid}", api_keys).status).to eq(404)
-        end
       end
 
       context 'when the vendor is upper case' do
@@ -112,7 +106,7 @@ describe 'API routes/models' do
 
         it 'returns the model data' do
           expect(last_response.json['models'][0]).to have_keys(
-            'vendor', 'name', 'known_models', 'defaults')
+            'id', 'name', 'defaults')
         end
 
         it 'returns correct defaults' do
@@ -165,7 +159,7 @@ describe 'API routes/models' do
 
       it 'returns the data for each vendor' do
         expect(last_response.json['vendors'][0]).to have_keys(
-          'id', 'name', 'known_macs', 'is_supported')
+          'id', 'name', 'known_macs')
       end
     end
 
@@ -198,7 +192,7 @@ describe 'API routes/models' do
 
         it 'returns the data for the vendor' do
           expect(last_response.json['vendors'][0]).to have_keys(
-            'id', 'name', 'known_macs', 'is_supported')
+            'id', 'name', 'known_macs')
         end
 
       end
@@ -213,7 +207,7 @@ describe 'API routes/models' do
 
         it 'returns the data for the vendor' do
           expect(last_response.json['vendors'][0]).to have_keys(
-            'id', 'name', 'known_macs', 'is_supported')
+            'id', 'name', 'known_macs')
         end
 
       end

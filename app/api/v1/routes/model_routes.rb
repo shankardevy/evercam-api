@@ -27,9 +27,10 @@ module Evercam
     end
     get '/models/:vendor' do
       authreport!('models/vendor/get')
-      vendor = ::Vendor.supported.by_exid(params[:vendor]).first
+      vendor = ::Vendor.by_exid(params[:vendor]).first
       raise NotFoundError, 'model vendor was not found' unless vendor
-      present Array(vendor), with: Presenters::Vendor, models: true
+      models = ::VendorModel.where(vendor_id: vendor.id)
+      present Array(models), with: Presenters::Model
     end
 
     desc 'Returns data for a particular camera model', {
@@ -41,7 +42,7 @@ module Evercam
     end
     get '/models/:vendor/:model' do
       authreport!('models/vendor/model/get')
-      vendor = ::Vendor.supported.by_exid(params[:vendor]).first
+      vendor = ::Vendor.by_exid(params[:vendor]).first
       raise NotFoundError, 'model vendor was not found' unless vendor
       model = vendor.get_model_for(params[:model])
       present Array(model), with: Presenters::Model

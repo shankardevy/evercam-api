@@ -238,7 +238,7 @@ describe 'API routes/users' do
         expect(content["cameras"].map {|s| s['id']}).to eq([camera0.exid])
         content["cameras"].each do |c|
           expect(c).to have_keys(
-           'id', 'name', 'owner', 'vendor_id', 'vendor_name', 'model',
+           'id', 'name', 'owner', 'vendor_id', 'vendor_name', 'model_id', 'model_name',
            'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
            'timezone', 'is_public', 'is_online', 'discoverable', 'location',
            'proxy_url')
@@ -259,7 +259,7 @@ describe 'API routes/users' do
           cameras.each {|c|
             expect(c['owned']).to eq(true)
             expect(c).to have_keys(
-             'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+             'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model_id', 'model_name',
              'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
              'timezone', 'is_public', 'is_online', 'discoverable', 'location',
              'external', 'internal','dyndns', 'proxy_url', 'rights')

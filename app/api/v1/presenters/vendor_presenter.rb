@@ -29,23 +29,6 @@ module Evercam
         }
       }
 
-      expose :is_supported, if: { supported: true }, documentation: {
-        type: 'boolean',
-        desc: 'Whether or not this vendor produces Evercam supported cameras',
-      } do |v,o|
-        false == v.vendor_models.empty?
-      end
-
-      expose :models, if: { models: true }, documentation: {
-        type: 'array',
-        desc: 'String array of models currently known for this vendor',
-        items: {
-          type: 'string'
-        }
-      } do |v,o|
-        v.vendor_models.map(&:known_models).flatten
-      end
-
     end
   end
 end

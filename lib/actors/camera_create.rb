@@ -87,7 +87,7 @@ module Evercam
         end
 
         if inputs[:model]
-          model = VendorModel.where(name: inputs[:model], vendor: vendor).first
+          model = VendorModel.where(exid: inputs[:model], vendor: vendor).first
           raise Evercam::NotFoundError.new("Unable to locate a model for '#{inputs[:model]}' under the '#{vendor.name}' vendor.",
                                            "model_not_found_error", inputs[:model]) if model.nil?
         elsif !vendor.nil?

@@ -27,7 +27,7 @@ describe 'API routes/cameras' do
 
         it 'returns a subset the cameras details' do
           expect(json).to have_keys(
-            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model_id', 'model_name',
             'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
             'timezone', 'is_public', 'is_online', 'discoverable', 'location',
             'proxy_url', 'rights')
@@ -46,7 +46,7 @@ describe 'API routes/cameras' do
 
         it 'returns the full camera details' do
           expect(json).to have_keys(
-            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model_id', 'model_name',
             'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
             'timezone', 'is_public', 'is_online', 'discoverable', 'location',
             'external', 'internal','dyndns', 'proxy_url', 'rights')
@@ -72,7 +72,7 @@ describe 'API routes/cameras' do
 
         it 'returns s subset of the cameras details' do
           expect(json).to have_keys(
-            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model',
+            'id', 'name', 'owned', 'owner', 'vendor_id', 'vendor_name', 'model_id', 'model_name',
             'created_at', 'updated_at', 'last_polled_at', 'last_online_at',
             'timezone', 'is_public', 'is_online', 'discoverable', 'location',
             'proxy_url', 'rights')
@@ -273,7 +273,8 @@ describe 'API routes/cameras' do
       data = response.json['cameras'][0]
 
       expect(data['vendor_id']).to eq(model.vendor.exid)
-      expect(data['model']).to eq(model.name)
+      expect(data['model_id']).to eq(model.exid)
+      expect(data['model_name']).to eq(model.name)
     end
 
     context 'when data is not complete' do
@@ -452,7 +453,7 @@ describe 'API routes/cameras' do
         is_public: false,
         mac_address: 'aa:aa:aa:aa:aa:aa',
         vendor: model.vendor.exid,
-        model: model.name,
+        model: model.exid,
         timezone: 'Etc/GMT+1',
         jpg_url: '/snap',
         cam_username: 'zzz',
