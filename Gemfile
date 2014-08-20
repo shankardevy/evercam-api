@@ -16,6 +16,7 @@ gem 'pony'
 gem 'aws-sdk'
 gem 'sidekiq'
 gem 'mini_magick'
+gem 'stringex'
 
 gem 'grape'
 gem 'grape-entity'
