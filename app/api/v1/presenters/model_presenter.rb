@@ -20,6 +20,14 @@ module Evercam
         required: true
       }
 
+      expose :vendor_id, documentation: {
+        type: 'string',
+        desc: 'Unique identifier for the vendor',
+        required: true
+      } do |m, o|
+        m.vendor.exid
+      end
+
       expose :defaults, documentation: {
         type: 'hash',
         desc: 'Various default values used by this camera model',

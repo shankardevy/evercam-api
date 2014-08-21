@@ -6,68 +6,45 @@ module Evercam
 
     include WebErrors
 
-    before do
-      authorize!
-    end
-
-    desc 'Returns set of support supported camera vendors', {
-      entity: Evercam::Presenters::Vendor
-    }
-    get '/models' do
-      authreport!('models/get')
-      vendors = ::Vendor.supported.eager(:vendor_models).all
-      present vendors, with: Presenters::Vendor, models: true
-    end
-
     desc 'Returns set of known models for a supported camera vendor', {
-      entity: Evercam::Presenters::Vendor
-    }
-    params do
-      requires :vendor, type: String, desc: "Unique identifier for the vendor"
-    end
-    get '/models/:vendor' do
-      authreport!('models/vendor/get')
-      vendor = ::Vendor.by_exid(params[:vendor]).first
-      raise NotFoundError, 'model vendor was not found' unless vendor
-      models = ::VendorModel.where(vendor_id: vendor.id)
-      present Array(models), with: Presenters::Model
-    end
-
-    desc 'Returns data for a particular camera model', {
       entity: Evercam::Presenters::Model
     }
     params do
-      requires :vendor, type: String, desc: "Unique identifier for the vendor"
-      requires :model, type: String, desc: "Name of the model"
+      optional :id, type: String, desc: "Unique identifier for the model"
+      optional :name, type: String, desc: "Name of the model"
+      optional :vendor_id, type: String, desc: "Unique identifier for the vendor"
     end
-    get '/models/:vendor/:model' do
-      authreport!('models/vendor/model/get')
-      vendor = ::Vendor.by_exid(params[:vendor]).first
-      raise NotFoundError, 'model vendor was not found' unless vendor
-      model = vendor.get_model_for(params[:model])
-      present Array(model), with: Presenters::Model
+    get '/models/search' do
+      authreport!('models/vendor/get')
+      v_id = params.fetch(:vendor, nil)
+      vendor = nil
+      unless v_id.nil?
+        vendor = ::Vendor.by_exid(v_id).first
+        raise NotFoundError, 'model vendor was not found' unless vendor
+      end
+      models = ::VendorModel.eager(:vendor)
+      models = models.where(vendor_id: vendor.id) unless vendor.nil?
+      models = models.where(Sequel.ilike(:name, "%#{params[:name]}%")) unless params.fetch(:name, nil).nil?
+      models = models.where(exid: params[:id]) unless params.fetch(:id, nil).nil?
+      present Array(models.all), with: Presenters::Model
     end
+
 
     desc 'Returns all known IP hardware vendors', {
       entity: Evercam::Presenters::Vendor
     }
-    get '/vendors' do
-      authreport!('vendors/get')
-      vendors = ::Vendor.eager(:vendor_models).all
-      present vendors, with: Presenters::Vendor, supported: true
-    end
-
-    desc 'Returns all known IP hardware vendors filtered by MAC prefix', {
-      entity: Evercam::Presenters::Vendor
-    }
     params do
-      requires :mac, type: String, desc: "Mac address of camera"
+      optional :id, type: String, desc: "Unique identifier for the vendor"
+      optional :name, type: String, desc: "Name of the vendor"
+      optional :mac, type: String, desc: "Mac address of camera"
     end
-    get '/vendors/:mac', requirements: { mac: Vendor::REGEX_MAC } do
-      authreport!('vendors/mac/get')
-      vendors = ::Vendor.by_mac(params[:mac][0,8]).eager(:vendor_models).all
-      raise NotFoundError, 'mac address was not matched' if vendors.empty?
-      present vendors, with: Presenters::Vendor, supported: true
+    get '/vendors/search' do
+      authreport!('vendors/get')
+      vendors = ::Vendor.eager(:vendor_models)
+      vendors = vendors.where(exid: params[:id]) unless params.fetch(:id, nil).nil?
+      vendors = vendors.where(Sequel.ilike(:name, "%#{params[:name]}%")) unless params.fetch(:name, nil).nil?
+      vendors = vendors.where(%("known_macs" @> ARRAY[?]), params[:mac].upcase[0,8]) unless params.fetch(:mac, nil).nil?
+      present vendors.all, with: Presenters::Vendor, supported: true
     end
 
   end
