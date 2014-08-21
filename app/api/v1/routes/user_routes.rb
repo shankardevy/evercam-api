@@ -106,7 +106,7 @@ module Evercam
           outcome = Actors::ShareCreateForRequest.run({key: params[:share_request_key],
                                                        email: params[:email]})
           if !outcome.success?
-            Rails.logger.error "Failed to create camera share for camera share "\
+            raise OutcomeError "Failed to create camera share for camera share "\
                                "request key '#{params[:share_request_key]}'."
           end
         end
