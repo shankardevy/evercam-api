@@ -3,14 +3,20 @@ module Evercam
     class WebhookUpdate < Mutations::Command
 
       required do
-        string :camera_id
-        string :user_id
+        string :webhook_id
         string :url
         integer :caller_id
       end
 
       def validate
-        unless URI.parse(url).kind_of?(URI::HTTP)
+        begin 
+          webhook_url = URI.parse(url)
+        rescue URI::InvalidURIError => err
+          raise Evercam::BadRequestError.new("Invalid URL specified.",
+                                               "invalid_url",
+                                               inputs[:url])
+        end
+        unless webhook_url.kind_of?(URI::HTTP)
           raise Evercam::BadRequestError.new("Invalid URL specified.",
                                              "invalid_url",
                                              inputs[:url])
@@ -18,24 +24,17 @@ module Evercam
       end
 
       def execute
-        camera = Camera.by_exid(inputs[:camera_id])
-        if camera.nil?
-          raise Evercam::NotFoundError.new("Unable to locate the '#{inputs[:camera_id]}' camera.",
-                                           "camera_not_found_error", inputs[:camera_id])
+        webhook = Webhook[webhook_id]
+        
+        if webhook.nil?
+          raise Evercam::NotFoundError.new("Unable to locate the webhook with the id of '#{inputs[:webhook_id]}'.",
+                                           "webhook_not_found_error", inputs[:webhook_id])
         end
 
-        user = User.by_login(user_id)
-
-        if user.nil?
-          raise Evercam::NotFoundError.new("Unable to locate a user for '#{inputs[:user_id]}'.",
-                                           "user_not_found_error", inputs[:user_id])
-        end
-
-        unless caller_id == user.id
+        unless caller_id == webhook.user_id
           raise AuthorizationError.new("Unauthorized")
         end
         
-        webhook = Webhook.where(camera: camera, user: user).first
         webhook.url = url
         webhook.save
       end

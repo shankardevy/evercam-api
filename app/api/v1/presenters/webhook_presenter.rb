@@ -6,10 +6,17 @@ module Evercam
 
       root :webhooks
 
+      expose :id,
+             documentation: {
+               type: 'integer',
+               desc: 'Unique identifier of the webhook.',
+               required: true
+             }
+
       expose :camera_id,
              documentation: {
                type: 'string',
-               desc: 'Unique identifier of the shared camera.',
+               desc: 'Unique identifier of the camera.',
                required: true
              } do |s, o|
         s.camera.exid

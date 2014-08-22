@@ -3,7 +3,7 @@ module Evercam
     class WebhookCreate < Mutations::Command
 
       required do
-        string :camera_id
+        string :id
         string :user_id
         string :url
         integer :caller_id
@@ -18,9 +18,9 @@ module Evercam
       end
 
       def execute
-        camera = Camera.by_exid(inputs[:camera_id])
+        camera = Camera.by_exid(inputs[:id])
         if camera.nil?
-          raise Evercam::NotFoundError.new("Unable to locate the '#{inputs[:camera_id]}' camera.",
+          raise Evercam::NotFoundError.new("Unable to locate the '#{inputs[:id]}' camera.",
                                            "camera_not_found_error", inputs[:camera_id])
         end
 
