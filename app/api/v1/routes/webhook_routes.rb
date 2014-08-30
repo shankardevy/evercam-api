@@ -25,11 +25,6 @@ module Evercam
 
       webhooks = Webhook.where(camera_id: camera[:id], user_id: caller[:id]).all
 
-      if webhooks.blank?
-        raise Evercam::NotFoundError.new("Unable to locate webhooks for camera with the id of '#{params[:id]}'.",
-                                         "webhook_not_found_error", params[:id])
-      end
-
       present webhooks, with: Presenters::Webhook
     end
 
