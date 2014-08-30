@@ -35,7 +35,7 @@ module Evercam
           raise AuthorizationError.new("Unauthorized")
         end
 
-        Webhook.create(camera: camera, user: user, url: url)
+        Webhook.create(camera: camera, user_id: user.id, url: url)
       end
     end
   end

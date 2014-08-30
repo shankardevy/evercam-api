@@ -16,12 +16,41 @@ module Evercam
       requires :id, type: String, desc: "Unique identifier for the camera"
     end
 
-    get '/cameras/:id/webhooks' do
+    get '/webhooks' do
+      # I can't find cleaner way to do it with current grape version
+      params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+      params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
+
       camera = get_cam(params[:id])
 
       webhooks = Webhook.where(camera_id: camera[:id], user_id: caller[:id]).all
 
+      if webhooks.blank?
+        raise Evercam::NotFoundError.new("Unable to locate webhooks for camera with the id of '#{params[:id]}'.",
+                                         "webhook_not_found_error", params[:id])
+      end
+
       present webhooks, with: Presenters::Webhook
+    end
+
+    desc 'Returns a specific webhook'
+    params do
+      requires :id, type: String, desc: "Unique identifier for the webhook"
+    end
+
+    get '/webhooks/:id' do
+      # I can't find cleaner way to do it with current grape version
+      params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
+      params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
+
+      webhook = Webhook[params[:id]]
+
+      if webhook.nil?
+        raise Evercam::NotFoundError.new("Unable to locate the webhook with the id of '#{params[:id]}'.",
+                                         "webhook_not_found_error", params[:id])
+      end
+
+      present webhook, with: Presenters::Webhook
     end
 
     desc 'Create a new webhook', {
@@ -34,7 +63,7 @@ module Evercam
       requires :url, type: String, desc: "Webhook URL."
     end
 
-    post '/cameras/:id/webhooks' do
+    post '/webhooks' do
 
       outcome = Actors::WebhookCreate.run(params.merge!(:caller_id => caller[:id]))
 
@@ -52,12 +81,11 @@ module Evercam
     }
 
     params do
-      requires :id, type: String, desc: "Unique identifier for the camera"
-      requires :webhook_id, type: Integer, desc: "Unique identifier for the webhook"
+      requires :id, type: Integer, desc: "Unique identifier for the webhook"
       requires :url, type: String, desc: "Webhook URL."
     end
 
-    patch '/cameras/:id/webhooks' do
+    patch '/webhooks/:id' do
 
       outcome = Actors::WebhookUpdate.run(params.merge!(:caller_id => caller[:id]))
       unless outcome.success?
@@ -74,11 +102,10 @@ module Evercam
     }
 
     params do
-      requires :id, type: String, desc: "Unique identifier for the camera"
-      requires :webhook_id, type: Integer, desc: "Unique identifier for the webhook"
+      requires :id, type: Integer, desc: "Unique identifier for the webhook"
     end
 
-    delete '/cameras/:id/webhooks' do
+    delete '/webhooks/:id' do
 
       outcome = Actors::WebhookDelete.run(params.merge!(:caller_id => caller[:id]))
       unless outcome.success?

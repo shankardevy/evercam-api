@@ -54,6 +54,9 @@ group :development do
   gem 'sqlite3'
   gem 'shotgun'
   gem 'thin'
+  gem 'racksh'
+  gem 'debase'
+  gem 'ruby-debug-ide'
 end
 
 group :test do
