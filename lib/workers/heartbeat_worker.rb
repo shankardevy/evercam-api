@@ -96,6 +96,7 @@ module Evercam
             ip: nil
           )
         end
+        trigger_webhook(camera)
         camera.update(updates)
         @dc.set(camera_name, camera, 0)
       rescue => e
@@ -107,7 +108,7 @@ module Evercam
     end
 
     def trigger_webhook(camera)
-      webhooks = camera.webhooks
+      webhooks = Webhook.where(camera_id: camera.id).all
       return if webhooks.empty?
       
       webhooks.each do |webhook|
@@ -125,7 +126,7 @@ module Evercam
           owner: camera.owner
         }
 
-        response = hook_conn.post '', parameters
+        hook_conn.post '', parameters.to_s
       end 
     end
 
