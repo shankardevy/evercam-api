@@ -123,7 +123,7 @@ module Evercam
           last_polled_at: camera.last_polled_at,
           last_online_at: camera.last_online_at,
           is_online: camera.is_online,
-          owner: camera.owner
+          owner: camera.owner.username
         }
 
         hook_conn.post '', parameters.to_s
