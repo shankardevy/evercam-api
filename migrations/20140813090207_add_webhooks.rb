@@ -7,6 +7,7 @@ Sequel.migration do
       foreign_key :camera_id, :cameras, on_delete: :cascade, null: false
       foreign_key :user_id, :users, on_delete: :cascade, null: false
       String :url, null: false
+      String :exid
       column :created_at, :timestamptz, null: false
       column :updated_at, :timestamptz, null: false
     end

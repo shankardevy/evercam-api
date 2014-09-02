@@ -24,7 +24,7 @@ module Evercam
       end
 
       def execute
-        webhook = Webhook[id]
+        webhook = Webhook.where(exid: id).first
         
         if webhook.nil?
           raise Evercam::NotFoundError.new("Unable to locate the webhook with the id of '#{inputs[:id]}'.",

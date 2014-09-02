@@ -3,7 +3,7 @@ module Evercam
     class WebhookCreate < Mutations::Command
 
       required do
-        string :id
+        string :camera_id
         string :user_id
         string :url
         integer :caller_id
@@ -18,9 +18,9 @@ module Evercam
       end
 
       def execute
-        camera = Camera.by_exid(inputs[:id])
+        camera = Camera.by_exid(inputs[:camera_id])
         if camera.nil?
-          raise Evercam::NotFoundError.new("Unable to locate the '#{inputs[:id]}' camera.",
+          raise Evercam::NotFoundError.new("Unable to locate the '#{inputs[:camera_id]}' camera.",
                                            "camera_not_found_error", inputs[:camera_id])
         end
 
@@ -35,7 +35,15 @@ module Evercam
           raise AuthorizationError.new("Unauthorized")
         end
 
-        Webhook.create(camera: camera, user_id: user.id, url: url)
+        Webhook.create(camera: camera, user_id: user.id, url: url, exid: generate_webhook_id)
+      end
+
+
+      def generate_webhook_id
+        loop do
+          random_token = SecureRandom.hex(4)
+          break random_token unless Webhook.find(exid: random_token)
+        end
       end
     end
   end

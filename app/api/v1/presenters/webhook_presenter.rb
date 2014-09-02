@@ -11,7 +11,9 @@ module Evercam
                type: 'integer',
                desc: 'Unique identifier of the webhook.',
                required: true
-             }
+             } do |s, o|
+        s[:exid]
+      end
 
       expose :camera_id,
              documentation: {
