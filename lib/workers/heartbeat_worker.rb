@@ -122,8 +122,7 @@ module Evercam
           id: camera.exid,
           last_polled_at: camera.last_polled_at,
           last_online_at: camera.last_online_at,
-          is_online: camera.is_online,
-          owner: camera.owner.username
+          is_online: camera.is_online
         }
 
         hook_conn.post '', parameters.to_s
