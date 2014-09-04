@@ -4,8 +4,6 @@ require 'evercam_misc'
 require 'sequel'
 db = Sequel.connect(Evercam::Config[:database])
 
-require 'minitest/autorun'
-
 require 'bundler'
 Bundler.require(:default, :test)
 

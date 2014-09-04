@@ -60,6 +60,7 @@ group :development do
 end
 
 group :test do
+  gem 'minitest'
   gem 'simplecov'
   gem 'rack-test'
   gem 'factory_girl'
