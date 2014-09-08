@@ -275,6 +275,7 @@ DEPENDENCIES
   kgio
   logjam
   mini_magick
+  minitest
   mocha
   mutations!
   newrelic-grape
