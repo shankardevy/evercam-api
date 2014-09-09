@@ -47,7 +47,7 @@ gem 'sinatra-partial',
   require: 'sinatra/partial'
 
 gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.3.0'
+gem 'evercam_models', '~> 0.3.4'
 
 gem 'airbrake'
 
@@ -55,9 +55,13 @@ group :development do
   gem 'sqlite3'
   gem 'shotgun'
   gem 'thin'
+  gem 'racksh'
+  gem 'debase'
+  gem 'ruby-debug-ide'
 end
 
 group :test do
+  gem 'minitest'
   gem 'simplecov'
   gem 'rack-test'
   gem 'factory_girl'

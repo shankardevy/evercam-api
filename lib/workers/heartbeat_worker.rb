@@ -96,6 +96,7 @@ module Evercam
             ip: nil
           )
         end
+        trigger_webhook(camera)
         camera.update(updates)
         @dc.set(camera_name, camera, 0)
       rescue => e
@@ -104,6 +105,28 @@ module Evercam
         logger.warn(e.backtrace.inspect)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
+    end
+
+    def trigger_webhook(camera)
+      webhooks = Webhook.where(camera_id: camera.id).all
+      return if webhooks.empty?
+      
+      webhooks.each do |webhook|
+        hook_conn = Faraday.new(:url => webhook.url) do |faraday|
+          faraday.adapter Faraday.default_adapter
+          faraday.options.timeout = 5
+          faraday.options.open_timeout = 2
+        end
+
+        parameters = {
+          id: camera.exid,
+          last_polled_at: camera.last_polled_at,
+          last_online_at: camera.last_online_at,
+          is_online: camera.is_online
+        }
+
+        hook_conn.post '', parameters.to_s
+      end 
     end
 
   end
