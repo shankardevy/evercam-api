@@ -47,6 +47,7 @@ Sequel.migration do
       drop_column :jpg_url
       drop_column :h264_url
       drop_column :mjpg_url
+      add_column :known_models, :text, default: []
     end
   end
 
