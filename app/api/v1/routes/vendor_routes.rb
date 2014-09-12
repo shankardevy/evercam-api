@@ -14,7 +14,7 @@ module Evercam
     }
     params do
       optional :id, type: String, desc: "Unique identifier for the vendor"
-      optional :name, type: String, desc: "Name of the vendor"
+      optional :name, type: String, desc: "Name of the vendor (partial search)"
       optional :mac, type: String, desc: "Mac address of camera"
     end
     get '/vendors/search' do

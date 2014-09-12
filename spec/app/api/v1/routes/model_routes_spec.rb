@@ -29,6 +29,10 @@ describe 'API routes/models' do
         expect(json[0]).to have_keys('id', 'name', 'vendor_id', 'defaults')
       end
 
+      it 'has pagination' do
+        expect(last_response.json).to have_keys('models', 'pages')
+      end
+
       it 'only returns supported models' do
         expect(json.map { |v| v['id'] }).
             to eq([model0.exid, model1.exid])
