@@ -69,6 +69,7 @@ group :test do
   gem 'webmock', '~> 1.17.0'
   gem 'rspec', '= 2.14.1'
   gem 'guard-rspec'
+  gem 'guard-rack'
   gem 'database_cleaner'
 
   gem 'mocha',
