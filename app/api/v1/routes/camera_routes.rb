@@ -229,7 +229,7 @@ module Evercam
         end
         invalidate_for_user(caller.username)
         IntercomEventsWorker.perform_async('created-camera', caller.email)
-        present Array(outcome.result), with: Presenters::Camera
+        present Array(outcome.result), options, with: Presenters::Camera, user: caller
       end
 
       #-------------------------------------------------------------------------
