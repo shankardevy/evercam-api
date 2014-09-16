@@ -94,8 +94,8 @@ describe 'API routes/cameras' do
             camera.update(location: nil)
             json = get("/cameras/#{camera.exid}", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
-            expect(json['location_lng']).to be_nil
-            expect(json['location_lat']).to be_nil
+            expect(json['location']['lng']).to eq(0)
+            expect(json['location']['lat']).to eq(0)
           end
         end
 
@@ -117,7 +117,7 @@ describe 'API routes/cameras' do
             camera.update(preview: nil)
             json = get("/cameras/#{camera.exid}?thumbnail=true", api_keys).json
             json = json['cameras'] ? json['cameras'][0] : {}
-            expect(json['thumbnail']).to be_nil
+            expect(json['thumbnail']).to eq("")
           end
         end
 
@@ -286,13 +286,13 @@ describe 'API routes/cameras' do
         camera.save
         response = get("/cameras/#{camera.exid}", api_keys)
         data     = response.json['cameras'][0]
-        expect(data['external']['http']['jpg']).to be_nil
+        expect(data['external']['http']['jpg']).to eq("")
         expect(data['proxy_url']['jpg']).to eq("http://evr.cm/#{camera.exid}.jpg")
         expect(data['dyndns']['rtsp']['h264']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
         expect(data['internal']['rtsp']['h264']).to eq('rtsp://1.1.1.1/h264')
-        expect(data['internal']['rtsp']['port']).to be_nil
-        expect(data['proxy_url']['hls']).to be_nil
-        expect(data['proxy_url']['rtmp']).to be_nil
+        expect(data['internal']['rtsp']['port']).to eq(0)
+        expect(data['proxy_url']['hls']).to eq("")
+        expect(data['proxy_url']['rtmp']).to eq("")
       end
 
       it 'returns null or valid partial url' do
@@ -301,11 +301,11 @@ describe 'API routes/cameras' do
         camera.save
         response = get("/cameras/#{camera.exid}", api_keys)
         data     = response.json['cameras'][0]
-        expect(data['external']['http']['jpg']).to be_nil
+        expect(data['external']['http']['jpg']).to eq("")
         expect(data['proxy_url']['jpg']).to eq("http://evr.cm/#{camera.exid}.jpg")
-        expect(data['dyndns']['rtsp']['h264']).to be_nil
-        expect(data['internal']['rtsp']['h264']).to be_nil
-        expect(data['internal']['rtsp']['port']).to be_nil
+        expect(data['dyndns']['rtsp']['h264']).to eq("")
+        expect(data['internal']['rtsp']['h264']).to eq("")
+        expect(data['internal']['rtsp']['port']).to eq(0)
       end
     end
 
