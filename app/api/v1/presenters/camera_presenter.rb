@@ -41,28 +41,28 @@ module Evercam
         type: 'string',
         desc: 'Unique identifier for the camera vendor'
       } do |c,o|
-        nil == c.vendor_model ? nil : c.vendor_model.vendor.exid
+        nil == c.vendor_model ? "" : c.vendor_model.vendor.exid
       end
 
       expose :vendor_name, documentation: {
         type: 'string',
         desc: 'The name for the camera vendor'
       } do |c,o|
-        nil == c.vendor ? nil : c.vendor.name
+        nil == c.vendor ? "" : c.vendor.name
       end
 
       expose :model_id, documentation: {
         type: 'string',
         desc: 'Unique identifier for the camera model'
       } do |c,o|
-        nil == c.vendor_model ? nil : c.vendor_model.exid
+        nil == c.vendor_model ? "" : c.vendor_model.exid
       end
 
       expose :model_name, documentation: {
         type: 'string',
         desc: 'Name of the camera model'
       } do |c,o|
-        nil == c.vendor_model ? nil : c.vendor_model.name
+        nil == c.vendor_model ? "" : c.vendor_model.name
       end
 
       with_options(format_with: :timestamp) do
@@ -137,7 +137,9 @@ module Evercam
              documentation: {
                  type: 'string',
                  desc: 'The physical network MAC address of the camera'
-             }
+             } do |c,_|
+        c.mac_address.to_s
+      end
 
       expose :location, documentation: {
           type: 'hash',
@@ -145,6 +147,8 @@ module Evercam
       } do |c,o|
         if c.location
           { lat: c.location.y, lng: c.location.x }
+        else
+          { lat: 0, lng: 0 }
         end
       end
 
@@ -163,7 +167,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'External http port of the camera'
                  } do |c,o|
-            c.config['external_http_port'] unless c.config['external_http_port'].blank?
+            c.config['external_http_port'].to_i
           end
 
           expose :camera, documentation: {
@@ -178,7 +182,7 @@ module Evercam
               desc: 'External snapshot url'
           } do |c,o|
             host = c.external_url
-            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+            (c.res_url('jpg').blank? or host.blank?) ? "" : host << c.res_url('jpg')
           end
 
           expose :mjpg, documentation: {
@@ -186,7 +190,7 @@ module Evercam
             desc: 'External mjpg url.'
           } do |c,o|
             host = c.external_url
-            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+            (c.res_url('mjpg').blank? or host.blank?) ? "" : host << c.res_url('mjpg')
           end
 
         end
@@ -197,7 +201,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'External rtsp port of the camera'
                  } do |c,o|
-            c.config['external_rtsp_port'] unless c.config['external_rtsp_port'].blank?
+            c.config['external_rtsp_port'].to_i
           end
 
           expose :mpeg, documentation: {
@@ -205,7 +209,7 @@ module Evercam
               desc: 'External mpeg url'
           } do |c,o|
             host = c.external_url('rtsp')
-            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+            (c.res_url('mpeg').blank? or host.blank?) ? "" : host << c.res_url('mpeg')
           end
 
           expose :audio, documentation: {
@@ -213,7 +217,7 @@ module Evercam
               desc: 'External audio url'
           } do |c,o|
             host = c.external_url('rtsp')
-            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+            (c.res_url('audio').blank? or host.blank?) ? "" : host << c.res_url('audio')
           end
 
           expose :h264, documentation: {
@@ -221,7 +225,7 @@ module Evercam
               desc: 'External h264 url'
           } do |c,o|
             host = c.external_url('rtsp')
-            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+            (c.res_url('h264').blank? or host.blank?) ? "" : host << c.res_url('h264')
           end
 
         end
@@ -241,7 +245,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'Internal http port of the camera'
                  } do |c,o|
-            c.config['internal_http_port'] unless c.config['internal_http_port'].blank?
+            c.config['internal_http_port'].to_i
           end
 
           expose :camera, documentation: {
@@ -256,7 +260,7 @@ module Evercam
               desc: 'Internal snapshot url'
           } do |c,o|
             host = c.internal_url
-            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+            (c.res_url('jpg').blank? or host.blank?) ? "" : host << c.res_url('jpg')
           end
 
           expose :mjpg, documentation: {
@@ -264,7 +268,7 @@ module Evercam
               desc: 'Mjpg url using evr.cm dynamic DNS'
           } do |c,o|
             host = c.internal_url
-            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+            (c.res_url('mjpg').blank? or host.blank?) ? "" : host << c.res_url('mjpg')
           end
 
         end
@@ -275,7 +279,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'Internal rtsp port of the camera'
                  } do |c,o|
-            c.config['internal_rtsp_port'] unless c.config['internal_rtsp_port'].blank?
+            c.config['internal_rtsp_port'].to_i
           end
 
           expose :mpeg, documentation: {
@@ -283,7 +287,7 @@ module Evercam
               desc: 'External mpeg url'
           } do |c,o|
             host = c.internal_url('rtsp')
-            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+            (c.res_url('mpeg').blank? or host.blank?) ? "" : host << c.res_url('mpeg')
           end
 
           expose :audio, documentation: {
@@ -291,7 +295,7 @@ module Evercam
               desc: 'External audio url'
           } do |c,o|
             host = c.internal_url('rtsp')
-            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+            (c.res_url('audio').blank? or host.blank?) ? "" : host << c.res_url('audio')
           end
 
           expose :h264, documentation: {
@@ -299,7 +303,7 @@ module Evercam
               desc: 'External h264 url'
           } do |c,o|
             host = c.internal_url('rtsp')
-            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+            (c.res_url('h264').blank? or host.blank?) ? "" : host << c.res_url('h264')
           end
 
         end
@@ -321,7 +325,7 @@ module Evercam
               desc: 'Snapshot url using evr.cm dynamic DNS'
           } do |c,o|
             host = c.dyndns_url
-            host << c.res_url('jpg') unless c.res_url('jpg').blank? or host.blank?
+            (c.res_url('jpg').blank? or host.blank?) ? "" : host << c.res_url('jpg')
           end
 
           expose :mjpg, documentation: {
@@ -329,7 +333,7 @@ module Evercam
               desc: 'Mjpg url using evr.cm dynamic DNS'
           } do |c,o|
             host = c.dyndns_url
-            host << c.res_url('mjpg') unless c.res_url('mjpg').blank? or host.blank?
+            (c.res_url('mjpg').blank? or host.blank?) ? "" : host << c.res_url('mjpg')
           end
 
         end
@@ -341,7 +345,7 @@ module Evercam
               desc: 'Dynamis DNS mpeg url'
           } do |c,o|
             host = c.dyndns_url('rtsp')
-            host << c.res_url('mpeg') unless c.res_url('mpeg').blank? or host.blank?
+            (c.res_url('mpeg').blank? or host.blank?) ? "" : host << c.res_url('mpeg')
           end
 
           expose :audio, documentation: {
@@ -349,7 +353,7 @@ module Evercam
               desc: 'Dynamis DNS audio url'
           } do |c,o|
             host = c.dyndns_url('rtsp')
-            host << c.res_url('audio') unless c.res_url('audio').blank? or host.blank?
+            (c.res_url('audio').blank? or host.blank?) ? "" : host << c.res_url('audio')
           end
 
           expose :h264, documentation: {
@@ -357,7 +361,7 @@ module Evercam
               desc: 'Dynamis DNS h264 url'
           } do |c,o|
             host = c.dyndns_url('rtsp')
-            host << c.res_url('h264') unless c.res_url('h264').blank? or host.blank?
+            (c.res_url('h264').blank? or host.blank?) ? "" : host << c.res_url('h264')
           end
 
         end
@@ -377,7 +381,7 @@ module Evercam
           desc: 'Hls url'
         } do |c,o|
           host = hls_url_for_camera(c)
-          host unless host.blank?
+          host.to_s
         end
 
         expose :rtmp, documentation: {
@@ -385,7 +389,7 @@ module Evercam
           desc: 'RTMP url'
         } do |c,o|
           host = rtmp_url_for_camera(c)
-          host unless host.blank?
+          host.to_s
         end
 
       end
@@ -422,7 +426,7 @@ module Evercam
                desc: '150x150 preview of camera view'
              } do |c,o|
         data = Base64.encode64(c.preview).gsub("\n", '') unless c.preview.nil?
-        c.preview.nil? ? nil : "data:image/jpeg;base64,#{data}"
+        c.preview.nil? ? "" : "data:image/jpeg;base64,#{data}"
       end
 
     end

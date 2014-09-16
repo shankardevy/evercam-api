@@ -77,7 +77,7 @@ module Evercam
         ip: request.ip
       )
 
-      options = {minimal: !rights.allow?(AccessRight::VIEW),
+    options = {minimal: !rights.allow?(AccessRight::VIEW),
                  with: Presenters::Camera,
                  thumbnail: params[:thumbnail]}
       options[:user] = rights.requester unless rights.requester.nil?
