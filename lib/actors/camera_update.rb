@@ -129,8 +129,8 @@ module Evercam
         end
 
         if inputs[:cam_username] or inputs[:cam_password]
-          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_username].empty? ? '' : inputs[:cam_username],
-                                                                'password' => inputs[:cam_password].empty? ? '' : inputs[:cam_password]}}})
+          camera.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:cam_username].to_s.empty? ? '' : inputs[:cam_username],
+                                                                'password' => inputs[:cam_password].to_s.empty? ? '' : inputs[:cam_password]}}})
         end
 
         camera.timezone = timezone if timezone
