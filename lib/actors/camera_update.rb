@@ -73,7 +73,7 @@ module Evercam
           add_error(:model, :valid, 'If you provide model you must also provide vendor')
         end
 
-        if !model.blank? && !vendor.blank? && !Vendor.by_exid(vendor).first.nil? && !VendorModel.find(:exid => model, :vendor_id => Vendor.by_exid(vendor).first.id)
+        if !model.blank? && !vendor.blank? && !Vendor.find(:name => vendor).nil? && !VendorModel.find(:name => model, :vendor_id => Vendor.find(:exid => vendor).id)
           add_error(:model, :exists, 'Model does not exist')
         end
 
@@ -135,7 +135,7 @@ module Evercam
 
         camera.timezone = timezone if timezone
         # Update or reset vendor model
-        camera.vendor_model =  VendorModel.find(:exid => model, :vendor_id => Vendor.by_exid(vendor).first.id) unless model.blank?
+        camera.vendor_model =  VendorModel.find(:name => model, :vendor_id => Vendor.find(:exid => vendor).id) unless model.blank?
         camera.vendor_model = nil if not model.nil? and model.empty?
 
         unless inputs[:mac_address].nil?
