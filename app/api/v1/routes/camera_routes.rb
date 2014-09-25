@@ -293,7 +293,7 @@ module Evercam
         camera = ::Camera.by_exid!(params[:id])
         APIv1::dc.set(params[:id], camera)
         invalidate_for_user(camera.owner.username)
-        present Array(camera), with: Presenters::Camera
+        present Array(camera), with: Presenters::Camera, user: caller
       end
 
 
@@ -337,7 +337,7 @@ module Evercam
         invalidate_for_user(camera.owner.username)
         camera.update(owner: new_owner)
         APIv1::dc.set(params[:id], camera, 0)
-        present Array(camera), with: Presenters::Camera
+        present Array(camera), with: Presenters::Camera, user: caller
       end
     end
   end
