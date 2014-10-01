@@ -21,14 +21,14 @@ module Evercam
       rescue URI::InvalidURIError => error
         raise BadRequestError, "Invalid URL. Cause: #{error}"
       rescue Faraday::TimeoutError
-        raise CameraOfflineError, 'Camera offline'
+        raise CameraOfflineError, 'We can&#39;t connect to your camera at the moment - please check your settings'
       end
       if response.success?
         response
       elsif response.status == 401
         raise AuthorizationError, 'Please check camera username and password'
       else
-        raise CameraOfflineError, 'Camera offline'
+        raise CameraOfflineError, 'We can&#39;t connect to your camera at the moment - please check your settings'
       end
     end
   end
