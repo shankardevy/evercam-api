@@ -65,3 +65,11 @@ namespace :workers do
 
 end
 
+namespace :tmp do
+  task :clear do
+    require 'dalli'
+    dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
+    dc.flush_all
+  end
+end
+
