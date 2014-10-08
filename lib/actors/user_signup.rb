@@ -57,7 +57,7 @@ module Evercam
         User.db.transaction do
           user.save
           share_remembrance_camera(user)
-          threescale_signup(user, password)
+          # threescale_signup(user, password)
           code = Digest::SHA1.hexdigest(user.username + user.created_at.to_s)
           Mailers::UserMailer.confirm(user: user, code: code)
         end
