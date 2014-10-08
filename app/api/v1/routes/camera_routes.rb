@@ -293,6 +293,7 @@ module Evercam
         camera = ::Camera.by_exid!(params[:id])
         APIv1::dc.set(params[:id], camera)
         invalidate_for_user(camera.owner.username)
+        invalidate_for_camera(camera)
         present Array(camera), with: Presenters::Camera, user: caller
       end
 
@@ -311,6 +312,7 @@ module Evercam
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
         APIv1::dc.delete(params[:id])
         invalidate_for_user(camera.owner.username)
+        invalidate_for_camera(camera)
         camera.destroy
         {}
       end
@@ -335,6 +337,7 @@ module Evercam
         new_owner = User.by_login(params[:user_id])
         raise NotFoundError.new("Specified user does not exist.") if new_owner.nil?
         invalidate_for_user(camera.owner.username)
+        invalidate_for_camera(camera)
         camera.update(owner: new_owner)
         APIv1::dc.set(params[:id], camera, 0)
         present Array(camera), with: Presenters::Camera, user: caller
