@@ -106,22 +106,8 @@ module Evercam
     end
 
     def threescale_signup(user, password)
-      if Evercam::Config[:testserver]
-        user.api_id  = SecureRandom.hex
-        user.api_key = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-      else
-        parameters = get_parameters.merge(org_name: user.fullname,
-                                          username: user.username,
-                                          email:    user.email,
-                                          password: password)
-        response   = get_faraday_connection.post('/admin/api/signup.xml', parameters)
-        unless (200..299).include?(response.status)
-          raise Evercam::WebErrors::BadRequestError, response.body
-        end
-        document     = Nokogiri::XML(response.body)
-        user.api_id  = document.css('application_id').text
-        user.api_key = document.css('key').text
-      end
+      user.api_id  = SecureRandom.hex(4)
+      user.api_key = SecureRandom.hex
       user.save
     end
 
