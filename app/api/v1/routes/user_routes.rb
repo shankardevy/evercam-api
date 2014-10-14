@@ -30,7 +30,7 @@ module Evercam
           entity: Evercam::Presenters::Camera
         }
         params do
-          requires :id, type: String, desc: "The user name or email address of the user."
+          requires :id, type: String, desc: "The Username or email address of the user."
           optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
         end
