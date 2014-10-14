@@ -121,6 +121,7 @@ module Evercam
                 # Invalidate cache
                 key = "camera-rights/#{camera.exid}/#{target_user.username}"
                 invalidate_for_user(target_user.username)
+                invalidate_for_camera(camera)
                 Evercam::APIv1::dc.delete(key)
                 present [outcome.result], with: Presenters::CameraShare
               else
@@ -156,6 +157,7 @@ module Evercam
                   key = "camera-rights/#{camera.exid}/#{share.user.username}"
                   Evercam::APIv1::dc.delete(key)
                   invalidate_for_user(share.user.username)
+                  invalidate_for_camera(camera)
                 end
               end
 
@@ -178,6 +180,7 @@ module Evercam
 
                share  = CameraShare.where(id: params[:id]).first
                raise NotFoundError.new if share.nil?
+               camera = Camera.where(id: share.camera_id).first
 
                rights = requester_rights_for(share.camera)
                if !(rights.is_public? && share.camera.discoverable?) && !rights.is_owner?
@@ -195,6 +198,7 @@ module Evercam
                key = "camera-rights/#{share.camera.exid}/#{share.user.username}"
                Evercam::APIv1::dc.delete(key)
                invalidate_for_user(share.user.username)
+               invalidate_for_camera(camera)
 
                present [outcome.result], with: Presenters::CameraShare
             end
