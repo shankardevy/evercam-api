@@ -58,6 +58,8 @@ group :development do
   gem 'racksh'
   gem 'debase'
   gem 'ruby-debug-ide'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 end
 
 group :test do
