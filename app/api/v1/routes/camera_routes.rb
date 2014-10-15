@@ -291,9 +291,10 @@ module Evercam
         end
 
         camera = ::Camera.by_exid!(params[:id])
-        APIv1::dc.set(params[:id], camera)
+
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
+        APIv1::dc.set(params[:id], camera)
         present Array(camera), with: Presenters::Camera, user: caller
       end
 
