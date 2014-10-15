@@ -77,22 +77,17 @@ module Evercam
           })
         end
       end
+
       resource :nearest do
         #-------------------------------------------------------------------
         # GET /public/nearest
         #-------------------------------------------------------------------
-        desc "Fetch a list of publicly discoverable cameras from within the Evercam system,"\
-             "and order by proximity to requester's location.", {
+        desc "Fetch nearest publicly discoverable camera from within the Evercam system."\
+             "If location isn't provided requester's IP address is used.", {
             entity: Evercam::Presenters::Camera
         }
         params do
-          optional :offset, type: Integer, desc: "The offset into the list of cameras to start the fetch from. Defaults to #{DEFAULT_OFFSET}."
-          optional :limit, type: Integer, desc: "The maximum number of cameras to retrieve. Defaults to #{DEFAULT_LIMIT}, cannot be more than #{MAXIMUM_LIMIT}."
-          optional :case_sensitive, type: 'Boolean', desc: "Set whether search terms are case sensitive. Defaults to true."
-          optional :id_starts_with, type: String, desc: "Search for cameras whose id starts with the given value."
-          optional :id_ends_with, type: String, desc: "Search for cameras whose id ends with the given value."
-          optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
-          optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
+          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitiude' points."
         end
         get do
           params_copy = params.clone
@@ -101,6 +96,22 @@ module Evercam
           cache_key = "public/#{params_copy.flatten.join('|')}"
           query_result = APIv1::dc.get(cache_key)
           total_pages = APIv1::dc.get("#{cache_key}/pages")
+          begin
+            if params[:near_to]
+              location = {
+                  longitude: Geocoding.as_point(params[:near_to]).x,
+                  latitude: Geocoding.as_point(params[:near_to]).y
+              }
+            else
+              location = {
+                  longitude: request.location.longitude,
+                  latitude: request.location.latitude
+              }
+            end
+          rescue Exception => ex
+            raise_error(400, 400, ex.message)
+          end
+
           if query_result.nil? or total_pages.nil?
             if request.location
               #TODO: convert this to Sequel query
@@ -113,38 +124,18 @@ module Evercam
               )
               ORDER BY
                 ST_Distance(location, ST_SetSRID(ST_Point(?, ?), 4326)::geography)
+              LIMIT 1
             }
-              query = Camera.fetch(sequel_query, request.location.longitude, request.location.latitude)
+              query = Camera.fetch(sequel_query, location[:longitude], location[:latitude])
             else
-              query = Camera.where(is_public: true, discoverable: true)
-            end
-            case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
-            is_like = case_sensitive ? :like : :ilike
-
-            begin
-              query = query.where(Sequel.send(is_like, :exid, "#{params[:id_starts_with]}%")) if params[:id_starts_with]
-              query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_ends_with]}")) if params[:id_ends_with]
-              query = query.where(Sequel.send(is_like, :exid, "%#{params[:id_includes]}%")) if params[:id_includes]
-            rescue Exception => ex
-              raise_error(400, 400, ex.message)
+              raise_error(400, 400, "Location is missing")
             end
 
-            limit = (params[:limit] || DEFAULT_LIMIT)
-            limit = (limit > MAXIMUM_LIMIT ? MAXIMUM_LIMIT : DEFAULT_LIMIT) unless (1..MAXIMUM_LIMIT).include?(limit)
-
-            count = query.count
-            total_pages = count / limit
-            total_pages += 1 unless count % limit == 0
-
-            offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
-            query = query.offset(offset).limit(limit)
             query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
             APIv1::dc.set(cache_key, query_result)
             APIv1::dc.set("#{cache_key}/pages", total_pages)
           end
-          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-            :pages => total_pages
-          })
+          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: true)
         end
       end
     end
