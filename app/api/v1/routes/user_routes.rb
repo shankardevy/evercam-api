@@ -30,7 +30,7 @@ module Evercam
           entity: Evercam::Presenters::Camera
         }
         params do
-          requires :id, type: String, desc: "The user name or email address of the user."
+          requires :id, type: String, desc: "The Username or email address of the user."
           optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
         end
@@ -83,13 +83,13 @@ module Evercam
         entity: Evercam::Presenters::User
       }
       params do
-        requires :firstname, type: String, desc: "First Name."
-        requires :lastname, type: String, desc: "Last Name."
-        requires :username, type: String, desc: "Username."
-        requires :country, type: String, desc: "Country."
-        requires :email, type: String, desc: "Email."
-        requires :password, type: String, desc: "Password."
-        optional :share_request_key, type: String, desc: "The key for a camera share request to be processed during the sign up."
+        requires :firstname, type: String, desc: "First Name"
+        requires :lastname, type: String, desc: "Last Name"
+        requires :username, type: String, desc: "Username"
+        requires :country, type: String, desc: "Country"
+        requires :email, type: String, desc: "Email"
+        requires :password, type: String, desc: "Password"
+        optional :share_request_key, type: String, desc: "The key for a camera share request to be processed during the sign up"
       end
       post do
         authreport!('users/post')
@@ -167,12 +167,12 @@ module Evercam
         entity: Evercam::Presenters::User
       }
       params do
-        requires :id, type: String, desc: "Username."
-        optional :firstname, type: String, desc: "First Name."
-        optional :lastname, type: String, desc: "Last Name."
-        optional :username, type: String, desc: "Username."
-        optional :country, type: String, desc: "Country."
-        optional :email, type: String, desc: "Email."
+        requires :id, type: String, desc: "Username"
+        optional :firstname, type: String, desc: "First Name"
+        optional :lastname, type: String, desc: "Last Name"
+        optional :username, type: String, desc: "Username"
+        optional :country, type: String, desc: "Country"
+        optional :email, type: String, desc: "Email"
       end
       patch '/:id', requirements: { id: /[^\/]*/ } do
         # I can't find cleaner way to do it with current grape version

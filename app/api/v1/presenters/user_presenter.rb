@@ -38,13 +38,13 @@ module Evercam
 
       expose :firstname, documentation: {
         type: 'string',
-        desc: 'Users firstname',
+        desc: 'Users first name',
         required: true
       }
 
       expose :lastname, documentation: {
         type: 'string',
-        desc: 'Users lastname',
+        desc: 'Users last name',
         required: true
       }
 
