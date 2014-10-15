@@ -60,6 +60,7 @@ group :development do
   gem 'ruby-debug-ide'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
+  gem 'pry-byebug'
 end
 
 group :test do
