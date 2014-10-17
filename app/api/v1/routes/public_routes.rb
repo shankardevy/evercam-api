@@ -25,7 +25,7 @@ module Evercam
           optional :id_starts_with, type: String, desc: "Search for cameras whose id starts with the given value."
           optional :id_ends_with, type: String, desc: "Search for cameras whose id ends with the given value."
           optional :id_contains, type: String, desc: "Search for cameras whose id contains the given value."
-          optional :is_near_to, type: String, desc: "Search for cameras within #{DEFAULT_DISTANCE} meters of a given address or longitude latitiude point."
+          optional :is_near_to, type: String, desc: "Search for cameras within #{DEFAULT_DISTANCE} meters of a given address or longitude latitude point."
           optional :within_distance, type: Float, desc: "Search for cameras within a specific range, in meters, of the is_near_to point."
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
         end
@@ -87,7 +87,7 @@ module Evercam
             entity: Evercam::Presenters::Camera
         }
         params do
-          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitiude' points."
+          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitude' points."
         end
         get do
           params_copy = params.clone
@@ -99,8 +99,8 @@ module Evercam
           begin
             if params[:near_to]
               location = {
-                  longitude: Geocoding.as_point(params[:near_to]).x,
-                  latitude: Geocoding.as_point(params[:near_to]).y
+                  longitude: Geocoding.as_point(params[:near_to]).y,
+                  latitude: Geocoding.as_point(params[:near_to]).x
               }
             else
               location = {
