@@ -1,0 +1,5 @@
+:verbose: false
+:concurrency:  5
+:queues:
+  - [async_worker, 5]
+  - [default, 1]
