@@ -37,6 +37,9 @@ module Evercam
     format :json
 
     namespace :cameras do
+      #-------------------------------------------------------------------
+      # GET /snapshot.jpg
+      #-------------------------------------------------------------------
       params do
         requires :id, type: String, desc: "Camera Id."
       end
@@ -103,6 +106,9 @@ module Evercam
       end
       route_param :id do
 
+        #-------------------------------------------------------------------
+        # GET /live
+        #-------------------------------------------------------------------
         desc 'Returns base64 encoded jpg from the online camera'
         get 'live' do
           camera = get_cam(params[:id])
@@ -124,6 +130,9 @@ module Evercam
           end
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots
+        #-------------------------------------------------------------------
         desc 'Returns the list of all snapshots currently stored for this camera'
         get 'snapshots' do
           camera = get_cam(params[:id])
@@ -136,6 +145,9 @@ module Evercam
           })
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots/latest
+        #-------------------------------------------------------------------
         desc 'Returns latest snapshot stored for this camera', {
           entity: Evercam::Presenters::Snapshot
         }
@@ -158,6 +170,9 @@ module Evercam
           end
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots/range
+        #-------------------------------------------------------------------
         desc 'Returns list of snapshots between two timestamps'
         params do
           requires :from, type: Integer, desc: "From Unix timestamp."
@@ -192,6 +207,9 @@ module Evercam
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots/:year/:month/day
+        #-------------------------------------------------------------------
         desc 'Returns list of specific days in a given month which contains any snapshots'
         params do
           requires :year, type: Integer, desc: "Year, for example 2013"
@@ -218,6 +236,9 @@ module Evercam
           { :days => days}
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots/:year/:month/:day/hours
+        #-------------------------------------------------------------------
         desc 'Returns list of specific hours in a given day which contains any snapshots'
         params do
           requires :year, type: Integer, desc: "Year, for example 2013"
@@ -248,6 +269,9 @@ module Evercam
           { :hours => hours}
         end
 
+        #-------------------------------------------------------------------
+        # GET /snapshots/:timestamp
+        #-------------------------------------------------------------------
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
         }
@@ -266,6 +290,9 @@ module Evercam
           present Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
+        #-------------------------------------------------------------------
+        # POST /snapshots
+        #-------------------------------------------------------------------
         desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
         params do
           optional :notes, type: String, desc: "Optional text note for this snapshot"
@@ -292,6 +319,9 @@ module Evercam
           present Array(outcome.result), with: Presenters::Snapshot
         end
 
+        #-------------------------------------------------------------------
+        # POST /snapshots/:timestamp
+        #-------------------------------------------------------------------
         desc 'Stores the supplied snapshot image data for the given timestamp'
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
@@ -320,6 +350,9 @@ module Evercam
           present Array(outcome.result), with: Presenters::Snapshot
         end
 
+        #-------------------------------------------------------------------
+        # DELETE /snapshots/:timestamp
+        #-------------------------------------------------------------------
         desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
