@@ -87,6 +87,76 @@ module Evercam
       end
     end
 
+    namespace :public do
+        #-------------------------------------------------------------------
+        # GET /nearest.jpg
+        #-------------------------------------------------------------------
+        desc "Returns jpg from nearest publicly discoverable camera from within the Evercam system."\
+             "If location isn't provided requester's IP address is used.", {
+        }
+        params do
+          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitude' points."
+        end
+        get 'nearest.jpg' do
+          begin
+            if params[:near_to]
+              location = {
+                longitude: Geocoding.as_point(params[:near_to]).x,
+                latitude: Geocoding.as_point(params[:near_to]).y
+              }
+            else
+              location = {
+                longitude: request.location.longitude,
+                latitude: request.location.latitude
+              }
+            end
+          rescue Exception => ex
+            raise_error(400, 400, ex.message)
+          end
+
+          if params[:near_to] or request.location
+            camera = Camera.nearest(location).limit(1).first
+          else
+            raise_error(400, 400, "Location is missing")
+          end
+
+          rights = requester_rights_for(camera)
+          raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
+
+          unless camera.external_url.nil?
+            require 'openssl'
+            require 'base64'
+            auth = camera.config.fetch('auth', {}).fetch('basic', '')
+            if auth != ''
+              auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
+            end
+            c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+            c.encrypt
+            c.key = "#{Evercam::Config[:snapshots][:key]}"
+            c.iv = "#{Evercam::Config[:snapshots][:iv]}"
+            # Padding was incompatible with node padding
+            c.padding = 0
+            msg = camera.external_url
+            msg << camera.res_url('jpg') unless camera.res_url('jpg').blank?
+            msg << "|#{auth}|#{Time.now.to_s}|"
+            until msg.length % 16 == 0 do
+              msg << ' '
+            end
+            t = c.update(msg)
+            t << c.final
+
+            CameraActivity.create(
+              camera: camera,
+              access_token: access_token,
+              action: 'viewed',
+              done_at: Time.now,
+              ip: request.ip
+            )
+
+            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.strict_encode64(t)}"
+          end
+        end
+      end
 
   end
 
