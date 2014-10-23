@@ -217,4 +217,103 @@ describe 'API routes/cameras' do
       end
     end
   end
+
+  describe 'GET /public/nearest' do
+    let!(:public_camera_1) {
+      create(:camera, exid: 'exid_A_1', preview: 'aaa')
+    }
+
+    let!(:public_camera_2) {
+      create(:camera, exid: 'exid_A_2', discoverable: false)
+    }
+
+    let!(:public_camera_3) {
+      create(:camera, exid: 'exid_B_3')
+    }
+
+    let!(:public_camera_4) {
+      create(:camera, exid: 'exid_B_4', discoverable: false)
+    }
+
+    let!(:public_camera_5) {
+      create(:camera, exid: 'exid_A_5', location: '0.0 90.0')
+    }
+
+    context "where no parameters are specified" do
+      it "returns success" do
+        get('/public/nearest')
+        expect(last_response.status).to eq(200)
+        data = last_response.json
+        expect(data.include?("cameras")).to eq(true)
+        expect(data.include?("message")).to eq(true)
+        cameras = data["cameras"]
+        expect(cameras.size).to eq(1)
+        camera = cameras.first
+        expect(camera.include?('thumbnail')).to eq(true)
+        expect(data["message"]).
+          to eq("Successfully Geocoded IP Address 127.0.0.1 as LAT: 0.0 LNG: 0.0")
+      end
+    end
+
+    context "when near_to is specified" do
+
+      context "as an address string" do
+
+        before(:each) do
+          WebMock.allow_net_connect!
+        end
+
+        after(:each) do
+          WebMock.disable_net_connect!(:allow_localhost => true)
+        end
+
+        it "returns success and the correct location message" do
+          get("/public/nearest", { near_to: 'Dublin' })
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data.include?("cameras")).to eq(true)
+          expect(data.include?("message")).to eq(true)
+          cameras = data["cameras"]
+          expect(cameras.size).to eq(1)
+          camera = cameras.first
+          expect(camera.include?('thumbnail')).to eq(true)
+          expect(data["message"]).
+            to eq("Successfully Geocoded Dublin as LAT: 53.3498053 LNG: -6.2603097")
+        end
+
+        it "returns success and the correct camera entries" do
+          get("/public/nearest", { near_to: 'The North Pole' })
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data.include?("cameras")).to eq(true)
+          cameras = data["cameras"]
+          expect(cameras.size).to eq(1)
+          cameras.each do |camera|
+            expect(["exid_A_5"].include?(camera["id"])).to eq(true)
+          end
+        end
+
+        it "surfaces an error when address cannot be geocoded" do
+          get("/public/nearest", { near_to: 'No Such Address' })
+          expect(last_response.status).to eq(400)
+          expect(last_response.json['message']).
+            to eq('Unable to geocode "No Such Address"')
+        end
+      end
+
+      context "as a lng lat point" do
+        it "returns success and the correct camera entries" do
+          get("/public/nearest", { near_to: '0, 90' })
+          expect(last_response.status).to eq(200)
+          data = last_response.json
+          expect(data.include?("cameras")).to eq(true)
+          cameras = data["cameras"]
+          expect(cameras.size).to eq(1)
+          cameras.each do |camera|
+            expect(["exid_A_5"].include?(camera["id"])).to eq(true)
+          end
+        end
+      end
+    end
+  end
 end

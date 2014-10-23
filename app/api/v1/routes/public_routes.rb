@@ -78,7 +78,6 @@ module Evercam
         end
       end
 
-      resource :nearest do
         #-------------------------------------------------------------------
         # GET /public/nearest
         #-------------------------------------------------------------------
@@ -89,56 +88,44 @@ module Evercam
         params do
           optional :near_to, type: String, desc: "Specify an address or 'longitude, latitude' points."
         end
-        get do
+        get 'nearest' do
           params_copy = params.clone
           params_copy.delete(:route_info)
           params_copy.merge!(request.location.data)
           cache_key = "public/#{params_copy.flatten.join('|')}"
           query_result = APIv1::dc.get(cache_key)
-          total_pages = APIv1::dc.get("#{cache_key}/pages")
           begin
             if params[:near_to]
               location = {
-                  longitude: Geocoding.as_point(params[:near_to]).y,
-                  latitude: Geocoding.as_point(params[:near_to]).x
+                  longitude: Geocoding.as_point(params[:near_to]).x,
+                  latitude: Geocoding.as_point(params[:near_to]).y
               }
+              location_message = "Successfully Geocoded #{params[:near_to]} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             else
               location = {
                   longitude: request.location.longitude,
                   latitude: request.location.latitude
               }
+              location_message = "Successfully Geocoded IP Address #{request.location.ip} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             end
           rescue Exception => ex
             raise_error(400, 400, ex.message)
           end
 
-          if query_result.nil? or total_pages.nil?
-            if request.location
-              #TODO: convert this to Sequel query
-              sequel_query = %{
-              SELECT * FROM cameras
-              WHERE(
-                (is_public IS TRUE) AND
-                (discoverable IS TRUE) AND
-                (location IS NOT NULL)
-              )
-              ORDER BY
-                ST_Distance(location, ST_SetSRID(ST_Point(?, ?), 4326)::geography)
-              LIMIT 1
-            }
-              query = Camera.fetch(sequel_query, location[:longitude], location[:latitude])
+          if query_result.nil?
+            if params[:near_to] or request.location
+              query = Camera.nearest(location).limit(1)
             else
               raise_error(400, 400, "Location is missing")
             end
 
             query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
             APIv1::dc.set(cache_key, query_result)
-            APIv1::dc.set("#{cache_key}/pages", total_pages)
           end
-          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: true)
+          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: true).merge!({
+            message: location_message
+          })
         end
-      end
     end
   end
 end
-

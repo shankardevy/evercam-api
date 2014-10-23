@@ -11,11 +11,22 @@ describe 'API routes/snapshots' do
     camera0 = create(:camera)
     camera0.values[:config].merge!({'external_host' => '89.101.225.158'})
     camera0.values[:config].merge!({'external_http_port' => 8105})
+    camera0.location = "0.0 90.0"
     camera0.save
     camera0
   end
+  let(:public_camera) do
+    public_camera = create(:camera)
+    public_camera.location = "0.0 90.0"
+    public_camera.is_public = true
+    public_camera.is_online = true
+    public_camera.discoverable = true
+    public_camera.save
+    public_camera
+  end
   let(:api_keys) { {api_id: camera0.owner.api_id, api_key: camera0.owner.api_key} }
   let(:snap) { create(:snapshot, camera: camera0) }
+  let(:public_snap) { create(:snapshot, camera: public_camera) }
 
   let(:other_user) { create(:user) }
   let(:alt_keys) { {api_id: other_user.api_id, api_key: other_user.api_key} }
@@ -346,6 +357,21 @@ describe 'API routes/snapshots' do
         camera0.save
         get("/cameras/#{snap.camera.exid}/snapshot.jpg")
         expect(last_response.status).to eq(403)
+      end
+    end
+
+  end
+
+
+  describe 'GET /public/nearest.jpg' do
+
+    context 'when snapshot request is correct' do
+      it 'redirects to snapshot server' do
+        public_camera
+        get("/public/nearest.jpg")
+        expect(last_response.status).to eq(302)
+        expect(last_response.location).
+          to start_with("#{Evercam::Config[:snapshots][:url]}#{public_snap.camera.exid}.jpg?t=")
       end
     end
 
