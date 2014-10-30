@@ -91,7 +91,7 @@ module Evercam
         get 'nearest' do
           params_copy = params.clone
           params_copy.delete(:route_info)
-          params_copy.merge!(request.location.data)
+          params_copy.merge!(request.location.data) if request.location
           cache_key = "public/#{params_copy.flatten.join('|')}"
           query_result = APIv1::dc.get(cache_key)
           begin
