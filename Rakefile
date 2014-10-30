@@ -73,3 +73,33 @@ namespace :tmp do
   end
 end
 
+task :import_cambase_data do
+  file = File.read("models.json")
+
+  models = JSON.parse(file)
+
+  models.each do |model|
+    vendor = Vendor.where(:exid => model['vendor_id']).first
+    if vendor.nil?
+      puts "Vendor #{model['vendor_id']} doesn't exist yet, creating it"
+      vendor = Vendor.create(
+        exid: model['vendor_id'],
+        name: model['vendor_name'],
+        known_macs: ['']
+      )
+    end
+
+    vendor_model = VendorModel.where(:exid => model['id']).first
+    if vendor_model.nil?
+      puts "Model #{model['id']} doesn't exist yet, adding it"
+      VendorModel.create(
+        vendor_id: vendor.id,
+        exid: model['id'],
+        name: model['name'],
+        config: model['config']
+      )
+    else
+      puts "Model #{model['id']} already exist, skipping it"
+    end
+  end
+end
