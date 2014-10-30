@@ -47,7 +47,7 @@ gem 'sinatra-partial',
   require: 'sinatra/partial'
 
 gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.3.5'
+gem 'evercam_models', '~> 0.3.6'
 
 gem 'airbrake'
 

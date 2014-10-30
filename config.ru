@@ -37,6 +37,11 @@ Airbrake.configure do |config|
    config.ignore << "Evercam::NotFoundError"
 end
 
+Geocoder.configure(
+  :timeout => 5,
+  :ip_lookup => :telize
+)
+
 map '/v1' do
 
   # setup ssl requirements

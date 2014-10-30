@@ -102,11 +102,15 @@ module Evercam
               }
               location_message = "Successfully Geocoded #{params[:near_to]} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             else
+              if request.location
               location = {
                   longitude: request.location.longitude,
                   latitude: request.location.latitude
               }
               location_message = "Successfully Geocoded IP Address #{request.location.ip} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
+              else
+                raise_error(400, 400, "There was an error decoding your IP address. Please try specifying a location using near_to parameter.")
+              end
             end
           rescue Exception => ex
             raise_error(400, 400, ex.message)
