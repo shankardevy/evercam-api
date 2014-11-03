@@ -47,7 +47,7 @@ gem 'sinatra-partial',
   require: 'sinatra/partial'
 
 gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.3.6'
+gem 'evercam_models', '~> 0.3.7'
 
 gem 'airbrake'
 
@@ -56,6 +56,7 @@ group :development do
   gem 'shotgun'
   gem 'thin'
   gem 'racksh'
+  gem 'rerun'
   gem 'debase'
   gem 'ruby-debug-ide'
   gem 'pry-rescue'
