@@ -97,8 +97,8 @@ module Evercam
           begin
             if params[:near_to]
               location = {
-                  longitude: Geocoding.as_point(params[:near_to]).y,
-                  latitude: Geocoding.as_point(params[:near_to]).x
+                  longitude: Geocoding.as_point(params[:near_to]).x,
+                  latitude: Geocoding.as_point(params[:near_to]).y
               }
               location_message = "Successfully Geocoded #{params[:near_to]} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             else
