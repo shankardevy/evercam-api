@@ -95,14 +95,14 @@ module Evercam
              "If location isn't provided requester's IP address is used.", {
         }
         params do
-          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitude' points."
+          optional :near_to, type: String, desc: "Specify an address or latitude longitude points."
         end
         get 'nearest.jpg' do
           begin
             if params[:near_to]
               location = {
-                longitude: Geocoding.as_point(params[:near_to]).x,
-                latitude: Geocoding.as_point(params[:near_to]).y
+                longitude: Geocoding.as_point(params[:near_to]).y,
+                latitude: Geocoding.as_point(params[:near_to]).x
               }
             else
               location = {
