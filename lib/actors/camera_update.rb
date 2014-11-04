@@ -143,9 +143,7 @@ module Evercam
         end
 
         # setup camera GPS location
-        if location_lng.blank? && location_lat.blank?
-          camera.location = nil
-        else
+        unless location_lng.blank? && location_lat.blank?
           begin
             camera.location = { lng: location_lng.to_f, lat: location_lat.to_f }
           rescue ArgumentError
