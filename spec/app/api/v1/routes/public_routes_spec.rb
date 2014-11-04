@@ -23,7 +23,7 @@ describe 'API routes/cameras' do
     }
 
     let!(:public_camera_5) {
-      create(:camera, exid: 'exid_A_5', location: '0.0 90.0')
+      create(:camera, exid: 'exid_A_5', location: '90.0 0.0')
     }
 
     let!(:private_camera_1) {
@@ -135,7 +135,7 @@ describe 'API routes/cameras' do
 
       context "as a lng lat point" do
         it "returns success and the correct camera entries" do
-          get("/public/cameras", { is_near_to: '0, 90' })
+          get("/public/cameras", { is_near_to: '90, 0' })
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data.include?("cameras")).to eq(true)
@@ -149,7 +149,7 @@ describe 'API routes/cameras' do
 
       context "and within_distance is specified" do
         it "returns success and the correct camera entries" do
-          get("/public/cameras", { is_near_to: '0, 89.9', within_distance: 99999 })
+          get("/public/cameras", { is_near_to: '89.9, 0', within_distance: 99999 })
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data.include?("cameras")).to eq(true)

@@ -97,15 +97,15 @@ module Evercam
           begin
             if params[:near_to]
               location = {
-                  longitude: Geocoding.as_point(params[:near_to]).x,
-                  latitude: Geocoding.as_point(params[:near_to]).y
+                  latitude: Geocoding.as_point(params[:near_to]).y,
+                  longitude: Geocoding.as_point(params[:near_to]).x
               }
               location_message = "Successfully Geocoded #{params[:near_to]} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             else
               if request.location
               location = {
-                  longitude: request.location.longitude,
-                  latitude: request.location.latitude
+                  latitude: request.location.latitude,
+                  longitude: request.location.longitude
               }
               location_message = "Successfully Geocoded IP Address #{request.location.ip} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
               else

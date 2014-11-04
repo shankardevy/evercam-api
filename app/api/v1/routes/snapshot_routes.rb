@@ -101,13 +101,13 @@ module Evercam
           begin
             if params[:near_to]
               location = {
-                longitude: Geocoding.as_point(params[:near_to]).x,
-                latitude: Geocoding.as_point(params[:near_to]).y
+                latitude: Geocoding.as_point(params[:near_to]).y,
+                longitude: Geocoding.as_point(params[:near_to]).x
               }
             else
               location = {
-                longitude: request.location.longitude,
-                latitude: request.location.latitude
+                latitude: request.location.latitude,
+                longitude: request.location.longitude
               }
             end
           rescue Exception => ex
