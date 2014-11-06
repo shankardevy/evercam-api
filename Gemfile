@@ -23,6 +23,9 @@ gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger', '= 0.7.2'
 
+gem 'activesupport-json_encoder',
+  github: 'rails/activesupport-json_encoder'
+
 gem 'faraday-digestauth', '~> 0.1.0',
   github: 'evercam/faraday-digestauth'
 
