@@ -14,6 +14,13 @@ GIT
       activesupport
 
 GIT
+  remote: git://github.com/rails/activesupport-json_encoder.git
+  revision: f02fb52c02609b3157e9288e1502dc6a4fe3b1fd
+  specs:
+    activesupport-json_encoder (1.1.0)
+      activesupport (>= 4.1.0, < 5.0)
+
+GIT
   remote: git://github.com/tobmatth/rack-ssl-enforcer.git
   revision: 4e5bdac7af35e1e91f3b62d373b2105236301043
   specs:
@@ -281,6 +288,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport-json_encoder!
   airbrake
   aws-sdk
   dalli
