@@ -201,7 +201,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'External rtsp port of the camera'
                  } do |c,o|
-            c.config['external_rtsp_port']
+            c.config['external_rtsp_port'] == 0 ? "" : c.config['external_rtsp_port']
           end
 
           expose :mpeg, documentation: {
@@ -245,7 +245,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'Internal http port of the camera'
                  } do |c,o|
-            c.config['internal_http_port']
+            c.config['internal_http_port'] == 0 ? "" : c.config['internal_http_port']
           end
 
           expose :camera, documentation: {
@@ -279,7 +279,7 @@ module Evercam
                      type: 'Integer',
                      desc: 'Internal rtsp port of the camera'
                  } do |c,o|
-            c.config['internal_rtsp_port']
+            c.config['internal_rtsp_port'] == 0 ? "" : c.config['internal_rtsp_port']
           end
 
           expose :mpeg, documentation: {
