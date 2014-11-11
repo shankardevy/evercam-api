@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.1.4'
 
-gem 'puma'
-gem 'puma_worker_killer'
+gem 'unicorn'
 gem 'rack'
 gem 'rack-rewrite'
 gem 'rack-ssl-enforcer',
@@ -56,6 +55,9 @@ gem 'evercam_models', '~> 0.3.8'
 gem 'airbrake'
 
 group :development do
+  gem 'sqlite3'
+  gem 'shotgun'
+  gem 'thin'
   gem 'racksh'
   gem 'rerun'
   gem 'debase'
