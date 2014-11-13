@@ -33,6 +33,12 @@ module Evercam
         if response.status == 200
           if response.headers.fetch('content-type', '').start_with?('image')
             image = MiniMagick::Image.read(response.body)
+            Snapshot.create(
+              camera: camera,
+              created_at: instant,
+              data: response.body,
+              notes: 'Heartbeat Worker auto save'
+            )
             image.resize "300x300"
             updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob)
           else
