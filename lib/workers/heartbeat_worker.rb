@@ -107,6 +107,13 @@ module Evercam
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
         @dc.set(camera_name, camera, 0)
+        if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
+          Sidekiq::Client.push({
+                                 'queue' => 'specific_worker',
+                                 'class' => Evercam::HeartbeatWorker,
+                                 'args'  => [camera_name]
+                               })
+        end
       rescue => e
         # we weren't expecting this (famous last words)
         logger.warn(e.message)

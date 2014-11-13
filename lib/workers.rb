@@ -8,7 +8,6 @@ require 'dalli'
 
 Sidekiq.configure_server do |c|
   c.redis = Evercam::Config[:sidekiq]
-  c.options[:queues] = ['default', 'async_worker']
 end
 
 Sidekiq.configure_client do |c|
