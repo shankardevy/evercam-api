@@ -271,7 +271,12 @@ module Evercam
           if params[:page]
             offset = (params[:page] - 1) * limit
           end
-          snap = camera.snapshots.select_group(:notes, :created_at).order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
+          snap = camera.snapshots.select_group(:notes, :created_at, :data).order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
+          if params[:with_data]
+            snap = snap.select_group(:notes, :created_at, :data)
+          else
+            snap = snap.select_group(:notes, :created_at)
+          end
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
