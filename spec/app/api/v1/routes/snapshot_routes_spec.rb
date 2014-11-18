@@ -463,6 +463,8 @@ describe 'API routes/snapshots' do
       it 'returns 200 OK status' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
+        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid208/snapshots/#{Time.now.to_i}.jpg").
+          to_return(:status => 201, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
         expect(last_response.status).to eq(201)
@@ -470,6 +472,8 @@ describe 'API routes/snapshots' do
 
       it 'saves snapshot to database' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
+          to_return(:status => 200, :body => "", :headers => {})
+        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid209/snapshots/#{Time.now.to_i}.jpg").
           to_return(:status => 200, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
@@ -481,6 +485,8 @@ describe 'API routes/snapshots' do
 
       it 'returns the snapshot' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
+          to_return(:status => 200, :body => "", :headers => {})
+        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid210/snapshots/#{Time.now.to_i}.jpg").
           to_return(:status => 200, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
