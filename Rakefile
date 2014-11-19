@@ -73,3 +73,38 @@ namespace :tmp do
   end
 end
 
+
+task :export_snapshots_to_s3 do
+  require 'evercam_misc'
+  require 'evercam_models'
+  require 'active_support'
+  require 'dotenv'
+  require 'sequel'
+  require 'aws-sdk'
+
+  Dotenv.load
+  Sequel::Model.db = Sequel.connect("#{ENV['DATABASE_URL']}", max_connections: 25)
+
+  begin
+
+    Snapshot.where(notes: "Heartbeat Worker auto save").select(:id).take(10).each do |snap|
+      puts "S3 export: Started migration for snapshot #{snap.id}"
+      snapshot = Snapshot[snap.id]
+      camera = snapshot.camera
+      filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
+
+      s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+      @s3_bucket = s3.buckets['evercam-camera-assets']
+      @s3_bucket.objects.create(filepath, snapshot.data)
+
+      snapshot.notes = 'Evercam System'
+      snapshot.data  = 'S3'
+      snapshot.save
+
+      puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3 \n\n"
+    end
+
+  rescue Exception => e
+    log.warn(e)
+  end
+end
