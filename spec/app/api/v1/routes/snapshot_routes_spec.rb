@@ -463,17 +463,17 @@ describe 'API routes/snapshots' do
       it 'returns 200 OK status' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
-        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid208/snapshots/#{Time.now.to_i}.jpg").
+        stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
           to_return(:status => 201, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
         expect(last_response.status).to eq(201)
       end
 
-      it 'saves snapshot to database' do
+      it 'saves snapshot' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
-        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid209/snapshots/#{Time.now.to_i}.jpg").
+        stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
           to_return(:status => 200, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
@@ -486,7 +486,7 @@ describe 'API routes/snapshots' do
       it 'returns the snapshot' do
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
-        stub_request(:put, "https://evercam-camera-assets.s3.amazonaws.com/exid210/snapshots/#{Time.now.to_i}.jpg").
+        stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
           to_return(:status => 200, :body => "", :headers => {})
 
         post("/cameras/#{camera0.exid}/snapshots", params.merge(api_keys))
@@ -532,7 +532,10 @@ describe 'API routes/snapshots' do
     }
 
     context 'when snapshot request is correct' do
-      it 'snapshot is saved to database' do
+      it 'snapshot is saved' do
+        stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
+          to_return(:status => 200, :body => "", :headers => {})
+
         post("/cameras/#{camera0.exid}/snapshots/12345678", params.merge(api_keys))
         expect(last_response.status).to eq(201)
         snap = Snapshot.first
