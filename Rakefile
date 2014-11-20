@@ -87,7 +87,7 @@ task :export_snapshots_to_s3 do
 
   begin
 
-    Snapshot.where(notes: "Heartbeat Worker auto save").select(:id).each do |snap|
+    Snapshot.exclude(notes: "S3").select(:id).each do |snap|
       puts "S3 export: Started migration for snapshot #{snap.id}"
       snapshot = Snapshot[snap.id]
       camera = snapshot.camera
