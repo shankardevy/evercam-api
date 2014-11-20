@@ -83,9 +83,8 @@ task :export_snapshots_to_s3 do
 
   begin
 
-    Snapshot.exclude(notes: "Evercam System").select(:id).each do |snap|
-      puts "S3 export: Started migration for snapshot #{snap.id}"
-      snapshot = Snapshot[snap.id]
+    Snapshot.exclude(notes: "Evercam System").each do |snapshot|
+      puts "S3 export: Started migration for snapshot #{snapshot.id}"
       camera = snapshot.camera
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
 
