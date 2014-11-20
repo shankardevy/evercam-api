@@ -87,11 +87,13 @@ task :export_snapshots_to_s3 do
 
   begin
 
-    Snapshot.exclude(notes: "S3").select(:id).each do |snap|
+    Snapshot.exclude(notes: "Evercam System").select(:id).each do |snap|
       puts "S3 export: Started migration for snapshot #{snap.id}"
       snapshot = Snapshot[snap.id]
       camera = snapshot.camera
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
+
+      return if snapshot.data == 'S3'
 
       s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
       @s3_bucket = s3.buckets['evercam-camera-assets']
@@ -101,7 +103,8 @@ task :export_snapshots_to_s3 do
       snapshot.data  = 'S3'
       snapshot.save
 
-      puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3 \n\n"
+      puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3"
+      puts "S3 export: #{Snapshot.exclude(notes: "Evercam System").select(:id).count} snapshots left \n\n"
     end
 
   rescue Exception => e
