@@ -82,7 +82,8 @@ task :export_snapshots_to_s3 do
   require 'aws-sdk'
 
   begin
-
+    Snapshot.set_primary_key :id
+    
     Snapshot.exclude(notes: "Evercam System").each do |snapshot|
       puts "S3 export: Started migration for snapshot #{snapshot.id}"
       camera = snapshot.camera
