@@ -75,15 +75,11 @@ end
 
 
 task :export_snapshots_to_s3 do
-  require 'evercam_misc'
-  require 'evercam_models'
-  require 'active_support'
-  require 'dotenv'
-  require 'sequel'
-  require 'aws-sdk'
 
-  Dotenv.load
-  Sequel::Model.db = Sequel.connect("#{ENV['DATABASE_URL']}", max_connections: 25)
+  db = Sequel.connect(Evercam::Config[:database])
+
+  require 'evercam_models'
+  require 'aws-sdk'
 
   begin
 
