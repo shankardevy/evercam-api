@@ -83,21 +83,21 @@ task :export_snapshots_to_s3 do
 
   begin
     Snapshot.set_primary_key :id
-    
-    Snapshot.exclude(notes: "Evercam System").each do |snapshot|
+
+    Snapshot.where(notes: "Evercam Capture auto save").or("notes IS NULL").each do |snapshot|
       puts "S3 export: Started migration for snapshot #{snapshot.id}"
       camera = snapshot.camera
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
 
-      return if snapshot.data == 'S3'
+      unless snapshot.data == 'S3'
+        s3         = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+        @s3_bucket = s3.buckets['evercam-camera-assets']
+        @s3_bucket.objects.create(filepath, snapshot.data)
 
-      s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
-      @s3_bucket = s3.buckets['evercam-camera-assets']
-      @s3_bucket.objects.create(filepath, snapshot.data)
-
-      snapshot.notes = 'Evercam System'
-      snapshot.data  = 'S3'
-      snapshot.save
+        snapshot.notes = 'Evercam System'
+        snapshot.data  = 'S3'
+        snapshot.save
+      end
 
       puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3"
       puts "S3 export: #{Snapshot.exclude(notes: "Evercam System").select(:id).count} snapshots left \n\n"
