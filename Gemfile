@@ -54,11 +54,12 @@ gem 'evercam_models', '~> 0.3.8'
 
 gem 'airbrake'
 
+gem 'racksh'
+
 group :development do
   gem 'sqlite3'
   gem 'shotgun'
   gem 'thin'
-  gem 'racksh'
   gem 'rerun'
   gem 'debase'
   gem 'ruby-debug-ide'
