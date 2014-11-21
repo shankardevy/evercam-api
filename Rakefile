@@ -94,13 +94,12 @@ task :export_snapshots_to_s3 do
         @s3_bucket = s3.buckets['evercam-camera-assets']
         @s3_bucket.objects.create(filepath, snapshot.data)
 
-        snapshot.notes = 'Evercam System'
         snapshot.data  = 'S3'
         snapshot.save
       end
 
       puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3"
-      puts "S3 export: #{Snapshot.exclude(notes: "Evercam System").select(:id).count} snapshots left \n\n"
+      puts "S3 export: #{Snapshot.where(notes: "Evercam Capture auto save").or("notes IS NULL").count} snapshots left \n\n"
     end
 
   rescue Exception => e
