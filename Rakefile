@@ -28,7 +28,7 @@ namespace :db do
     envs.each do |env|
       db = Sequel.connect(Evercam::Config.settings[env][:database])
       migrations = db[:schema_migrations].order(:filename).to_a
-      migration  = 0
+      migration = 0
       if migrations.length > 1
         match = /^(\d+).+$/.match(migrations[-2][:filename])
         migration = match[1].to_i if match
@@ -73,6 +73,36 @@ namespace :tmp do
   end
 end
 
+task :import_cambase_data do
+  file = File.read("models.json")
+
+  models = JSON.parse(file)
+
+  models.each do |model|
+    vendor = Vendor.where(:exid => model['vendor_id']).first
+    if vendor.nil?
+      puts "Vendor #{model['vendor_id']} doesn't exist yet, creating it"
+      vendor = Vendor.create(
+        exid: model['vendor_id'],
+        name: model['vendor_name'],
+        known_macs: ['']
+      )
+    end
+
+    vendor_model = VendorModel.where(:exid => model['id']).first
+    if vendor_model.nil?
+      puts "Model #{model['id']} doesn't exist yet, adding it"
+      VendorModel.create(
+        vendor_id: vendor.id,
+        exid: model['id'],
+        name: model['name'],
+        config: model['config']
+      )
+    else
+      puts "Model #{model['id']} already exist, skipping it"
+    end
+  end
+end
 
 task :export_snapshots_to_s3 do
 
@@ -90,11 +120,11 @@ task :export_snapshots_to_s3 do
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
 
       unless snapshot.data == 'S3'
-        s3         = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+        s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
         @s3_bucket = s3.buckets['evercam-camera-assets']
         @s3_bucket.objects.create(filepath, snapshot.data)
 
-        snapshot.data  = 'S3'
+        snapshot.data = 'S3'
         snapshot.save
       end
 
