@@ -117,7 +117,7 @@ module Evercam
         @dc.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
           Sidekiq::Client.push({
-                                 'queue' => 'specific_worker',
+                                 'queue' => 'frequent',
                                  'class' => Evercam::HeartbeatWorker,
                                  'args'  => [camera_name]
                                })
