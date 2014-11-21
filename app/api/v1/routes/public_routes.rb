@@ -33,8 +33,8 @@ module Evercam
           params_copy = params.clone
           params_copy.delete(:route_info)
           cache_key = "public/#{params_copy.flatten.join('|')}"
-          query_result = APIv1::dc.get(cache_key)
-          total_pages = APIv1::dc.get("#{cache_key}/pages")
+          query_result = Evercam::Services.dalli_cache.get(cache_key)
+          total_pages = Evercam::Services.dalli_cache.get("#{cache_key}/pages")
           if query_result.nil? or total_pages.nil?
             query = Camera.where(is_public: true, discoverable: true)
             unless params[:thumbnail]
@@ -69,8 +69,8 @@ module Evercam
             offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
             query = query.offset(offset).limit(limit)
             query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
-            APIv1::dc.set(cache_key, query_result)
-            APIv1::dc.set("#{cache_key}/pages", total_pages)
+            Evercam::Services.dalli_cache.set(cache_key, query_result)
+            Evercam::Services.dalli_cache.set("#{cache_key}/pages", total_pages)
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
             :pages => total_pages
@@ -93,7 +93,7 @@ module Evercam
           params_copy.delete(:route_info)
           params_copy.merge!(request.location.data) if request.location
           cache_key = "public/#{params_copy.flatten.join('|')}"
-          query_result = APIv1::dc.get(cache_key)
+          query_result = Evercam::Services.dalli_cache.get(cache_key)
           begin
             if params[:near_to]
               location = {
@@ -124,7 +124,7 @@ module Evercam
             end
 
             query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
-            APIv1::dc.set(cache_key, query_result)
+            Evercam::Services.dalli_cache.set(cache_key, query_result)
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: true).merge!({
             message: location_message

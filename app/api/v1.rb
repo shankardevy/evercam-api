@@ -2,6 +2,7 @@ Dir.glob(File.expand_path('../v1/**/*.rb', __FILE__)).sort.
   each { |f| require f }
 
 require_relative '../../lib/actors'
+require_relative '../../lib/services'
 
 module Evercam
   class APIv1 < Grape::API
@@ -25,6 +26,7 @@ module Evercam
       include SessionHelper
       include ThreeScaleHelper
       include ParameterMapper
+      include Services
     end
 
     # The position of this is important so beware of moving it!
@@ -56,21 +58,7 @@ module Evercam
     add_swagger_documentation(
       Evercam::Config[:swagger][:v1]
     )
-
-    # Dalli cache
-    options = { :namespace => "app_v1", :compress => true, :expires_in => 5.minutes }
-    class << self; attr_accessor :dc end
-    if ENV["MEMCACHEDCLOUD_SERVERS"]
-      @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
-    else
-      @dc = Dalli::Client.new('127.0.0.1:11211', options)
-    end
-
-    # AWS S3 bucket
-    class << self; attr_accessor :s3_bucket end
-    s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
-    @s3_bucket = s3.buckets['evercam-camera-assets']
-
+    
     # Uncomment this to see a list of available routes on start up.
     # self.routes.each do |api|
     #   puts "#{api.route_method.ljust(10)} -> /v1#{api.route_path}"

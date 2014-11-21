@@ -43,7 +43,7 @@ module Evercam
                         params[:id])
           end
           key = "user/cameras/#{params[:id]}/#{params[:include_shared]}/#{params[:thumbnail]}"
-          cameras = APIv1::dc.get(key)
+          cameras = Evercam::Services.dalli_cache.get(key)
           if cameras.nil?
             query = Camera.where(owner: user)
             if params[:include_shared]
@@ -70,7 +70,7 @@ module Evercam
                                              thumbnail: params[:thumbnail])
               end
             end
-            APIv1::dc.set(key, cameras)
+            Evercam::Services.dalli_cache.set(key, cameras)
           end
           {cameras: cameras}
         end
