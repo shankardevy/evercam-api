@@ -32,13 +32,16 @@ module Evercam
       def execute
         camera = ::Camera.by_exid!(id)
         unless %w(image/jpeg image/pjpeg image/png image/x-png image/gif).include? inputs[:data]['type']
-          add_error(:data, :valid, 'File type not supported')
+          raise Evercam::WebErrors::BadRequestError.new(message="File not provided or file type not supported", code="invalid_parameters", context="data")
         end
+
+        filepath = "#{camera.exid}/snapshots/#{timestamp.to_i}.jpg"
+        Evercam::APIv1::s3_bucket.objects.create(filepath, inputs[:data]['tempfile'].read)
 
         Snapshot.create(
           camera: camera,
           created_at: Time.at(timestamp),
-          data: inputs[:data]['tempfile'].read,
+          data: 'S3',
           notes: notes
         )
       end

@@ -28,7 +28,7 @@ namespace :db do
     envs.each do |env|
       db = Sequel.connect(Evercam::Config.settings[env][:database])
       migrations = db[:schema_migrations].order(:filename).to_a
-      migration  = 0
+      migration = 0
       if migrations.length > 1
         match = /^(\d+).+$/.match(migrations[-2][:filename])
         migration = match[1].to_i if match
@@ -101,5 +101,38 @@ task :import_cambase_data do
     else
       puts "Model #{model['id']} already exist, skipping it"
     end
+  end
+end
+
+task :export_snapshots_to_s3 do
+
+  db = Sequel.connect(Evercam::Config[:database])
+
+  require 'evercam_models'
+  require 'aws-sdk'
+
+  begin
+    Snapshot.set_primary_key :id
+
+    Snapshot.where(notes: "Evercam Capture auto save").or("notes IS NULL").each do |snapshot|
+      puts "S3 export: Started migration for snapshot #{snapshot.id}"
+      camera = snapshot.camera
+      filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
+
+      unless snapshot.data == 'S3'
+        s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+        @s3_bucket = s3.buckets['evercam-camera-assets']
+        @s3_bucket.objects.create(filepath, snapshot.data)
+
+        snapshot.data = 'S3'
+        snapshot.save
+      end
+
+      puts "S3 export: Snapshot #{snapshot.id} from camera #{camera.exid} moved to S3"
+      puts "S3 export: #{Snapshot.where(notes: "Evercam Capture auto save").or("notes IS NULL").count} snapshots left \n\n"
+    end
+
+  rescue Exception => e
+    log.warn(e)
   end
 end

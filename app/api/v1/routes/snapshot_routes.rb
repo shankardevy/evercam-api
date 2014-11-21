@@ -95,19 +95,19 @@ module Evercam
              "If location isn't provided requester's IP address is used.", {
         }
         params do
-          optional :near_to, type: String, desc: "Specify an address or 'longitude, latitude' points."
+          optional :near_to, type: String, desc: "Specify an address or latitude longitude points."
         end
         get 'nearest.jpg' do
           begin
             if params[:near_to]
               location = {
-                longitude: Geocoding.as_point(params[:near_to]).x,
-                latitude: Geocoding.as_point(params[:near_to]).y
+                latitude: Geocoding.as_point(params[:near_to]).y,
+                longitude: Geocoding.as_point(params[:near_to]).x
               }
             else
               location = {
-                longitude: request.location.longitude,
-                latitude: request.location.latitude
+                latitude: request.location.latitude,
+                longitude: request.location.longitude
               }
             end
           rescue Exception => ex
@@ -177,7 +177,7 @@ module Evercam
       route_param :id do
 
         #-------------------------------------------------------------------
-        # GET /live
+        # GET /cameras/:id/live
         #-------------------------------------------------------------------
         desc 'Returns base64 encoded jpg from the online camera'
         get 'live' do
@@ -201,7 +201,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots
+        # GET /cameras/:id/snapshots
         #-------------------------------------------------------------------
         desc 'Returns the list of all snapshots currently stored for this camera'
         get 'snapshots' do
@@ -216,7 +216,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots/latest
+        # GET /cameras/:id/snapshots/latest
         #-------------------------------------------------------------------
         desc 'Returns latest snapshot stored for this camera', {
           entity: Evercam::Presenters::Snapshot
@@ -241,7 +241,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots/range
+        # GET /cameras/:id/snapshots/range
         #-------------------------------------------------------------------
         desc 'Returns list of snapshots between two timestamps'
         params do
@@ -271,14 +271,18 @@ module Evercam
           if params[:page]
             offset = (params[:page] - 1) * limit
           end
-
-          snap = camera.snapshots.order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
+          snap = camera.snapshots.select_group(:notes, :created_at, :data).order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
+          if params[:with_data]
+            snap = snap.select_group(:notes, :created_at, :data)
+          else
+            snap = snap.select_group(:notes, :created_at)
+          end
 
           present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots/:year/:month/day
+        # GET /cameras/:id/snapshots/:year/:month/day
         #-------------------------------------------------------------------
         desc 'Returns list of specific days in a given month which contains any snapshots'
         params do
@@ -307,7 +311,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots/:year/:month/:day/hours
+        # GET /cameras/:id/snapshots/:year/:month/:day/hours
         #-------------------------------------------------------------------
         desc 'Returns list of specific hours in a given day which contains any snapshots'
         params do
@@ -340,7 +344,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /snapshots/:timestamp
+        # GET /cameras/:id/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
@@ -361,7 +365,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # POST /snapshots
+        # POST /cameras/:id/snapshots
         #-------------------------------------------------------------------
         desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
         params do
@@ -390,7 +394,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # POST /snapshots/:timestamp
+        # POST /cameras/:id/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Stores the supplied snapshot image data for the given timestamp'
         params do
@@ -421,7 +425,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # DELETE /snapshots/:timestamp
+        # DELETE /cameras/:id/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
         params do

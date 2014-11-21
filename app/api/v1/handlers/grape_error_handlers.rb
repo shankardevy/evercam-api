@@ -71,7 +71,7 @@ module Evercam
           status             = 400
           details["message"] = "Invalid parameters specified for request."
           details["code"]    = "invalid_parameters"
-          details["context"] = exception.errors.keys
+          details["context"] = exception.errors.keys.first
         elsif exception.kind_of?(Sequel::ValidationFailed)
           log.error "Sequel validation exception caught processing request.\n"\
           "Message: #{exception.message}\n" +
@@ -79,7 +79,15 @@ module Evercam
           status             = 400
           details["message"] = exception.message
           details["code"]    = "invalid_parameters"
-          details["context"] = exception.errors.keys
+          details["context"] = exception.errors.keys.first
+        elsif exception.kind_of?(RuntimeError)
+          log.error "Grape RuntimeError caught processing request.\n"\
+                    "Message: #{exception.message}\n" +
+                      exception.backtrace[0, 5].join("\n")
+          status             = 400
+          details["message"] = "Invalid parameters specified for request."
+          details["code"]    = "invalid_parameters"
+          details["context"] = ""
         else
           log.error "Non-Evercam exception caught processing request.\n"\
                     "Type: #{exception.class.name}\n"\

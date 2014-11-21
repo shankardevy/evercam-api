@@ -1,5 +1,6 @@
 :verbose: false
 :concurrency:  5
 :queues:
+  - [specific_worker, 5]
   - [async_worker, 5]
   - [default, 1]

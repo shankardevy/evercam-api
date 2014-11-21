@@ -27,10 +27,13 @@ module Evercam
                                               timeout: Evercam::Config[:api][:timeout],
                                               connecttimeout: Evercam::Config[:api][:timeout])
             if response.success?
+              filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
+              Evercam::APIv1::s3_bucket.objects.create(filepath, response.body)
+
               snapshot = Snapshot.create(
                 camera: camera,
                 created_at: instant,
-                data: response.body,
+                data: 'S3',
                 notes: inputs[:notes]
               )
             end

@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.1.2'
+ruby '2.1.4'
 
 gem 'unicorn'
 gem 'rack'
@@ -21,6 +21,9 @@ gem 'stringex'
 gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger', '= 0.7.2'
+
+gem 'activesupport-json_encoder',
+  github: 'rails/activesupport-json_encoder'
 
 gem 'faraday-digestauth', '~> 0.1.0',
   github: 'evercam/faraday-digestauth'
@@ -47,15 +50,17 @@ gem 'sinatra-partial',
   require: 'sinatra/partial'
 
 gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.3.6'
+gem 'evercam_models', '~> 0.3.8'
 
 gem 'airbrake'
+
+gem 'racksh'
 
 group :development do
   gem 'sqlite3'
   gem 'shotgun'
   gem 'thin'
-  gem 'racksh'
+  gem 'rerun'
   gem 'debase'
   gem 'ruby-debug-ide'
   gem 'pry-rescue'

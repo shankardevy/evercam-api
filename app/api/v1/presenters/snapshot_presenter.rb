@@ -25,8 +25,14 @@ module Evercam
         type: 'file',
         desc: 'Image data',
         required: false
-      } do |s,o|
-        data = Base64.encode64(s.data).gsub("\n", '')
+      } do |snapshot, _|
+        if snapshot.data == 'S3'
+          filepath = "#{snapshot.camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
+          image = Evercam::APIv1::s3_bucket.objects[filepath].read
+        else
+          image = snapshot.data
+        end
+        data = Base64.encode64(image).gsub("\n", '')
         "data:image/jpeg;base64,#{data}"
       end
 

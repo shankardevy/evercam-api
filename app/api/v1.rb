@@ -66,6 +66,10 @@ module Evercam
       @dc = Dalli::Client.new('127.0.0.1:11211', options)
     end
 
+    # AWS S3 bucket
+    class << self; attr_accessor :s3_bucket end
+    s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+    @s3_bucket = s3.buckets['evercam-camera-assets']
 
     # Uncomment this to see a list of available routes on start up.
     # self.routes.each do |api|

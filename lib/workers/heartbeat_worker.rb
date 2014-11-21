@@ -33,6 +33,20 @@ module Evercam
         if response.status == 200
           if response.headers.fetch('content-type', '').start_with?('image')
             image = MiniMagick::Image.read(response.body)
+
+            #TODO: move @s3_bucket and @dc to an external module
+            s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
+            @s3_bucket = s3.buckets['evercam-camera-assets']
+
+            filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
+            @s3_bucket.objects.create(filepath, response.body)
+
+            Snapshot.create(
+              camera: camera,
+              created_at: instant,
+              data: 'S3',
+              notes: 'Evercam System'
+            )
             image.resize "300x300"
             updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob)
           else
@@ -101,6 +115,13 @@ module Evercam
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
         @dc.set(camera_name, camera, 0)
+        if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
+          Sidekiq::Client.push({
+                                 'queue' => 'specific_worker',
+                                 'class' => Evercam::HeartbeatWorker,
+                                 'args'  => [camera_name]
+                               })
+        end
       rescue => e
         # we weren't expecting this (famous last words)
         logger.warn(e.message)
