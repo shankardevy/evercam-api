@@ -6,7 +6,7 @@ module Evercam
     include Sidekiq::Worker
 
     def perform(name, host)
-      config = Evercam::Config[:amazon]
+      config = Evercam::Config[:amazon_mhlabs]
       manager = Evercam::DNS::ZoneManager.new('evr.cm', config)
 
       address = Resolv.getaddresses(host).find do |a|
