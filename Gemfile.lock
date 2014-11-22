@@ -262,6 +262,8 @@ GEM
       sinatra (>= 1.0.0)
     sinatra-partial (0.4.0)
       sinatra
+    skylight (0.4.3)
+      activesupport (>= 3.0.0)
     slop (3.6.0)
     spoon (0.0.4)
       ffi
@@ -345,6 +347,7 @@ DEPENDENCIES
   sinatra-contrib
   sinatra-flash
   sinatra-partial
+  skylight
   sqlite3
   stringex
   thin
