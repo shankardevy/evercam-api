@@ -56,7 +56,9 @@ gem 'airbrake'
 
 gem 'racksh'
 
+
 group :development do
+  gem 'fakes3'
   gem 'sqlite3'
   gem 'shotgun'
   gem 'thin'
