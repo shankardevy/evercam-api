@@ -1,3 +1,5 @@
+require 'active_support/core_ext/module/attribute_accessors'
+
 module Evercam
   module Services
     mattr_accessor :dalli_cache
