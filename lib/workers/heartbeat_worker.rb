@@ -3,10 +3,13 @@ require 'faraday'
 require 'mini_magick'
 require 'faraday/digestauth'
 require 'dalli'
+require_relative '../../lib/services'
+require_relative '../../app/api/v1/helpers/cache_helper'
 
 module Evercam
   class HeartbeatWorker
 
+    include Evercam::CacheHelper
     include Sidekiq::Worker
     sidekiq_options retry: false
 
@@ -34,12 +37,8 @@ module Evercam
           if response.headers.fetch('content-type', '').start_with?('image')
             image = MiniMagick::Image.read(response.body)
 
-            #TODO: move @s3_bucket and @dc to an external module
-            s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
-            @s3_bucket = s3.buckets['evercam-camera-assets']
-
             filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
-            @s3_bucket.objects.create(filepath, response.body)
+            Evercam::Services.s3_bucket.objects.create(filepath, response.body)
 
             Snapshot.create(
               camera: camera,
@@ -71,13 +70,6 @@ module Evercam
     end
 
     def perform(camera_name)
-      # Dalli cache
-      options = { :namespace => "app_v1", :compress => true }
-      if ENV["MEMCACHEDCLOUD_SERVERS"]
-        @dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
-      else
-        @dc = Dalli::Client.new('127.0.0.1:11211', options)
-      end
       logger.info("Started update for camera #{camera_name}")
       instant = Time.now
       camera = Camera.by_exid(camera_name)
@@ -114,7 +106,7 @@ module Evercam
         camera.update(updates)
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
-        @dc.set(camera_name, camera, 0)
+        Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
           Sidekiq::Client.push({
                                  'queue' => 'frequent',
@@ -151,24 +143,6 @@ module Evercam
         hook_conn.post '', parameters.to_s
       end 
     end
-
-    #TODO: remove this and call CacheHelper methods directly
-    def invalidate_for_user(username)
-      ['true', 'false', ''].repeated_permutation(2) do |a|
-        @dc.delete("user/cameras/#{username}/#{a[0]}/#{a[1]}")
-      end
-    end
-
-    def invalidate_for_camera(camera)
-      camera_sharees = CameraShare.where(camera_id: camera.id)
-      unless camera_sharees.blank?
-        camera_sharees.each do |user|
-          username = User[user.user_id].username
-          invalidate_for_user(username)
-        end
-      end
-    end
-
   end
 end
 

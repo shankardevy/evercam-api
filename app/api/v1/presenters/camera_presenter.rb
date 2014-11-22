@@ -404,7 +404,7 @@ module Evercam
         else
           key = "camera-rights/#{camera.exid}/#{options[:user].name}"
         end
-        rights_string = Evercam::APIv1::dc.get(key)
+        rights_string = Evercam::Services::dalli_cache.get(key)
         if rights_string.nil?
           list   = []
           grants = []
@@ -415,7 +415,7 @@ module Evercam
           end
           list.concat(grants) unless grants.empty?
           rights_string = list.join(",")
-          Evercam::APIv1::dc.set(key, rights_string, 5*60)
+          Evercam::Services::dalli_cache.set(key, rights_string, 5*60)
         end
         rights_string
       end

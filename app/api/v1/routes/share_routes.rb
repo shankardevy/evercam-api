@@ -122,7 +122,7 @@ module Evercam
                 key = "camera-rights/#{camera.exid}/#{target_user.username}"
                 invalidate_for_user(target_user.username)
                 invalidate_for_camera(camera)
-                Evercam::APIv1::dc.delete(key)
+                Evercam::Services::dalli_cache.delete(key)
                 present [outcome.result], with: Presenters::CameraShare
               else
                 # Send email to email
@@ -155,7 +155,7 @@ module Evercam
                 unless share.user.nil?
                   # Invalidate cache
                   key = "camera-rights/#{camera.exid}/#{share.user.username}"
-                  Evercam::APIv1::dc.delete(key)
+                  Evercam::Services::dalli_cache.delete(key)
                   invalidate_for_user(share.user.username)
                   invalidate_for_camera(camera)
                 end
@@ -196,7 +196,7 @@ module Evercam
 
                # Invalidate cache
                key = "camera-rights/#{share.camera.exid}/#{share.user.username}"
-               Evercam::APIv1::dc.delete(key)
+               Evercam::Services::dalli_cache.delete(key)
                invalidate_for_user(share.user.username)
                invalidate_for_camera(camera)
 

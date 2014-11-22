@@ -43,7 +43,7 @@ end
 
 namespace :workers do
 
-  db = Sequel.connect(Evercam::Config[:database])
+  Sequel.connect(Evercam::Config[:database])
   require 'evercam_models'
   require_relative 'lib/workers'
 
@@ -68,8 +68,10 @@ end
 namespace :tmp do
   task :clear do
     require 'dalli'
-    dc = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
-    dc.flush_all
+    require_relative 'lib/services'
+
+    Evercam::Services.dalli_cache.flush_all
+    puts "Memcached cache flushed!"
   end
 end
 
@@ -106,7 +108,7 @@ end
 
 task :export_snapshots_to_s3 do
 
-  db = Sequel.connect(Evercam::Config[:database])
+  Sequel.connect(Evercam::Config[:database])
 
   require 'evercam_models'
   require 'aws-sdk'
@@ -120,9 +122,7 @@ task :export_snapshots_to_s3 do
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
 
       unless snapshot.data == 'S3'
-        s3 = AWS::S3.new(:access_key_id => Evercam::Config[:amazon][:access_key_id], :secret_access_key => Evercam::Config[:amazon][:secret_access_key])
-        @s3_bucket = s3.buckets['evercam-camera-assets']
-        @s3_bucket.objects.create(filepath, snapshot.data)
+        Evercam::Services.s3_bucket.objects.create(filepath, snapshot.data)
 
         snapshot.data = 'S3'
         snapshot.save

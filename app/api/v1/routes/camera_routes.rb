@@ -267,7 +267,7 @@ module Evercam
       patch '/:id' do
         authreport!('cameras/patch')
 
-        camera = APIv1::dc.get(params[:id])
+        camera = Evercam::Services.dalli_cache.get(params[:id])
         camera = ::Camera.by_exid!(params[:id]) if camera.nil?
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
@@ -294,7 +294,7 @@ module Evercam
 
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
-        APIv1::dc.set(params[:id], camera)
+        Evercam::Services.dalli_cache.set(params[:id], camera)
         present Array(camera), with: Presenters::Camera, user: caller
       end
 
@@ -311,7 +311,7 @@ module Evercam
         camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
-        APIv1::dc.delete(params[:id])
+        Evercam::Services.dalli_cache.delete(params[:id])
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
         camera.destroy
@@ -340,7 +340,7 @@ module Evercam
         invalidate_for_user(camera.owner.username)
         invalidate_for_camera(camera)
         camera.update(owner: new_owner)
-        APIv1::dc.set(params[:id], camera, 0)
+        Evercam::Services.dalli_cache.set(params[:id], camera, 0)
         present Array(camera), with: Presenters::Camera, user: caller
       end
     end
