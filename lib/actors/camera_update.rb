@@ -164,7 +164,7 @@ module Evercam
         camera.discoverable = (inputs[:discoverable] == true) if inputs.include?(:discoverable)
         camera.save
 
-        if inputs[:external_host]
+        unless inputs[:external_host].blank?
           # fire off the evr.cm zone update to sidekiq
           DNSUpsertWorker.perform_async(id, inputs[:external_host]) unless Evercam::Config[:testserver]
         end
