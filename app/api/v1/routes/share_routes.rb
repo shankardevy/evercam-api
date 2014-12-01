@@ -120,8 +120,7 @@ module Evercam
                 EmailWorker.perform_async({type: 'share', user: caller.username, email: target_user.email, camera: camera.exid}) unless caller.email == params[:email]
                 # Invalidate cache
                 key = "camera-rights/#{camera.exid}/#{target_user.username}"
-                invalidate_for_user(target_user.username)
-                invalidate_for_camera(camera)
+                CacheInvalidationWorker.perform_async(camera.exid)
                 Evercam::Services::dalli_cache.delete(key)
                 present [outcome.result], with: Presenters::CameraShare
               else
@@ -196,8 +195,7 @@ module Evercam
                # Invalidate cache
                key = "camera-rights/#{share.camera.exid}/#{share.user.username}"
                Evercam::Services::dalli_cache.delete(key)
-               invalidate_for_user(share.user.username)
-               invalidate_for_camera(camera)
+               CacheInvalidationWorker.perform_async(camera.exid)
 
                present [outcome.result], with: Presenters::CameraShare
             end

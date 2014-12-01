@@ -170,11 +170,7 @@ module Evercam
         end
 
         # Check if online
-        Sidekiq::Client.push({
-                               'queue' => 'async',
-                               'class' => Evercam::HeartbeatWorker,
-                               'args'  => [id]
-                             })
+        Sidekiq::Client.push({ 'queue' => 'async', 'class' => Evercam::HeartbeatWorker, 'args' => [id] })
 
         camera
       end

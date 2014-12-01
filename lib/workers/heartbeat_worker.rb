@@ -11,7 +11,9 @@ module Evercam
 
     include Evercam::CacheHelper
     include Sidekiq::Worker
+
     sidekiq_options retry: false
+    sidekiq_options queue: :heartbeat
 
     TIMEOUT = 5
 
@@ -104,15 +106,10 @@ module Evercam
         end
         trigger_webhook(camera)
         camera.update(updates)
-        invalidate_for_user(camera.owner.username)
-        invalidate_for_camera(camera)
+        CacheInvalidationWorker.perform_async(camera.exid)
         Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          Sidekiq::Client.push({
-                                 'queue' => 'frequent',
-                                 'class' => Evercam::HeartbeatWorker,
-                                 'args'  => [camera_name]
-                               })
+          Sidekiq::Client.push({ 'queue' => 'frequent', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
         end
       rescue => e
         # we weren't expecting this (famous last words)
