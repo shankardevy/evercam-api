@@ -5,13 +5,17 @@ require 'faraday/digestauth'
 require 'dalli'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
+require_relative '../../app/api/v1/helpers/sidekiq_helper'
 
 module Evercam
   class HeartbeatWorker
 
     include Evercam::CacheHelper
+    include Evercam::SidekiqHelper
     include Sidekiq::Worker
+
     sidekiq_options retry: false
+    sidekiq_options queue: :heartbeat
 
     TIMEOUT = 5
 
@@ -104,15 +108,10 @@ module Evercam
         end
         trigger_webhook(camera)
         camera.update(updates)
-        invalidate_for_user(camera.owner.username)
-        invalidate_for_camera(camera)
+        perform_in_background('cache', Evercam::CacheInvalidationWorker, camera.exid)
         Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          Sidekiq::Client.push({
-                                 'queue' => 'frequent',
-                                 'class' => Evercam::HeartbeatWorker,
-                                 'args'  => [camera_name]
-                               })
+          perform_in_background('frequent', Evercam::HeartbeatWorker, camera_name)
         end
       rescue => e
         # we weren't expecting this (famous last words)

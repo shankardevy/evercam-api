@@ -29,6 +29,7 @@ require_relative "actors/webhook_delete"
 require_relative "actors/mailers/mailer"
 require_relative "actors/mailers/account_mailer"
 require_relative "actors/mailers/user_mailer"
+require_relative "../app/api/v1/helpers/sidekiq_helper"
 
 module Evercam
   VALID_IP_ADDRESS_REGEX = Regexp.new('^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$');

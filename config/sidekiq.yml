@@ -2,4 +2,6 @@
 :queues:
   - [frequent, 5]
   - [async, 5]
+  - [cache, 5]
   - [default, 1]
+  - [heartbeat, 1]
