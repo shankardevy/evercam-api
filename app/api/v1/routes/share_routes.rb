@@ -157,7 +157,6 @@ module Evercam
                   key = "camera-rights/#{camera.exid}/#{share.user.username}"
                   Evercam::Services::dalli_cache.delete(key)
                   invalidate_for_user(share.user.username)
-                  invalidate_for_camera(camera)
                 end
               end
 
