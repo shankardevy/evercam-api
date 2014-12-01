@@ -24,7 +24,6 @@ module Evercam
       include ErrorsHelper
       include LoggingHelper
       include SessionHelper
-      include SidekiqHelper
       include ThreeScaleHelper
       include ParameterMapper
       include Services

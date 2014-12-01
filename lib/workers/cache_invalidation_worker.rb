@@ -7,6 +7,8 @@ module Evercam
     include Evercam::CacheHelper
     include Sidekiq::Worker
 
+    sidekiq_options queue: :cache
+
     def perform(camera_exid)
       begin
         invalidate_for_camera(camera_exid)
