@@ -15,6 +15,7 @@ gem 'kgio'
 gem 'pony'
 gem 'aws-sdk'
 gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 gem 'mini_magick'
 gem 'stringex'
 
@@ -81,6 +82,7 @@ group :test do
   gem 'guard-rspec'
   gem 'guard-rack'
   gem 'database_cleaner'
+  gem 'mock_redis'
 
   gem 'mocha',
     require: 'mocha/api'
