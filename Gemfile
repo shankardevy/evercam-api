@@ -15,6 +15,7 @@ gem 'kgio'
 gem 'pony'
 gem 'aws-sdk'
 gem 'sidekiq'
+gem 'sidekiq-unique-jobs'
 gem 'mini_magick'
 gem 'stringex'
 

@@ -14,6 +14,7 @@ module Evercam
 
     sidekiq_options retry: false
     sidekiq_options queue: :heartbeat
+    sidekiq_options unique: true
 
     TIMEOUT = 5
 
@@ -110,6 +111,8 @@ module Evercam
         Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
           Sidekiq::Client.push({ 'queue' => 'frequent', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
+        else
+          Sidekiq::Client.push({ 'queue' => 'heartbeat', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
         end
       rescue => e
         # we weren't expecting this (famous last words)
