@@ -176,6 +176,7 @@ GEM
     minitest (5.4.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
+    mock_redis (0.13.2)
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -328,6 +329,7 @@ DEPENDENCIES
   mini_magick
   minitest
   mocha
+  mock_redis
   mutations!
   newrelic-grape
   newrelic_rpm
