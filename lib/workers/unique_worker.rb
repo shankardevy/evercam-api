@@ -7,7 +7,7 @@ class UniqueQueueWorker
     @args = args
   end
 
-  def self.perform_async(queue, worker, *args)
+  def self.enqueue_if_unique(queue, worker, *args)
     q = new(queue, worker, *args)
     q.enqueue unless q.exists?
   end

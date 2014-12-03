@@ -18,9 +18,13 @@ module Evercam
 
     TIMEOUT = 5
 
+    def self.enqueue(queue, camera_name)
+      UniqueQueueWorker.enqueue_if_unique(queue, self, camera_name)
+    end
+
     def self.enqueue_all
       Camera.select(:exid).each do |r|
-        UniqueQueueWorker.perform_async('heartbeat', Evercam::HeartbeatWorker, r[:exid])
+        UniqueQueueWorker.enqueue_if_unique('heartbeat', self, r[:exid])
       end
     end
 
@@ -107,12 +111,12 @@ module Evercam
         end
         trigger_webhook(camera)
         camera.update(updates)
-        CacheInvalidationWorker.perform_async(camera.exid)
+        CacheInvalidationWorker.enqueue(camera.exid)
         Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          UniqueQueueWorker.perform_async('frequent', Evercam::HeartbeatWorker, camera_name)
+          Evercam::HeartbeatWorker.enqueue('frequent', camera_name)
         else
-          UniqueQueueWorker.perform_async('heartbeat', Evercam::HeartbeatWorker, camera_name)
+          Evercam::HeartbeatWorker.enqueue('heartbeat', camera_name)
         end
       rescue => e
         # we weren't expecting this (famous last words)
