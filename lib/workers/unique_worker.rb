@@ -17,14 +17,10 @@ class UniqueQueueWorker
   end
 
   def exists?
-    exists = false
-    sidekiq_queue = Sidekiq::Queue.new(queue)
-    sidekiq_queue.each do |job|
-      if job.klass == worker.to_s && job.args == args
-        exists = true
-        break
-      end
+    #OPTIMIZE: this is a O(N) operation, it should be optimized if it becomes a bottleneck
+    #https://github.com/mperham/sidekiq/issues/2025#issuecomment-61182277
+    Sidekiq::Queue.new(queue).any? do |job|
+      job.klass == worker.to_s && job.args == args && job.queue == queue
     end
-    exists
   end
 end

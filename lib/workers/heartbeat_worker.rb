@@ -18,13 +18,13 @@ module Evercam
 
     TIMEOUT = 5
 
-    def self.enqueue(queue, camera_name)
-      UniqueQueueWorker.enqueue_if_unique(queue, self, camera_name)
+    def self.enqueue(queue, camera_exid)
+      UniqueQueueWorker.enqueue_if_unique(queue, self, camera_exid)
     end
 
     def self.enqueue_all
-      Camera.select(:exid).each do |r|
-        UniqueQueueWorker.enqueue_if_unique('heartbeat', self, r[:exid])
+      Camera.select(:exid).each do |camera|
+        UniqueQueueWorker.enqueue_if_unique('heartbeat', self, camera.exid)
       end
     end
 
@@ -76,10 +76,10 @@ module Evercam
       updates
     end
 
-    def perform(camera_name)
-      logger.info("Started update for camera #{camera_name}")
+    def perform(camera_exid)
+      logger.info("Started update for camera #{camera_exid}")
       instant = Time.now
-      camera = Camera.by_exid(camera_name)
+      camera = Camera.by_exid(camera_exid)
       return if camera.nil?
       updates = { is_online: false, last_polled_at: instant }
 
@@ -111,11 +111,11 @@ module Evercam
       trigger_webhook(camera)
       camera.update(updates)
       CacheInvalidationWorker.enqueue(camera.exid)
-      Evercam::Services.dalli_cache.set(camera_name, camera, 0)
-      if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-        Evercam::HeartbeatWorker.enqueue('frequent', camera_name)
+      Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+      if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_exid
+        Evercam::HeartbeatWorker.enqueue('frequent', camera_exid)
       else
-        Evercam::HeartbeatWorker.enqueue('heartbeat', camera_name)
+        Evercam::HeartbeatWorker.enqueue('heartbeat', camera_exid)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
