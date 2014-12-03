@@ -3,6 +3,7 @@ require 'faraday'
 require 'mini_magick'
 require 'faraday/digestauth'
 require 'dalli'
+require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
 
@@ -12,15 +13,18 @@ module Evercam
     include Evercam::CacheHelper
     include Sidekiq::Worker
 
-    sidekiq_options retry: false
+    sidekiq_options retry: 10
     sidekiq_options queue: :heartbeat
-    sidekiq_options unique: true
 
     TIMEOUT = 5
 
-    def self.run
+    def self.enqueue(queue, camera_name)
+      UniqueQueueWorker.enqueue_if_unique(queue, self, camera_name)
+    end
+
+    def self.enqueue_all
       Camera.select(:exid).each do |r|
-        perform_async(r[:exid])
+        UniqueQueueWorker.enqueue_if_unique('heartbeat', self, r[:exid])
       end
     end
 
@@ -82,42 +86,36 @@ module Evercam
       unless camera.external_url.nil?
         updates = snap_request(camera, updates, instant)
       end
-      begin
-        if camera.is_online and not updates[:is_online]
-          # Try one more time, some cameras are dumb
-          updates = snap_request(camera, updates, instant)
-          unless updates[:is_online]
-            CameraActivity.create(
-              camera: camera,
-              access_token: nil,
-              action: 'offline',
-              done_at: Time.now,
-              ip: nil
-            )
-          end
-        end
-        if not camera.is_online and updates[:is_online]
+      if camera.is_online and not updates[:is_online]
+        # Try one more time, some cameras are dumb
+        updates = snap_request(camera, updates, instant)
+        unless updates[:is_online]
           CameraActivity.create(
             camera: camera,
             access_token: nil,
-            action: 'online',
+            action: 'offline',
             done_at: Time.now,
             ip: nil
           )
         end
-        trigger_webhook(camera)
-        camera.update(updates)
-        CacheInvalidationWorker.perform_async(camera.exid)
-        Evercam::Services.dalli_cache.set(camera_name, camera, 0)
-        if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          Sidekiq::Client.push({ 'queue' => 'frequent', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
-        else
-          Sidekiq::Client.push({ 'queue' => 'heartbeat', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
-        end
-      rescue => e
-        # we weren't expecting this (famous last words)
-        logger.warn(e.message)
-        logger.warn(e.backtrace.inspect)
+      end
+      if not camera.is_online and updates[:is_online]
+        CameraActivity.create(
+          camera: camera,
+          access_token: nil,
+          action: 'online',
+          done_at: Time.now,
+          ip: nil
+        )
+      end
+      trigger_webhook(camera)
+      camera.update(updates)
+      CacheInvalidationWorker.enqueue(camera.exid)
+      Evercam::Services.dalli_cache.set(camera_name, camera, 0)
+      if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
+        Evercam::HeartbeatWorker.enqueue('frequent', camera_name)
+      else
+        Evercam::HeartbeatWorker.enqueue('heartbeat', camera_name)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
@@ -125,7 +123,7 @@ module Evercam
     def trigger_webhook(camera)
       webhooks = Webhook.where(camera_id: camera.id).all
       return if webhooks.empty?
-      
+
       webhooks.each do |webhook|
         hook_conn = Faraday.new(:url => webhook.url) do |faraday|
           faraday.adapter Faraday.default_adapter
@@ -141,8 +139,7 @@ module Evercam
         }
 
         hook_conn.post '', parameters.to_s
-      end 
+      end
     end
   end
 end
-

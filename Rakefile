@@ -47,22 +47,13 @@ namespace :workers do
   require 'evercam_models'
   require_relative 'lib/workers'
 
-  task :enable do
-    Evercam::ScheduleWorker.enable
-  end
-
-  task :disable do
-    Evercam::ScheduleWorker.disable
-  end
-
   task :heartbeat do
-    Evercam::HeartbeatWorker.run
+    Evercam::HeartbeatWorker.enqueue_all
   end
 
   task :hb_single, [:arg1] do |t, args|
     Evercam::HeartbeatWorker.perform_async(args.arg1)
   end
-
 end
 
 namespace :tmp do
