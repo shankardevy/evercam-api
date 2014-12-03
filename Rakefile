@@ -56,7 +56,7 @@ namespace :workers do
   end
 
   task :heartbeat do
-    Evercam::HeartbeatWorker.run
+    Evercam::HeartbeatWorker.enqueue_all
   end
 
   task :hb_single, [:arg1] do |t, args|

@@ -3,6 +3,7 @@ require 'faraday'
 require 'mini_magick'
 require 'faraday/digestauth'
 require 'dalli'
+require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
 
@@ -14,13 +15,12 @@ module Evercam
 
     sidekiq_options retry: false
     sidekiq_options queue: :heartbeat
-    sidekiq_options unique: true
 
     TIMEOUT = 5
 
-    def self.run
+    def self.enqueue_all
       Camera.select(:exid).each do |r|
-        perform_async(r[:exid])
+        UniqueQueueWorker.perform_async('heartbeat', Evercam::HeartbeatWorker, r[:exid])
       end
     end
 
@@ -110,9 +110,9 @@ module Evercam
         CacheInvalidationWorker.perform_async(camera.exid)
         Evercam::Services.dalli_cache.set(camera_name, camera, 0)
         if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          Sidekiq::Client.push({ 'queue' => 'frequent', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
+          UniqueQueueWorker.perform_async('frequent', Evercam::HeartbeatWorker, camera_name)
         else
-          Sidekiq::Client.push({ 'queue' => 'heartbeat', 'class' => Evercam::HeartbeatWorker, 'args' => [camera_name] })
+          UniqueQueueWorker.perform_async('heartbeat', Evercam::HeartbeatWorker, camera_name)
         end
       rescue => e
         # we weren't expecting this (famous last words)
@@ -125,7 +125,7 @@ module Evercam
     def trigger_webhook(camera)
       webhooks = Webhook.where(camera_id: camera.id).all
       return if webhooks.empty?
-      
+
       webhooks.each do |webhook|
         hook_conn = Faraday.new(:url => webhook.url) do |faraday|
           faraday.adapter Faraday.default_adapter
@@ -141,8 +141,7 @@ module Evercam
         }
 
         hook_conn.post '', parameters.to_s
-      end 
+      end
     end
   end
 end
-

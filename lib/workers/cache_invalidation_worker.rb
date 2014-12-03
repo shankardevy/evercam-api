@@ -8,7 +8,6 @@ module Evercam
     include Sidekiq::Worker
 
     sidekiq_options queue: :cache
-    sidekiq_options unique: true
 
     def perform(camera_exid)
       begin
