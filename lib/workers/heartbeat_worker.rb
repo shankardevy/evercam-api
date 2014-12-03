@@ -13,7 +13,7 @@ module Evercam
     include Evercam::CacheHelper
     include Sidekiq::Worker
 
-    sidekiq_options retry: false
+    sidekiq_options retry: 10
     sidekiq_options queue: :heartbeat
 
     TIMEOUT = 5
@@ -86,42 +86,36 @@ module Evercam
       unless camera.external_url.nil?
         updates = snap_request(camera, updates, instant)
       end
-      begin
-        if camera.is_online and not updates[:is_online]
-          # Try one more time, some cameras are dumb
-          updates = snap_request(camera, updates, instant)
-          unless updates[:is_online]
-            CameraActivity.create(
-              camera: camera,
-              access_token: nil,
-              action: 'offline',
-              done_at: Time.now,
-              ip: nil
-            )
-          end
-        end
-        if not camera.is_online and updates[:is_online]
+      if camera.is_online and not updates[:is_online]
+        # Try one more time, some cameras are dumb
+        updates = snap_request(camera, updates, instant)
+        unless updates[:is_online]
           CameraActivity.create(
             camera: camera,
             access_token: nil,
-            action: 'online',
+            action: 'offline',
             done_at: Time.now,
             ip: nil
           )
         end
-        trigger_webhook(camera)
-        camera.update(updates)
-        CacheInvalidationWorker.enqueue(camera.exid)
-        Evercam::Services.dalli_cache.set(camera_name, camera, 0)
-        if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
-          Evercam::HeartbeatWorker.enqueue('frequent', camera_name)
-        else
-          Evercam::HeartbeatWorker.enqueue('heartbeat', camera_name)
-        end
-      rescue => e
-        # we weren't expecting this (famous last words)
-        logger.warn(e.message)
-        logger.warn(e.backtrace.inspect)
+      end
+      if not camera.is_online and updates[:is_online]
+        CameraActivity.create(
+          camera: camera,
+          access_token: nil,
+          action: 'online',
+          done_at: Time.now,
+          ip: nil
+        )
+      end
+      trigger_webhook(camera)
+      camera.update(updates)
+      CacheInvalidationWorker.enqueue(camera.exid)
+      Evercam::Services.dalli_cache.set(camera_name, camera, 0)
+      if ["carrollszoocam", "gpocam", "wayra-office"].include? camera_name
+        Evercam::HeartbeatWorker.enqueue('frequent', camera_name)
+      else
+        Evercam::HeartbeatWorker.enqueue('heartbeat', camera_name)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
