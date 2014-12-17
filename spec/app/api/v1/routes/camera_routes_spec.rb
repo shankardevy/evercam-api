@@ -291,7 +291,7 @@ describe 'API routes/cameras' do
         expect(data['dyndns']['rtsp']['h264']).to eq("rtsp://#{camera.exid}.evr.cm/h264")
         expect(data['internal']['rtsp']['h264']).to eq('rtsp://1.1.1.1/h264')
         expect(data['internal']['rtsp']['port']).to eq("")
-        expect(data['proxy_url']['hls']).to eq("")
+        # expect(data['proxy_url']['hls']).to eq("")
         expect(data['proxy_url']['rtmp']).to eq("")
       end
 
