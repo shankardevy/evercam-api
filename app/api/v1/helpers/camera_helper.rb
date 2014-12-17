@@ -39,12 +39,12 @@ module Evercam
     
     def hls_url_for_camera(camera)
       rtsp_url = rtsp_url_for_camera(camera)
-      Evercam::Config[:hls][:base_path] + "/hls/m3u8_" + URI.escape(rtsp_url, ":/?.") unless rtsp_url.nil?
+      Evercam::Config[:streams][:hls_path] + "/live/" + CGI.escape(rtsp_url) unless rtsp_url.nil?
     end
-    
+
     def rtmp_url_for_camera(camera)
       rtsp_url = rtsp_url_for_camera(camera)
-      Evercam::Config[:hls][:base_path] + "/hls/rtmp_" + URI.escape(rtsp_url, ":/?.") unless rtsp_url.nil?
+      Evercam::Config[:streams][:rtmp_path] + "/live/" + CGI.escape(rtsp_url) unless rtsp_url.nil?
     end
   end
 end
