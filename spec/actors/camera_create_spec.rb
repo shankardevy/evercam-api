@@ -1,4 +1,4 @@
-require 'data_helper'
+require_relative '../../spec/data_helper'
 
 module Evercam
   module Actors
