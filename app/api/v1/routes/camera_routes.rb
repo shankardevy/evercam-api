@@ -41,7 +41,7 @@ module Evercam
       end
       if response.success?
         data = Base64.encode64(response.body).gsub("\n", '')
-        { status: 'ok', data: "data:#{response.headers.fetch('content-type', 'image/jpg')};base64,#{data}"}
+        { status: 'ok', data: "data:#{response.headers.fetch('content-type', 'image/jpg').gsub(/\s+/, '').gsub("\"", "'") };base64,#{data}"}
       elsif response.status == 401
         raise AuthorizationError, 'Please check camera username and password'
       else
