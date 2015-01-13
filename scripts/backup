@@ -1,4 +1,4 @@
 #!/bin/sh
 
-heroku pgbackups:capture -a obscure-brook-6377 --expire
+heroku pgbackups:capture -a evercam-api --expire
 
