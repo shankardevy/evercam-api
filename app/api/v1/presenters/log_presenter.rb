@@ -16,7 +16,7 @@ module Evercam
         elsif c.access_token.user.present?
           c.access_token.user.fullname
         elsif c.access_token.client.present?
-          c.access_token.client.exid
+          c.access_token.client.name
         end
       end
 
