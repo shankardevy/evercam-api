@@ -42,7 +42,7 @@ module Evercam
                         "Unable to locate the '#{params[:id]}' user.",
                         params[:id])
           end
-          key = "user/cameras/#{params[:id]}/#{params[:include_shared]}/#{params[:thumbnail]}"
+          key = "user|cameras|#{params[:id]}|#{params[:include_shared]}|#{params[:thumbnail]}"
           cameras = Evercam::Services.dalli_cache.get(key)
           if cameras.nil?
             query = Camera.where(owner: user)
