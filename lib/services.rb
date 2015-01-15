@@ -5,7 +5,7 @@ module Evercam
     mattr_accessor :dalli_cache
     mattr_accessor :s3_bucket
 
-    options = { :namespace => "app_v1", :compress => true, :expires_in => 300 }
+    options = { :namespace => "app_v1", :compress => true, :expires_in => 300, value_max_bytes: 2000000 }
     if ENV["MEMCACHEDCLOUD_SERVERS"]
       self.dalli_cache = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
     else
