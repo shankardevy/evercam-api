@@ -38,19 +38,6 @@ describe 'API routes/models' do
             to eq([model0.exid, model1.exid])
       end
     end
-
-    context 'for an unauthenticated request' do
-      before(:each) { get('/models/search') }
-
-      let(:json) { last_response.json['models'] }
-
-      it 'returns an unauthenticated error' do
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
   end
 
   describe 'GET /models/search/:id' do
@@ -76,21 +63,5 @@ describe 'API routes/models' do
             to eq([vendor0.exid])
       end
     end
-
-    context 'for an unauthenticated request' do
-      before(:each) { get('/models/search') }
-
-      let(:json) { last_response.json['models'] }
-
-      it 'returns an unauthenticated error' do
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
   end
-
-
 end
-

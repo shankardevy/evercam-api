@@ -29,19 +29,6 @@ describe 'API routes/vendors' do
         expect(json[0]).to have_keys('id', 'name', 'known_macs')
       end
     end
-
-    context 'for an unauthenticated request' do
-      before(:each) { get('/vendors/search') }
-
-      let(:json) { last_response.json['vendors'] }
-
-      it 'returns an unauthenticated error' do
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
   end
 
   describe 'GET /vendors/search/:id' do
@@ -66,21 +53,5 @@ describe 'API routes/vendors' do
         expect(json[0]['id']).to eq(vendor0.exid)
       end
     end
-
-    context 'for an unauthenticated request' do
-      before(:each) { get('/vendors/search') }
-
-      let(:json) { last_response.json['vendors'] }
-
-      it 'returns an unauthenticated error' do
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
   end
-
-
 end
-

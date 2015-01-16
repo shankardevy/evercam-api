@@ -5,10 +5,6 @@ module Evercam
 
     include WebErrors
 
-    before do
-      authorize!
-    end
-
     desc 'Returns all known IP hardware vendors', {
         entity: Evercam::Presenters::Vendor
     }
