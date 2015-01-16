@@ -7,10 +7,6 @@ module Evercam
 
     DEFAULT_LIMIT = 25
 
-    before do
-      authorize!
-    end
-
     desc 'Returns set of known models for a supported camera vendor', {
       entity: Evercam::Presenters::Model
     }
