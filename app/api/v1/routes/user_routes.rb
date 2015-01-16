@@ -138,15 +138,12 @@ module Evercam
         include SessionHelper
       end
 
-      before do
-        authorize!
-      end
-
       #-------------------------------------------------------------------------
       # GET /v1/users/:id
       #-------------------------------------------------------------------------
       desc 'Returns available information for the user'
       get '/:id', requirements: { id: /[^\/]*/ } do
+        authorize!
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
@@ -175,6 +172,7 @@ module Evercam
         optional :email, type: String, desc: "Email"
       end
       patch '/:id', requirements: { id: /[^\/]*/ } do
+        authorize!
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
@@ -198,6 +196,7 @@ module Evercam
         entity: Evercam::Presenters::User
       }
       delete '/:id', requirements: { id: /[^\/]*/ } do
+        authorize!
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')

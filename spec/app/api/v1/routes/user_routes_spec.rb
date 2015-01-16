@@ -535,43 +535,6 @@ describe 'API routes/users' do
         end
       end
     end
-
-    context 'when no authentication details are provided' do
-      it 'returns an unauthenticated error' do
-        parameters.delete(:api_id)
-        parameters.delete(:api_key)
-        get("/users/#{user.username}/credentials", parameters)
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data).not_to be_nil
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
-
-    context 'when an non-existent API id is specified' do
-      it 'returns an unauthenticated error' do
-        parameters[:api_id] = 'blah'
-        get("/users/#{user.username}/credentials", parameters)
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data).not_to be_nil
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
-
-    context 'when the API key does not match the API id specified' do
-      it 'returns an unauthenticated error' do
-        parameters[:api_key] = 'blah'
-        get("/users/#{user.username}/credentials", parameters)
-        expect(last_response.status).to eq(401)
-        data = last_response.json
-        expect(data).not_to be_nil
-        expect(data.include?("message")).to eq(true)
-        expect(data["message"]).to eq("Unauthenticated")
-      end
-    end
   end
 
 end
