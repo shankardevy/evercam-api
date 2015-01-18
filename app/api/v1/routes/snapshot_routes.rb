@@ -55,7 +55,7 @@ module Evercam
             require 'openssl'
             require 'base64'
             auth = camera.config.fetch('auth', {}).fetch('basic', '')
-            if auth != ''
+            if auth != '' and auth != {'username'=>'', 'password'=>''}
               auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
             end
             c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
@@ -81,7 +81,7 @@ module Evercam
               ip: request.ip
             )
 
-            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.strict_encode64(t)}"
+            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.urlsafe_encode64(t)}"
           end
         end
       end
