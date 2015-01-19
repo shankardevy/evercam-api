@@ -44,6 +44,10 @@
   :mail:
     :from: evercam.io <support@evercam.io>
     :via: :sendmail
+  :snapshots:
+    :url: http://localhost:4000/
+    :key: <%= ENV['SNAP_KEY'] %>
+    :iv: <%= ENV['SNAP_IV'] %>
 
 :test:
   <<: *defaults
