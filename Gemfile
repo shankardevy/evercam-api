@@ -59,12 +59,7 @@ gem 'racksh'
 
 group :development do
   gem 'fakes3'
-  gem 'sqlite3'
-  gem 'shotgun'
   gem 'thin'
-  gem 'rerun'
-  gem 'debase'
-  gem 'ruby-debug-ide'
   gem 'pry-rescue'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
