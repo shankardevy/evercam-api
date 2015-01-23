@@ -58,6 +58,7 @@
   :database: <%= ENV['DATABASE_URL'] %>
   :api:
     :ssl:
+      :timeout: 5
       :force_secure_cookies: false
       :redirect_html: "Sorry, all API calls must be made via https. Redirecting...\n"
   :cookies:
