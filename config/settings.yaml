@@ -57,8 +57,8 @@
   <<: *defaults
   :database: <%= ENV['DATABASE_URL'] %>
   :api:
+    :timeout: 5
     :ssl:
-      :timeout: 5
       :force_secure_cookies: false
       :redirect_html: "Sorry, all API calls must be made via https. Redirecting...\n"
   :cookies:
@@ -87,6 +87,7 @@
 :staging:
   <<: *production
   :api:
+    :timeout: 5
     :ssl:
       :only_environments: production
   :cookies:
