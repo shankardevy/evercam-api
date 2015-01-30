@@ -112,7 +112,18 @@ module Evercam
       camera.update(updates)
       CacheInvalidationWorker.enqueue(camera.exid)
       Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
-      if ["carrollszoocam", "gpocam", "wayra-office", "wayra-agora", "wayrahikvision", "zipyard-navan-foh", "zipyard-ranelagh-foh"].include? camera_exid
+      if [
+        "carrollszoocam",
+        "gpocam",
+        "wayra-office",
+        "wayra-agora",
+        "wayrahikvision",
+        "zipyard-navan-foh",
+        "zipyard-ranelagh-foh",
+        "ndrc-main",
+        "ndrc-foodcam",
+        "gemcon-cathalbrugha"
+      ].include? camera_exid
         Evercam::HeartbeatWorker.enqueue('frequent', camera_exid)
       elsif "bennett" == camera_exid
         Evercam::HeartbeatWorker.enqueue('bennett', camera_exid)
