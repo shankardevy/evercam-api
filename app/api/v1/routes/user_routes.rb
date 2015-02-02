@@ -111,6 +111,13 @@ module Evercam
           end
         end
 
+        share_requests = CameraShareRequest.where(email: user.email).all
+        unless share_requests.blank?
+          share_requests.each do |share_request|
+            Actors::ShareCreateForRequest.run({key: share_request.key, email: user.email})
+          end
+        end
+
         present Array(user), with: Presenters::User
       end
     end
