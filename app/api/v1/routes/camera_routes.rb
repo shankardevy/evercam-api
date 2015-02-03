@@ -159,7 +159,7 @@ module Evercam
                 )
               end
             end
-            Evercam::Services.dalli_cache.set(key, cameras)
+            # Evercam::Services.dalli_cache.set(key, cameras)
           end
         end
         {cameras: cameras}
