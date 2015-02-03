@@ -14,10 +14,10 @@ describe 'API routes/vendors' do
   let(:api_keys) { {api_id: user.api_id, api_key: user.api_key} }
 
 
-  describe 'GET /vendors/search' do
+  describe 'GET /vendors' do
 
     context 'for an authenticated request' do
-      before(:each) { get('/vendors/search', api_keys) }
+      before(:each) { get('/vendors', api_keys) }
 
       let(:json) { last_response.json['vendors'] }
 
@@ -31,12 +31,12 @@ describe 'API routes/vendors' do
     end
   end
 
-  describe 'GET /vendors/search/:id' do
+  describe 'GET /vendors/:id' do
 
     context 'for an authenticated request' do
       before(:each) do
         params = api_keys.merge(:vendor_id => vendor0.exid)
-        get('/vendors/search', params)
+        get('/vendors', params)
       end
 
       let(:json) { last_response.json['vendors'] }

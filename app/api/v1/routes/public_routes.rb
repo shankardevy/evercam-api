@@ -5,19 +5,19 @@ module Evercam
   class V1PublicRoutes < Grape::API
     include WebErrors
 
-    DEFAULT_OFFSET         = 0
-    DEFAULT_LIMIT          = 100
-    MAXIMUM_LIMIT          = 1000
-    DEFAULT_DISTANCE       = 1000
+    DEFAULT_OFFSET = 0
+    DEFAULT_LIMIT = 100
+    MAXIMUM_LIMIT = 1000
+    DEFAULT_DISTANCE = 1000
 
     resource :public do
       resource :cameras do
         #-------------------------------------------------------------------
-        # GET /public/cameras
+        # GET /v1/public/cameras
         #-------------------------------------------------------------------
         desc "Fetch a list of publicly discoverable cameras from within the Evercam system.", {
-          entity: Evercam::Presenters::Camera
-        }
+            entity: Evercam::Presenters::Camera
+          }
         params do
           optional :offset, type: Integer, desc: "The offset into the list of cameras to start the fetch from. Defaults to #{DEFAULT_OFFSET}."
           optional :limit, type: Integer, desc: "The maximum number of cameras to retrieve. Defaults to #{DEFAULT_LIMIT}, cannot be more than #{MAXIMUM_LIMIT}."
@@ -30,22 +30,28 @@ module Evercam
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
         end
         get do
-          params_copy = params.clone
-          params_copy.delete(:route_info)
-          cache_key = "public|#{params_copy.flatten.join('|')}"
-          query_result = Evercam::Services.dalli_cache.get(cache_key)
-          total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
+          # NOTE: Disabled cache temporarily because data is too big to be cached currently (when thumbnail=true)
+
+          # params_copy = params.clone
+          # params_copy.delete(:route_info)
+          # cache_key = "public|#{params_copy.flatten.join('|')}"
+          # query_result = Evercam::Services.dalli_cache.get(cache_key)
+          # total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
+          query_result = nil
+          total_pages = nil
           if query_result.nil? or total_pages.nil?
             query = Camera.where(is_public: true, discoverable: true)
             unless params[:thumbnail]
-              query = query.select(Sequel.qualify(:cameras, :id),
-                    Sequel.qualify(:cameras, :created_at),
-                    Sequel.qualify(:cameras, :updated_at),
-                    :exid,
-                    :owner_id, :is_public, :config,
-                    :name, :last_polled_at, :is_online,
-                    :timezone, :last_online_at, :location,
-                    :mac_address, :model_id, :discoverable)
+              query = query.select(
+                Sequel.qualify(:cameras, :id),
+                Sequel.qualify(:cameras, :created_at),
+                Sequel.qualify(:cameras, :updated_at),
+                :exid,
+                :owner_id, :is_public, :config,
+                :name, :last_polled_at, :is_online,
+                :timezone, :last_online_at, :location,
+                :mac_address, :model_id, :discoverable
+              )
             end
             case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
             is_like = case_sensitive ? :like : :ilike
@@ -68,23 +74,22 @@ module Evercam
 
             offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
             query = query.offset(offset).limit(limit)
-            query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
-            Evercam::Services.dalli_cache.set(cache_key, query_result)
-            Evercam::Services.dalli_cache.set("#{cache_key}|pages", total_pages)
+            query_result = query.eager(:owner).eager(:vendor_model => :vendor).all.to_a
+            # Evercam::Services.dalli_cache.set(cache_key, query_result)
+            # Evercam::Services.dalli_cache.set("#{cache_key}|pages", total_pages)
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-            :pages => total_pages
-          })
+              :pages => total_pages
+            })
         end
-      end
 
         #-------------------------------------------------------------------
-        # GET /public/nearest
+        # GET /v1/public/cameras/nearest
         #-------------------------------------------------------------------
         desc "Fetch nearest publicly discoverable camera from within the Evercam system."\
              "If location isn't provided requester's IP address is used.", {
             entity: Evercam::Presenters::Camera
-        }
+          }
         params do
           optional :near_to, type: String, desc: "Specify an address or latitude longitude points."
         end
@@ -97,17 +102,17 @@ module Evercam
           begin
             if params[:near_to]
               location = {
-                  latitude: Geocoding.as_point(params[:near_to]).y,
-                  longitude: Geocoding.as_point(params[:near_to]).x
+                latitude: Geocoding.as_point(params[:near_to]).y,
+                longitude: Geocoding.as_point(params[:near_to]).x
               }
               location_message = "Successfully Geocoded #{params[:near_to]} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
             else
               if request.location
-              location = {
+                location = {
                   latitude: request.location.latitude,
                   longitude: request.location.longitude
-              }
-              location_message = "Successfully Geocoded IP Address #{request.location.ip} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
+                }
+                location_message = "Successfully Geocoded IP Address #{request.location.ip} as LAT: #{location[:latitude]} LNG: #{location[:longitude]}"
               else
                 raise_error(400, 400, "There was an error decoding your IP address. Please try specifying a location using near_to parameter.")
               end
@@ -123,13 +128,14 @@ module Evercam
               raise_error(400, 400, "Location is missing")
             end
 
-            query_result = query.eager(:owner).eager(:vendor_model=>:vendor).all.to_a
+            query_result = query.eager(:owner).eager(:vendor_model => :vendor).all.to_a
             Evercam::Services.dalli_cache.set(cache_key, query_result)
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: true).merge!({
-            message: location_message
-          })
+              message: location_message
+            })
         end
+      end
     end
   end
 end

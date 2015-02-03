@@ -22,60 +22,6 @@ module Evercam
     end
 
     resource :users do
-      route_param :id, requirements: { id: /[^\/]*/ } do
-        #-----------------------------------------------------------------------
-        # GET /v1/users/:id/cameras
-        #-----------------------------------------------------------------------
-        desc 'Returns the set of cameras associated with a user', {
-          entity: Evercam::Presenters::Camera
-        }
-        params do
-          requires :id, type: String, desc: "The Username or email address of the user."
-          optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
-          optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
-        end
-        get :cameras do
-          authreport!('users/cameras/get')
-          user = ::User.by_login(params[:id])
-          if user.nil?
-            raise_error(404, "user_not_found",
-                        "Unable to locate the '#{params[:id]}' user.",
-                        params[:id])
-          end
-          key = "user|cameras|#{params[:id]}|#{params[:include_shared]}|#{params[:thumbnail]}"
-          cameras = Evercam::Services.dalli_cache.get(key)
-          if cameras.nil?
-            query = Camera.where(owner: user)
-            if params[:include_shared]
-              query = query.association_left_join(:shares).or(Sequel.qualify(:shares,
-                                                                             :user_id) => user.id)
-              query = query.group(Sequel.qualify(:cameras, :id))
-              query = query.select(Sequel.qualify(:cameras, :id),
-                                   Sequel.qualify(:cameras, :created_at),
-                                   Sequel.qualify(:cameras, :updated_at),
-                                   :exid,
-                                   :owner_id, :is_public, :config,
-                                   :name, :last_polled_at, :is_online,
-                                   :timezone, :last_online_at, :location,
-                                   :mac_address, :model_id, :discoverable, :preview)
-            end
-
-            cameras = []
-            query.order(:name).eager(:owner, :vendor_model=>:vendor).all.select do |camera|
-              rights = requester_rights_for(camera)
-              if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
-                presenter = Evercam::Presenters::Camera.new(camera)
-                cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW),
-                                             user: caller,
-                                             thumbnail: params[:thumbnail])
-              end
-            end
-            Evercam::Services.dalli_cache.set(key, cameras)
-          end
-          {cameras: cameras}
-        end
-      end
-
       #-------------------------------------------------------------------------
       # POST /v1/users
       #-------------------------------------------------------------------------
@@ -92,7 +38,6 @@ module Evercam
         optional :share_request_key, type: String, desc: "The key for a camera share request to be processed during the sign up"
       end
       post do
-        authreport!('users/post')
         params[:country].downcase!
         outcome = Actors::UserSignup.run(params)
         if !outcome.success?
@@ -154,7 +99,6 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
-        authreport!('users/get')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -183,7 +127,6 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
-        authreport!('users/patch')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -207,7 +150,6 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
-        authreport!('users/delete')
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -223,11 +165,10 @@ module Evercam
       #-------------------------------------------------------------------------
       desc "Fetch API credentials for an authenticated user."
       params do
-        requires :id, type: String, desc: "User name for the user to fetch credentials for."
+        requires :id, type: String, desc: "User name or email for the user to fetch credentials for."
         requires :password, type: String, desc: "Password for the user to fetch credentials for."
       end
       get '/:id/credentials', requirements: { id: /[^\/]*/ } do
-        authreport!('users/credentials')
         user = User.by_login(params[:id])
         raise NotFoundError.new("No user with an id of #{params[:id]} exists.") if user.nil?
 
@@ -240,4 +181,3 @@ module Evercam
     end
   end
 end
-

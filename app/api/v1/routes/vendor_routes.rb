@@ -5,23 +5,39 @@ module Evercam
 
     include WebErrors
 
+    #---------------------------------------------------------------------------
+    # GET /v1/vendors
+    #---------------------------------------------------------------------------
     desc 'Returns all known IP hardware vendors', {
         entity: Evercam::Presenters::Vendor
-    }
+      }
     params do
-      optional :id, type: String, desc: "Unique identifier for the vendor"
       optional :name, type: String, desc: "Name of the vendor (partial search)"
       optional :mac, type: String, desc: "Mac address of camera"
     end
-    get '/vendors/search' do
-      authreport!('vendors/get')
+    get '/vendors' do
       vendors = ::Vendor.eager(:vendor_models)
       vendors = vendors.where(exid: params[:id]) unless params.fetch(:id, nil).nil?
       vendors = vendors.where(Sequel.ilike(:name, "%#{params[:name]}%")) unless params.fetch(:name, nil).nil?
-      vendors = vendors.where(%("known_macs" @> ARRAY[?]), params[:mac].upcase[0,8]) unless params.fetch(:mac, nil).nil?
+      vendors = vendors.where(%("known_macs" @> ARRAY[?]), params[:mac].upcase[0, 8]) unless params.fetch(:mac, nil).nil?
       present vendors.all, with: Presenters::Vendor, supported: true
     end
 
+    #---------------------------------------------------------------------------
+    # GET /v1/vendors/:id
+    #---------------------------------------------------------------------------
+    desc 'Returns available information for the specified vendor', {
+        entity: Evercam::Presenters::Vendor
+      }
+    params do
+      requires :id, type: String, desc: "Unique identifier for the vendor"
+    end
+    get '/vendors/:id' do
+      vendor = Vendor.where(exid: params[:id]).first
+      raise Evercam::NotFoundError.new("Unable to locate the '#{params[:id]}' vendor.",
+          "vendor_not_found_error", params[:id]) if vendor.blank?
+      present [vendor], with: Presenters::Vendor, supported: true
+    end
   end
 end
 

@@ -638,32 +638,6 @@ describe 'API routes/cameras' do
                         api_key: private_camera.owner.api_key}}
     let(:parameters) {{ids: "#{public_camera.exid},#{private_camera.exid},#{other_camera.exid}"}}
 
-    it 'returns an error when no ids are specified' do
-      get("/cameras")
-      expect(last_response.status).to eq(400)
-      data = last_response.json
-      expect(data.include?("message")).to eq(true)
-      expect(data["message"]).to eq("Invalid parameters specified for request.")
-      expect(data["context"]).to eq(["ids"])
-    end
-
-    it 'returns an empty list of cameras when no ids are specified' do
-      get("/cameras", {ids: ""})
-      expect(last_response.status).to eq(200)
-      data = last_response.json
-      expect(data.include?("cameras")).to eq(true)
-      expect(data["cameras"].size).to eq(0)
-    end
-
-    it 'returns only public cameras when no authentication details are provided' do
-      get("/cameras", parameters)
-      expect(last_response.status).to eq(200)
-      data = last_response.json
-      expect(data.include?("cameras")).to eq(true)
-      expect(data["cameras"].size).to eq(1)
-      expect(data["cameras"][0]["id"]).to eq(public_camera.exid)
-    end
-
     it 'returns only cameras that the user has permissions on when authentication is provided' do
       get("/cameras", parameters.merge(credentials))
       expect(last_response.status).to eq(200)

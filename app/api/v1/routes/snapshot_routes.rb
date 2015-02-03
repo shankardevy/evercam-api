@@ -38,14 +38,14 @@ module Evercam
 
     namespace :cameras do
       #-------------------------------------------------------------------
-      # GET /snapshot.jpg
+      # GET /v1/cameras/:id/live/snapshot
       #-------------------------------------------------------------------
       params do
         requires :id, type: String, desc: "Camera Id."
       end
       route_param :id do
         desc 'Returns jpg from the camera'
-        get 'snapshot.jpg' do
+        get '/live/snapshot' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
@@ -89,7 +89,7 @@ module Evercam
 
     namespace :public do
         #-------------------------------------------------------------------
-        # GET /nearest.jpg
+        # GET /v1/public/cameras/nearest/snapshot
         #-------------------------------------------------------------------
         desc "Returns jpg from nearest publicly discoverable camera from within the Evercam system."\
              "If location isn't provided requester's IP address is used.", {
@@ -97,7 +97,7 @@ module Evercam
         params do
           optional :near_to, type: String, desc: "Specify an address or latitude longitude points."
         end
-        get 'nearest.jpg' do
+        get 'cameras/nearest/snapshot' do
           begin
             if params[:near_to]
               location = {
@@ -169,6 +169,7 @@ module Evercam
 
     DEFAULT_LIMIT_WITH_DATA = 10
     DEFAULT_LIMIT_NO_DATA = 100
+    MAXIMUM_LIMIT = 1000
 
     namespace :cameras do
       params do
@@ -177,46 +178,49 @@ module Evercam
       route_param :id do
 
         #-------------------------------------------------------------------
-        # GET /cameras/:id/live
-        #-------------------------------------------------------------------
-        desc 'Returns base64 encoded jpg from the online camera'
-        get 'live' do
-          camera = get_cam(params[:id])
-
-          rights = requester_rights_for(camera)
-          raise AuthorizationError.new unless rights.allow?(AccessRight::SNAPSHOT)
-
-          if camera.is_online
-            res = Evercam::get_jpg(camera)
-            data = Base64.encode64(res.body).gsub("\n", '')
-            {
-              camera: camera.exid,
-              created_at: Time.now.to_i,
-              timezone: camera.timezone.zone,
-              data: "data:image/jpeg;base64,#{data}"
-            }
-          else
-            {message: 'camera is offline'}
-          end
-        end
-
-        #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots
+        # GET /v1/cameras/:id/recordings/snapshots
         #-------------------------------------------------------------------
         desc 'Returns the list of all snapshots currently stored for this camera'
-        get 'snapshots' do
+        params do
+          requires :id, type: String, desc: "Unique identifier for the camera"
+          optional :from, type: Integer, desc: "From Unix timestamp."
+          optional :to, type: Integer, desc: "To Unix timestamp."
+          optional :limit, type: Integer, desc: "The maximum number of cameras to retrieve. Defaults to #{DEFAULT_LIMIT_NO_DATA}, cannot be more than #{MAXIMUM_LIMIT}."
+          optional :page, type: Integer, desc: "Page number, starting from 0"
+        end
+        get 'recordings/snapshots' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-          snap_q = Snapshot.where(:camera_id => camera.id).select(:created_at, :notes).all
-          present(snap_q, with: Presenters::Snapshot).merge!({
-            timezone: camera.timezone.zone
-          })
+
+          limit = params[:limit] || DEFAULT_LIMIT_NO_DATA
+          limit = DEFAULT_LIMIT_NO_DATA if limit < 1 or limit > MAXIMUM_LIMIT
+
+          page = params[:page].to_i || 0
+          page = 0 if page < 0
+          offset = (page - 1) * limit
+          offset = 0 if offset < 0
+
+          from = Time.at(params[:from].to_i).to_s
+          to = Time.at(params[:to].to_i).to_s
+          to = Time.now.to_s if params[:to].blank?
+
+          query = Snapshot.where(:camera_id => camera.id).select(:notes, :created_at).order(:created_at).filter(:created_at => (from..to))
+
+          count = query.count
+          total_pages = count / limit
+          total_pages += 1 unless count % limit == 0
+
+          snapshots = query.limit(limit).offset(offset).all
+
+          present(snapshots, with: Presenters::Snapshot).merge!({
+              timezone: camera.timezone.zone, pages: total_pages
+            })
         end
 
         #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots/latest
+        # GET /v1/cameras/:id/recordings/snapshots/latest
         #-------------------------------------------------------------------
         desc 'Returns latest snapshot stored for this camera', {
           entity: Evercam::Presenters::Snapshot
@@ -224,7 +228,7 @@ module Evercam
         params do
           optional :with_data, type: 'Boolean', desc: "Should it send image data?"
         end
-        get 'snapshots/latest' do
+        get 'recordings/snapshots/latest' do
           camera = get_cam(params[:id])
           snapshot = camera.snapshots.order(:created_at).last
           if snapshot
@@ -241,55 +245,14 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots/range
-        #-------------------------------------------------------------------
-        desc 'Returns list of snapshots between two timestamps'
-        params do
-          requires :from, type: Integer, desc: "From Unix timestamp."
-          requires :to, type: Integer, desc: "To Unix timestamp."
-          optional :with_data, type: 'Boolean', desc: "Should it send image data?"
-          optional :limit, type: Integer, desc: "Limit number of results, default 100 with no data, 10 with data"
-          optional :page, type: Integer, desc: "Page number"
-        end
-        get 'snapshots/range' do
-          camera = get_cam(params[:id])
-
-          rights = requester_rights_for(camera)
-          raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-
-          from = Time.at(params[:from].to_i).to_s
-          to = Time.at(params[:to].to_i).to_s
-
-          limit = params[:limit]
-          if params[:with_data]
-            limit ||= DEFAULT_LIMIT_WITH_DATA
-          else
-            limit ||= DEFAULT_LIMIT_NO_DATA
-          end
-
-          offset = 0
-          if params[:page]
-            offset = (params[:page] - 1) * limit
-          end
-          snap = camera.snapshots.select_group(:notes, :created_at, :data).order(:created_at).filter(:created_at => (from..to)).limit(limit).offset(offset)
-          if params[:with_data]
-            snap = snap.select_group(:notes, :created_at, :data)
-          else
-            snap = snap.select_group(:notes, :created_at)
-          end
-
-          present Array(snap), with: Presenters::Snapshot, with_data: params[:with_data]
-        end
-
-        #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots/:year/:month/day
+        # GET /v1/cameras/:id/snapshots/:year/:month/day
         #-------------------------------------------------------------------
         desc 'Returns list of specific days in a given month which contains any snapshots'
         params do
           requires :year, type: Integer, desc: "Year, for example 2013"
           requires :month, type: Integer, desc: "Month, for example 11"
         end
-        get 'snapshots/:year/:month/days' do
+        get 'recordings/snapshots/:year/:month/days' do
           unless (1..12).include?(params[:month])
             raise BadRequestError, 'Invalid month value'
           end
@@ -311,7 +274,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots/:year/:month/:day/hours
+        # GET /v1/cameras/:id/snapshots/:year/:month/:day/hours
         #-------------------------------------------------------------------
         desc 'Returns list of specific hours in a given day which contains any snapshots'
         params do
@@ -319,7 +282,7 @@ module Evercam
           requires :month, type: Integer, desc: "Month, for example 11"
           requires :day, type: Integer, desc: "Day, for example 17"
         end
-        get 'snapshots/:year/:month/:day/hours' do
+        get 'recordings/snapshots/:year/:month/:day/hours' do
           unless (1..12).include?(params[:month])
             raise BadRequestError, 'Invalid month value'
           end
@@ -344,7 +307,7 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # GET /cameras/:id/snapshots/:timestamp
+        # GET /v1/cameras/:id/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Returns the snapshot stored for this camera closest to the given timestamp', {
           entity: Evercam::Presenters::Snapshot
@@ -354,7 +317,7 @@ module Evercam
           optional :with_data, type: 'Boolean', desc: "Should it send image data?"
           optional :range, type: Integer, desc: "Time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp)."
         end
-        get 'snapshots/:timestamp' do
+        get 'recordings/snapshots/:timestamp' do
           camera = get_cam(params[:id])
 
           snapshot = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
@@ -365,13 +328,14 @@ module Evercam
         end
 
         #-------------------------------------------------------------------
-        # POST /cameras/:id/snapshots
+        # POST /v1/cameras/:id/recordings/snapshots
         #-------------------------------------------------------------------
         desc 'Fetches a snapshot from the camera and stores it using the current timestamp'
         params do
           optional :notes, type: String, desc: "Optional text note for this snapshot"
+          optional :with_data, type: 'Boolean', desc: "Should it return image data?"
         end
-        post 'snapshots' do
+        post 'recordings/snapshots' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
@@ -390,19 +354,20 @@ module Evercam
             ip: request.ip
           )
 
-          present Array(outcome.result), with: Presenters::Snapshot
+          present Array(outcome.result), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
         #-------------------------------------------------------------------
-        # POST /cameras/:id/snapshots/:timestamp
+        # POST /v1/cameras/:id/recordings/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Stores the supplied snapshot image data for the given timestamp'
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
           requires :data, type: File, desc: "Image file."
           optional :notes, type: String, desc: "Optional text note for this snapshot"
+          optional :with_data, type: 'Boolean', desc: "Should it return image data?"
         end
-        post 'snapshots/:timestamp' do
+        post 'recordings/snapshots/:timestamp' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera)
@@ -421,17 +386,17 @@ module Evercam
             ip: request.ip
           )
 
-          present Array(outcome.result), with: Presenters::Snapshot
+          present Array(outcome.result), with: Presenters::Snapshot, with_data: params[:with_data]
         end
 
         #-------------------------------------------------------------------
-        # DELETE /cameras/:id/snapshots/:timestamp
+        # DELETE /v1/cameras/:id/recordings/snapshots/:timestamp
         #-------------------------------------------------------------------
         desc 'Deletes any snapshot for this camera which exactly matches the timestamp'
         params do
           requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
         end
-        delete 'snapshots/:timestamp' do
+        delete 'recordings/snapshots/:timestamp' do
           camera = get_cam(params[:id])
 
           rights = requester_rights_for(camera.owner, AccessRight::SNAPSHOTS)
@@ -448,10 +413,7 @@ module Evercam
           camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i)).destroy
           {}
         end
-
       end
     end
-
   end
 end
-

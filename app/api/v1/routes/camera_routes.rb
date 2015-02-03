@@ -13,7 +13,7 @@ module Evercam
     include WebErrors
 
     #---------------------------------------------------------------------------
-    # GET /cameras/test
+    # GET /v1/cameras/test
     #---------------------------------------------------------------------------
     desc 'Tests if given camera parameters are correct'
     params do
@@ -50,7 +50,7 @@ module Evercam
     end
 
     #---------------------------------------------------------------------------
-    # GET /cameras/:id
+    # GET /v1/cameras/:id
     #---------------------------------------------------------------------------
     desc 'Returns all data for a given camera', {
       entity: Evercam::Presenters::Camera
@@ -60,7 +60,6 @@ module Evercam
       optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
     end
     get '/cameras/:id' do
-      authreport!('cameras/get')
 
       camera = get_cam(params[:id])
       rights = requester_rights_for(camera)
@@ -77,50 +76,97 @@ module Evercam
         ip: request.ip
       )
 
-    options = {minimal: !rights.allow?(AccessRight::VIEW),
-                 with: Presenters::Camera,
-                 thumbnail: params[:thumbnail]}
+      options = {
+        minimal: !rights.allow?(AccessRight::VIEW),
+        with: Presenters::Camera,
+        thumbnail: params[:thumbnail]
+      }
       options[:user] = rights.requester unless rights.requester.nil?
       present([camera], options)
     end
 
-    #---------------------------------------------------------------------------
-    # GET /cameras
-    #---------------------------------------------------------------------------
-    desc "Returns data for a specified set of cameras. The ultimate intention "\
-         "would be to expand this functionality to be a more general search. "\
-         "The current implementation is as a basic absolute match list capability.", {
-      entity: Evercam::Presenters::Camera
-    }
-    params do
-      requires :ids, type: String, desc: "Comma separated list of camera identifiers for the cameras being queried."
-      optional :api_id, type: String, desc: "Caller API id used to authenticate the request."
-      optional :api_key, type: String, desc: "Caller API key used to authenticate the request."
-    end
-    get '/cameras' do
-      authreport!('cameras/get')
-
-      cameras = []
-      if params.include?(:ids) && params[:ids]
-        ids = params[:ids].split(",").inject([]) {|list, entry| list << entry.strip}
-        Camera.where(exid: ids).each do |camera|
-          rights = requester_rights_for(camera)
-          if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
-            presenter = Evercam::Presenters::Camera.new(camera)
-            cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW))
-          end
-        end
-      end
-      {cameras: cameras}
-    end
 
     resource :cameras do
       before do
         authorize!
       end
 
+      #---------------------------------------------------------------------------
+      # GET /v1/cameras
+      #---------------------------------------------------------------------------
+      desc "Returns data for a specified set of cameras.", {
+        entity: Evercam::Presenters::Camera
+      }
+      params do
+        optional :ids, type: String, desc: "Comma separated list of camera identifiers for the cameras being queried."
+        optional :user_id, type: String, desc: "The Evercam user name or email address for the new camera owner."
+        optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
+        optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
+      end
+      get do
+        if params.include?(:ids) && params[:ids]
+          cameras = []
+          ids = params[:ids].split(",").inject([]) { |list, entry| list << entry.strip }
+          Camera.where(exid: ids).each do |camera|
+            rights = requester_rights_for(camera)
+            if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
+              presenter = Evercam::Presenters::Camera.new(camera)
+              cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW))
+            end
+          end
+        else
+          if params.include?(:user_id) && params[:user_id]
+            user = ::User.by_login(params[:user_id])
+            if user.nil?
+              raise_error(404, "user_not_found",
+                "Unable to locate the '#{params[:user_id]}' user.",
+                params[:user_id])
+            end
+          else
+            user = ::User.where(api_id: params[:api_id], api_key: params[:api_key]).first
+          end
+
+          key = "cameras|#{user.username}|#{params[:include_shared]}|#{params[:thumbnail]}"
+          cameras = Evercam::Services.dalli_cache.get(key)
+
+          if cameras.blank?
+            cameras = []
+            query = Camera.where(owner: user)
+            if params[:include_shared]
+              query = query.association_left_join(:shares)
+                        .or(Sequel.qualify(:shares, :user_id) => user.id)
+              query = query.group(Sequel.qualify(:cameras, :id))
+              query = query.select(
+                Sequel.qualify(:cameras, :id),
+                Sequel.qualify(:cameras, :created_at),
+                Sequel.qualify(:cameras, :updated_at),
+                :exid,
+                :owner_id, :is_public, :config,
+                :name, :last_polled_at, :is_online,
+                :timezone, :last_online_at, :location,
+                :mac_address, :model_id, :discoverable, :preview
+              )
+            end
+
+            query.order(:name).eager(:owner, :vendor_model => :vendor).all.select do |camera|
+              rights = requester_rights_for(camera)
+              if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
+                presenter = Evercam::Presenters::Camera.new(camera)
+                cameras << presenter.as_json(
+                  minimal: !rights.allow?(AccessRight::VIEW),
+                  user: caller,
+                  thumbnail: params[:thumbnail]
+                )
+              end
+            end
+            Evercam::Services.dalli_cache.set(key, cameras)
+          end
+        end
+        {cameras: cameras}
+      end
+
       #-------------------------------------------------------------------------
-      # POST /cameras
+      # POST /v1/cameras
       #-------------------------------------------------------------------------
       desc 'Creates a new camera owned by the authenticating user', {
         entity: Evercam::Presenters::Camera
@@ -152,7 +198,6 @@ module Evercam
         optional :h264_url, type: String, desc: "H264 url."
       end
       post do
-        authreport!('cameras/post')
         raise BadRequestError.new("Requester is not a user.") if caller.nil? || !caller.instance_of?(User)
         parameters = {}.merge(params).merge(username: caller.username)
         outcome    = Actors::CameraCreate.run(parameters)
@@ -166,7 +211,7 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
-      # PATCH /cameras/:id
+      # PATCH /v1/cameras/:id
       #-------------------------------------------------------------------------
       desc 'Updates full or partial data for an existing camera', {
         entity: Evercam::Presenters::Camera
@@ -198,8 +243,6 @@ module Evercam
         optional :h264_url, type: String, desc: "H264 url."
       end
       patch '/:id' do
-        authreport!('cameras/patch')
-
         camera = Evercam::Services.dalli_cache.get(params[:id])
         camera = ::Camera.by_exid!(params[:id]) if camera.nil?
         rights = requester_rights_for(camera)
@@ -232,14 +275,12 @@ module Evercam
 
 
       #-------------------------------------------------------------------------
-      # DELETE /cameras/:id
+      # DELETE /v1/cameras/:id
       #-------------------------------------------------------------------------
       desc 'Deletes a camera from Evercam along with any stored media', {
         entity: Evercam::Presenters::Camera
       }
       delete '/:id' do
-        authreport!('cameras/delete')
-
         camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
@@ -250,7 +291,7 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
-      # PUT /cameras/:id
+      # PUT /v1/cameras/:id
       #-------------------------------------------------------------------------
       desc 'Transfers the ownership of a camera from one user to another', {
         entity: Evercam::Presenters::Camera
@@ -260,8 +301,6 @@ module Evercam
          requires :user_id, type: String, desc: "The Evercam user name or email address for the new camera owner."
       end
       put '/:id' do
-        authreport!('cameras/transfer')
-
         camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.is_owner?
@@ -276,4 +315,3 @@ module Evercam
     end
   end
 end
-

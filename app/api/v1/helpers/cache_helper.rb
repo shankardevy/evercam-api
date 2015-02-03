@@ -3,7 +3,7 @@ module Evercam
 
     def invalidate_for_user(username)
       ['true', 'false', ''].repeated_permutation(2) do |a|
-        Evercam::Services::dalli_cache.delete("user|cameras|#{username}|#{a[0]}|#{a[1]}")
+        Evercam::Services::dalli_cache.delete("cameras|#{username}|#{a[0]}|#{a[1]}")
       end
     end
 

@@ -12,6 +12,7 @@
     :v1:
       :api_version: '1.0'
       :mount_path: swagger
+      :hide_format: true
       :hide_documentation_path: true
       :base_path: http://localhost:9292/v1
   :sidekiq:
@@ -67,6 +68,7 @@
     :v1:
       :api_version: '1.0'
       :mount_path: swagger
+      :hide_format: true
       :hide_documentation_path: true
       :base_path: https://api.evercam.io/v1
   :sidekiq:
@@ -99,14 +101,11 @@
   :sidekiq:
     :url: redis://localhost:6379/0
     :namespace: sidekiq
-  :snapshots:
-      :url: http://proxy.evercam.io:/
-      :key: <%= ENV['SNAP_KEY'] %>
-      :iv: <%= ENV['SNAP_IV'] %>
   :swagger:
     :v1:
       :api_version: '1.0'
       :mount_path: swagger
+      :hide_format: true
       :hide_documentation_path: true
       :base_path: http://proxy.evr.cm:9292/v1
   :testserver: true

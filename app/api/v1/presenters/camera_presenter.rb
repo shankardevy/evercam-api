@@ -426,9 +426,9 @@ module Evercam
              documentation: {
                type: 'Image',
                desc: '150x150 preview of camera view'
-             } do |c,o|
-        data = Base64.encode64(c.preview).gsub("\n", '') unless c.preview.nil?
-        c.preview.nil? ? "" : "data:image/jpeg;base64,#{data}"
+             } do |camera, _options|
+        data = Base64.encode64(camera.preview).gsub("\n", '') unless camera.preview.nil?
+        camera.preview.nil? ? "" : "data:image/jpeg;base64,#{data}"
       end
 
     end

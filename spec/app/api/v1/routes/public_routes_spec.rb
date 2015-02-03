@@ -218,7 +218,7 @@ describe 'API routes/cameras' do
     end
   end
 
-  describe 'GET /public/nearest' do
+  describe 'GET /public/cameras/nearest' do
     let!(:public_camera_1) {
       create(:camera, exid: 'exid_A_1', preview: 'aaa')
     }
@@ -241,7 +241,7 @@ describe 'API routes/cameras' do
 
     context "where no parameters are specified" do
       it "returns success" do
-        get('/public/nearest')
+        get('/public/cameras/nearest')
         expect(last_response.status).to eq(200)
         data = last_response.json
         expect(data.include?("cameras")).to eq(true)
@@ -268,7 +268,7 @@ describe 'API routes/cameras' do
         end
 
         it "returns success and the correct location message" do
-          get("/public/nearest", { near_to: 'Dublin' })
+          get("/public/cameras/nearest", { near_to: 'Dublin' })
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data.include?("cameras")).to eq(true)
@@ -282,7 +282,7 @@ describe 'API routes/cameras' do
         end
 
         it "returns success and the correct camera entries" do
-          get("/public/nearest", { near_to: 'The North Pole' })
+          get("/public/cameras/nearest", { near_to: 'The North Pole' })
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data.include?("cameras")).to eq(true)
@@ -294,7 +294,7 @@ describe 'API routes/cameras' do
         end
 
         it "surfaces an error when address cannot be geocoded" do
-          get("/public/nearest", { near_to: 'No Such Address' })
+          get("/public/cameras/nearest", { near_to: 'No Such Address' })
           expect(last_response.status).to eq(400)
           expect(last_response.json['message']).
             to eq('Unable to geocode "No Such Address"')
@@ -303,7 +303,7 @@ describe 'API routes/cameras' do
 
       context "as a lng lat point" do
         it "returns success and the correct camera entries" do
-          get("/public/nearest", { near_to: '0, 90' })
+          get("/public/cameras/nearest", { near_to: '0, 90' })
           expect(last_response.status).to eq(200)
           data = last_response.json
           expect(data.include?("cameras")).to eq(true)

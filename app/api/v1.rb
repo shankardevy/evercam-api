@@ -7,9 +7,9 @@ require_relative '../../lib/services'
 module Evercam
   class APIv1 < Grape::API
 
-	formatter :m3u8, lambda { |object, env| object }
+    formatter :m3u8, lambda { |object, env| object }
 
-	content_type :json, "application/json"
+    content_type :json, "application/json"
 
     # use JSON if accept header empty
     default_format :json
@@ -18,6 +18,7 @@ module Evercam
       def auth
         WithAuth.new(env)
       end
+
       include AuthorizationHelper
       include CameraHelper
       include CacheHelper
@@ -47,7 +48,7 @@ module Evercam
     mount V1SnapshotRoutes
     mount V1SnapshotJpgRoutes
     mount V1ModelRoutes
-    mount V1TestRoutes
+    mount V1AuthRoutes
     mount V1ClientRoutes
     mount V1PublicRoutes
     mount V1ShareRoutes
@@ -58,11 +59,12 @@ module Evercam
     add_swagger_documentation(
       Evercam::Config[:swagger][:v1]
     )
-    
+
     # Uncomment this to see a list of available routes on start up.
-    # self.routes.each do |api|
-    #   puts "#{api.route_method.ljust(10)} -> /v1#{api.route_path}"
+    # self.routes.each do |route|
+    #   file.write "/v1#{route.route_path.gsub!('(.:format)', '').ljust(60)} #{route.route_method}\n"
     # end
+
     #Sequel::Model.db.loggers << Logger.new($stdout)
 
   end
