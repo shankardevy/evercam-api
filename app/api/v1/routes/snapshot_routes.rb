@@ -169,7 +169,7 @@ module Evercam
 
     DEFAULT_LIMIT_WITH_DATA = 10
     DEFAULT_LIMIT_NO_DATA = 100
-    MAXIMUM_LIMIT = 1000
+    MAXIMUM_LIMIT = 10000
 
     namespace :cameras do
       params do
