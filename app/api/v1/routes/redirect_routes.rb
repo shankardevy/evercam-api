@@ -5,6 +5,31 @@ module Evercam
       log_redirect(params)
       redirect "/v1/cameras/#{params[:id]}/live/snapshot?#{params.except(:id, :route_info).to_query}"
     end
+
+    get '/users/:id/cameras' do
+      log_redirect(params)
+      redirect "/v1/cameras?user_id=#{params[:id]}&#{params.except(:id, :route_info).to_query}"
+    end
+
+    get '/cameras/:id/snapshots/latest' do
+      log_redirect(params)
+      redirect "/v1/cameras/#{params[:id]}/recordings/snapshots/latest?#{params.except(:id, :route_info).to_query}"
+    end
+
+    get '/shares/cameras/:id' do
+      log_redirect(params)
+      redirect "/v1/cameras/#{params[:id]}/shares?#{params.except(:id, :route_info).to_query}"
+    end
+
+    get '/shares/requests/:id' do
+      log_redirect(params)
+      redirect "/v1/cameras/#{params[:id]}/shares/requests?#{params.except(:route_info).to_query}"
+    end
+
+    get '/webhooks' do
+      log_redirect(params)
+      redirect "/v1/cameras/#{params[:camera_id]}/webhooks?#{params.except(:route_info).to_query}"
+    end
   end
 end
 
