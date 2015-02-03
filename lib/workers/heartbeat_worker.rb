@@ -108,10 +108,13 @@ module Evercam
           ip: nil
         )
       end
+      camera_is_online = camera.is_online
       trigger_webhook(camera)
       camera.update(updates)
-      CacheInvalidationWorker.enqueue(camera.exid)
-      Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+      if camera_is_online != updates[:is_online]
+        Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+        CacheInvalidationWorker.enqueue(camera.exid)
+      end
       if [
         "carrollszoocam",
         "gpocam",
@@ -122,11 +125,10 @@ module Evercam
         "zipyard-ranelagh-foh",
         "ndrc-main",
         "ndrc-foodcam",
-        "gemcon-cathalbrugha"
+        "gemcon-cathalbrugha",
+        "bennett"
       ].include? camera_exid
-        Evercam::HeartbeatWorker.enqueue('frequent', camera_exid)
-      elsif "bennett" == camera_exid
-        Evercam::HeartbeatWorker.enqueue('bennett', camera_exid)
+        Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
       else
         Evercam::HeartbeatWorker.enqueue('heartbeat', camera_exid)
       end
