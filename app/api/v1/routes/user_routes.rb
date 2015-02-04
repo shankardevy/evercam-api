@@ -68,22 +68,6 @@ module Evercam
     end
 
     resource :users do
-      before do
-        authorize!
-      end
-
-      route_param :id do
-        #-----------------------------------------------------------------------
-        # GET /v1/users/rights
-        #-----------------------------------------------------------------------
-        desc 'Returns the set of camera and other rights you have granted and have been granted (COMING SOON)'
-        get :rights do
-          raise ComingSoonError
-        end
-      end
-    end
-
-    resource :users do
       helpers do
         include AuthorizationHelper
         include LoggingHelper

@@ -62,9 +62,9 @@ module Evercam
     )
 
     # Uncomment this to see a list of available routes on start up.
-    self.routes.each do |route|
-      puts "/v1#{route.route_path.gsub!('(.:format)', '').ljust(60)} #{route.route_method}\n"
-    end
+    # self.routes.each do |route|
+    #   puts "/v1#{route.route_path.gsub!('(.:format)', '').ljust(60)} #{route.route_method}\n"
+    # end
 
     #Sequel::Model.db.loggers << Logger.new($stdout)
 
