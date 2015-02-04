@@ -68,6 +68,12 @@ module Evercam
         u.country.iso3166_a2
       end
 
+      expose :billing_id, documentation: {
+          type: 'string',
+          desc: 'Users billing id',
+          required: true
+        }
+
     end
   end
 end
