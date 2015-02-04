@@ -105,6 +105,7 @@ module Evercam
         optional :username, type: String, desc: "Username"
         optional :country, type: String, desc: "Country"
         optional :email, type: String, desc: "Email"
+        optional :billing_id, type: String, desc: "Billing ID"
       end
       patch '/:id', requirements: { id: /[^\/]*/ } do
         authorize!

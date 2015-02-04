@@ -11,6 +11,7 @@ module Evercam
         string :lastname
         string :country
         string :email
+        string :billing_id
       end
 
       def validate
@@ -29,6 +30,7 @@ module Evercam
         user.lastname = lastname if lastname
         user.country = Country.by_iso3166(inputs[:country]) if country
         user.email = email if email
+        user.billing_id = billing_id if billing_id
         user.save
       end
 
