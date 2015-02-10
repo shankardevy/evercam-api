@@ -18,7 +18,7 @@ module Evercam
 
         unless known_macs.blank?
           known_macs.each do |resource|
-            if resource && !(resource =~ /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/)
+            if resource && !(resource =~ /^([0-9A-Fa-f]{2}[:-]){2}([0-9A-Fa-f]{2})$/)
               add_error(resource, :valid, 'Mac address is invalid')
             end
           end
