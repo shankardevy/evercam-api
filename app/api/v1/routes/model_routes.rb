@@ -55,6 +55,38 @@ module Evercam
           "model_not_found_error", params[:id]) if model.blank?
       present(Array(model), with: Presenters::Model)
     end
+
+    resource :models do
+
+      before do
+        authorize!
+      end
+
+      #---------------------------------------------------------------------------
+      # POST /v1/models
+      #---------------------------------------------------------------------------
+      desc 'Returns available information for the specified model', {
+                                                                      entity: Evercam::Presenters::Model
+                                                                  }
+      params do
+        requires :id, type: String, desc: "Unique identifier for the model"
+        requires :vendor_id, type: String, desc: "Unique identifier for the vendor"
+        requires :name, type: String, desc: "Name of the model"
+        optional :jpg_url, type: String, desc: "Snapshot url"
+        optional :mjpg_url, type: String, desc: "Mjpg url"
+        optional :mpeg4_url, type: String, desc: "MPEG4 url"
+        optional :mobile_url, type: String, desc: "Mobile url"
+        optional :h264_url, type: String, desc: "H264 url"
+        optional :lowres_url, type: String, desc: "Low resolution url"
+      end
+      post do
+        outcome = Actors::ModelCreate.run(params)
+        unless outcome.success?
+          raise OutcomeError, outcome.to_json
+        end
+        present(Array(outcome.result), with: Presenters::Model)
+      end
+    end
   end
 end
 
