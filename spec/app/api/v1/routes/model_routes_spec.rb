@@ -22,10 +22,11 @@ describe 'API routes/models' do
       let(:json) { last_response.json['models'] }
 
       it 'returns an OK status' do
-        expect(last_response.status).to eq(200)
+        expect(last_response.status).to eq(404)
       end
 
       it 'returns the model data' do
+        expect(json[0]).to eq(nil)
         expect(json[0]).to have_keys('id', 'name', 'vendor_id', 'defaults')
       end
 
