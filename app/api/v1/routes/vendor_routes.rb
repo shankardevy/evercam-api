@@ -38,6 +38,35 @@ module Evercam
           "vendor_not_found_error", params[:id]) if vendor.blank?
       present [vendor], with: Presenters::Vendor, supported: true
     end
+
+    resource :vendors do
+      before do
+        authorize!
+      end
+
+      #---------------------------------------------------------------------------
+      # POST /v1/vendors
+      #---------------------------------------------------------------------------
+      desc 'Create a new vendor', {
+          entity: Evercam::Presenters::Vendor
+        }
+      params do
+        requires :id, type: String, desc: "Unique identifier for the vendor"
+        requires :name, type: String, desc: "vendor name"
+        optional :macs, type: String, desc: "Comma separated list of MAC's prefixes the vendor uses"
+      end
+      post do
+        known_macs = ['']
+        if params.include?(:macs) && params[:macs]
+          known_macs = params[:macs].split(",").inject([]) { |list, entry| list << entry.strip }
+        end
+        outcome = Actors::VendorCreate.run(params.merge!(:known_macs => known_macs))
+        unless outcome.success?
+          raise OutcomeError, outcome.to_json
+        end
+        present Array(outcome.result), with: Presenters::Vendor, supported: true
+      end
+    end
   end
 end
 
