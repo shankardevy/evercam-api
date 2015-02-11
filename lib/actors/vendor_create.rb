@@ -29,10 +29,10 @@ module Evercam
       def execute
 
         vendor = Vendor.new(
-                  exid: id,
-                  name: name,
-                  known_macs: known_macs
-                )
+            exid: id,
+            name: name,
+            known_macs: known_macs
+        )
         Vendor.db.transaction do
           vendor.save
         end

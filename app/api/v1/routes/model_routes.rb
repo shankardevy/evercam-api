@@ -66,8 +66,8 @@ module Evercam
       # POST /v1/models
       #---------------------------------------------------------------------------
       desc 'Returns available information for the specified model', {
-                                                                      entity: Evercam::Presenters::Model
-                                                                  }
+          entity: Evercam::Presenters::Model
+        }
       params do
         requires :id, type: String, desc: "Unique identifier for the model"
         requires :vendor_id, type: String, desc: "Unique identifier for the vendor"

@@ -48,8 +48,8 @@ module Evercam
       # POST /v1/vendors
       #---------------------------------------------------------------------------
       desc 'Create a new vendor', {
-                                    entity: Evercam::Presenters::Vendor
-                                }
+          entity: Evercam::Presenters::Vendor
+        }
       params do
         requires :id, type: String, desc: "Unique identifier for the vendor"
         requires :name, type: String, desc: "vendor name"
