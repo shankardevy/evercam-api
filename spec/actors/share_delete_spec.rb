@@ -33,7 +33,7 @@ module Evercam
                expect(outcome).to be_success
                result = outcome.result
                expect(result).not_to be_nil
-               expect(result).to eq(false)
+               expect(result).to eq(true)
                expect(rights.allow?(AccessRight::LIST)).to eq(false)
                expect(rights.allow?(AccessRight::EDIT)).to eq(false)
                expect(rights.allow?(AccessRight::DELETE)).to eq(false)
@@ -56,7 +56,7 @@ module Evercam
                outcome = subject.run(parameters)
                errors = outcome.errors.symbolic
                expect(outcome).to_not be_success
-               expect(errors[:camera]).to eq(nil)
+               expect(errors[:camera]).to eq(:exists)
             end
          end
 
@@ -70,7 +70,7 @@ module Evercam
                expect(outcome).to be_success
                result = outcome.result
                expect(result).not_to be_nil
-               expect(result).to eq(false)
+               expect(result).to eq(true)
             end
          end
       end
