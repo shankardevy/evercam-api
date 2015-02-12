@@ -6,7 +6,7 @@ You can complete the sign-up process by following the url below to verify your e
 
 https://dashboard.evercam.io/confirm?u=<%= user.username %>&c=<%= code %>
 
-We're still in beta and greatly appreciate any feedback, so if you have any suggestions or if there is anything we can do to improve your Evercam experience, please let us know.
+We greatly appreciate any feedback, so if you have any suggestions or if there is anything we can do to improve your Evercam experience, please let us know.
 
 Thanks again for joining us,
 
