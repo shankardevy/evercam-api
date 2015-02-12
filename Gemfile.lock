@@ -7,13 +7,6 @@ GIT
       net-http-digest_auth (~> 1.4)
 
 GIT
-  remote: git://github.com/garrettheaver/mutations.git
-  revision: 0b9ed69ff61934d9d6c26eb0061d4a576e39e144
-  specs:
-    mutations (0.6.0)
-      activesupport
-
-GIT
   remote: git://github.com/rails/activesupport-json_encoder.git
   revision: f02fb52c02609b3157e9288e1502dc6a4fe3b1fd
   specs:
@@ -176,6 +169,8 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    mutations (0.7.2)
+      activesupport
     net-http-digest_auth (1.4)
     newrelic-grape (1.4.1)
       grape
@@ -315,7 +310,7 @@ DEPENDENCIES
   mini_magick
   minitest
   mocha
-  mutations!
+  mutations
   newrelic-grape
   newrelic_rpm
   nokogiri

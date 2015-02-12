@@ -34,8 +34,7 @@ gem 'newrelic-grape'
 gem 'intercom', '~> 2.1.1', require: 'intercom'
 gem 'logjam'
 
-gem 'mutations',
- github: 'garrettheaver/mutations'
+gem 'mutations'
 
 gem 'rack-cors',
   require: 'rack/cors'
