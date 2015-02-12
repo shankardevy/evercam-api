@@ -64,6 +64,14 @@ module Evercam
         unless outcome.success?
           raise OutcomeError, outcome.to_json
         end
+        # Adding default vendor_model
+        parameters = {
+          id: "#{outcome.result.exid}_default",
+          vendor_id: outcome.result.exid,
+          name: 'Default'
+        }
+        Actors::ModelCreate.run(parameters)
+
         present Array(outcome.result), with: Presenters::Vendor, supported: true
       end
     end
