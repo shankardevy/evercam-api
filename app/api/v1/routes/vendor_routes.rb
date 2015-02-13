@@ -74,6 +74,30 @@ module Evercam
 
         present Array(outcome.result), with: Presenters::Vendor, supported: true
       end
+
+      #---------------------------------------------------------------------------
+      # PATCH /v1/vendors/:id
+      #---------------------------------------------------------------------------
+      desc 'Updates full or partial data on your existing vendor', {
+          entity: Evercam::Presenters::Vendor
+        }
+      params do
+        requires :id, type: String, desc: "Unique identifier for the vendor"
+        optional :name, type: String, desc: "vendor name"
+        optional :macs, type: String, desc: "Comma separated list of MAC's prefixes the vendor uses"
+      end
+      patch '/:id' do
+        known_macs = ['']
+        if params.include?(:macs) && params[:macs]
+          known_macs = params[:macs].split(",").inject([]) { |list, entry| list << entry.strip }
+        end
+        outcome = Actors::VendorUpdate.run(params.merge!(:known_macs => known_macs))
+        unless outcome.success?
+          raise OutcomeError, outcome.to_json
+        end
+        present Array(outcome.result), with: Presenters::Vendor, supported: true
+      end
+
     end
   end
 end
