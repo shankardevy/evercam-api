@@ -15,6 +15,8 @@ module Evercam
         string :mobile_url
         string :h264_url
         string :lowres_url
+        string :default_username
+        string :default_password
       end
 
       def validate
@@ -45,6 +47,11 @@ module Evercam
             end
           end
         end
+
+        if inputs[:default_username] or inputs[:default_password]
+          model.values[:config].merge!({'auth' => {'basic' => {'username' => inputs[:default_username], 'password' => inputs[:default_password] }}})
+        end
+
         VendorModel.db.transaction do
           model.save
         end

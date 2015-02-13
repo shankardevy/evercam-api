@@ -65,7 +65,7 @@ module Evercam
       #---------------------------------------------------------------------------
       # POST /v1/models
       #---------------------------------------------------------------------------
-      desc 'Returns available information for the specified model', {
+      desc 'Create a new model', {
           entity: Evercam::Presenters::Model
         }
       params do
@@ -78,9 +78,37 @@ module Evercam
         optional :mobile_url, type: String, desc: "Mobile url"
         optional :h264_url, type: String, desc: "H264 url"
         optional :lowres_url, type: String, desc: "Low resolution url"
+        optional :default_username, type: String, desc: "Default Username"
+        optional :default_password, type: String, desc: "Default Password"
       end
       post do
         outcome = Actors::ModelCreate.run(params)
+        unless outcome.success?
+          raise OutcomeError, outcome.to_json
+        end
+        present(Array(outcome.result), with: Presenters::Model)
+      end
+
+      #---------------------------------------------------------------------------
+      # PATCH /v1/models/:id
+      #---------------------------------------------------------------------------
+      desc 'Updates full or partial data on your existing model', {
+          entity: Evercam::Presenters::Model
+        }
+      params do
+        requires :id, type: String, desc: "Unique identifier for the model"
+        optional :name, type: String, desc: "Name of the model"
+        optional :jpg_url, type: String, desc: "Snapshot url"
+        optional :mjpg_url, type: String, desc: "Mjpg url"
+        optional :mpeg4_url, type: String, desc: "MPEG4 url"
+        optional :mobile_url, type: String, desc: "Mobile url"
+        optional :h264_url, type: String, desc: "H264 url"
+        optional :lowres_url, type: String, desc: "Low resolution url"
+        optional :default_username, type: String, desc: "Default Username"
+        optional :default_password, type: String, desc: "Default Password"
+      end
+      patch '/:id' do
+        outcome = Actors::ModelUpdate.run(params)
         unless outcome.success?
           raise OutcomeError, outcome.to_json
         end
