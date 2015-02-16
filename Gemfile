@@ -55,6 +55,9 @@ gem 'airbrake'
 
 gem 'racksh'
 
+gem 'pusher'
+gem 'em-http-request'
+
 group :development do
   gem 'fakes3'
   gem 'thin'

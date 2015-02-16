@@ -5,6 +5,8 @@ module Evercam
       ['true', 'false', ''].repeated_permutation(2) do |a|
         Evercam::Services::dalli_cache.delete("cameras|#{username}|#{a[0]}|#{a[1]}")
       end
+
+      Pusher.trigger_async(username, 'user_cameras_changed', {})
     end
 
     def invalidate_for_camera(camera_exid)
@@ -18,7 +20,9 @@ module Evercam
           invalidate_for_user(username)
         end
       end
-    end
 
+      Evercam::Services::dalli_cache.delete(camera_exid)
+      Pusher.trigger_async(camera_exid, 'camera_changed', {})
+    end
   end
 end

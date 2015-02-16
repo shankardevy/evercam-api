@@ -130,7 +130,7 @@ module Evercam
       ].include? camera_exid
         Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
       else
-        Evercam::HeartbeatWorker.enqueue('heartbeat', camera_exid)
+        UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera.exid)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
