@@ -170,7 +170,7 @@ module Evercam
         end
 
         # Check if online
-        Evercam::HeartbeatWorker.enqueue('async', [id])
+        Evercam::HeartbeatWorker.enqueue('async', id)
 
         camera
       end

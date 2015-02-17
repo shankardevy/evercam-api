@@ -60,7 +60,6 @@ module Evercam
       optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
     end
     get '/cameras/:id' do
-
       camera = get_cam(params[:id])
       rights = requester_rights_for(camera)
       unless rights.allow?(AccessRight::LIST)
