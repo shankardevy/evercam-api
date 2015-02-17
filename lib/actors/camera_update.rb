@@ -169,12 +169,8 @@ module Evercam
           DNSUpsertWorker.perform_async(id, inputs[:external_host]) unless Evercam::Config[:testserver]
         end
 
-        # Check if online
-        Evercam::HeartbeatWorker.enqueue('async', id)
-
         camera
       end
-
     end
   end
 end
