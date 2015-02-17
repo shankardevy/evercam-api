@@ -269,6 +269,7 @@ module Evercam
 
         CacheInvalidationWorker.enqueue(camera.exid)
         Evercam::Services.dalli_cache.set(params[:id], camera)
+        Evercam::HeartbeatWorker.enqueue('async', camera.exid)
         present Array(camera), with: Presenters::Camera, user: caller
       end
 
