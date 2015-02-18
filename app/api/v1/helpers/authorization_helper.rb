@@ -85,7 +85,7 @@ module Evercam
       credentials = nil
       parameters = request.params
       #log.debug "Checking request parameters for API credentials."
-      if parameters.include?(:api_id) && parameters.include?(:api_key)
+      unless parameters[:api_id].blank? && parameters[:api_key].blank?
         credentials = {api_id: parameters[:api_id],
                        api_key: parameters[:api_key]}
       end
