@@ -113,7 +113,7 @@ task :export_snapshots_to_s3 do
       filepath = "#{camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
 
       unless snapshot.data == 'S3'
-        Evercam::Services.s3_bucket.objects.create(filepath, snapshot.data)
+        Evercam::Services.snapshot_bucket.objects.create(filepath, snapshot.data)
 
         snapshot.data = 'S3'
         snapshot.save

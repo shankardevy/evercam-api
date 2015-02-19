@@ -3,7 +3,8 @@ require 'active_support/core_ext/module/attribute_accessors'
 module Evercam
   module Services
     mattr_accessor :dalli_cache
-    mattr_accessor :s3_bucket
+    mattr_accessor :snapshot_bucket
+    mattr_accessor :public_bucket
 
     options = { :namespace => "app_v1", :compress => true, :expires_in => 300, value_max_bytes: 20000000 }
     if ENV["MEMCACHEDCLOUD_SERVERS"]
@@ -26,13 +27,16 @@ module Evercam
         :use_ssl => false
       )
       s3.buckets.create('evercam-camera-assets')
-      self.s3_bucket = s3.buckets['evercam-camera-assets']
+      s3.buckets.create('evercam-public-assets')
+      self.snapshot_bucket = s3.buckets['evercam-camera-assets']
+      self.public_bucket = s3.buckets['evercam-public-assets']
     else
       s3 = AWS::S3.new(
         :access_key_id => Evercam::Config[:amazon][:access_key_id],
         :secret_access_key => Evercam::Config[:amazon][:secret_access_key]
       )
-      self.s3_bucket = s3.buckets['evercam-camera-assets']
+      self.snapshot_bucket = s3.buckets['evercam-camera-assets']
+      self.public_bucket = s3.buckets['evercam-public-assets']
     end
   end
 end

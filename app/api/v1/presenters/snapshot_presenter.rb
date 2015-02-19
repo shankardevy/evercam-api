@@ -28,7 +28,7 @@ module Evercam
       } do |snapshot, _|
         if snapshot.data == 'S3'
           filepath = "#{snapshot.camera.exid}/snapshots/#{snapshot.created_at.to_i}.jpg"
-          image = Evercam::Services.s3_bucket.objects[filepath].read
+          image = Evercam::Services.snapshot_bucket.objects[filepath].read
         else
           image = snapshot.data
         end
