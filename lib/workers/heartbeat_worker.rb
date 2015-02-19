@@ -45,7 +45,7 @@ module Evercam
             image = MiniMagick::Image.read(response.body)
 
             filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
-            Evercam::Services.s3_bucket.objects.create(filepath, response.body)
+            Evercam::Services.snapshot_bucket.objects.create(filepath, response.body)
 
             Snapshot.create(
               camera: camera,
