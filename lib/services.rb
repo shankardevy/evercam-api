@@ -13,7 +13,7 @@ module Evercam
       self.dalli_cache = Dalli::Client.new('127.0.0.1:11211', options)
     end
 
-    if Evercam::Config.env == :development
+    if Evercam::Config.env == :development && ENV['NO_FAKE_S3'].blank?
       if !system('lsof -i:10453')
         system('2>/dev/null 1>&2 fakes3 --root=/tmp/fakes3 --port=10453 &')
         abort 'FakeS3 was not running and was started automatically, start the server again to continue'
