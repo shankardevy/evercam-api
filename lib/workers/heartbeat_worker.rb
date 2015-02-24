@@ -46,6 +46,8 @@ module Evercam
 
             filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
             Evercam::Services.snapshot_bucket.objects.create(filepath, response.body)
+            file = Evercam::Services.snapshot_bucket.objects[filepath]
+            thumbnail_url = file.url_for(:get, { secure: true}).to_s
 
             Snapshot.create(
               camera: camera,
@@ -54,7 +56,7 @@ module Evercam
               notes: 'Evercam System'
             )
             image.resize "300x300"
-            updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob)
+            updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob, thumbnail_url: thumbnail_url)
           else
             logger.warn("Camera seems online, but returned content type: #{response.headers.fetch('Content-Type', '')}")
           end

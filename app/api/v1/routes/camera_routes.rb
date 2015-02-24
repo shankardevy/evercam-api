@@ -103,6 +103,7 @@ module Evercam
         optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
       end
       get do
+        thumbnail_requested = params.include?(:thumbnail) && params[:thumbnail] 
         if params.include?(:ids) && params[:ids]
           cameras = []
           ids = params[:ids].split(",").inject([]) { |list, entry| list << entry.strip }
@@ -126,7 +127,7 @@ module Evercam
           end
 
           key = "cameras|#{user.username}|#{params[:include_shared]}|#{params[:thumbnail]}"
-          cameras = Evercam::Services.dalli_cache.get(key)
+          cameras = Evercam::Services.dalli_cache.get(key) unless thumbnail_requested
 
           if cameras.blank?
             cameras = []
@@ -143,7 +144,7 @@ module Evercam
                 :owner_id, :is_public, :config,
                 :name, :last_polled_at, :is_online,
                 :timezone, :last_online_at, :location,
-                :mac_address, :model_id, :discoverable, :preview
+                :mac_address, :model_id, :discoverable, :preview, :thumbnail_url
               )
             end
 
@@ -158,7 +159,7 @@ module Evercam
                 )
               end
             end
-            # Evercam::Services.dalli_cache.set(key, cameras)
+            Evercam::Services.dalli_cache.set(key, cameras) unless thumbnail_requested
           end
         end
         {cameras: cameras}
