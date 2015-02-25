@@ -15,6 +15,10 @@ module Evercam
         string :password
       end
 
+      optional do
+        string :share_request_key
+      end
+
       def validate
         if (/^.+@.+\..+$/ =~ inputs[:email]).nil?
           add_error(:email, :invalid, 'Not a valid email address.')
@@ -32,6 +36,8 @@ module Evercam
       def execute
         country  = Country.by_iso3166(inputs[:country])
         password = inputs[:password]
+        key = inputs[:share_request_key]
+        inputs.delete("share_request_key")
 
         if country.nil?
           raise NotFoundError.new("The country code '#{inputs[:country]}' is not valid.",
@@ -49,6 +55,9 @@ module Evercam
         end
 
         user = User.new(inputs.merge(password: password, country: country))
+        if key
+          user.confirmed_at = Time.now
+        end
         if !user.valid?
           raise Evercam::BadRequestError.new("Invalid parameters specified to request.",
                                              "invalid_parameters", *user.errors.keys)
@@ -58,8 +67,10 @@ module Evercam
           user.save
           share_remembrance_camera(user)
           threescale_signup(user, password)
-          code = Digest::SHA1.hexdigest(user.username + user.created_at.to_s)
-          Mailers::UserMailer.confirm(user: user, code: code)
+          if key.blank?
+            code = Digest::SHA1.hexdigest(user.username + user.created_at.to_s)
+            Mailers::UserMailer.confirm(user: user, code: code)
+          end
         end
 
         # Create intercom user
