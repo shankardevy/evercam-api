@@ -129,6 +129,7 @@ end
 task :export_thumbnails_to_s3 do
   Sequel.connect(Evercam::Config[:database])
 
+  require 'active_support' 
   require 'active_support/core_ext'
   require 'evercam_models'
   require 'aws-sdk'
