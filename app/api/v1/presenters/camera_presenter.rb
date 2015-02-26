@@ -431,6 +431,12 @@ module Evercam
         camera.preview.nil? ? "" : "data:image/jpeg;base64,#{data}"
       end
 
+      expose :thumbnail_url, documentation: {
+               type: 'String',
+               desc: 'Latest recorded snapshot url'
+             } do |camera, _options|
+        camera.thumbnail_url.blank? ? "" : camera.thumbnail_url
+      end
     end
   end
 end

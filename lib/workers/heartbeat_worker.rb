@@ -46,6 +46,8 @@ module Evercam
 
             filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
             Evercam::Services.snapshot_bucket.objects.create(filepath, response.body)
+            file = Evercam::Services.snapshot_bucket.objects[filepath]
+            thumbnail_url = file.url_for(:get, { secure: true}).to_s
 
             Snapshot.create(
               camera: camera,
@@ -54,7 +56,7 @@ module Evercam
               notes: 'Evercam System'
             )
             image.resize "300x300"
-            updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob)
+            updates.merge!(is_online: true, last_online_at: instant, preview: image.to_blob, thumbnail_url: thumbnail_url)
           else
             logger.warn("Camera seems online, but returned content type: #{response.headers.fetch('Content-Type', '')}")
           end
@@ -111,9 +113,11 @@ module Evercam
       camera_is_online = camera.is_online
       trigger_webhook(camera)
       camera.update(updates)
-      if camera_is_online != updates[:is_online]
-        Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
-        CacheInvalidationWorker.enqueue(camera.exid)
+      unless !camera_is_online == false && updates[:is_online] == false
+        if (camera_is_online != updates[:is_online]) || (camera.updated_at < Time.now - 30)
+          Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+          CacheInvalidationWorker.enqueue(camera.exid)
+        end
       end
       if [
         "carrollszoocam",
