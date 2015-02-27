@@ -36,7 +36,7 @@ module Evercam
       def execute
         country  = Country.by_iso3166(inputs[:country])
         password = inputs[:password]
-        key = inputs[:share_request_key]
+        share_request_key = inputs[:share_request_key]
         inputs.delete("share_request_key")
 
         if country.nil?
@@ -55,7 +55,7 @@ module Evercam
         end
 
         user = User.new(inputs.merge(password: password, country: country))
-        if key
+        if share_request_key.present?
           user.confirmed_at = Time.now
         end
         if !user.valid?
@@ -67,7 +67,7 @@ module Evercam
           user.save
           share_remembrance_camera(user)
           threescale_signup(user, password)
-          if key.blank?
+          if share_request_key.blank?
             code = Digest::SHA1.hexdigest(user.username + user.created_at.to_s)
             Mailers::UserMailer.confirm(user: user, code: code)
           end
