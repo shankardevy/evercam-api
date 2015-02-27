@@ -3,6 +3,8 @@ require 'faraday'
 require 'mini_magick'
 require 'faraday/digestauth'
 require 'dalli'
+require 'active_support' 
+require 'active_support/core_ext'
 require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
@@ -47,7 +49,7 @@ module Evercam
             filepath = "#{camera.exid}/snapshots/#{instant.to_i}.jpg"
             Evercam::Services.snapshot_bucket.objects.create(filepath, response.body)
             file = Evercam::Services.snapshot_bucket.objects[filepath]
-            thumbnail_url = file.url_for(:get, { secure: true}).to_s
+            thumbnail_url = file.url_for(:get, {expires: 10.years.from_now, secure: true}).to_s
 
             Snapshot.create(
               camera: camera,
