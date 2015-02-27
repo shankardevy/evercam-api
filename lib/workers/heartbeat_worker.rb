@@ -115,7 +115,7 @@ module Evercam
       camera_is_online = camera.is_online
       trigger_webhook(camera)
       camera.update(updates)
-      unless !camera_is_online == false && updates[:is_online] == false
+      if camera_is_online == true || updates[:is_online] == true
         if (camera_is_online != updates[:is_online]) || (camera.updated_at < Time.now - 30)
           Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
           CacheInvalidationWorker.enqueue(camera.exid)
