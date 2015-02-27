@@ -215,7 +215,7 @@ module Evercam
           snapshots = query.limit(limit).offset(offset).all
 
           present(snapshots, with: Presenters::Snapshot).merge!({
-              timezone: camera.timezone.zone, pages: total_pages
+              pages: total_pages
             })
         end
 
@@ -234,13 +234,9 @@ module Evercam
           if snapshot
             rights = requester_rights_for(camera)
             raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
-            present(Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data]).merge!({
-              timezone: camera.timezone.zone
-            })
+            present(Array(snapshot), with: Presenters::Snapshot, with_data: params[:with_data])
           else
-            present([], with: Presenters::Snapshot, with_data: params[:with_data]).merge!({
-              timezone: camera.timezone.zone
-            })
+            present([], with: Presenters::Snapshot, with_data: params[:with_data])
           end
         end
 
