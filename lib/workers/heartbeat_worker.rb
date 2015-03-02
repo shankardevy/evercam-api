@@ -115,8 +115,11 @@ module Evercam
       camera_is_online = camera.is_online
       trigger_webhook(camera)
       camera.update(updates)
+      cached_camera = Evercam::Services::dalli_cache.get(camera.exid)
+      cached_thumbnail_url = cached_camera.blank? ? '' : cached_camera.thumbnail_url
       if camera_is_online == true || updates[:is_online] == true
-        if (camera_is_online != updates[:is_online]) || (camera.updated_at < Time.now - 30)
+        if (camera_is_online != updates[:is_online]) ||
+            (thumbnail_token_time(cached_thumbnail_url) < thumbnail_token_time(camera.thumbnail_url) - 30.seconds)
           Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
           CacheInvalidationWorker.enqueue(camera.exid)
         end
@@ -139,6 +142,16 @@ module Evercam
         UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera.exid)
       end
       logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
+    end
+
+    def thumbnail_token_time(thumbnail_url)
+      if thumbnail_url.blank?
+        Time.now + 1.minutes
+      else
+        url = URI::parse(thumbnail_url).query
+        token = CGI::parse(url)['Expires'].first.to_i
+        Time.at(token) - 10.years
+      end
     end
 
     def trigger_webhook(camera)
