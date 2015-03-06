@@ -83,7 +83,7 @@ module Evercam
               ip: request.ip
             )
 
-            redirect "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/live/snapshot.jpg?t=#{Base64.urlsafe_encode64(token)}"
+            redirect "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/live/snapshot.jpg?token=#{Base64.urlsafe_encode64(token)}"
           end
         end
       end
