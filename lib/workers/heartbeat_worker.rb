@@ -135,6 +135,7 @@ module Evercam
         "ndrc-main",
         "ndrc-foodcam",
         "gemcon-cathalbrugha",
+        "smartcity1",
         "bennett"
       ].include? camera_exid
         Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
