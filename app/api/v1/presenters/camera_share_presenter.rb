@@ -40,15 +40,6 @@ module Evercam
     	  s.user.username
     	end
 
-    	expose :email,
-    	       documentation: {
-    	       	 type: 'string',
-    	       	 desc: 'The email address of the user the camera is shared with.',
-    	       	 required: true
-    	       } do |s, o|
-    	  s.user.email
-    	end
-
       expose :kind,
              documentation: {
          	     type: 'string',
