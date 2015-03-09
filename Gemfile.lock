@@ -152,9 +152,9 @@ GEM
     i18n (0.6.11)
     ice_nine (0.11.0)
     interception (0.5)
-    intercom (2.1.4)
-      json
-    json (1.8.1)
+    intercom (2.4.4)
+      json (~> 1.8)
+    json (1.8.2)
     kgio (2.9.2)
     kramdown (1.4.1)
     libnotify (0.8.3)
@@ -320,7 +320,7 @@ DEPENDENCIES
   grape-swagger (= 0.7.2)
   guard-rack
   guard-rspec
-  intercom (~> 2.1.1)
+  intercom
   json
   kgio
   logjam
