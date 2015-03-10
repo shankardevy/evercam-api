@@ -172,7 +172,7 @@ module Evercam
         entity: Evercam::Presenters::Camera
       }
       params do
-        requires :id, type: String, desc: "Camera Id."
+        optional :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
         optional :vendor, type: String, desc: "Camera vendor id."
         optional :model, type: String, desc: "Camera model name."
