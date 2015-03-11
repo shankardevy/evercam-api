@@ -136,6 +136,7 @@ module Evercam
         "ndrc-foodcam",
         "gemcon-cathalbrugha",
         "smartcity1",
+        "stephens-green",
         "treacyconsulting1",
         "treacyconsulting2",
         "treacyconsulting3",
