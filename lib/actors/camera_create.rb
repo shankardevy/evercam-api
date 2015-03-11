@@ -3,13 +3,13 @@ module Evercam
     class CameraCreate < Mutations::Command
 
       required do
+        string :id
         string :name
         string :username
         boolean :is_public
       end
 
       optional do
-        string :id
         string :timezone
         string :mac_address
         string :model
