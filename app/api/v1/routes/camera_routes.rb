@@ -172,7 +172,7 @@ module Evercam
         entity: Evercam::Presenters::Camera
       }
       params do
-        requires :id, type: String, desc: "Camera Id."
+        optional :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
         optional :vendor, type: String, desc: "Camera vendor id."
         optional :model, type: String, desc: "Camera model name."
@@ -199,7 +199,11 @@ module Evercam
       end
       post do
         raise BadRequestError.new("Requester is not a user.") if caller.nil? || !caller.instance_of?(User)
-        parameters = {}.merge(params).merge(username: caller.username)
+        if params[:id].blank?
+          parameters = {}.merge(params).merge(username: caller.username, id: auto_generate_camera_id(params[:name]))
+        else
+          parameters = {}.merge(params).merge(username: caller.username)
+        end
         outcome    = Actors::CameraCreate.run(parameters)
         unless outcome.success?
           IntercomEventsWorker.perform_async('failed-creating-camera', caller.email)
