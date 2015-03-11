@@ -1,7 +1,6 @@
 module Evercam
   module Actors
     class CameraCreate < Mutations::Command
-      include CameraHelper
 
       required do
         string :name
@@ -38,7 +37,7 @@ module Evercam
       end
 
       def validate
-        unless id.blank? and id =~ /^[a-z0-9\-_]+$/ and id.length > 3
+        unless id =~ /^[a-z0-9\-_]+$/ and id.length > 3
           add_error(:id, :valid, 'Camera ID can only contain lower case letters, numbers, hyphens and underscore. Minimum length is 4.')
         end
 
@@ -76,9 +75,6 @@ module Evercam
       end
 
       def execute
-        if inputs[:id].blank?
-          inputs.merge(id: auto_generate_camera_id(inputs[:name]))
-        end
         user = User.by_login(inputs[:username])
         raise NotFoundError.new("Unable to locate a user for '#{inputs[:username]}'.",
                                 "user_not_found_error", inputs[:username]) if user.nil?
