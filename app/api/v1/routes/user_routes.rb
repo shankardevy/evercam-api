@@ -31,7 +31,7 @@ module Evercam
       params do
         requires :firstname, type: String, desc: "First Name"
         requires :lastname, type: String, desc: "Last Name"
-        requires :username, type: String, desc: "Username"
+        requires :username, type: String, desc: "Username will be stored in lowercase"
         requires :country, type: String, desc: "Country"
         requires :email, type: String, desc: "Email"
         requires :password, type: String, desc: "Password"
