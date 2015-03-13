@@ -32,13 +32,15 @@ module Evercam
         requires :firstname, type: String, desc: "First Name"
         requires :lastname, type: String, desc: "Last Name"
         requires :username, type: String, desc: "Username"
-        requires :country, type: String, desc: "Country"
         requires :email, type: String, desc: "Email"
         requires :password, type: String, desc: "Password"
+        optional :country, type: String, desc: "Country"
         optional :share_request_key, type: String, desc: "The key for a camera share request to be processed during the sign up"
       end
       post do
-        params[:country].downcase!
+        if params[:country]
+          params[:country].downcase!
+        end
         params[:username].downcase!
         outcome = Actors::UserSignup.run(params)
         if !outcome.success?
