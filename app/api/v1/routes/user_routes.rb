@@ -39,6 +39,7 @@ module Evercam
       end
       post do
         params[:country].downcase!
+        params[:username].downcase!
         outcome = Actors::UserSignup.run(params)
         if !outcome.success?
           raise_error(400, "invalid_parameters",
@@ -83,6 +84,7 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
+        params[:id].downcase!
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -112,6 +114,7 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
+        params[:id].downcase!
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -135,6 +138,7 @@ module Evercam
         # I can't find cleaner way to do it with current grape version
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
+        params[:id].downcase!
         target = ::User.by_login(params[:id])
         raise NotFoundError, 'user does not exist' unless target
 
@@ -154,6 +158,7 @@ module Evercam
         requires :password, type: String, desc: "Password for the user to fetch credentials for."
       end
       get '/:id/credentials', requirements: { id: /[^\/]*/ } do
+        params[:id].downcase!
         user = User.by_login(params[:id])
         raise NotFoundError.new("No user with an id of #{params[:id]} exists.") if user.nil?
 
