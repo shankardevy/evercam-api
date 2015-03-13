@@ -60,9 +60,6 @@ module Evercam
             share = CameraShare.create(camera: camera, user: sharee, sharer: sharer, kind: CameraShare::PRIVATE)
             access_rights.grant(*rights_list) if rights_list.size > 0
          end
-         unless share.nil?
-           share.user_id = sharee.username
-         end
          share
       end
     end
