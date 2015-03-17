@@ -3,7 +3,7 @@ require 'faraday'
 require 'mini_magick'
 require 'faraday/digestauth'
 require 'dalli'
-require 'active_support' 
+require 'active_support'
 require 'active_support/core_ext'
 require_relative './unique_worker'
 require_relative '../../lib/services'
@@ -142,6 +142,9 @@ module Evercam
         "treacyconsulting3",
         "dcctestdumping1",
         "dcctestdumping2",
+        "cebit-hiks",
+        "cebit-axis",
+        "cebit-hikb",
         "bennett"
       ].include? camera_exid
         Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
