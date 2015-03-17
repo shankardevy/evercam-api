@@ -31,7 +31,6 @@ module Evercam
         [:jpg, :mjpg, :mpeg4, :mobile, :h264, :lowres].each do |resource|
           url_name = "#{resource}_url"
           unless inputs[url_name].blank?
-            inputs[url_name].prepend('/') if inputs[url_name][0,1] != '/'
             if model.values[:config].has_key?('snapshots')
               model.values[:config]['snapshots'].merge!({resource => inputs[url_name]})
             else
