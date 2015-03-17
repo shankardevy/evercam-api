@@ -126,10 +126,8 @@ module Evercam
         share = CameraShare.where(camera_id: camera.id, user_id: user.id).first
         raise NotFoundError.new if share.nil?
 
-        requester = caller
-        if camera.owner_id != requester.id && share.user_id != requester.id
-          raise AuthorizationError.new
-        end
+        rights = requester_rights_for(camera)
+        raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
         outcome = Actors::ShareDelete.run(params.merge!({id: camera.id, user_id: user.id, ip: request.ip}))
 
@@ -164,9 +162,7 @@ module Evercam
         raise NotFoundError.new if share.nil?
 
         rights = requester_rights_for(camera)
-        if !(rights.is_public? && camera.discoverable?) && !rights.is_owner?
-          raise AuthorizationError.new
-        end
+        raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
 
         outcome = Actors::ShareUpdate.run(params.merge!({id: camera.id, user_id: user.id, ip: request.ip}))
         if !outcome.success?
