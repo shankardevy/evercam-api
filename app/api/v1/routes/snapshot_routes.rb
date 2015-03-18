@@ -70,7 +70,7 @@ module Evercam
 
             message = camera.external_url
             message << camera.res_url('jpg') unless camera.res_url('jpg').blank?
-            message << "|#{cam_auth}|#{credentials}|#{Time.now.to_s}|"
+            message << "|#{cam_auth}|#{credentials}|#{Time.now.utc.iso8601}|"
             message << ' ' until message.length % 16 == 0
             token = cipher.update(message)
             token << cipher.final
@@ -83,7 +83,7 @@ module Evercam
               ip: request.ip
             )
 
-            redirect "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/live/snapshot.jpg?token=#{Base64.urlsafe_encode64(token)}"
+            redirect "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/live/snapshot?token=#{Base64.urlsafe_encode64(token)}"
           end
         end
       end
