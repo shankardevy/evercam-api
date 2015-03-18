@@ -54,24 +54,26 @@ module Evercam
           unless camera.external_url.nil?
             require 'openssl'
             require 'base64'
-            auth = camera.config.fetch('auth', {}).fetch('basic', '')
-            if auth != '' and auth != {'username'=>'', 'password'=>''}
-              auth = "#{camera.config['auth']['basic']['username']}:#{camera.config['auth']['basic']['password']}"
-            end
-            c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
-            c.encrypt
-            c.key = "#{Evercam::Config[:snapshots][:key]}"
-            c.iv = "#{Evercam::Config[:snapshots][:iv]}"
-            # Padding was incompatible with node padding
-            c.padding = 0
-            msg = camera.external_url
-            msg << camera.res_url('jpg') unless camera.res_url('jpg').blank?
-            msg << "|#{auth}|#{Time.now.to_s}|"
-            until msg.length % 16 == 0 do
-              msg << ' '
-            end
-            t = c.update(msg)
-            t << c.final
+            cam_username = camera.config.fetch('auth', {}).fetch('basic', {}).fetch('username', '')
+            cam_password = camera.config.fetch('auth', {}).fetch('basic', {}).fetch('password', '')
+            cam_auth = "#{cam_username}:#{cam_password}"
+
+            api_id = params.fetch('api_id', '')
+            api_key = params.fetch('api_key', '')
+            credentials = "#{api_id}:#{api_key}"
+
+            cipher = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+            cipher.encrypt
+            cipher.key = "#{Evercam::Config[:snapshots][:key]}"
+            cipher.iv = "#{Evercam::Config[:snapshots][:iv]}"
+            cipher.padding = 0
+
+            message = camera.external_url
+            message << camera.res_url('jpg') unless camera.res_url('jpg').blank?
+            message << "|#{cam_auth}|#{credentials}|#{Time.now.to_s}|"
+            message << ' ' until message.length % 16 == 0
+            token = cipher.update(message)
+            token << cipher.final
 
             CameraActivity.create(
               camera: camera,
@@ -81,7 +83,7 @@ module Evercam
               ip: request.ip
             )
 
-            redirect "#{Evercam::Config[:snapshots][:url]}#{camera.exid}.jpg?t=#{Base64.urlsafe_encode64(t)}"
+            redirect "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/live/snapshot.jpg?token=#{Base64.urlsafe_encode64(token)}"
           end
         end
       end
