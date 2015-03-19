@@ -206,9 +206,13 @@ module Evercam
           offset = (page - 1) * limit
           offset = 0 if offset < 0
 
-          from = Time.at(params[:from].to_i).to_s
-          to = Time.at(params[:to].to_i).to_s
-          to = Time.now.to_s if params[:to].blank?
+          from_time = Time.at(params[:from].to_i).utc
+          to_time = Time.at(params[:to].to_i).utc
+          to_time = Time.utc if params[:to].blank?
+
+          off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
+          from = Time.new(from_time.year, from_time.month, from_time.day, from_time.hour, from_time.min, from_time.sec, off_set).utc.to_s
+          to = Time.new(to_time.year, to_time.month, to_time.day, to_time.hour, to_time.min, to_time.sec, off_set).utc.to_s
 
           query = Snapshot.where(:camera_id => camera.id).select(:notes, :created_at).order(:created_at).filter(:created_at => (from..to))
 
@@ -261,10 +265,11 @@ module Evercam
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
+          off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
-            from = camera.timezone.time(Time.utc(params[:year], params[:month], day)).to_s
-            to = camera.timezone.time(Time.utc(params[:year], params[:month], day, 23, 59, 59)).to_s
+            from = Time.new(params[:year], params[:month], day, 0, 0, 0, off_set).utc.to_s
+            to = Time.new(params[:year], params[:month], day, hour, 59, 59, off_set).utc.to_s
             if camera.snapshots.filter(:created_at => (from..to)).count > 0
               days << day
             end
@@ -294,9 +299,9 @@ module Evercam
           rights = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
+          off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
           hours = []
           (0..23).each do |hour|
-            off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
             from = Time.new(params[:year], params[:month], params[:day], hour, 0, 0, off_set).utc.to_s
             to = Time.new(params[:year], params[:month], params[:day], hour, 59, 59, off_set).utc.to_s
 
