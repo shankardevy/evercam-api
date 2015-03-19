@@ -296,8 +296,10 @@ module Evercam
 
           hours = []
           (0..23).each do |hour|
-            from = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour)).to_s
-            to = camera.timezone.time(Time.utc(params[:year], params[:month], params[:day], hour, 59, 59)).to_s
+            off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
+            from = Time.new(params[:year], params[:month], params[:day], hour, 0, 0, off_set).utc.to_s
+            to = Time.new(params[:year], params[:month], params[:day], hour, 59, 59, off_set).utc.to_s
+
             if camera.snapshots.filter(:created_at => (from..to)).count > 0
               hours << hour
             end
