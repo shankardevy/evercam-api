@@ -82,7 +82,7 @@ module Evercam
     end
 
     def perform(camera_exid)
-      Concurrent.timeout(15) do
+      Concurrent.timeout(30) do
         logger.info("Started update for camera #{camera_exid}")
         instant = Time.now
         camera = Camera.by_exid(camera_exid)

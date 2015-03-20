@@ -16,7 +16,7 @@ module Evercam
     end
 
     def perform(camera_exid)
-      Concurrent.timeout(15) do
+      Concurrent.timeout(30) do
         invalidate_for_camera(camera_exid)
         logger.info("Invalidated cache for camera #{camera_exid}")
       end
