@@ -269,7 +269,7 @@ module Evercam
           days = []
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
             from = Time.new(params[:year], params[:month], day, 0, 0, 0, off_set).utc.to_s
-            to = Time.new(params[:year], params[:month], day, hour, 59, 59, off_set).utc.to_s
+            to = Time.new(params[:year], params[:month], day, 23, 59, 59, off_set).utc.to_s
             if camera.snapshots.filter(:created_at => (from..to)).count > 0
               days << day
             end
