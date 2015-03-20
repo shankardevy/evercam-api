@@ -1,3 +1,4 @@
+require 'concurrent/utilities'
 require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
@@ -15,11 +16,9 @@ module Evercam
     end
 
     def perform(camera_exid)
-      begin
+      Concurrent.timeout(15) do
         invalidate_for_camera(camera_exid)
         logger.info("Invalidated cache for camera #{camera_exid}")
-      rescue => e
-        logger.warn "Cache Invalidation exception: #{e.message}"
       end
     end
   end
