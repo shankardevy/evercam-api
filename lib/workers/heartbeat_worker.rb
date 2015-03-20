@@ -147,6 +147,9 @@ module Evercam
           "cebit-hiks",
           "cebit-axis",
           "cebit-hikb",
+          "beefcam1",
+          "beefcam2",
+          "beefcammobile",
           "bennett"
         ].include? camera_exid
           Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
