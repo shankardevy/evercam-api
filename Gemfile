@@ -19,6 +19,7 @@ gem 'mini_magick'
 gem 'stringex'
 gem 'concurrent-ruby'
 gem 'concurrent-ruby-ext'
+gem 'curb'
 
 gem 'grape'
 gem 'grape-entity'
