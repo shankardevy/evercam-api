@@ -269,6 +269,7 @@ GEM
     sinatra-partial (0.4.0)
       sinatra
     slop (3.6.0)
+    smarter_csv (1.0.19)
     spoon (0.0.4)
       ffi
     stringex (2.5.2)
@@ -350,6 +351,7 @@ DEPENDENCIES
   sinatra-contrib
   sinatra-flash
   sinatra-partial
+  smarter_csv
   stringex
   thin
   unicorn

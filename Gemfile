@@ -17,6 +17,7 @@ gem 'aws-sdk'
 gem 'sidekiq'
 gem 'mini_magick'
 gem 'stringex'
+gem 'smarter_csv'
 
 gem 'grape'
 gem 'grape-entity'
