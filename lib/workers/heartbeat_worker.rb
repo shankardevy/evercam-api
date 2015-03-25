@@ -128,7 +128,8 @@ module Evercam
           logger.info("Started update for camera #{camera_exid}")
           instant = Time.now
           camera = Camera.by_exid(camera_exid)
-          return if camera.nil?
+
+          raise Evercam::NotFoundError.new("Unable to find a camera for #{camera_exid}") if camera.nil?
           updates = { is_online: false, last_polled_at: instant }
 
           unless camera.external_url.nil?

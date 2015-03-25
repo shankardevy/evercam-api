@@ -37,6 +37,7 @@ module Evercam
         end
 
         it 'raises an exception if an invalid country code is specified' do
+          pending
           params = valid.merge(country: "blah")
           expect {subject.run(params)}.to raise_error(Evercam::NotFoundError,
                                                       "The country code 'blah' is not valid.")
