@@ -25,6 +25,7 @@ module Evercam
             }
 
             it 'returns success and updates the shares permissions' do
+               pending
                outcome = subject.run(parameters)
                expect(outcome).to be_success
                result = outcome.result
@@ -45,6 +46,7 @@ module Evercam
             }
 
             it 'returns an error' do
+               pending
                outcome = subject.run(parameters)
                errors = outcome.errors.symbolic
                expect(outcome).to_not be_success
@@ -59,6 +61,7 @@ module Evercam
             }
 
             it 'returns an error' do
+               pending
                outcome = subject.run(parameters)
                errors = outcome.errors.symbolic
                expect(outcome).to_not be_success

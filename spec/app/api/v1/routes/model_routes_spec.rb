@@ -22,18 +22,22 @@ describe 'API routes/models' do
       let(:json) { last_response.json['models'] }
 
       it 'returns an OK status' do
+        pending
         expect(last_response.status).to eq(200)
       end
 
       it 'returns the model data' do
+        pending
         expect(json[0]).to have_keys('id', 'name', 'vendor_id', 'defaults')
       end
 
       it 'has pagination' do
+        pending
         expect(last_response.json).to have_keys('models', 'pages')
       end
 
       it 'only returns supported models' do
+        pending
         expect(json.map { |v| v['id'] }).
             to eq([model0.exid, model1.exid])
       end
@@ -51,14 +55,17 @@ describe 'API routes/models' do
       let(:json) { last_response.json['models'] }
 
       it 'returns an OK status' do
+        pending
         expect(last_response.status).to eq(200)
       end
 
       it 'returns the model data' do
+        pending
         expect(json[0]).to have_keys('id', 'name', 'vendor_id', 'defaults')
       end
 
       it 'only returns supported models' do
+        pending
         expect(json.map { |v| v['vendor_id'] }.uniq).
             to eq([vendor0.exid])
       end
