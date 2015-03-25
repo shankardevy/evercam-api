@@ -5,6 +5,7 @@ require 'faraday/digestauth'
 require 'dalli'
 require 'active_support'
 require 'active_support/core_ext'
+require 'concurrent/utilities'
 require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
@@ -81,77 +82,79 @@ module Evercam
     end
 
     def perform(camera_exid)
-      logger.info("Started update for camera #{camera_exid}")
-      instant = Time.now
-      camera = Camera.by_exid(camera_exid)
-      return if camera.nil?
-      updates = { is_online: false, last_polled_at: instant }
+      Concurrent.timeout(30) do
+        logger.info("Started update for camera #{camera_exid}")
+        instant = Time.now
+        camera = Camera.by_exid(camera_exid)
+        return if camera.nil?
+        updates = { is_online: false, last_polled_at: instant }
 
-      unless camera.external_url.nil?
-        updates = snap_request(camera, updates, instant)
-      end
-      if camera.is_online and not updates[:is_online]
-        # Try one more time, some cameras are dumb
-        updates = snap_request(camera, updates, instant)
-        unless updates[:is_online]
+        unless camera.external_url.nil?
+          updates = snap_request(camera, updates, instant)
+        end
+        if camera.is_online and not updates[:is_online]
+          # Try one more time, some cameras are dumb
+          updates = snap_request(camera, updates, instant)
+          unless updates[:is_online]
+            CameraActivity.create(
+              camera: camera,
+              access_token: nil,
+              action: 'offline',
+              done_at: Time.now,
+              ip: nil
+            )
+          end
+        end
+        if not camera.is_online and updates[:is_online]
           CameraActivity.create(
             camera: camera,
             access_token: nil,
-            action: 'offline',
+            action: 'online',
             done_at: Time.now,
             ip: nil
           )
         end
-      end
-      if not camera.is_online and updates[:is_online]
-        CameraActivity.create(
-          camera: camera,
-          access_token: nil,
-          action: 'online',
-          done_at: Time.now,
-          ip: nil
-        )
-      end
-      camera_is_online = camera.is_online
-      trigger_webhook(camera)
-      camera.update(updates)
-      cached_camera = Evercam::Services::dalli_cache.get(camera.exid)
-      cached_thumbnail_url = cached_camera.blank? ? '' : cached_camera.thumbnail_url
-      if camera_is_online == true || updates[:is_online] == true
-        if (camera_is_online != updates[:is_online]) ||
-            (thumbnail_token_time(cached_thumbnail_url) < thumbnail_token_time(camera.thumbnail_url) - 30.seconds)
-          Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
-          CacheInvalidationWorker.enqueue(camera.exid)
+        camera_is_online = camera.is_online
+        trigger_webhook(camera)
+        camera.update(updates)
+        cached_camera = Evercam::Services::dalli_cache.get(camera.exid)
+        cached_thumbnail_url = cached_camera.blank? ? '' : cached_camera.thumbnail_url
+        if camera_is_online == true || updates[:is_online] == true
+          if (camera_is_online != updates[:is_online]) ||
+              (thumbnail_token_time(cached_thumbnail_url) < thumbnail_token_time(camera.thumbnail_url) - 30.seconds)
+            Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+            CacheInvalidationWorker.enqueue(camera.exid)
+          end
         end
+        if [
+          "carrollszoocam",
+          "gpocam",
+          "wayra-office",
+          "wayra-agora",
+          "wayrahikvision",
+          "zipyard-navan-foh",
+          "zipyard-ranelagh-foh",
+          "ndrc-main",
+          "ndrc-foodcam",
+          "gemcon-cathalbrugha",
+          "smartcity1",
+          "stephens-green",
+          "treacyconsulting1",
+          "treacyconsulting2",
+          "treacyconsulting3",
+          "dcctestdumping1",
+          "dcctestdumping2",
+          "beefcam1",
+          "beefcam2",
+          "beefcammobile",
+          "bennett"
+        ].include? camera_exid
+          Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
+        else
+          UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera.exid)
+        end
+        logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
       end
-      if [
-        "carrollszoocam",
-        "gpocam",
-        "wayra-office",
-        "wayra-agora",
-        "wayrahikvision",
-        "zipyard-navan-foh",
-        "zipyard-ranelagh-foh",
-        "ndrc-main",
-        "ndrc-foodcam",
-        "gemcon-cathalbrugha",
-        "smartcity1",
-        "stephens-green",
-        "treacyconsulting1",
-        "treacyconsulting2",
-        "treacyconsulting3",
-        "dcctestdumping1",
-        "dcctestdumping2",
-        "cebit-hiks",
-        "cebit-axis",
-        "cebit-hikb",
-        "bennett"
-      ].include? camera_exid
-        Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
-      else
-        UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera.exid)
-      end
-      logger.info("Update for camera #{camera.exid} finished. New status #{updates[:is_online]}")
     end
 
     def thumbnail_token_time(thumbnail_url)
