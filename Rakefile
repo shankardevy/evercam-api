@@ -225,8 +225,10 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   default_username = args.default_username.nil? ? "" : args.default_username.to_s
   default_password = args.default_password.nil? ? "" : args.default_password.to_s
   
+  m.name = m.name.upcase
+  
   if !jpg_url.blank?
-    m.jpg_url = :jpg_url 
+    m.jpg_url = jpg_url 
     if m.values[:config].has_key?('snapshots')
       if m.values[:config]['snapshots'].has_key?('jpg')
         m.values[:config]['snapshots']['jpg'] = jpg_url
