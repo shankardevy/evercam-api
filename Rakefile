@@ -159,8 +159,10 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       ### This does not call the method if any of the parameters is blank
       #Rake::Task["fix_model"].invoke(m, jpg_url, h264_url, mjpg_url, default_username, default_password)
 
+      m.name = m.name.upcase
+
       if !jpg_url.blank?
-        m.jpg_url = :jpg_url 
+        m.jpg_url = jpg_url 
         if m.values[:config].has_key?('snapshots')
           if m.values[:config]['snapshots'].has_key?('jpg')
             m.values[:config]['snapshots']['jpg'] = jpg_url
