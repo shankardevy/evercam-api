@@ -66,6 +66,7 @@ GEM
     cookiejar (0.3.2)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    curb (0.8.7)
     daemons (1.1.9)
     dalli (2.7.2)
     database_cleaner (1.3.0)
@@ -274,6 +275,7 @@ GEM
     sinatra-partial (0.4.0)
       sinatra
     slop (3.6.0)
+    smarter_csv (1.0.19)
     spoon (0.0.4)
       ffi
     stringex (2.5.2)
@@ -314,6 +316,7 @@ DEPENDENCIES
   aws-sdk
   concurrent-ruby
   concurrent-ruby-ext
+  curb
   dalli
   database_cleaner
   em-http-request
@@ -357,6 +360,7 @@ DEPENDENCIES
   sinatra-contrib
   sinatra-flash
   sinatra-partial
+  smarter_csv
   stringex
   thin
   unicorn

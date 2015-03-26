@@ -34,12 +34,22 @@ module Evercam
         response  = conn.get do |req|
           req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
         end
+
+        if response.status == 401
+          digest_response = Curl::Easy.new("#{params[:external_url]}#{params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')}")
+          digest_response.http_auth_types = :digest
+          digest_response.username = params[:cam_username]
+          digest_response.password = params[:cam_password]
+          digest_response.perform
+
+          response = OpenStruct.new({'status' => digest_response.response_code, 'body' => digest_response.body, 'headers' => digest_response.headers })
+        end
       rescue URI::InvalidURIError => error
         raise BadRequestError, "Invalid URL. Cause: #{error}"
       rescue Faraday::TimeoutError
         raise CameraOfflineError, 'Camera offline'
       end
-      if response.success?
+      if response.status == 200
         data = Base64.encode64(response.body).gsub("\n", '')
         { status: 'ok', data: "data:#{response.headers.fetch('content-type', 'image/jpg').gsub(/\s+/, '').gsub("\"", "'") };base64,#{data}"}
       elsif response.status == 401
@@ -107,7 +117,7 @@ module Evercam
         include_shared = false if params.include?(:exclude_shared) && params[:exclude_shared]
         include_shared = false if params.include?(:include_shared) && params[:include_shared] == "false"
 
-        thumbnail_requested = params.include?(:thumbnail) && params[:thumbnail] 
+        thumbnail_requested = params.include?(:thumbnail) && params[:thumbnail]
         if params.include?(:ids) && params[:ids]
           cameras = []
           ids = params[:ids].split(",").inject([]) { |list, entry| list << entry.strip }
