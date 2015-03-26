@@ -282,44 +282,57 @@ end
 
 task :fix_models_data do
   VendorModel.all.each do |model|
+    updated = false
     ## Upcase all model names except Default
     if model.name.downcase != "default"
-      model.name = model.name.upcase
+      if model.name != model.name.upcase
+        model.name = model.name.upcase
+        updated = true
+      end
     end
 
     ## Remove None from model Urls
-    if model.jpg_url.downcase == "none" || model.jpg_url.length < 4
-      models.jpg_url = ""
+    if !model.jpg_url.blank? && (model.jpg_url.downcase == "none" || model.jpg_url.downcase == "jpg" || model.jpg_url.length < 4)
+      model.jpg_url = ""
       if model.values[:config].has_key?('snapshots')
         if model.values[:config]['snapshots'].has_key?('jpg')
           model.values[:config]['snapshots']['jpg'] = ""
+          updated = true
         else
           model.values[:config]['snapshots'].merge!({:jpg => ""})
+          updated = true
         end
-      else
+      end
     end
-    if model.h264_url.downcase == "none" || model.h264_url.length < 5
-      models.h264_url = ""
+    if !model.h264_url.blank? && (model.h264_url.downcase == "none" || model.h264_url.downcase == "h264" || model.h264_url.length < 4)
+      model.h264_url = ""
       if model.values[:config].has_key?('snapshots')
         if model.values[:config]['snapshots'].has_key?('h264')
           model.values[:config]['snapshots']['h264'] = ""
+          updated = true
         else
           model.values[:config]['snapshots'].merge!({:h264 => ""})
+          updated = true
         end
-      else
+      end
     end
-    if model.mjpg_url.downcase == "none" || model.mjpg_url.length < 5
-      models.mjpg_url = ""
+    if !model.mjpg_url.blank? && (model.mjpg_url.downcase == "none" || model.mjpg_url.downcase == "mjpg" || model.mjpg_url.length < 4)
+      model.mjpg_url = ""
       if model.values[:config].has_key?('snapshots')
         if model.values[:config]['snapshots'].has_key?('mjpg')
           model.values[:config]['snapshots']['mjpg'] = ""
+          updated = true
         else
           model.values[:config]['snapshots'].merge!({:mjpg => ""})
+          updated = true
         end
-      else
+      end
     end
 
-    model.save
+    if updated
+      puts " - " + model.name + ", " + model.exid
+      model.save
+    end
   end
 end
 
