@@ -99,7 +99,7 @@ module Evercam
       params do
         optional :ids, type: String, desc: "Comma separated list of camera identifiers for the cameras being queried."
         optional :user_id, type: String, desc: "The Evercam user name or email address for the new camera owner."
-        optional :exclude_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
+        optional :exclude_shared, type: 'Boolean', desc: "Set to true to exclude cameras shared with the user in the fetch."
         optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
       end
       get do
