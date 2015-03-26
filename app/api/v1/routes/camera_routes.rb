@@ -109,10 +109,14 @@ module Evercam
       params do
         optional :ids, type: String, desc: "Comma separated list of camera identifiers for the cameras being queried."
         optional :user_id, type: String, desc: "The Evercam user name or email address for the new camera owner."
-        optional :include_shared, type: 'Boolean', desc: "Set to true to include cameras shared with the user in the fetch."
+        optional :exclude_shared, type: 'Boolean', desc: "Set to true to exclude cameras shared with the user in the fetch."
         optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view for each camera or null if it's not available."
       end
       get do
+        include_shared = true
+        include_shared = false if params.include?(:exclude_shared) && params[:exclude_shared]
+        include_shared = false if params.include?(:include_shared) && params[:include_shared] == "false"
+
         thumbnail_requested = params.include?(:thumbnail) && params[:thumbnail]
         if params.include?(:ids) && params[:ids]
           cameras = []
@@ -136,13 +140,13 @@ module Evercam
             user = ::User.where(api_id: params[:api_id], api_key: params[:api_key]).first
           end
 
-          key = "cameras|#{user.username}|#{params[:include_shared]}|#{params[:thumbnail]}"
+          key = "cameras|#{user.username}|#{include_shared}|#{params[:thumbnail]}"
           cameras = Evercam::Services.dalli_cache.get(key) unless thumbnail_requested
 
           if cameras.blank?
             cameras = []
             query = Camera.where(owner: user)
-            if params[:include_shared]
+            if include_shared
               query = query.association_left_join(:shares)
                         .or(Sequel.qualify(:shares, :user_id) => user.id)
               query = query.group(Sequel.qualify(:cameras, :id))
