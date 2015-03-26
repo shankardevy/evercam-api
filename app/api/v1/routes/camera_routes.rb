@@ -13,7 +13,7 @@ module Evercam
     include WebErrors
 
     #---------------------------------------------------------------------------
-    # GET /v1/cameras/test
+    # POST /v1/cameras/test
     #---------------------------------------------------------------------------
     desc 'Tests if given camera parameters are correct'
     params do
@@ -22,7 +22,7 @@ module Evercam
       optional :cam_username, type: String, desc: "Camera username."
       optional :cam_password, type: String, desc: "Camera password."
     end
-    get '/cameras/test' do
+    post '/cameras/test' do
       begin
         conn = Faraday.new(:url => params[:external_url]) do |faraday|
           faraday.request :basic_auth, params[:cam_username], params[:cam_password]
