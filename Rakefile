@@ -280,6 +280,49 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   puts "       FIXED: #{m.exid}"
 end
 
+task :fix_models_data do
+  VendorModel.all.each do |model|
+    ## Upcase all model names except Default
+    if model.name.downcase != "default"
+      model.name = model.name.upcase
+    end
+
+    ## Remove None from model Urls
+    if model.jpg_url.downcase == "none" || model.jpg_url.length < 4
+      models.jpg_url = ""
+      if model.values[:config].has_key?('snapshots')
+        if model.values[:config]['snapshots'].has_key?('jpg')
+          model.values[:config]['snapshots']['jpg'] = ""
+        else
+          model.values[:config]['snapshots'].merge!({:jpg => ""})
+        end
+      else
+    end
+    if model.h264_url.downcase == "none" || model.h264_url.length < 5
+      models.h264_url = ""
+      if model.values[:config].has_key?('snapshots')
+        if model.values[:config]['snapshots'].has_key?('h264')
+          model.values[:config]['snapshots']['h264'] = ""
+        else
+          model.values[:config]['snapshots'].merge!({:h264 => ""})
+        end
+      else
+    end
+    if model.mjpg_url.downcase == "none" || model.mjpg_url.length < 5
+      models.mjpg_url = ""
+      if model.values[:config].has_key?('snapshots')
+        if model.values[:config]['snapshots'].has_key?('mjpg')
+          model.values[:config]['snapshots']['mjpg'] = ""
+        else
+          model.values[:config]['snapshots'].merge!({:mjpg => ""})
+        end
+      else
+    end
+
+    model.save
+  end
+end
+
 
 task :import_cambase_data do
   file = File.read("models.json")
