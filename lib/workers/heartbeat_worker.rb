@@ -96,35 +96,35 @@ module Evercam
     end
 
     def perform(camera_exid)
-      if [
-        "carrollszoocam",
-        "gpocam",
-        "wayra-office",
-        "wayra-agora",
-        "wayrahikvision",
-        "zipyard-navan-foh",
-        "zipyard-ranelagh-foh",
-        "ndrc-main",
-        "ndrc-foodcam",
-        "gemcon-cathalbrugha",
-        "smartcity1",
-        "stephens-green",
-        "treacyconsulting1",
-        "treacyconsulting2",
-        "treacyconsulting3",
-        "dcctestdumping1",
-        "dcctestdumping2",
-        "beefcam1",
-        "beefcam2",
-        "beefcammobile",
-        "bennett"
-      ].include? camera_exid
-        Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
-      else
-        UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera_exid)
-      end
       begin
         Concurrent.timeout(30) do
+          if [
+            "carrollszoocam",
+            "gpocam",
+            "wayra-office",
+            "wayra-agora",
+            "wayrahikvision",
+            "zipyard-navan-foh",
+            "zipyard-ranelagh-foh",
+            "ndrc-main",
+            "ndrc-foodcam",
+            "gemcon-cathalbrugha",
+            "smartcity1",
+            "stephens-green",
+            "treacyconsulting1",
+            "treacyconsulting2",
+            "treacyconsulting3",
+            "dcctestdumping1",
+            "dcctestdumping2",
+            "beefcam1",
+            "beefcam2",
+            "beefcammobile",
+            "bennett"
+          ].include? camera_exid
+            Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
+          else
+            UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera_exid)
+          end
           logger.info("Started update for camera #{camera_exid}")
           instant = Time.now
           camera = Camera.by_exid(camera_exid)
