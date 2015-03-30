@@ -208,7 +208,7 @@ describe 'API routes/cameras' do
 
         parameters = test_params_valid.merge(api_keys)
         post('/cameras/test', parameters)
-        expect(last_response.status).to eq(200)
+        expect(last_response.status).to eq(201)
       end
     end
 
