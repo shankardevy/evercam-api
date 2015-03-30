@@ -144,7 +144,7 @@ describe 'API routes/cameras' do
     end
   end
 
-  describe 'GET /cameras/test' do
+  describe 'POST /cameras/test' do
     let (:test_params_invalid)  do
       {
         external_url: 'http://1.1.1.1',
@@ -165,7 +165,7 @@ describe 'API routes/cameras' do
 
     context 'when there are no parameters' do
       it 'returns a 400 bad request status' do
-        get('/cameras/test', api_keys)
+        post('/cameras/test', api_keys)
         expect(last_response.status).to eq(400)
       end
     end
@@ -174,7 +174,7 @@ describe 'API routes/cameras' do
       it 'returns a 400 bad request status' do
         parameters = test_params_invalid.merge(external_url: '2.2.2.2:123',
                                                jpg_url: 'pancake').merge(api_keys)
-        get('/cameras/test', parameters)
+        post('/cameras/test', parameters)
         expect(last_response.status).to eq(400)
       end
     end
@@ -185,7 +185,7 @@ describe 'API routes/cameras' do
           to_return(:status => 500, :body => "", :headers => {})
 
         parameters = test_params_invalid.merge(api_keys)
-        get('/cameras/test', parameters)
+        post('/cameras/test', parameters)
         expect(last_response.status).to eq(503)
       end
     end
@@ -196,7 +196,7 @@ describe 'API routes/cameras' do
           to_return(:status => 401, :body => "", :headers => {})
 
         parameters = test_params_valid.merge(cam_password: 'xxx').merge(api_keys)
-        get('/cameras/test', parameters)
+        post('/cameras/test', parameters)
         expect(last_response.status).to eq(403)
       end
     end
@@ -207,7 +207,7 @@ describe 'API routes/cameras' do
           to_return(:status => 200, :body => "", :headers => {})
 
         parameters = test_params_valid.merge(api_keys)
-        get('/cameras/test', parameters)
+        post('/cameras/test', parameters)
         expect(last_response.status).to eq(200)
       end
     end
