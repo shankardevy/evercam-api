@@ -208,7 +208,7 @@ module Evercam
 
           from_time = Time.at(params[:from].to_i).utc
           to_time = Time.at(params[:to].to_i).utc
-          to_time = Time.utc if params[:to].blank?
+          to_time = Time.now.utc if params[:to].blank?
 
           off_set = Time.now.in_time_zone(camera.timezone.zone).strftime("%:z")
           from = Time.new(from_time.year, from_time.month, from_time.day, from_time.hour, from_time.min, from_time.sec, off_set).utc.to_s
