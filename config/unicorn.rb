@@ -17,5 +17,5 @@ after_fork do |server, worker|
     puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to send QUIT'
   end
 
-  Sequel::Model.db = Sequel.connect(Evercam::Config[:database])
+  Sequel::Model.db = Sequel.connect(Evercam::Config[:database], max_connections: 20)
 end
