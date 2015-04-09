@@ -12,7 +12,7 @@ module Evercam
 
       def execute
         camera = ::Camera.by_exid!(inputs[:id])
-        instant = camera.timezone.time Time.now
+        instant = Time.now.utc
         snapshot = nil
         response = nil
 
