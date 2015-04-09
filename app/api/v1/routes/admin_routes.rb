@@ -1,3 +1,4 @@
+# TODO: remove this after launching sidekiq-based system on the Elixir server
 module Evercam
   class V1AdminRoutes < Grape::API
     format :json

@@ -72,7 +72,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
   require 'smarter_csv'
 
   AWS.config(
-    :access_key_id => ENV['AWS_ACCESS_KEY_ID'], 
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
     :secret_access_key => ENV['AWS_SECRET_KEY'],
     # disable this key if source bucket is in US
     :s3_endpoint => 's3-eu-west-1.amazonaws.com'
@@ -80,7 +80,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
   s3 = AWS::S3.new
   assets = s3.buckets['evercam-public-assets']
   csv = assets.objects['models_data.csv']
-  
+
   if csv.nil?
     puts " No CSV file found"
   else
@@ -97,7 +97,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
     f.write(csv.read)
     puts " 'models_data.csv' imported from AWS S3 \n"
   end
-  
+
   puts "\n Reading data from 'models_data.csv' for #{args[:vendorexid]} \n"
   File.open("temp/models_data.csv", "r:ISO-8859-15:UTF-8") do |file|
     v = Vendor.find(:exid => args[:vendorexid])
@@ -132,7 +132,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       next if !(vm[:vendor_id].downcase == args[:vendorexid].downcase)
       original_vm = vm.clone
       puts "    + " + v.exid + "." + vm[:model].to_s
-      
+
       if !d.nil?
         Rake::Task["fix_model"].invoke(d, vm[:jpg_url], vm[:h264_url], vm[:mjpg_url], vm[:default_username], vm[:default_password])
       end
@@ -140,10 +140,10 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       m = VendorModel.where(:exid => vm[:model].to_s).first
       if m.nil?
         m = VendorModel.new(
-            exid: vm[:model].to_s,
-            name: vm[:model].upcase,
-            vendor_id: v.id,
-            config: {}
+          exid: vm[:model].to_s,
+          name: vm[:model].upcase,
+          vendor_id: v.id,
+          config: {}
         )
         puts "     VM += " + v.id.to_s + ", " + vm[:model] + ", " + vm[:model].upcase
       else
@@ -155,14 +155,14 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       mjpg_url = vm[:mjpg_url].nil? ? "" : vm[:mjpg_url]
       default_username = vm[:default_username].nil? ? "" : vm[:default_username].to_s
       default_password = vm[:default_password].nil? ? "" : vm[:default_password].to_s
-      
+
       ### This does not call the method if any of the parameters is blank
       #Rake::Task["fix_model"].invoke(m, jpg_url, h264_url, mjpg_url, default_username, default_password)
 
       m.name = m.name.upcase
 
       if !jpg_url.blank?
-        m.jpg_url = jpg_url 
+        m.jpg_url = jpg_url
         if m.values[:config].has_key?('snapshots')
           if m.values[:config]['snapshots'].has_key?('jpg')
             m.values[:config]['snapshots']['jpg'] = jpg_url
@@ -175,7 +175,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       end
 
       if !h264_url.blank?
-        m.h264_url = h264_url 
+        m.h264_url = h264_url
         if m.values[:config].has_key?('snapshots')
           if m.values[:config]['snapshots'].has_key?('h264')
             m.values[:config]['snapshots']['h264'] = h264_url
@@ -188,7 +188,7 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       end
 
       if !mjpg_url.blank?
-        m.mjpg_url = mjpg_url 
+        m.mjpg_url = mjpg_url
         if m.values[:config].has_key?('snapshots')
           if m.values[:config]['snapshots'].has_key?('mjpg')
             m.values[:config]['snapshots']['mjpg'] = mjpg_url
@@ -201,8 +201,14 @@ task :import_vendor_data, [:vendorexid] do |t, args|
       end
 
       if default_username or default_password
-        m.values[:config].merge!({'auth' => {'basic' => {'username' => default_username.to_s.empty? ? '' : default_username.to_s,
-                                                         'password' => default_password.to_s.empty? ? '' : default_password.to_s}}})
+        m.values[:config].merge!({
+          'auth' => {
+            'basic' => {
+              'username' => default_username.to_s.empty? ? '' : default_username.to_s,
+              'password' => default_password.to_s.empty? ? '' : default_password.to_s
+            }
+          }
+        })
       end
 
       puts "       " + m.values[:config].to_s
@@ -226,11 +232,11 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   mjpg_url = args.mjpg_url.nil? ? "" : args.mjpg_url
   default_username = args.default_username.nil? ? "" : args.default_username.to_s
   default_password = args.default_password.nil? ? "" : args.default_password.to_s
-  
+
   m.name = m.name.upcase
-  
+
   if !jpg_url.blank?
-    m.jpg_url = jpg_url 
+    m.jpg_url = jpg_url
     if m.values[:config].has_key?('snapshots')
       if m.values[:config]['snapshots'].has_key?('jpg')
         m.values[:config]['snapshots']['jpg'] = jpg_url
@@ -243,7 +249,7 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   end
 
   if !h264_url.blank?
-    m.h264_url = h264_url 
+    m.h264_url = h264_url
     if m.values[:config].has_key?('snapshots')
       if m.values[:config]['snapshots'].has_key?('h264')
         m.values[:config]['snapshots']['h264'] = h264_url
@@ -256,7 +262,7 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   end
 
   if !mjpg_url.blank?
-    m.mjpg_url = mjpg_url 
+    m.mjpg_url = mjpg_url
     if m.values[:config].has_key?('snapshots')
       if m.values[:config]['snapshots'].has_key?('mjpg')
         m.values[:config]['snapshots']['mjpg'] = mjpg_url
@@ -269,8 +275,14 @@ task :fix_model, [:m, :jpg_url, :h264_url, :mjpg_url, :default_username, :defaul
   end
 
   if default_username or default_password
-    m.values[:config].merge!({'auth' => {'basic' => {'username' => default_username.to_s.empty? ? '' : default_username.to_s,
-                                                     'password' => default_password.to_s.empty? ? '' : default_password.to_s}}})
+    m.values[:config].merge!({
+      'auth' => {
+        'basic' => {
+          'username' => default_username.to_s.empty? ? '' : default_username.to_s,
+          'password' => default_password.to_s.empty? ? '' : default_password.to_s
+        }
+      }
+    })
   end
 
   puts "       " + m.values[:config].to_s
@@ -402,7 +414,7 @@ end
 task :export_thumbnails_to_s3 do
   Sequel.connect(Evercam::Config[:database])
 
-  require 'active_support' 
+  require 'active_support'
   require 'active_support/core_ext'
   require 'evercam_models'
   require 'aws-sdk'
@@ -421,6 +433,60 @@ task :export_thumbnails_to_s3 do
       end
     end
 
+  rescue Exception => e
+    log.warn(e)
+  end
+end
+
+task :send_camera_data_to_elixir_server, [:total, :paid_only] do |t, args|
+  Sequel.connect(Evercam::Config[:database])
+
+  require 'active_support'
+  require 'active_support/core_ext'
+  require 'evercam_models'
+
+  recording_cameras = [
+    "carrollszoocam",
+    "gpocam",
+    "wayra-agora",
+    "wayrahikvision",
+    "zipyard-navan-foh",
+    "zipyard-ranelagh-foh",
+    "gemcon-cathalbrugha",
+    "smartcity1",
+    "stephens-green",
+    "treacyconsulting1",
+    "treacyconsulting2",
+    "treacyconsulting3",
+    "dcctestdumping1",
+    "dcctestdumping2",
+    "beefcam1",
+    "beefcam2",
+    "beefcammobile",
+    "bennett"
+  ]
+  begin
+    total = args[:total] || Camera.count
+    cameras = Camera
+    cameras = cameras.where(exid: recording_cameras) if args[:paid_only].present?
+    cameras.take(total.to_i).each do |camera|
+      camera_url = camera.external_url.to_s
+      camera_url << camera.res_url('jpg').to_s
+      unless camera_url.blank?
+        auth = "#{camera.cam_username}:#{camera.cam_password}"
+        frequent = recording_cameras.include? camera.exid
+        Sidekiq::Client.push({
+          'queue' => "to_elixir",
+          'class' => "ElixirWorker",
+          'args' => [
+            camera.exid,
+            camera_url,
+            auth,
+            frequent
+          ]
+        })
+      end
+    end
   rescue Exception => e
     log.warn(e)
   end

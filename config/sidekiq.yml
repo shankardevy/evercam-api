@@ -3,6 +3,7 @@
 :queues:
   - [async, 10]
   - [cache, 10]
+  - [from_elixir, 10]
   - [default, 1]
   - [heartbeat, 1]
   - [bennett, 9]
