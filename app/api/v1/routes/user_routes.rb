@@ -1,6 +1,5 @@
 require_relative '../presenters/user_presenter'
 require_relative '../presenters/camera_presenter'
-require 'pry'
 
 module Evercam
   class V1UserRoutes < Grape::API
