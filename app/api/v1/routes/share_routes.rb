@@ -127,7 +127,9 @@ module Evercam
         raise NotFoundError.new if share.nil?
 
         rights = requester_rights_for(camera)
-        raise AuthorizationError.new if !rights.allow?(AccessRight::EDIT)
+        if !rights.allow?(AccessRight::EDIT) && caller.email != user.email
+          raise AuthorizationError.new
+        end
 
         outcome = Actors::ShareDelete.run(params.merge!({id: camera.id, user_id: user.id, ip: request.ip}))
 
