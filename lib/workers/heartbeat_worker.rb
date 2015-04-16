@@ -7,7 +7,6 @@ require 'curb'
 require 'active_support'
 require 'active_support/core_ext'
 require 'concurrent/utilities'
-require_relative './unique_worker'
 require_relative '../../lib/services'
 require_relative '../../app/api/v1/helpers/cache_helper'
 
@@ -23,12 +22,12 @@ module Evercam
     TIMEOUT = 5
 
     def self.enqueue(queue, camera_exid)
-      UniqueQueueWorker.enqueue_if_unique(queue, self, camera_exid)
+      Sidekiq::Client.push({ 'queue' => queue, 'class' => self, 'args' => [camera_exid] })
     end
 
     def self.enqueue_all
       Camera.select(:exid).each do |camera|
-        UniqueQueueWorker.enqueue_if_unique('heartbeat', self, camera.exid)
+        HeartbeatWorker.perform_async(camera.exid)
       end
     end
 
@@ -123,7 +122,7 @@ module Evercam
           ].include? camera_exid
             Evercam::HeartbeatWorker.enqueue(camera_exid, camera_exid)
           else
-            UniqueQueueWorker.enqueue_if_unique('heartbeat', Evercam::HeartbeatWorker, camera_exid)
+            Evercam::HeartbeatWorker.enqueue("heartbeat", camera_exid)
           end
           logger.info("Started update for camera #{camera_exid}")
           instant = Time.now
