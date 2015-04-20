@@ -77,6 +77,11 @@ module Evercam
             logger.warn("Camera seems online, but returned content type: #{response.headers.fetch('Content-Type', '')}")
           end
         end
+
+        # camera is online but responds with "Device Busy"
+        if response.status == 503
+          updates.merge!(is_online: true, last_online_at: instant)
+        end
       rescue URI::InvalidURIError
         raise BadRequestError, 'Invalid URL'
       rescue Net::OpenTimeout
