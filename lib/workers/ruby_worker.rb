@@ -19,7 +19,7 @@ module Evercam
           camera: camera,
           created_at: Time.at(timestamp),
           data: 'S3',
-          notes: 'Evercam System'
+          notes: 'Evercam Proxy'
         )
       end
     end
