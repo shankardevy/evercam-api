@@ -2,7 +2,7 @@ require 'aws'
 require_relative '../../lib/services'
 
 module Evercam
-  class RubyWorker
+  class RubySnapshotWorker
 
     include Sidekiq::Worker
 
