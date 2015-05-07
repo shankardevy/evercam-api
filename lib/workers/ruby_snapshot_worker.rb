@@ -16,8 +16,8 @@ module Evercam
         "File '#{filepath}' not found in '#{Evercam::Services.snapshot_bucket.name}' bucket"
       ) unless file.exists?
 
-      if Snapshot.where(created_at: Time.at(timestamp)).all.blank?
-        camera = Camera.by_exid!(camera_id)
+      camera = Camera.by_exid!(camera_id)
+      if Snapshot.where(camera: camera, created_at: Time.at(timestamp)).blank?
         Snapshot.create(
           camera: camera,
           created_at: Time.at(timestamp),
