@@ -4,6 +4,7 @@
   - [async, 10]
   - [cache, 10]
   - [status, 10]
+  - [from_elixir, 10]
   - [snapshot, 10]
   - [default, 1]
   - [heartbeat, 1]
