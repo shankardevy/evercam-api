@@ -6,7 +6,7 @@ module Evercam
 
     include Sidekiq::Worker
 
-    sidekiq_options queue: :from_elixir
+    sidekiq_options queue: :snapshot
 
     def perform(camera_id, timestamp)
       filepath = "#{camera_id}/snapshots/#{timestamp}.jpg"
