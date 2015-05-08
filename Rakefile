@@ -446,6 +446,8 @@ task :send_camera_data_to_elixir_server, [:total, :paid_only] do |t, args|
   require 'evercam_models'
 
   recording_cameras = [
+    "dancecam",
+    "centralbankbuild",
     "carrollszoocam",
     "gpocam",
     "wayra-agora",
