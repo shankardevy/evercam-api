@@ -67,7 +67,8 @@ module Evercam
     #   puts "/v1#{route.route_path.gsub!('(.:format)', '').ljust(60)} #{route.route_method}\n"
     # end
 
-    #Sequel::Model.db.loggers << Logger.new($stdout)
-
+    # Uncomment this to see sql the debug log
+    # Sequel::Model.db.sql_log_level = :debug
+    # Sequel::Model.db.logger = Logger.new($stdout)
   end
 end
