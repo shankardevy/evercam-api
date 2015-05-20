@@ -32,11 +32,11 @@ end
 
 # Set up Airbrake.
 Airbrake.configure do |config|
-   config.api_key = Evercam::Config[:airbrake][:api_key]
-   config.environment_name = (ENV['RACK_ENV'] || 'development')
-   config.ignore << "Evercam::CameraOfflineError"
-   config.ignore << "Evercam::AuthorizationError"
-   config.ignore << "Evercam::NotFoundError"
+  config.api_key = Evercam::Config[:airbrake][:api_key]
+  config.environment_name = (ENV['RACK_ENV'] || 'development')
+  config.ignore << "Evercam::CameraOfflineError"
+  config.ignore << "Evercam::AuthorizationError"
+  config.ignore << "Evercam::NotFoundError"
 end
 
 Geocoder.configure(
@@ -82,17 +82,18 @@ end
 map '/' do
   # setup ssl requirements
   use Rack::SslEnforcer,
-      Evercam::Config[:api][:ssl]
+    Evercam::Config[:api][:ssl]
 
   run Evercam::WebApp
 end
 
 map '/sidekiq' do
   use Rack::SslEnforcer,
-      Evercam::Config[:api][:ssl]
+    Evercam::Config[:api][:ssl]
 
   use Rack::Auth::Basic, "Protected Area" do |username, password|
-    username == 'sidekiq' && password == 'mehcam'
+    username == Evercam::Config[:sidekiq][:username] &&
+      password == Evercam::Config[:sidekiq][:password]
   end
 
   run Sidekiq::Web

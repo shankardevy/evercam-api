@@ -7,11 +7,11 @@ require 'evercam_misc'
 require 'dalli'
 
 Sidekiq.configure_server do |c|
-  c.redis = Evercam::Config[:sidekiq]
+  c.redis = Evercam::Config[:redis]
 end
 
 Sidekiq.configure_client do |c|
-  c.redis = Evercam::Config[:sidekiq]
+  c.redis = Evercam::Config[:redis]
 end
 
 require_relative "zone_manager"

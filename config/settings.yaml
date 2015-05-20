@@ -15,9 +15,12 @@
       :hide_format: true
       :hide_documentation_path: true
       :base_path: http://localhost:9292/v1
-  :sidekiq:
+  :redis:
     :url: redis://localhost:6379/0
     :namespace: sidekiq
+  :sidekiq:
+    :username: <%= ENV['SIDEKIQ_USERNAME'] %>
+    :password: <%= ENV['SIDEKIQ_PASSWORD'] %>
   :amazon:
     :access_key_id: <%= ENV['AWS_ACCESS_KEY'] %>
     :secret_access_key: <%= ENV['AWS_SECRET_KEY'] %>
@@ -77,7 +80,7 @@
       :hide_format: true
       :hide_documentation_path: true
       :base_path: https://api.evercam.io/v1
-  :sidekiq:
+  :redis:
     :url: <%= ENV['REDISCLOUD_URL'] %>
     :namespace: sidekiq
   :mail:
@@ -104,9 +107,6 @@
     :to: env.staging@evercam.io
     :from: evercam.io <env.staging@evercam.io>
     :via: :sendmail
-  :sidekiq:
-    :url: redis://localhost:6379/0
-    :namespace: sidekiq
   :swagger:
     :v1:
       :api_version: '1.0'
