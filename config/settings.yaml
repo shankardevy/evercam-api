@@ -38,7 +38,7 @@
     :key: <%= ENV['SNAP_KEY'] %>
     :iv: <%= ENV['SNAP_IV'] %>
   :airbrake:
-     :api_key: 40b9c667b991a7e0530f07523cebb573
+     :api_key: <%= ENV['AIRBRAKE_KEY'] %>
   :streams:
     :rtmp_path: rtmp://media.evercam.io:1935
 
