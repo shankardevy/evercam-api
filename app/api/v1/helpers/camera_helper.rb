@@ -36,7 +36,7 @@ module Evercam
         nil
       end
     end
-    
+
     def hls_url_for_camera(camera)
       rtsp_url = rtsp_url_for_camera(camera)
       Evercam::Config[:streams][:hls_path] + "/live/" + CGI.escape(rtsp_url) unless rtsp_url.nil?
@@ -44,7 +44,25 @@ module Evercam
 
     def rtmp_url_for_camera(camera)
       rtsp_url = rtsp_url_for_camera(camera)
-      Evercam::Config[:streams][:rtmp_path] + "/live/" + CGI.escape(rtsp_url) unless rtsp_url.nil?
+      token = "#{camera.cam_username}|#{camera.cam_password}|#{rtsp_url}|"
+      token = encrypt(token) unless rtsp_url.blank?
+      Evercam::Config[:streams][:rtmp_path] + "/live/" + camera.exid + "?token=" + token unless rtsp_url.blank?
+    end
+
+    def encrypt(message)
+      require 'openssl'
+
+      cipher = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+      cipher.encrypt
+      cipher.key = "#{Evercam::Config[:snapshots][:key]}"
+      cipher.iv = "#{Evercam::Config[:snapshots][:iv]}"
+      cipher.padding = 0
+
+      message << ' ' until message.length % 16 == 0
+      token = cipher.update(message)
+      token << cipher.final
+
+      Base64.urlsafe_encode64(token)
     end
 
     def auto_generate_camera_id(camera_name)
