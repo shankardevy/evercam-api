@@ -379,9 +379,8 @@ module Evercam
         expose :hls, documentation: {
           type: 'String',
           desc: 'HLS url'
-        } do |c,o|
-          host = hls_url_for_camera(c)
-          host.to_s
+        } do |camera, _options|
+          camera.is_public ? hls_url_for_camera(camera).to_s : ""
         end
 
         expose :rtmp, documentation: {
