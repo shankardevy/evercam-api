@@ -41,6 +41,7 @@
      :api_key: <%= ENV['AIRBRAKE_KEY'] %>
   :streams:
     :rtmp_path: rtmp://media.evercam.io:1935
+    :hls_path: http://media.evercam.io
 
 :development:
   <<: *defaults
@@ -54,6 +55,7 @@
     :iv: <%= ENV['SNAP_IV'] %>
   :streams:
     :rtmp_path: rtmp://localhost:1935
+    :hls_path: http://localhost:4000
 
 :test:
   <<: *defaults

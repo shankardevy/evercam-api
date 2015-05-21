@@ -376,15 +376,13 @@ module Evercam
           "http://evr.cm/#{c.exid}.jpg"
         end
 
-        # commented out until it's properly implemented
-        #
-        # expose :hls, documentation: {
-        #   type: 'String',
-        #   desc: 'Hls url'
-        # } do |c,o|
-        #   host = hls_url_for_camera(c)
-        #   host.to_s
-        # end
+        expose :hls, documentation: {
+          type: 'String',
+          desc: 'HLS url'
+        } do |c,o|
+          host = hls_url_for_camera(c)
+          host.to_s
+        end
 
         expose :rtmp, documentation: {
           type: 'String',

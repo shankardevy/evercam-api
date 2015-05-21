@@ -39,7 +39,9 @@ module Evercam
 
     def hls_url_for_camera(camera)
       rtsp_url = rtsp_url_for_camera(camera)
-      Evercam::Config[:streams][:hls_path] + "/live/" + CGI.escape(rtsp_url) unless rtsp_url.nil?
+      token = "#{camera.cam_username}|#{camera.cam_password}|#{rtsp_url}|"
+      token = encrypt(token) unless rtsp_url.blank?
+      Evercam::Config[:streams][:hls_path] + "/live/" + camera.exid + "/index.m3u8?token=" + token unless rtsp_url.blank?
     end
 
     def rtmp_url_for_camera(camera)
