@@ -1,5 +1,5 @@
 # evercam-api
-| Name   | Evercam Dashboard HTML5 Client   |
+| Name   | Evercam API   |
 | --- | --- |
 | Owner   | [@mosic](https://github.com/mosic)   |
 | Dependencies Status   | [![Dependency Status](https://gemnasium.com/evercam/evercam-api.svg)](https://gemnasium.com/evercam/evercam-api)  |
