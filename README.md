@@ -1,4 +1,6 @@
-# evercam-api
+# Evercam API
+Responsible for all API endpoints, communications between evercam-media and evercam-dash (and other clients).
+
 | Name   | Evercam API   |
 | --- | --- |
 | Owner   | [@mosic](https://github.com/mosic)   |
