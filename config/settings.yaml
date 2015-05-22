@@ -41,7 +41,7 @@
      :api_key: <%= ENV['AIRBRAKE_KEY'] %>
   :streams:
     :rtmp_path: rtmp://media.evercam.io:1935
-    :hls_path: http://media.evercam.io
+    :hls_path: https://media.evercam.io
 
 :development:
   <<: *defaults
