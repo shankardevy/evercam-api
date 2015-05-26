@@ -11,7 +11,7 @@ dropdb --if-exists evercam_dev \
   && createdb evercam_dev \
   && dropdb --if-exists evercam_tst \
   && createdb evercam_tst \
-  && curl -# `heroku pgbackups:url -a $APP` > $TMP \
+  && curl -# `heroku pg:backups public-url -a $APP` > $TMP \
   && pg_restore -v -x -O -d evercam_dev < $TMP \
   && pg_restore -s -v -x -O -d evercam_tst < $TMP \
   && pg_restore -a -v -x -O -d evercam_tst -t schema_migrations < $TMP ;
