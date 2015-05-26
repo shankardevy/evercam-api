@@ -118,6 +118,7 @@ module Evercam
         include_shared = false if params.include?(:include_shared) && params[:include_shared] == "false"
 
         thumbnail_requested = params.include?(:thumbnail) && params[:thumbnail]
+        requested_by_client = caller.kind_of?(Client)
         if params.include?(:ids) && params[:ids]
           cameras = []
           ids = params[:ids].split(",").inject([]) { |list, entry| list << entry.strip }
@@ -141,7 +142,7 @@ module Evercam
           end
 
           key = "cameras|#{user.username}|#{include_shared}|#{params[:thumbnail]}"
-          cameras = Evercam::Services.dalli_cache.get(key) unless thumbnail_requested
+          cameras = Evercam::Services.dalli_cache.get(key) unless thumbnail_requested || requested_by_client
 
           if cameras.blank?
             cameras = []
