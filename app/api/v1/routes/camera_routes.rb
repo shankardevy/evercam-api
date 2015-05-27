@@ -124,6 +124,7 @@ module Evercam
           ids = params[:ids].split(",").inject([]) { |list, entry| list << entry.strip }
           Camera.where(exid: ids).each do |camera|
             rights = requester_rights_for(camera)
+            rights = CameraRightSet.new(camera, rights.token.grantor) if rights.type == :client
             if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
               presenter = Evercam::Presenters::Camera.new(camera)
               cameras << presenter.as_json(minimal: !rights.allow?(AccessRight::VIEW))
@@ -165,6 +166,7 @@ module Evercam
 
             query.order(:name).eager(:owner, :vendor_model => :vendor).all.select do |camera|
               rights = requester_rights_for(camera)
+              rights = CameraRightSet.new(camera, rights.token.grantor) if rights.type == :client
               if rights.allow_any?(AccessRight::LIST, AccessRight::VIEW)
                 presenter = Evercam::Presenters::Camera.new(camera)
                 cameras << presenter.as_json(
