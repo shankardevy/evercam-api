@@ -25,11 +25,10 @@ module Evercam
 
          context 'when given valid parameters' do
             let(:parameters) {
-               {id: share.camera.exid, share_id: share.id}
+              { id: share.camera.id, user_id: share.user.id }
             }
 
             it 'returns success and updates the shares permissions' do
-              pending
                outcome = subject.run(parameters)
                expect(outcome).to be_success
                result = outcome.result

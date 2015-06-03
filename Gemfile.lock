@@ -365,4 +365,3 @@ DEPENDENCIES
   stringex
   thin
   unicorn
-  webmock (~> 1.17.0)
