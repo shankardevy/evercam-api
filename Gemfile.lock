@@ -31,7 +31,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     addressable (2.3.6)
-    airbrake (4.0.0)
+    airbrake (4.2.1)
       builder
       multi_json
     aws-sdk (1.59.0)
@@ -182,7 +182,7 @@ GEM
     minitest (5.4.3)
     mocha (1.1.0)
       metaclass (~> 0.0.1)
-    multi_json (1.10.1)
+    multi_json (1.11.0)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     mutations (0.7.2)
