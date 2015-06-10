@@ -26,7 +26,7 @@ gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger', '= 0.7.2'
 
-gem 'georuby', '= 2.3.0'
+gem 'georuby', '~> 2.3.0'
 
 gem 'activesupport-json_encoder',
   github: 'rails/activesupport-json_encoder'
@@ -54,8 +54,8 @@ gem 'sinatra-contrib',
 gem 'sinatra-partial',
   require: 'sinatra/partial'
 
-gem 'evercam_misc', '~> 0.0'
-gem 'evercam_models', '~> 0.3.14'
+gem 'evercam_misc', '~> 0.0.10'
+gem 'evercam_models', '~> 0.3.17'
 
 gem 'airbrake'
 
@@ -78,8 +78,8 @@ group :test do
   gem 'rack-test'
   gem 'factory_girl'
   gem 'nokogiri'
-  gem 'webmock', '~> 1.17.0'
-  gem 'rspec', '= 2.14.1'
+  gem 'webmock', '~> 1.21.0'
+  gem 'rspec', '= 3.2.0'
   gem 'guard-rspec'
   gem 'guard-rack'
   gem 'database_cleaner'
