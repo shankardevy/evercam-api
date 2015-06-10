@@ -30,7 +30,7 @@ module Evercam
       base.rescue_from :all do |exception|
         status = 500
         details = {"message" => "Sorry, we dropped the ball.",
-                   "code" =>    "unknown_error",
+                   "code" =>    "#{exception.message}",
                    "context" => []}
         if exception.kind_of?(EvercamError)
           log.error "Evercam error caught processing request.\n"\
