@@ -117,7 +117,7 @@ GEM
     ffi (1.9.3)
     formatador (0.2.5)
     geocoder (1.2.8)
-    georuby (2.3.0)
+    georuby (2.5.2)
     grape (0.9.0)
       activesupport
       builder
@@ -325,7 +325,7 @@ DEPENDENCIES
   factory_girl
   fakes3
   faraday-digestauth (~> 0.1.0)!
-  georuby (= 2.3.0)
+  georuby (= 2.5.2)
   grape
   grape-entity
   grape-swagger (= 0.7.2)

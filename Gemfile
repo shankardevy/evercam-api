@@ -26,7 +26,7 @@ gem 'grape'
 gem 'grape-entity'
 gem 'grape-swagger', '= 0.7.2'
 
-gem 'georuby', '= 2.3.0'
+gem 'georuby', '= 2.5.2'
 
 gem 'activesupport-json_encoder',
   github: 'rails/activesupport-json_encoder'
