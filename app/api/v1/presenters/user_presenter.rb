@@ -68,9 +68,9 @@ module Evercam
         u.country.blank? ? "" : u.country.iso3166_a2
       end
 
-      expose :billing_id, documentation: {
+      expose :stripe_customer_id, documentation: {
           type: 'string',
-          desc: 'Users billing id',
+          desc: 'Users stripe customer id',
           required: true
         }
 
