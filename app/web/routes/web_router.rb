@@ -25,8 +25,10 @@ module Evercam
       Evercam::Config[:cookies]
 
     # configure intercom.io
-    Intercom.app_id = Evercam::Config[:intercom][:app_id]
-    Intercom.app_api_key  = Evercam::Config[:intercom][:api_key]
+    Intercom::Client.new(
+      app_id: Evercam::Config[:intercom][:app_id],
+      api_key: Evercam::Config[:intercom][:api_key]
+    )
 
     # enable partial helpers and default to erb
     register Sinatra::Partial
