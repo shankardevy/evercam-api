@@ -8,8 +8,8 @@ module Evercam
     def perform(event, email)
       begin
         Intercom::Client.new(
-          app_id: 'f9c1fd60de50d31bcbc3f4d8d74c9c6dbc40e95a',
-          api_key: 'e07f964835e66a91d356be0171895dea792c3c4b'
+          app_id: Evercam::Config[:intercom][:app_id],
+          api_key: Evercam::Config[:intercom][:api_key]
         )
         Intercom::Event.create(
            :event_name => event,
