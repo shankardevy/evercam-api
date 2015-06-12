@@ -29,6 +29,14 @@ module Evercam
         }
       }
 
+      expose :logo, documentation: {
+        type: 'string',
+        desc: 'Vendor logo',
+        required: true,
+      } do |v,o|
+        "http://evercam-public-assets.s3.amazonaws.com/#{v.exid}/logo.jpg"
+      end
+
     end
   end
 end
