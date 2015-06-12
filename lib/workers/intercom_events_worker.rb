@@ -7,11 +7,11 @@ module Evercam
 
     def perform(event, email)
       begin
-        Intercom::Client.new(
+        intercom = Intercom::Client.new(
           app_id: Evercam::Config[:intercom][:app_id],
           api_key: Evercam::Config[:intercom][:api_key]
         )
-        Intercom::Event.create(
+        intercom.events.create(
            :event_name => event,
            :created_at => Time.now.to_i,
            :email  => email
