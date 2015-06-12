@@ -82,7 +82,11 @@ module Evercam
           if ic_user.nil?
             # Create ic user
             begin
-              intercom.users.create(:email => inputs[:email], :name => user.fullname)
+              intercom.users.create(
+                :email => inputs[:email],
+                :name => user.fullname,
+                :signed_up_at => Time.now.to_i
+              )
             rescue
               # Ignore it
             end
