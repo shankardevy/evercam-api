@@ -33,10 +33,9 @@ module Evercam
         type: "integer",
         desc: "Total number of models of the vendor",
         required: true
-      } do |v, o|
+      } do |v, _o|
         v.vendor_models.count
       end
-
     end
   end
 end
