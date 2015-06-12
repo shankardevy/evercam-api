@@ -29,15 +29,21 @@ module Evercam
         }
       }
 
-      expose :logo, documentation: {
-        type: 'string',
-        desc: 'Vendor logo',
-        required: true,
-      } do |v,o|
-        "http://evercam-public-assets.s3.amazonaws.com/#{v.exid}/logo.jpg"
+      expose :total_models, documentation: {
+        type: "integer",
+        desc: "Total number of models of the vendor",
+        required: true
+      } do |v, _o|
+        v.vendor_models.count
       end
 
+      expose :logo, documentation: {
+        type: "string",
+        desc: "Vendor logo",
+        required: true,
+      } do |v, _o|
+        "http://evercam-public-assets.s3.amazonaws.com/#{v.exid}/logo.jpg"
+      end
     end
   end
 end
-
