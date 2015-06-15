@@ -1,15 +1,22 @@
+require_relative "../../app/api/v1/helpers/cache_helper.rb"
+
 module Evercam
   class DeleteUserWorker
     include Sidekiq::Worker
+    include Evercam::CacheHelper
 
-    def perform(user)
+    def perform(username)
       begin
-        # delete user owned cameras
+        user = ::User.by_login(username)
+        raise NotFoundError, 'user does not exist' unless user
+
         query = Camera.where(owner: user)
         query.eager(:owner).all.select do |camera|
+          invalidate_for_camera(camera.exid)
           camera.destroy
         end
 
+        invalidate_for_user(user.username)
         user.destroy
         logger.info("User (#{user.username}) delete successfully.")
       rescue => e
