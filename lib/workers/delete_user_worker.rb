@@ -1,11 +1,10 @@
 module Evercam
   class DeleteUserWorker
-
     include Sidekiq::Worker
 
     def perform(user)
       begin
-        #delete user owned cameras
+        # delete user owned cameras
         query = Camera.where(owner: user)
         query.eager(:owner).all.select do |camera|
           camera.destroy
@@ -17,6 +16,5 @@ module Evercam
         logger.warn "User delete exception: #{e.message}"
       end
     end
-
   end
 end
