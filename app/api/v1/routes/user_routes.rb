@@ -1,5 +1,6 @@
 require_relative '../presenters/user_presenter'
 require_relative '../presenters/camera_presenter'
+require 'pry'
 
 module Evercam
   class V1UserRoutes < Grape::API
@@ -147,13 +148,7 @@ module Evercam
         rights = requester_rights_for(target, AccessRight::USER)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
-        #delete user owned cameras
-        query = Camera.where(owner: target)
-        query.eager(:owner).all.select do |camera|
-          camera.destroy
-        end
-
-        target.destroy
+        DeleteUserWorker.perform_async(target)
         {}
       end
 
