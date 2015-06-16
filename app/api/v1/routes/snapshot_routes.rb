@@ -349,20 +349,41 @@ module Evercam
           rights = requester_rights_for(camera)
           raise AuthorizationError.new if !rights.allow?(AccessRight::SNAPSHOT)
 
-          outcome = Actors::SnapshotFetch.run(params)
-          unless outcome.success?
-            raise OutcomeError, outcome.to_json
+          # TODO: extract token creation to a method
+          require 'openssl'
+          require 'base64'
+          cam_username = camera.config.fetch('auth', {}).fetch('basic', {}).fetch('username', '')
+          cam_password = camera.config.fetch('auth', {}).fetch('basic', {}).fetch('password', '')
+          cam_auth = "#{cam_username}:#{cam_password}"
+
+          api_id = params.fetch('api_id', '')
+          api_key = params.fetch('api_key', '')
+          credentials = "#{api_id}:#{api_key}"
+
+          cipher = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+          cipher.encrypt
+          cipher.key = "#{Evercam::Config[:snapshots][:key]}"
+          cipher.iv = "#{Evercam::Config[:snapshots][:iv]}"
+          cipher.padding = 0
+
+          message = camera.external_url
+          message << camera.res_url('jpg') unless camera.res_url('jpg').blank?
+          message << "|#{cam_auth}|#{credentials}|#{Time.now.utc.iso8601}|"
+          message << ' ' until message.length % 16 == 0
+          token = cipher.update(message)
+          token << cipher.final
+
+          url = "#{Evercam::Config[:snapshots][:url]}v1/cameras/#{camera.exid}/recordings/snapshots?notes=#{params[:notes]}&with_data=#{params[:with_data]}&token=#{Base64.urlsafe_encode64(token)}"
+
+          conn = Faraday.new(url: url) do |faraday|
+            faraday.adapter Faraday.default_adapter
+            faraday.options.timeout = 10
+            faraday.options.open_timeout = 10
           end
 
-          CameraActivity.create(
-            camera: camera,
-            access_token: access_token,
-            action: 'captured',
-            done_at: Time.now,
-            ip: request.ip
-          )
-
-          present Array(outcome.result), with: Presenters::Snapshot, with_data: params[:with_data]
+          response = conn.post
+          status response.status
+          JSON.parse response.body
         end
 
         #-------------------------------------------------------------------
