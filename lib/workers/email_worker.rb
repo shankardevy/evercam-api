@@ -60,11 +60,11 @@ module Evercam
       end
 
       if params['type'] == 'share_request'
-        Mailers::UserMailer.share_request(user: user, email: params['email'], camera: camera,
+        Mailers::UserMailer.share_request(user: user, email: params['email'], message: params['message'], camera: camera,
                                         attachments: {'snapshot.jpg' => snap}, key: params['key'],
                                         add_snap: add_snap, socket: Socket.gethostname)
       elsif params['type'] == 'share'
-        Mailers::UserMailer.share(user: user, email: params['email'], camera: camera,
+        Mailers::UserMailer.share(user: user, email: params['email'], message: params['message'], camera: camera,
                                   attachments: {'snapshot.jpg' => snap}, add_snap: add_snap,
                                   socket: Socket.gethostname)
       end

@@ -2,6 +2,8 @@ Hello from Evercam,
 
 <%= user.fullname %> has shared the camera <%= camera.name %> (<%= camera.exid %>) with you.
 
+<%= message %>
+
 To access this camera, you will need to click on the link below and create an account with Evercam.
 
 https://dashboard.evercam.io/v1/users/signup?key=<%= key %>
