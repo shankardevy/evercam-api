@@ -141,19 +141,13 @@ module Evercam
         params[:id] = params[:id][0..-6] if params[:id].end_with?('.json')
         params[:id] = params[:id][0..-5] if params[:id].end_with?('.xml')
         params[:id].downcase!
-        target = ::User.by_login(params[:id])
-        raise NotFoundError, 'user does not exist' unless target
+        user = ::User.by_login(params[:id])
+        raise NotFoundError, 'user does not exist' unless user
 
-        rights = requester_rights_for(target, AccessRight::USER)
+        rights = requester_rights_for(user, AccessRight::USER)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
 
-        #delete user owned cameras
-        query = Camera.where(owner: target)
-        query.eager(:owner).all.select do |camera|
-          camera.destroy
-        end
-
-        target.destroy
+        DeleteUserWorker.perform_async(user.username)
         {}
       end
 
