@@ -29,12 +29,6 @@ module Evercam
       log_redirect(params)
       redirect "/v1/cameras/#{params[:id]}/shares/requests?#{params.except(:route_info).to_query}"
     end
-
-    desc 'Internal endpoint only, keep hidden', {hidden: true}
-    get '/webhooks' do
-      log_redirect(params)
-      redirect "/v1/cameras/#{params[:camera_id]}/webhooks?#{params.except(:route_info).to_query}"
-    end
   end
 end
 

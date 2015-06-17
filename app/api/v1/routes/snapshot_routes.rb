@@ -270,7 +270,8 @@ module Evercam
           (1..Date.new(params[:year], params[:month], -1).day).each do |day|
             from = Time.new(params[:year], params[:month], day, 0, 0, 0, off_set).utc.to_s
             to = Time.new(params[:year], params[:month], day, 23, 59, 59, off_set).utc.to_s
-            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+
+            if Sequel::Model.db.select(camera.snapshots.where(:created_at => (from..to)).exists).first[:exists]
               days << day
             end
           end
@@ -305,7 +306,7 @@ module Evercam
             from = Time.new(params[:year], params[:month], params[:day], hour, 0, 0, off_set).utc.to_s
             to = Time.new(params[:year], params[:month], params[:day], hour, 59, 59, off_set).utc.to_s
 
-            if camera.snapshots.filter(:created_at => (from..to)).count > 0
+            if Sequel::Model.db.select(camera.snapshots.where(:created_at => (from..to)).exists).first[:exists]
               hours << hour
             end
           end

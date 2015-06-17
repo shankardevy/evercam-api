@@ -1,5 +1,6 @@
 require_relative '../presenters/camera_presenter'
 require_relative '../presenters/camera_share_presenter'
+require_relative '../helpers/cache_helper.rb'
 require 'faraday/digestauth'
 require 'typhoeus/adapters/faraday'
 
@@ -11,6 +12,7 @@ module Evercam
     TIMEOUT = 5
 
     include WebErrors
+    include Evercam::CacheHelper
 
     #---------------------------------------------------------------------------
     # POST /v1/cameras/test
@@ -74,7 +76,9 @@ module Evercam
       rights = requester_rights_for(camera)
       unless rights.allow?(AccessRight::LIST)
         raise AuthorizationError.new if camera.is_public?
-        raise NotFoundError.new unless camera.is_public?
+        if !rights.allow?(AccessRight::VIEW) && !camera.is_public?
+          raise NotFoundError.new
+        end
       end
 
       CameraActivity.create(
@@ -306,8 +310,7 @@ module Evercam
         camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
-        Evercam::Services.dalli_cache.delete(params[:id])
-        CacheInvalidationWorker.enqueue(camera.exid)
+        invalidate_for_camera(camera.exid)
         camera.destroy
         {}
       end

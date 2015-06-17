@@ -36,6 +36,29 @@ module Evercam
         m.config
       end
 
+      expose :images do
+        expose :icon, documentation: {
+          type: 'String',
+          desc: 'Model icon'
+        } do |m,o|
+          "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/icon.jpg"
+        end
+
+        expose :thumbnail, documentation: {
+          type: 'String',
+          desc: 'Model thumbnail'
+        } do |m,o|
+          "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/thumbnail.jpg"
+        end
+
+        expose :original, documentation: {
+          type: 'String',
+          desc: 'Model Original'
+        } do |m,o|
+          "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/original.jpg"
+        end
+      end
+
     end
   end
 end

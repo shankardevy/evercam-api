@@ -135,7 +135,6 @@ module Evercam
             )
           end
           camera_is_online = camera.is_online
-          trigger_webhook(camera)
           camera.update(updates)
           cached_camera = Evercam::Services::dalli_cache.get(camera.exid)
           cached_thumbnail_url = cached_camera.blank? ? '' : cached_camera.thumbnail_url
@@ -160,28 +159,6 @@ module Evercam
         url = URI::parse(thumbnail_url).query
         token = CGI::parse(url)['Expires'].first.to_i
         Time.at(token) - 10.years
-      end
-    end
-
-    def trigger_webhook(camera)
-      webhooks = Webhook.where(camera_id: camera.id).all
-      return if webhooks.empty?
-
-      webhooks.each do |webhook|
-        hook_conn = Faraday.new(:url => webhook.url) do |faraday|
-          faraday.adapter Faraday.default_adapter
-          faraday.options.timeout = 5
-          faraday.options.open_timeout = 2
-        end
-
-        parameters = {
-          id: camera.exid,
-          last_polled_at: camera.last_polled_at,
-          last_online_at: camera.last_online_at,
-          is_online: camera.is_online
-        }
-
-        hook_conn.post '', parameters.to_s
       end
     end
   end

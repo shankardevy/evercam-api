@@ -50,7 +50,7 @@ module Evercam
                 :owner_id, :is_public, :config,
                 :name, :last_polled_at, :is_online,
                 :timezone, :last_online_at, :location,
-                :mac_address, :model_id, :discoverable
+                :mac_address, :model_id, :discoverable, :thumbnail_url
               )
             end
             case_sensitive = params.include?(:case_sensitive) ? params[:case_sensitive] : true
