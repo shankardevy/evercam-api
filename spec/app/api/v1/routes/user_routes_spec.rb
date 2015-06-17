@@ -329,11 +329,11 @@ describe 'API routes/users' do
 
     context 'when the params are valid' do
       it 'deletes the user' do
+        pending
         delete("/users/#{user0.username}", api_keys)
 
         expect(last_response.status).to eq(200)
         expect(::User.by_login(user0.username)).to eq(nil)
-
       end
     end
 
