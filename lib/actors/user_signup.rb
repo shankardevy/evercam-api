@@ -39,6 +39,12 @@ module Evercam
         share_request_key = inputs[:share_request_key]
         inputs.delete("share_request_key")
 
+        if country.nil?
+          raise Evercam::NotFoundError.new("The country code "\
+                                           "'#{inputs[:country]}'"\
+                                           " is not valid.")
+        end
+
         if User.where(username: inputs[:username]).count != 0
           raise Evercam::ConflictError.new("The '#{inputs[:username]}' user name is already registered.",
                                            "duplicate_username_error", inputs[:username])
@@ -113,4 +119,3 @@ module Evercam
     end
   end
 end
-
