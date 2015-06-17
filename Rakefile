@@ -64,6 +64,242 @@ namespace :tmp do
   end
 end
 
+desc "Import models_data_all.csv from S3 and add extra specs data to Evercam Models"
+task :import_vendor_models, [:vendorexid] do |t, args|
+  require 'evercam_models'
+  require 'aws-sdk'
+  require 'open-uri'
+  require 'smarter_csv'
+
+  AWS.config(
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_KEY'],
+    # disable this key if source bucket is in US
+    :s3_endpoint => 's3-eu-west-1.amazonaws.com'
+  )
+  s3 = AWS::S3.new
+  assets = s3.buckets['evercam-public-assets']
+  csv = assets.objects['models_data_some.csv']
+
+  if csv.nil?
+    puts " No CSV file found"
+  else
+    puts " CSV file found"
+  end
+
+  if !Dir.exists?("temp/")
+    puts " Create temp/"
+    Dir.mkdir("temp/")
+  end
+
+  puts "\n Importing models_data_all.csv... \n"
+  File.open("temp/models_data_all.csv", "wb") do |f|
+    f.write(csv.read)
+    puts " 'models_data.csv' imported from AWS S3 \n"
+  end
+
+  puts "\n Reading data from 'models_data_all.csv' for #{args[:vendorexid]} \n"
+  File.open("temp/models_data_all.csv", "r:ISO-8859-15:UTF-8") do |file|
+    v = Vendor.find(:exid => args[:vendorexid])
+    if v.nil?
+      puts " Vendor '" + args[:vendorexid] + "' could not be found"
+      return
+    end
+
+    SmarterCSV.process(file).each do |vm|
+      next if !(vm[:vendor_id].downcase == args[:vendorexid].downcase)
+      original_vm = vm.clone
+      puts "    + " + v.exid + "." + vm[:model].to_s
+
+      m = VendorModel.where(:exid => vm[:model].to_s).first
+      if m.nil?
+        puts "     VM Not Found = " + v.id.to_s + ", " + vm[:model] + ", " + vm[:model].upcase
+      else
+        puts "     VM = " + m.vendor_id.to_s + ", " + m.exid + ", " + m.name
+      end
+
+      shape = vm[:shape].nil? ? "" : vm[:shape]
+      resolution = vm[:resolution].nil? ? "" : vm[:resolution]
+      official_url = vm[:official_url].nil? ? "" : vm[:official_url]
+      audio_url = vm[:audio_url].nil? ? "" : vm[:audio_url]
+      more_info = vm[:more_info].nil? ? "" : vm[:more_info]
+      poe = vm[:poe].nil? ? "" : vm[:poe] == "t" ? "True" : "False"
+      wifi = vm[:wifi].nil? ? "" : vm[:wifi] == "t" ? "True" : "False"
+      onvif = vm[:onvif].nil? ? "" : vm[:onvif] == "t" ? "True" : "False"
+      psia = vm[:psia].nil? ? "" : vm[:psia] == "t" ? "True" : "False"
+      ptz = vm[:ptz].nil? ? "" : vm[:ptz] == "t" ? "True" : "False"
+      infrared = vm[:infrared].nil? ? "" : vm[:infrared] == "t" ? "True" : "False"
+      varifocal = vm[:varifocal].nil? ? "" : vm[:varifocal] == "t" ? "True" : "False"
+      sd_card = vm[:sd_card].nil? ? "" : vm[:sd_card] == "t" ? "True" : "False"
+      upnp = vm[:upnp].nil? ? "" : vm[:upnp] == "t" ? "True" : "False"
+      audio_io = vm[:audio_io].nil? ? "" : vm[:audio_io] == "t" ? "True" : "False"
+      discontinued = vm[:discontinued].nil? ? "" : vm[:discontinued] == "t" ? "True" : "False"
+
+      puts "    SPEC = " + m.name
+      Rake::Task["specs_model"].invoke(m, shape, resolution, official_url, audio_url, more_info, poe, wifi, onvif, psia, ptz, infrared, varifocal, sd_card, upnp, audio_io, discontinued)
+    end
+  end
+end
+
+# add specs to given model
+task :specs_model, [:m, :shape, :resolution, :official_url, :audio_url, :more_info, :poe, :wifi, :onvif, :psia, :ptz, :infrared, :varifocal, :sd_card, :upnp, :audio_io, :discontinued] do |t, args|
+  args.with_defaults(:shape => "", :resolution => "", :official_url => "", :audio_url => "", :more_info => "", :poe => "False", :wifi => "False", :onvif => "False", :psia => "False", :ptz => "False", :infrared => "False", :varifocal => "False", :sd_card => "False", :upnp => "False", :audio_io => "False", :discontinued => "False")
+
+  m = args.m
+
+  if !args.shape.nil?
+    if m.values[:specs].has_key?('shape')
+      m.values[:specs]['shape'] = args.shape
+    else
+      m.values[:specs].merge!({:shape => args.shape})
+    end
+  end
+  puts "    - shape = " + m.values[:specs]['shape']
+
+  if !args.resolution.nil?
+    if m.values[:specs].has_key?('resolution')
+      m.values[:specs]['resolution'] = args.resolution
+    else
+      m.values[:specs].merge!({:resolution => args.resolution})
+    end
+  end
+  puts "    - resolution = " + m.values[:specs]['resolution']
+
+  if !args.official_url.nil?
+    if m.values[:specs].has_key?('official_url')
+      m.values[:specs]['official_url'] = args.official_url
+    else
+      m.values[:specs].merge!({:official_url => args.official_url})
+    end
+  end
+  puts "    - official_url = " + m.values[:specs]['official_url']
+
+  if !args.audio_url.nil?
+    if m.values[:specs].has_key?('audio_url')
+      m.values[:specs]['audio_url'] = args.audio_url
+    else
+      m.values[:specs].merge!({:audio_url => args.audio_url})
+    end
+  end
+  puts "    - audio_url = " + m.values[:specs]['audio_url']
+
+  if !args.more_info.nil?
+    if m.values[:specs].has_key?('more_info')
+      m.values[:specs]['more_info'] = args.more_info
+    else
+      m.values[:specs].merge!({:more_info => args.more_info})
+    end
+  end
+  puts "    - more_info = " + m.values[:specs]['more_info']
+
+  if !args.poe.nil?
+    if m.values[:specs].has_key?('poe')
+      m.values[:specs]['poe'] = args.poe
+    else
+      m.values[:specs].merge!({:poe => args.poe})
+    end
+  end
+  puts "    - poe = " + m.values[:specs]['poe']
+
+  if !args.wifi.nil?
+    if m.values[:specs].has_key?('wifi')
+      m.values[:specs]['wifi'] = args.wifi
+    else
+      m.values[:specs].merge!({:wifi => args.wifi})
+    end
+  end
+  puts "    - wifi = " + m.values[:specs]['wifi']
+
+  if !args.onvif.nil?
+    if m.values[:specs].has_key?('onvif')
+      m.values[:specs]['onvif'] = args.onvif
+    else
+      m.values[:specs].merge!({:onvif => args.onvif})
+    end
+  end
+  puts "    - onvif = " + m.values[:specs]['onvif']
+
+  if !args.psia.nil?
+    if m.values[:specs].has_key?('psia')
+      m.values[:specs]['psia'] = args.psia
+    else
+      m.values[:specs].merge!({:psia => args.psia})
+    end
+  end
+  puts "    - psia = " + m.values[:specs]['psia']
+
+  if !args.ptz.nil?
+    if m.values[:specs].has_key?('ptz')
+      m.values[:specs]['ptz'] = args.ptz
+    else
+      m.values[:specs].merge!({:ptz => args.ptz})
+    end
+  end
+  puts "    - ptz = " + m.values[:specs]['ptz']
+
+  if !args.infrared.nil?
+    if m.values[:specs].has_key?('infrared')
+      m.values[:specs]['infrared'] = args.infrared
+    else
+      m.values[:specs].merge!({:infrared => args.infrared})
+    end
+  end
+  puts "    - infrared = " + m.values[:specs]['infrared']
+
+  if !args.varifocal.nil?
+    if m.values[:specs].has_key?('varifocal')
+      m.values[:specs]['varifocal'] = args.varifocal
+    else
+      m.values[:specs].merge!({:varifocal => args.varifocal})
+    end
+  end
+  puts "    - varifocal = " + m.values[:specs]['varifocal']
+
+  if !args.sd_card.nil?
+    if m.values[:specs].has_key?('sd_card')
+      m.values[:specs]['sd_card'] = args.sd_card
+    else
+      m.values[:specs].merge!({:sd_card => args.sd_card})
+    end
+  end
+  puts "    - sd_card = " + m.values[:specs]['sd_card']
+
+  if !args.upnp.nil?
+    if m.values[:specs].has_key?('upnp')
+      m.values[:specs]['upnp'] = args.upnp
+    else
+      m.values[:specs].merge!({:upnp => args.upnp})
+    end
+  end
+  puts "    - upnp = " + m.values[:specs]['upnp']
+
+  if !args.audio_io.nil?
+    if m.values[:specs].has_key?('audio_io')
+      m.values[:specs]['audio_io'] = args.audio_io
+    else
+      m.values[:specs].merge!({:audio_io => args.audio_io})
+    end
+  end
+  puts "    - audio_io = " + m.values[:specs]['audio_io']
+
+  if !args.discontinued.nil?
+    if m.values[:specs].has_key?('discontinued')
+      m.values[:specs]['discontinued'] = args.discontinued
+    else
+      m.values[:specs].merge!({:discontinued => args.discontinued})
+    end
+  end
+  puts "    - discontinued = " + m.values[:specs]['discontinued']
+
+  puts "       " + m.values[:specs].to_s
+
+  ######
+  m.save
+  ######
+
+  puts "       SPECS: #{m.exid}"
+end
+
 desc "Import cambase_models.csv from S3 and fix Evercam models data for given vendor onlys"
 task :import_vendor_data, [:vendorexid] do |t, args|
   require 'evercam_models'
