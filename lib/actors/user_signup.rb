@@ -39,7 +39,7 @@ module Evercam
         share_request_key = inputs[:share_request_key]
         inputs.delete("share_request_key")
 
-        if country.nil?
+        if !inputs[:country].blank? && country.nil?
           raise Evercam::NotFoundError.new("The country code "\
                                            "'#{inputs[:country]}'"\
                                            " is not valid.")
