@@ -573,7 +573,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'snapshot is saved' do
-        pending
+        skip
         stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
           to_return(:status => 200, :body => "", :headers => {})
 
