@@ -135,7 +135,7 @@ task :import_vendor_models, [:vendorexid] do |t, args|
       audio_io = vm[:audio_io].nil? ? "" : vm[:audio_io] == "t" ? "True" : "False"
       discontinued = vm[:discontinued].nil? ? "" : vm[:discontinued] == "t" ? "True" : "False"
 
-      puts "    SPEC = " + m.name
+      puts "     SPEC = " + m.name
       Rake::Task["specs_model"].invoke(m, shape, resolution, official_url, audio_url, more_info, poe, wifi, onvif, psia, ptz, infrared, varifocal, sd_card, upnp, audio_io, discontinued)
     end
   end
@@ -146,152 +146,153 @@ task :specs_model, [:m, :shape, :resolution, :official_url, :audio_url, :more_in
   args.with_defaults(:shape => "", :resolution => "", :official_url => "", :audio_url => "", :more_info => "", :poe => "False", :wifi => "False", :onvif => "False", :psia => "False", :ptz => "False", :infrared => "False", :varifocal => "False", :sd_card => "False", :upnp => "False", :audio_io => "False", :discontinued => "False")
 
   m = args.m
+  m.values[:specs] = {}
 
   if !args.shape.nil?
-    if m.values[:specs].has_key?('shape')
-      m.values[:specs]['shape'] = args.shape
+    if m.values[:specs].has_key?("shape")
+      m.values[:specs]["shape"] = args.shape
     else
-      m.values[:specs].merge!({:shape => args.shape})
+      m.values[:specs].merge!("shape" => args.shape)
     end
   end
-  puts "    - shape = " + m.values[:specs]['shape']
+  puts "     - shape = " + args.shape + " => " + m.values[:specs]["shape"].to_s
 
   if !args.resolution.nil?
-    if m.values[:specs].has_key?('resolution')
-      m.values[:specs]['resolution'] = args.resolution
+    if m.values[:specs].has_key?("resolution")
+      m.values[:specs]["resolution"] = args.resolution
     else
-      m.values[:specs].merge!({:resolution => args.resolution})
+      m.values[:specs].merge!("resolution" => args.resolution)
     end
   end
-  puts "    - resolution = " + m.values[:specs]['resolution']
+  puts "     - resolution = " + args.resolution + " => " + m.values[:specs]["resolution"].to_s
 
   if !args.official_url.nil?
-    if m.values[:specs].has_key?('official_url')
-      m.values[:specs]['official_url'] = args.official_url
+    if m.values[:specs].has_key?("official_url")
+      m.values[:specs]["official_url"] = args.official_url
     else
-      m.values[:specs].merge!({:official_url => args.official_url})
+      m.values[:specs].merge!("official_url" => args.official_url)
     end
   end
-  puts "    - official_url = " + m.values[:specs]['official_url']
+  puts "     - official_url = " + args.official_url + " => " + m.values[:specs]["official_url"].to_s
 
   if !args.audio_url.nil?
-    if m.values[:specs].has_key?('audio_url')
-      m.values[:specs]['audio_url'] = args.audio_url
+    if m.values[:specs].has_key?("audio_url")
+      m.values[:specs]["audio_url"] = args.audio_url
     else
-      m.values[:specs].merge!({:audio_url => args.audio_url})
+      m.values[:specs].merge!("audio_url" => args.audio_url)
     end
   end
-  puts "    - audio_url = " + m.values[:specs]['audio_url']
+  puts "     - audio_url = " + args.audio_url + " => " + m.values[:specs]["audio_url"].to_s
 
   if !args.more_info.nil?
-    if m.values[:specs].has_key?('more_info')
-      m.values[:specs]['more_info'] = args.more_info
+    if m.values[:specs].has_key?("more_info")
+      m.values[:specs]["more_info"] = args.more_info
     else
-      m.values[:specs].merge!({:more_info => args.more_info})
+      m.values[:specs].merge!("more_info" => args.more_info)
     end
   end
-  puts "    - more_info = " + m.values[:specs]['more_info']
+  puts "     - more_info = " + args.more_info + " => " + m.values[:specs]["more_info"].to_s
 
   if !args.poe.nil?
-    if m.values[:specs].has_key?('poe')
-      m.values[:specs]['poe'] = args.poe
+    if m.values[:specs].has_key?("poe")
+      m.values[:specs]["poe"] = args.poe
     else
-      m.values[:specs].merge!({:poe => args.poe})
+      m.values[:specs].merge!("poe" => args.poe)
     end
   end
-  puts "    - poe = " + m.values[:specs]['poe']
+  puts "     - poe = " + args.poe + " => " + m.values[:specs]["poe"].to_s
 
   if !args.wifi.nil?
-    if m.values[:specs].has_key?('wifi')
-      m.values[:specs]['wifi'] = args.wifi
+    if m.values[:specs].has_key?("wifi")
+      m.values[:specs]["wifi"] = args.wifi
     else
-      m.values[:specs].merge!({:wifi => args.wifi})
+      m.values[:specs].merge!("wifi" => args.wifi)
     end
   end
-  puts "    - wifi = " + m.values[:specs]['wifi']
+  puts "     - wifi = " + args.wifi + " => " + m.values[:specs]["wifi"].to_s
 
   if !args.onvif.nil?
-    if m.values[:specs].has_key?('onvif')
-      m.values[:specs]['onvif'] = args.onvif
+    if m.values[:specs].has_key?("onvif")
+      m.values[:specs]["onvif"] = args.onvif
     else
-      m.values[:specs].merge!({:onvif => args.onvif})
+      m.values[:specs].merge!("onvif" => args.onvif)
     end
   end
-  puts "    - onvif = " + m.values[:specs]['onvif']
+  puts "     - onvif = " + args.onvif + " => " + m.values[:specs]["onvif"].to_s
 
   if !args.psia.nil?
-    if m.values[:specs].has_key?('psia')
-      m.values[:specs]['psia'] = args.psia
+    if m.values[:specs].has_key?("psia")
+      m.values[:specs]["psia"] = args.psia
     else
-      m.values[:specs].merge!({:psia => args.psia})
+      m.values[:specs].merge!("psia" => args.psia)
     end
   end
-  puts "    - psia = " + m.values[:specs]['psia']
+  puts "     - psia = " + args.psia + " => " + m.values[:specs]["psia"].to_s
 
   if !args.ptz.nil?
-    if m.values[:specs].has_key?('ptz')
-      m.values[:specs]['ptz'] = args.ptz
+    if m.values[:specs].has_key?("ptz")
+      m.values[:specs]["ptz"] = args.ptz
     else
-      m.values[:specs].merge!({:ptz => args.ptz})
+      m.values[:specs].merge!("ptz" => args.ptz)
     end
   end
-  puts "    - ptz = " + m.values[:specs]['ptz']
+  puts "     - ptz = " + args.ptz + " => " + m.values[:specs]["ptz"].to_s
 
   if !args.infrared.nil?
-    if m.values[:specs].has_key?('infrared')
-      m.values[:specs]['infrared'] = args.infrared
+    if m.values[:specs].has_key?("infrared")
+      m.values[:specs]["infrared"] = args.infrared
     else
-      m.values[:specs].merge!({:infrared => args.infrared})
+      m.values[:specs].merge!("infrared" => args.infrared)
     end
   end
-  puts "    - infrared = " + m.values[:specs]['infrared']
-
+  puts "     - infrared = " + args.infrared + " => " + m.values[:specs]["infrared"].to_s
+ 
   if !args.varifocal.nil?
-    if m.values[:specs].has_key?('varifocal')
-      m.values[:specs]['varifocal'] = args.varifocal
+    if m.values[:specs].has_key?("varifocal")
+      m.values[:specs]["varifocal"] = args.varifocal
     else
-      m.values[:specs].merge!({:varifocal => args.varifocal})
+      m.values[:specs].merge!("varifocal" => args.varifocal)
     end
   end
-  puts "    - varifocal = " + m.values[:specs]['varifocal']
+  puts "     - varifocal = " + args.varifocal + " => " + m.values[:specs]["varifocal"].to_s
 
   if !args.sd_card.nil?
-    if m.values[:specs].has_key?('sd_card')
-      m.values[:specs]['sd_card'] = args.sd_card
+    if m.values[:specs].has_key?("sd_card")
+      m.values[:specs]["sd_card"] = args.sd_card
     else
-      m.values[:specs].merge!({:sd_card => args.sd_card})
+      m.values[:specs].merge!("sd_card" => args.sd_card)
     end
   end
-  puts "    - sd_card = " + m.values[:specs]['sd_card']
+  puts "     - sd_card = " + args.sd_card + " => " + m.values[:specs]["sd_card"].to_s
 
   if !args.upnp.nil?
-    if m.values[:specs].has_key?('upnp')
-      m.values[:specs]['upnp'] = args.upnp
+    if m.values[:specs].has_key?("upnp")
+      m.values[:specs]["upnp"] = args.upnp
     else
-      m.values[:specs].merge!({:upnp => args.upnp})
+      m.values[:specs].merge!("upnp" => args.upnp)
     end
   end
-  puts "    - upnp = " + m.values[:specs]['upnp']
+  puts "     - upnp = " + args.upnp + " => " + m.values[:specs]["upnp"].to_s
 
   if !args.audio_io.nil?
-    if m.values[:specs].has_key?('audio_io')
-      m.values[:specs]['audio_io'] = args.audio_io
+    if m.values[:specs].has_key?("audio_io")
+      m.values[:specs]["audio_io"] = args.audio_io
     else
-      m.values[:specs].merge!({:audio_io => args.audio_io})
+      m.values[:specs].merge!("audio_io" => args.audio_io)
     end
   end
-  puts "    - audio_io = " + m.values[:specs]['audio_io']
+  puts "     - audio_io = " + args.audio_io + " => " + m.values[:specs]["audio_io"].to_s
 
   if !args.discontinued.nil?
-    if m.values[:specs].has_key?('discontinued')
-      m.values[:specs]['discontinued'] = args.discontinued
+    if m.values[:specs].has_key?("discontinued")
+      m.values[:specs]["discontinued"] = args.discontinued
     else
-      m.values[:specs].merge!({:discontinued => args.discontinued})
+      m.values[:specs].merge!("discontinued" => args.discontinued)
     end
   end
-  puts "    - discontinued = " + m.values[:specs]['discontinued']
+  puts "     - discontinued = " + args.discontinued + " => " + m.values[:specs]["discontinued"].to_s
 
-  puts "       " + m.values[:specs].to_s
+  puts "     => " + m.values[:specs].to_s
 
   ######
   m.save

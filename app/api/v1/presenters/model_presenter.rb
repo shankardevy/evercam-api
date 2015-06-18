@@ -36,13 +36,13 @@ module Evercam
         m.config
       end
 
-      # expose :specs, documentation: {
-      #   type: 'hash',
-      #   desc: 'Device specifications of this camera model',
-      #   required: true
-      # } do |m,o|
-      #   m.specs
-      # end
+      expose :specs, documentation: {
+        type: 'hash',
+        desc: 'Device specifications of this camera model',
+        required: true
+      } do |m,o|
+        m.specs
+      end
 
       expose :images do
         expose :icon, documentation: {
