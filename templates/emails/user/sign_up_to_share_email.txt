@@ -1,6 +1,6 @@
 Hello from Evercam,
 
-<%= user.fullname %> has shared the camera <%= camera.name %> (<%= camera.exid %>) with you.
+<%= user.fullname %> has shared the camera <%= camera.name %> with you.
 
 <%= message %>
 
