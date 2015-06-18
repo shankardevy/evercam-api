@@ -3,7 +3,7 @@ Responsible for all API endpoints, communications between evercam-media and ever
 
 | Name   | Evercam API   |
 | --- | --- |
-| Owner   | [@mosic](https://github.com/mosic)   |
+| Owner   | [@azharmalik3](https://github.com/azharmalik3)   |
 | Dependencies Status   | [![Dependency Status](https://gemnasium.com/evercam/evercam-api.svg)](https://gemnasium.com/evercam/evercam-api)  |
 | Code Climate   | [![Code Climate](https://codeclimate.com/github/evercam/evercam-api/badges/gpa.svg)](https://codeclimate.com/github/evercam/evercam-api)   |
 | Travis Test   | [![Dependency Status](https://travis-ci.org/evercam/evercam-api.svg?branch=master)](https://travis-ci.org/evercam/evercam-api)   |
