@@ -2,6 +2,8 @@ Hello from Evercam,
 
 <%= user.fullname %> has shared the camera <%= camera.name %> (<%= camera.exid %>) with you.
 
+<%= message %>
+
 Click on the link below to access this camera.
 
 https://dashboard.evercam.io/v1/cameras/<%= camera.exid %>
