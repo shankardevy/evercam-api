@@ -79,7 +79,7 @@ group :test do
   gem 'factory_girl'
   gem 'nokogiri'
   gem 'webmock', '~> 1.21.0'
-  gem 'rspec', '= 3.2.0'
+  gem 'rspec', '= 3.3.0'
   gem 'guard-rspec'
   gem 'guard-rack'
   gem 'database_cleaner'
