@@ -8,7 +8,8 @@ module Evercam
 
     options = { :namespace => "app_v1", :compress => true, :expires_in => 300, value_max_bytes: 20000000 }
     if ENV["MEMCACHEDCLOUD_SERVERS"]
-      self.dalli_cache = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), :username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"])
+      options = options.merge({:username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"]})
+      self.dalli_cache = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), options)
     else
       self.dalli_cache = Dalli::Client.new('127.0.0.1:11211', options)
     end
