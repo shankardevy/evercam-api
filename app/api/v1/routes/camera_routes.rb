@@ -334,7 +334,7 @@ module Evercam
         raise NotFoundError.new("Specified user does not exist.") if new_owner.nil?
         CacheInvalidationWorker.enqueue(camera.exid)
         camera.update(owner: new_owner)
-        Evercam::Services.dalli_cache.set(params[:id], camera, 0)
+        Evercam::Services.dalli_cache.set(params[:id], camera)
         present Array(camera), with: Presenters::Camera, user: caller
       end
     end

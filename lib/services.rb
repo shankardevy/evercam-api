@@ -6,7 +6,7 @@ module Evercam
     mattr_accessor :snapshot_bucket
     mattr_accessor :public_bucket
 
-    options = { :namespace => "app_v1", :compress => true, :expires_in => 300, value_max_bytes: 20000000 }
+    options = { :namespace => "app_v1", :compress => true, :expires_in => 5.minutes, value_max_bytes: 20000000 }
     if ENV["MEMCACHEDCLOUD_SERVERS"]
       options = options.merge({:username => ENV["MEMCACHEDCLOUD_USERNAME"], :password => ENV["MEMCACHEDCLOUD_PASSWORD"]})
       self.dalli_cache = Dalli::Client.new(ENV["MEMCACHEDCLOUD_SERVERS"].split(','), options)

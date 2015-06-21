@@ -70,7 +70,7 @@ module Evercam
             else
               token = AccessToken.where(client_id: owner.id).order(Sequel.desc(:created_at)).first
             end
-            Evercam::Services.dalli_cache.set(credentials.to_s, token, 5 * 60)
+            Evercam::Services.dalli_cache.set(credentials.to_s, token)
           end
         end
       end

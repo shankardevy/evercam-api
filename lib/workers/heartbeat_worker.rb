@@ -141,7 +141,7 @@ module Evercam
           if camera_is_online == true || updates[:is_online] == true
             if (camera_is_online != updates[:is_online]) ||
                 (thumbnail_token_time(cached_thumbnail_url) < thumbnail_token_time(camera.thumbnail_url) - 30.seconds)
-              Evercam::Services.dalli_cache.set(camera_exid, camera, 0)
+              Evercam::Services.dalli_cache.set(camera_exid, camera)
               CacheInvalidationWorker.enqueue(camera.exid)
             end
           end

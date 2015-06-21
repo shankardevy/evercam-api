@@ -414,7 +414,7 @@ module Evercam
           end
           list.concat(grants) unless grants.empty?
           rights_string = list.join(",")
-          Evercam::Services::dalli_cache.set(key, rights_string, 5*60)
+          Evercam::Services::dalli_cache.set(key, rights_string)
         end
         rights_string
       end
