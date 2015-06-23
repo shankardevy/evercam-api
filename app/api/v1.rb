@@ -28,6 +28,7 @@ module Evercam
       include ThreeScaleHelper
       include ParameterMapper
       include Services
+      include Utils
     end
 
     # The position of this is important so beware of moving it!
