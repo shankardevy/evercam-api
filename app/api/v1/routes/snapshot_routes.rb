@@ -321,14 +321,19 @@ module Evercam
           entity: Evercam::Presenters::Snapshot
         }
         params do
-          requires :timestamp, type: Integer, desc: "Snapshot Unix timestamp."
+          requires :timestamp, type: String, desc: "Snapshot timestamp, formatted as either Unix timestamp or ISO8601."
           optional :with_data, type: 'Boolean', desc: "Should it send image data?"
           optional :range, type: Integer, desc: "Time range in seconds around specified timestamp. Default range is one second (so it matches only exact timestamp)."
         end
         get 'recordings/snapshots/:timestamp' do
           camera = get_cam(params[:id])
 
-          snapshot = camera.snapshot_by_ts!(Time.at(params[:timestamp].to_i), params[:range].to_i)
+          if Evercam::Utils.is_num?(params["timestamp"])
+            timestamp = Time.at(params[:timestamp].to_i)
+          else
+            timestamp = Time.parse(params[:timestamp])
+          end
+          snapshot = camera.snapshot_by_ts!(timestamp, params[:range].to_i)
           rights   = requester_rights_for(camera)
           raise AuthorizationError.new unless rights.allow?(AccessRight::LIST)
 
