@@ -30,15 +30,15 @@ module Evercam
           optional :thumbnail, type: 'Boolean', desc: "Set to true to get base64 encoded 150x150 thumbnail with camera view or null if it's not available."
         end
         get do
-          # NOTE: Disabled cache temporarily because data is too big to be cached currently (when thumbnail=true)
-
-          # params_copy = params.clone
-          # params_copy.delete(:route_info)
-          # cache_key = "public|#{params_copy.flatten.join('|')}"
-          # query_result = Evercam::Services.dalli_cache.get(cache_key)
-          # total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
           query_result = nil
           total_pages = nil
+          unless params.include?(:thumbnail) || params[:thumbnail]
+            params_copy = params.clone
+            params_copy.delete(:route_info)
+            cache_key = "public|#{params_copy.flatten.join('|')}"
+            query_result = Evercam::Services.dalli_cache.get(cache_key)
+            total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
+          end
           if query_result.nil? or total_pages.nil?
             query = Camera.where(is_public: true, discoverable: true)
             unless params[:thumbnail]
@@ -75,8 +75,10 @@ module Evercam
             offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
             query = query.offset(offset).limit(limit)
             query_result = query.eager(:owner).eager(:vendor_model => :vendor).all.to_a
-            # Evercam::Services.dalli_cache.set(cache_key, query_result)
-            # Evercam::Services.dalli_cache.set("#{cache_key}|pages", total_pages)
+            unless params.include?(:thumbnail) || params[:thumbnail]
+              Evercam::Services.dalli_cache.set(cache_key, query_result)
+              Evercam::Services.dalli_cache.set("#{cache_key}|pages", total_pages)
+            end
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
               :pages => total_pages
