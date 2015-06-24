@@ -59,14 +59,14 @@ module Evercam
          rights_list.delete_if {|r| CameraRightSet::PUBLIC_RIGHTS.include?(r)} if camera.is_public?
          share         = nil
          Sequel::Model.db.transaction do
-            share = CameraShare.create(
-              camera: camera,
-              user: sharee,
-              sharer: sharer,
-              kind: CameraShare::PRIVATE,
-              message: message
-            )
-            access_rights.grant(*rights_list) if rights_list.size > 0
+           share = CameraShare.create(
+             camera: camera,
+             user: sharee,
+             sharer: sharer,
+             kind: CameraShare::PRIVATE,
+             message: message
+           )
+           access_rights.grant(*rights_list) if rights_list.size > 0
          end
          share
       end
