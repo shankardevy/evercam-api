@@ -34,6 +34,7 @@ module Evercam
         float :location_lat
 
         boolean :is_online
+        boolean :discoverable
       end
 
       def validate
@@ -139,6 +140,7 @@ module Evercam
         camera.timezone    = timezone if timezone
         camera.mac_address = mac_address if mac_address
 
+        camera.discoverable = inputs[:discoverable] if inputs[:discoverable]
         if inputs[:is_online]
           camera.is_online = inputs[:is_online]
           camera.last_online_at = Time.now
