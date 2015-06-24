@@ -331,7 +331,7 @@ module Evercam
           if Evercam::Utils.is_num?(params["timestamp"])
             timestamp = Time.at(params[:timestamp].to_i)
           else
-            timestamp = Time.parse(params[:timestamp])
+            timestamp = ActiveSupport::TimeZone.new('UTC').parse(params[:timestamp])
           end
           snapshot = camera.snapshot_by_ts!(timestamp, params[:range].to_i)
           rights   = requester_rights_for(camera)
