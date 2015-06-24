@@ -3,36 +3,6 @@ require_relative '../presenters/snapshot_presenter'
 
 module Evercam
 
-  def self.get_jpg(camera)
-    response = nil
-
-    unless camera.external_url.nil?
-      begin
-        conn = Faraday.new(:url => camera.external_url) do |faraday|
-          faraday.request :basic_auth, camera.cam_username, camera.cam_password
-          faraday.request :digest, camera.cam_username, camera.cam_password
-          faraday.adapter  :typhoeus
-          faraday.options.timeout = Evercam::Config[:api][:timeout]           # open/read timeout in seconds
-          faraday.options.open_timeout = Evercam::Config[:api][:timeout]      # connection open timeout in seconds
-        end
-        response = conn.get do |req|
-          req.url camera.res_url('jpg')
-        end
-      rescue URI::InvalidURIError => error
-        raise BadRequestError, "Invalid URL. Cause: #{error}"
-      rescue Faraday::TimeoutError
-        raise CameraOfflineError, 'We can&#39;t connect to your camera at the moment - please check your settings'
-      end
-      if response.success?
-        response
-      elsif response.status == 401
-        raise AuthorizationError, 'Please check camera username and password'
-      else
-        raise CameraOfflineError, 'We can&#39;t connect to your camera at the moment - please check your settings'
-      end
-    end
-  end
-
   class V1SnapshotJpgRoutes < Grape::API
     format :json
 
