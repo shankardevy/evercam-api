@@ -1,4 +1,5 @@
 require 'bundler'
+require 'rack'
 require 'rack/rewrite'
 require 'dalli'
 require 'pusher'
@@ -6,6 +7,7 @@ require 'evercam_misc'
 require 'sequel'
 require 'sidekiq/web'
 require 'newrelic_rpm'
+require 'mashape-analytics'
 
 # Establish a connection to the database.
 Sequel.connect(Evercam::Config[:database])
@@ -71,6 +73,10 @@ map '/v1' do
 
   # Bring in Airbrake.
   use Airbrake::Rack
+
+  use MashapeAnalytics::Frameworks::Rack,
+    service_token: ENV['MASHAPE'],
+    environment: 'production'
 
   # Enable gzip
   use Rack::Deflater

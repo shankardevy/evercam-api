@@ -58,6 +58,7 @@ gem 'evercam_misc', '~> 0.0.10'
 gem 'evercam_models', '~> 0.3.17'
 
 gem 'airbrake'
+gem 'mashape-analytics'
 
 gem 'racksh'
 

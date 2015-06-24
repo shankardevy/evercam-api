@@ -169,6 +169,8 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mashape-analytics (1.0.1)
+      rbczmq (~> 1.7, >= 1.7.8)
     metaclass (0.0.4)
     method_source (0.8.2)
     mime-types (2.6.1)
@@ -232,6 +234,7 @@ GEM
     rb-fsevent (0.9.5)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    rbczmq (1.7.8)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -339,6 +342,7 @@ DEPENDENCIES
   json
   kgio
   logjam
+  mashape-analytics
   mini_magick
   minitest
   mocha
