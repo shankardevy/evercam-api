@@ -310,8 +310,7 @@ module Evercam
         camera = get_cam(params[:id])
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
-        invalidate_for_camera(camera.exid)
-        camera.destroy
+        DeleteCameraWorker.perform_async(camera.exid)
         {}
       end
 
