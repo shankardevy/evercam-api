@@ -1,11 +1,10 @@
 Sequel.migration do
-
   up do
     alter_table(:vendor_models) do
-      add_column :resolution, :text, null: true, default: ''
-      add_column :official_url, :text, null: true, default: ''
-      add_column :audio_url, :text, null: true, default: ''
-      add_column :more_info, :text, null: true, default: ''
+      add_column :resolution, :text, null: true, default: ""
+      add_column :official_url, :text, null: true, default: ""
+      add_column :audio_url, :text, null: true, default: ""
+      add_column :more_info, :text, null: true, default: ""
       add_column :poe, :boolean, null: false, default: false
       add_column :wifi, :boolean, null: false, default: false
       add_column :onvif, :boolean, null: false, default: false
@@ -39,5 +38,4 @@ Sequel.migration do
       drop_column :discontinued
     end
   end
-
 end

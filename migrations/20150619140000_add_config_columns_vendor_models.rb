@@ -1,5 +1,4 @@
 Sequel.migration do
-
   up do
     alter_table(:vendor_models) do
       add_column :username, :text, null: true
@@ -13,5 +12,4 @@ Sequel.migration do
       drop_column :password
     end
   end
-
 end

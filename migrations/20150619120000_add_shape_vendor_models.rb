@@ -1,8 +1,7 @@
 Sequel.migration do
-
   up do
     alter_table(:vendor_models) do
-      add_column :shape, String, null: true, default: ''
+      add_column :shape, String, null: true, default: ""
     end
   end
 
@@ -11,5 +10,4 @@ Sequel.migration do
       drop_column :shape
     end
   end
-
 end

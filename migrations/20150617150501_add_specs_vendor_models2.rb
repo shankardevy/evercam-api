@@ -1,5 +1,4 @@
 Sequel.migration do
-
   up do
     alter_table(:vendor_models) do
       drop_column :specs
@@ -11,5 +10,4 @@ Sequel.migration do
       add_column :specs, :json, null: true
     end
   end
-
 end
