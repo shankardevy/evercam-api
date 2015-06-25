@@ -23,7 +23,7 @@ module Evercam
         type: "string",
         desc: "Unique identifier for the vendor",
         required: true
-      } do |m, o|
+      } do |m, _o|
         m.vendor.exid
       end
 
@@ -156,53 +156,55 @@ module Evercam
       expose :icon_image, documentation: {
         type: "String",
         desc: "Model icon"
-      } do |m,o|
+      } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/icon.jpg"
       end
 
       expose :thumbnail_image, documentation: {
         type: "String",
         desc: "Model thumbnail"
-      } do |m,o|
+      } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/thumbnail.jpg"
       end
 
       expose :original_image, documentation: {
         type: "String",
         desc: "Model Original"
-      } do |m,o|
+      } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/original.jpg"
       end
 
-      # temporary here, will be removed after alternate attributes will be used by other apps
+      # temporary here, will be removed after alternate attributes 
+      # will be used by other apps
       expose :defaults, documentation: {
         type: "hash",
         desc: "Various default values used by this camera model",
         required: true
-      } do |m,o|
+      } do |m, _o|
         m.config
       end
 
-      # temporary here, will be removed after alternate attributes will be used by other apps
+      # temporary here, will be removed after alternate attributes 
+      # will be used by other apps
       expose :images do
         expose :icon, documentation: {
           type: "String",
           desc: "Model icon"
-        } do |m,o|
+        } do |m, _o|
           "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/icon.jpg"
         end
 
         expose :thumbnail, documentation: {
           type: "String",
           desc: "Model thumbnail"
-        } do |m,o|
+        } do |m, _o|
           "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/thumbnail.jpg"
         end
 
         expose :original, documentation: {
           type: "String",
           desc: "Model Original"
-        } do |m,o|
+        } do |m, _o|
           "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/original.jpg"
         end
       end

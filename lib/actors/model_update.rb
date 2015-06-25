@@ -36,7 +36,7 @@ module Evercam
 
       def validate
         if VendorModel.where(exid: id).first.nil?
-          add_error(:model, :exists, 'Model does not exist')
+          add_error(:model, :exists, "Model does not exist")
         end
       end
 
@@ -60,9 +60,7 @@ module Evercam
                                                                 'password' => inputs[:default_password].to_s.empty? ? '' : inputs[:default_password]}}})
         end
 
-        [:shape, :resolution, :official_url, :audio_url, :more_info, :poe, 
-          :wifi, :onvif, :psia, :ptz, :infrared, :varifocal, :sd_card, :upnp, 
-            :audio_io, :discontinued].each do |spec|
+        [:shape, :resolution, :official_url, :audio_url, :more_info, :poe, :wifi, :onvif, :psia, :ptz, :infrared, :varifocal, :sd_card, :upnp, :audio_io, :discontinued].each do |spec|
           unless inputs[spec].blank?
             if model.values[:specs].has_key?(spec)
               model.values[:specs][spec] = inputs[spec]
