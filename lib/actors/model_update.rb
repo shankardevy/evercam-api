@@ -8,31 +8,30 @@ module Evercam
 
       optional do
         string :name
-        string :jpg_url, :empty => true
-        string :mjpg_url, :empty => true
-        string :mpeg4_url, :empty => true
-        string :mobile_url, :empty => true
-        string :h264_url, :empty => true
-        string :lowres_url, :empty => true
-        string :default_username, :empty => true
-        string :default_password, :empty => true
-
-        string :shape, :empty => true
-        string :resolution, :empty => true
-        string :official_url, :empty => true
-        string :audio_url, :empty => true
-        string :more_info, :empty => true
-        string :poe, :empty => true
-        string :wifi, :empty => true
-        string :onvif, :empty => true
-        string :psia, :empty => true
-        string :ptz, :empty => true
-        string :infrared, :empty => true
-        string :varifocal, :empty => true
-        string :sd_card, :empty => true
-        string :upnp, :empty => true
-        string :audio_io, :empty => true
-        string :discontinued, :empty => true
+        string :jpg_url, empty: true
+        string :mjpg_url, empty: true
+        string :mpeg4_url, empty: true
+        string :mobile_url, empty: true
+        string :h264_url, empty: true
+        string :lowres_url, empty: true
+        string :default_username, empty: true
+        string :default_password, empty: true
+        string :shape, empty: true
+        string :resolution, empty: true
+        string :official_url, empty: true
+        string :audio_url, empty: true
+        string :more_info, empty: true
+        string :poe, empty: true
+        string :wifi, empty: true
+        string :onvif, empty: true
+        string :psia, empty: true
+        string :ptz, empty: true
+        string :infrared, empty: true
+        string :varifocal, empty: true
+        string :sd_card, empty: true
+        string :upnp, empty: true
+        string :audio_io, empty: true
+        string :discontinued, empty: true
       end
 
       def validate
@@ -66,7 +65,7 @@ module Evercam
             if model.values[:specs].has_key?(spec)
               model.values[:specs][spec] = inputs[spec]
             else
-              model.values[:specs].merge!({ spec => inputs[spec] })
+              model.values[:specs].merge!( spec => inputs[spec] )
             end
           end
         end
