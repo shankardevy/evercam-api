@@ -1,7 +1,7 @@
 Sequel.migration do
   up do
     alter_table(:camera_shares) do
-      add_column :message, Text
+      add_column :message, :text
     end
   end
 
