@@ -16,14 +16,14 @@ module Evercam
 
       def create_share_for_user(user, camera)
          grantor = (inputs[:grantor] ? User.where(username: inputs[:grantor]).first : camera.owner)
-         create_share(grantor, user, camera, inputs[:rights])
+         create_share(grantor, user, camera, inputs[:rights], inputs[:message])
       end
 
       def create_share_for_request(share_request)
          user = User.where(email: share_request.email).first
          Sequel::Model.db.transaction do
             share_request.update(status: CameraShareRequest::USED)
-            create_share(share_request.user, user, share_request.camera, share_request.rights)
+            create_share(share_request.user, user, share_request.camera, share_request.rights, share_request.message)
          end
       end
 
@@ -41,12 +41,14 @@ module Evercam
                                    user:   grantor,
                                    status: CameraShareRequest::PENDING,
                                    email:  email,
-                                   rights: inputs[:rights])
+                                   rights: inputs[:rights],
+                                   message: inputs[:message]
+         )
       end
 
       private
 
-      def create_share(sharer, sharee, camera, rights)
+      def create_share(sharer, sharee, camera, rights, message)
          if CameraShare.where(camera: camera, user: sharee).count != 0
             raise Evercam::ConflictError.new("The camera has already been shared with this user.",
                                              "duplicate_share_error", sharee.username, sharee.email)
@@ -57,8 +59,14 @@ module Evercam
          rights_list.delete_if {|r| CameraRightSet::PUBLIC_RIGHTS.include?(r)} if camera.is_public?
          share         = nil
          Sequel::Model.db.transaction do
-            share = CameraShare.create(camera: camera, user: sharee, sharer: sharer, kind: CameraShare::PRIVATE)
-            access_rights.grant(*rights_list) if rights_list.size > 0
+           share = CameraShare.create(
+             camera: camera,
+             user: sharee,
+             sharer: sharer,
+             kind: CameraShare::PRIVATE,
+             message: message
+           )
+           access_rights.grant(*rights_list) if rights_list.size > 0
          end
          share
       end
