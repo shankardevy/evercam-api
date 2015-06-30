@@ -123,17 +123,17 @@ task :import_vendor_models, [:vendorexid] do |t, args|
       official_url = vm[:official_url].nil? ? "" : vm[:official_url]
       audio_url = vm[:audio_url].nil? ? "" : vm[:audio_url]
       more_info = vm[:more_info].nil? ? "" : vm[:more_info]
-      poe = vm[:poe].nil? ? "" : vm[:poe] == "t" ? "True" : "False"
-      wifi = vm[:wifi].nil? ? "" : vm[:wifi] == "t" ? "True" : "False"
-      onvif = vm[:onvif].nil? ? "" : vm[:onvif] == "t" ? "True" : "False"
-      psia = vm[:psia].nil? ? "" : vm[:psia] == "t" ? "True" : "False"
-      ptz = vm[:ptz].nil? ? "" : vm[:ptz] == "t" ? "True" : "False"
-      infrared = vm[:infrared].nil? ? "" : vm[:infrared] == "t" ? "True" : "False"
-      varifocal = vm[:varifocal].nil? ? "" : vm[:varifocal] == "t" ? "True" : "False"
-      sd_card = vm[:sd_card].nil? ? "" : vm[:sd_card] == "t" ? "True" : "False"
-      upnp = vm[:upnp].nil? ? "" : vm[:upnp] == "t" ? "True" : "False"
-      audio_io = vm[:audio_io].nil? ? "" : vm[:audio_io] == "t" ? "True" : "False"
-      discontinued = vm[:discontinued].nil? ? "" : vm[:discontinued] == "t" ? "True" : "False"
+      poe = vm[:poe].nil? ? "False" : vm[:poe] == "t" ? "True" : "False"
+      wifi = vm[:wifi].nil? ? "False" : vm[:wifi] == "t" ? "True" : "False"
+      onvif = vm[:onvif].nil? ? "False" : vm[:onvif] == "t" ? "True" : "False"
+      psia = vm[:psia].nil? ? "False" : vm[:psia] == "t" ? "True" : "False"
+      ptz = vm[:ptz].nil? ? "False" : vm[:ptz] == "t" ? "True" : "False"
+      infrared = vm[:infrared].nil? ? "False" : vm[:infrared] == "t" ? "True" : "False"
+      varifocal = vm[:varifocal].nil? ? "False" : vm[:varifocal] == "t" ? "True" : "False"
+      sd_card = vm[:sd_card].nil? ? "False" : vm[:sd_card] == "t" ? "True" : "False"
+      upnp = vm[:upnp].nil? ? "False" : vm[:upnp] == "t" ? "True" : "False"
+      audio_io = vm[:audio_io].nil? ? "False" : vm[:audio_io] == "t" ? "True" : "False"
+      discontinued = vm[:discontinued].nil? ? "False" : vm[:discontinued] == "t" ? "True" : "False"
 
       Rake::Task["specs_model"].invoke(m, shape, resolution, official_url, audio_url, more_info, poe, wifi, onvif, psia, ptz, infrared, varifocal, sd_card, upnp, audio_io, discontinued)
     end
