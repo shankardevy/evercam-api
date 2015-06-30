@@ -102,22 +102,47 @@ task :import_vendor_models, [:vendorexid] do |t, args|
   File.open("temp/models_data_all.csv", "r:ISO-8859-15:UTF-8") do |file|
     v = Vendor.find(:exid => args[:vendorexid])
     if v.nil?
-      puts " Vendor '" + args[:vendorexid] + "' could not be found"
-      return
+      # try creating new vendor if does not exist already
+      if args[:vendorexid] =~ /^[a-z0-9\-_]+$/ and args[:vendorexid].length > 3
+        v = Vendor.new(
+          exid: args[:vendorexid],
+          name: args[:vendorexid].upcase,
+          known_macs: ['']
+        )
+        v.save
+        puts "    V += " + v.id.to_s + ", " + args[:vendorexid] + ", " + args[:vendorexid].upcase
+      else
+        puts ' New vendor ID can only contain lower case letters, numbers, hyphens and underscore. Minimum length is 4.'
+      end
+    else
+      puts "    V == " + v.exid
+    end
+    d = VendorModel.find(exid: v.exid + "_default")
+    if d.nil?
+      # try creating default vendor model if does not exist already
+      d = VendorModel.new(
+        exid: v.exid + "_default",
+        name: "Default",
+        vendor_id: v.id,
+        config: {}
+      )
+      d.save
+      puts "    D += " + d.exid.to_s + ", " + d.name
+    else
+      puts "    D == " + d.exid.to_s + ", " + d.name
     end
 
     SmarterCSV.process(file).each do |vm|
       next if !(vm[:vendor_id].downcase == args[:vendorexid].downcase)
       original_vm = vm.clone
-      puts "    + " + v.exid + "." + vm[:model].to_s
-
+      
       m = VendorModel.where(:exid => vm[:model].to_s).first
       
       # Next if vendor model not found
       next if m.nil?
       
-      puts "      VM = " + m.vendor_id.to_s + ", " + m.exid + ", " + m.name
-      
+      puts "    M == " + m.exid + ", " + m.name
+
       shape = vm[:shape].nil? ? "" : vm[:shape]
       resolution = vm[:resolution].nil? ? "" : vm[:resolution]
       official_url = vm[:official_url].nil? ? "" : vm[:official_url]
