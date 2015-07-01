@@ -342,7 +342,7 @@ module Evercam
 
           expose :mpeg, documentation: {
               type: 'String',
-              desc: 'Dynamis DNS mpeg url'
+              desc: 'Dynamic DNS mpeg url'
           } do |c,o|
             host = c.dyndns_url('rtsp')
             (c.res_url('mpeg').blank? or c.config['external_rtsp_port'] == 0 or host.blank?) ? "" : host << c.res_url('mpeg')
@@ -350,7 +350,7 @@ module Evercam
 
           expose :audio, documentation: {
               type: 'String',
-              desc: 'Dynamis DNS audio url'
+              desc: 'Dynamic DNS audio url'
           } do |c,o|
             host = c.dyndns_url('rtsp')
             (c.res_url('audio').blank? or c.config['external_rtsp_port'] == 0 or host.blank?) ? "" : host << c.res_url('audio')
