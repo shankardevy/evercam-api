@@ -1,13 +1,13 @@
 Sequel.migration do
   up do
-    alter_table :users do
-      rename_column :billing_id, :stripe_customer_id
+    alter_table (:users) do
+      add_column :stripe_customer_id, String
     end
   end
 
   down do
-    alter_table :users do
-      rename_column :stripe_customer_id, :billing_id
+    alter_table (:users) do
+      drop_column :stripe_customer_id
     end
   end
 

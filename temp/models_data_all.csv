@@ -1,0 +1,26 @@
+id,vendor_id,model,jpg_url,h264_url,mjpg_url,resolution,shape,onvif,psia,ptz,infrared,varifocal,sd_card,upnp,created_at,updated_at,model_slug,audio_io,default_username,default_password,more_info,discontinued,wifi,poe,audio_url,official_url
+1484,other,other_default,other.jpg,,,1080p,Other,f,f,f,f,f,f,f,50:09.7,28:33.3,back-camera,t,,,,f,t,f,,
+1484,evercam,evercam_default,back.jpg,,,,Other,f,f,f,f,f,f,f,50:09.7,28:33.3,back-camera,f,,,,f,f,f,,
+1484,evercam,back camera,back.jpg,,,,Other,f,f,f,f,f,f,f,50:09.7,28:33.3,back-camera,f,,,,f,f,f,,
+1483,evercam,front-camera,front.jpg,,,,Other,f,f,f,f,f,f,f,50:09.6,28:33.3,front-camera,f,,,,f,f,f,,
+2437,starvedia,starvedia_default,,,,1280x800,Dome,f,f,t,f,f,t,f,39:37.5,39:37.5,ic737w,t,,,,f,t,f,,http://www.starvedia.com/ProductDetail_ic737w.html
+2437,starvedia,ic737w,,,,1280x800,Dome,f,f,t,f,f,t,f,39:37.5,39:37.5,ic737w,t,,,,f,t,f,,http://www.starvedia.com/ProductDetail_ic737w.html
+2439,starvedia,ic711w,,,,1280x800,Box,f,f,f,f,f,t,f,42:42.1,42:42.1,ic711w,t,,,,f,t,f,,http://www.starvedia.com/ProductDetail_ic711w.html
+2438,starvedia,ic727w,,,,1280x800,Bullet,f,f,f,f,f,t,f,41:32.5,43:18.6,ic727w,f,,,,f,t,f,,http://www.starvedia.com/ProductDetail_ic727w.html
+2435,starvedia,ic717hd,,,,1280x800,Box,f,f,f,f,f,t,f,33:03.8,44:11.8,ic717hd,t,,,,f,f,f,,http://www.starvedia.com/ProductDetail_ic717HD.html
+2436,starvedia,ic502wplus,,,,,Dome,f,f,t,f,f,t,f,34:50.2,46:09.3,ic502wplus,t,,,,f,t,f,,http://www.starvedia.com/ProductDetail_ic502wp.html
+2440,geniv,geniv_default,cgi-bin/mjpg/video.cgi?channel=0&subtype=0,cam/realmonitor?channel=1&subtype=1,cgi-bin/mjpg/video.cgi?channel=0&subtype=0,1920x1080,Dome,t,f,t,f,f,f,f,22:15.3,22:15.3,g4-ip20atc,t,admin,admin,,,,,,
+2440,geniv,g4-ip20atc,cgi-bin/mjpg/video.cgi?channel=0&subtype=0,cam/realmonitor?channel=1&subtype=1,cgi-bin/mjpg/video.cgi?channel=0&subtype=0,1920x1080,Dome,t,f,t,f,f,f,f,22:15.3,22:15.3,g4-ip20atc,t,admin,admin,,,,,,
+2441,tenvis,tenvis_default,,,,640x480,Cube,f,f,f,t,f,f,f,58:41.8,32:20.7,jpt3815w,t,admin,admin,Support remote viewing on mobile devices. iPhone/iPad/Android OS supported.,,,,,
+2441,tenvis,jpt3815w,,,,640x480,Cube,f,f,f,t,f,f,f,58:41.8,32:20.7,jpt3815w,t,admin,admin,Support remote viewing on mobile devices. iPhone/iPad/Android OS supported.,,,,,
+2442,sricam,sricam_default,,,,,Box,f,f,f,t,f,t,f,07:22.5,07:22.5,ap002,t,,,,f,t,f,,http://www.sricam.com/product/1137504576-219111891/Sricam_AP002_Wireless_Megapixel_32G_TF_SD_Card_P2P_IR_Wifi_Camera_720P_Wireless_Megapixel_IP_Camera.html
+2442,sricam,ap002,,,,,Box,f,f,f,t,f,t,f,07:22.5,07:22.5,ap002,t,,,,f,t,f,,http://www.sricam.com/product/1137504576-219111891/Sricam_AP002_Wireless_Megapixel_32G_TF_SD_Card_P2P_IR_Wifi_Camera_720P_Wireless_Megapixel_IP_Camera.html
+2445,sercomm,sercomm_default,,,,VGA,Cube,f,f,f,f,f,f,f,47:48.1,51:42.1,shc-rc8026,t,,,Support Audio detection sensitivity. ,,,,,
+2445,sercomm,shc-rc8026,,,,VGA,Cube,f,f,f,f,f,f,f,47:48.1,51:42.1,shc-rc8026,t,,,Support Audio detection sensitivity. ,,,,,
+2446,sercomm,shc-rc8221,,,,720p,Cube,f,f,f,f,f,f,f,59:14.3,59:14.3,shc-rc8221,t,,,,f,f,f,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=99
+2447,sercomm,shc-oc821,,,,720p,Cube,f,f,f,f,f,t,f,48:18.4,48:18.4,shc-oc821,f,,,,f,t,f,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=100
+2452,sercomm,4551,,,,1080p,Cube,f,f,f,f,f,f,t,08:46.9,08:46.9,4551,t,,,,f,t,t,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=382
+2448,sercomm,shc-rc8261,,,,720p,Cube,f,f,t,f,f,t,t,51:46.0,51:46.0,shc-rc8261,t,,,,f,t,f,,
+2450,sercomm,8321,,,,720p,Cube,f,f,f,f,f,f,t,58:23.4,58:23.4,8321,f,,,,f,t,f,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=380
+2451,sercomm,oc431,,,,720p,Cube,f,f,f,f,f,f,f,00:56.6,00:56.6,oc431,t,,,,f,t,f,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=381
+2449,sercomm,8110,,,,720p,Cube,f,f,f,f,f,t,t,55:13.1,55:13.1,8110,f,,,,f,t,f,,http://www.sercomm.com/contpage.aspx?langid=1&type=prod3&L1id=2&L2id=3&L3id=9&Prodid=379

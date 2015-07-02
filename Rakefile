@@ -64,6 +64,159 @@ namespace :tmp do
   end
 end
 
+desc "Import models_data_all.csv from S3 and add extra specs data to Evercam Models"
+task :import_vendor_models, [:vendorexid] do |t, args|
+  require 'evercam_models'
+  require 'aws-sdk'
+  require 'open-uri'
+  require 'smarter_csv'
+
+  AWS.config(
+    :access_key_id => ENV['AWS_ACCESS_KEY_ID'],
+    :secret_access_key => ENV['AWS_SECRET_KEY'],
+    # disable this key if source bucket is in US
+    :s3_endpoint => 's3-eu-west-1.amazonaws.com'
+  )
+  s3 = AWS::S3.new
+  assets = s3.buckets['evercam-public-assets']
+  csv = assets.objects['models_data_all.csv']
+
+  if csv.nil?
+    puts " No CSV file found"
+  else
+    puts " CSV file found"
+  end
+
+  if !Dir.exists?("temp/")
+    puts " Create temp/"
+    Dir.mkdir("temp/")
+  end
+
+  puts "\n Importing models_data_all.csv... \n"
+  File.open("temp/models_data_all.csv", "wb") do |f|
+    f.write(csv.read)
+    puts " 'models_data_all.csv' imported from AWS S3 \n"
+  end
+
+  puts "\n Reading data from 'models_data_all.csv' for #{args[:vendorexid]} \n"
+  File.open("temp/models_data_all.csv", "r:ISO-8859-15:UTF-8") do |file|
+    v = Vendor.find(:exid => args[:vendorexid])
+    if v.nil?
+      # try creating new vendor if does not exist already
+      if args[:vendorexid] =~ /^[a-z0-9\-_]+$/ and args[:vendorexid].length > 3
+        v = Vendor.new(
+          exid: args[:vendorexid],
+          name: args[:vendorexid].upcase,
+          known_macs: ['']
+        )
+        v.save
+        puts "    V += " + v.id.to_s + ", " + args[:vendorexid] + ", " + args[:vendorexid].upcase
+      else
+        puts ' New vendor ID can only contain lower case letters, numbers, hyphens and underscore. Minimum length is 4.'
+      end
+    else
+      puts "    V == " + v.exid
+    end
+    d = VendorModel.find(exid: v.exid + "_default")
+    if d.nil?
+      # try creating default vendor model if does not exist already
+      d = VendorModel.new(
+        exid: v.exid + "_default",
+        name: "Default",
+        vendor_id: v.id,
+        config: {}
+      )
+      d.save
+      puts "    D += " + d.exid.to_s + ", " + d.name
+    else
+      puts "    D == " + d.exid.to_s + ", " + d.name
+    end
+
+    SmarterCSV.process(file).each do |vm|
+      next if !(vm[:vendor_id].downcase == args[:vendorexid].downcase)
+      original_vm = vm.clone
+      
+      m = VendorModel.where(:exid => vm[:model].to_s).first
+      
+      # Next if vendor model not found
+      next if m.nil?
+      
+      puts "    M == " + m.exid + ", " + m.name
+
+      shape = vm[:shape].nil? ? "" : vm[:shape]
+      resolution = vm[:resolution].nil? ? "" : vm[:resolution]
+      official_url = vm[:official_url].nil? ? "" : vm[:official_url]
+      audio_url = vm[:audio_url].nil? ? "" : vm[:audio_url]
+      more_info = vm[:more_info].nil? ? "" : vm[:more_info]
+      poe = vm[:poe].nil? ? "False" : vm[:poe] == "t" ? "True" : "False"
+      wifi = vm[:wifi].nil? ? "False" : vm[:wifi] == "t" ? "True" : "False"
+      onvif = vm[:onvif].nil? ? "False" : vm[:onvif] == "t" ? "True" : "False"
+      psia = vm[:psia].nil? ? "False" : vm[:psia] == "t" ? "True" : "False"
+      ptz = vm[:ptz].nil? ? "False" : vm[:ptz] == "t" ? "True" : "False"
+      infrared = vm[:infrared].nil? ? "False" : vm[:infrared] == "t" ? "True" : "False"
+      varifocal = vm[:varifocal].nil? ? "False" : vm[:varifocal] == "t" ? "True" : "False"
+      sd_card = vm[:sd_card].nil? ? "False" : vm[:sd_card] == "t" ? "True" : "False"
+      upnp = vm[:upnp].nil? ? "False" : vm[:upnp] == "t" ? "True" : "False"
+      audio_io = vm[:audio_io].nil? ? "False" : vm[:audio_io] == "t" ? "True" : "False"
+      discontinued = vm[:discontinued].nil? ? "False" : vm[:discontinued] == "t" ? "True" : "False"
+
+      Rake::Task["specs_model"].invoke(m, shape, resolution, official_url, audio_url, more_info, poe, wifi, onvif, psia, ptz, infrared, varifocal, sd_card, upnp, audio_io, discontinued)
+    end
+  end
+end
+
+# add specs to given model
+task :specs_model, [:m, :shape, :resolution, :official_url, :audio_url, :more_info, :poe, :wifi, :onvif, :psia, :ptz, :infrared, :varifocal, :sd_card, :upnp, :audio_io, :discontinued] do |t, args|
+  args.with_defaults(:shape => "", :resolution => "", :official_url => "", :audio_url => "", :more_info => "", :poe => "False", :wifi => "False", :onvif => "False", :psia => "False", :ptz => "False", :infrared => "False", :varifocal => "False", :sd_card => "False", :upnp => "False", :audio_io => "False", :discontinued => "False")
+
+  m = args.m
+
+  # set up specs
+  m.values[:shape] = args.shape
+  m.values[:resolution] = args.resolution
+  m.values[:official_url] = args.official_url
+  m.values[:poe] = args.poe
+  m.values[:wifi] = args.wifi
+  m.values[:onvif] = args.onvif
+  m.values[:psia] = args.psia
+  m.values[:ptz] = args.ptz
+  m.values[:infrared] = args.infrared
+  m.values[:varifocal] = args.varifocal
+  m.values[:sd_card] = args.sd_card
+  m.values[:upnp] = args.upnp
+  m.values[:audio_io] = args.audio_io
+  m.values[:discontinued] = args.discontinued
+
+  # set up snapshot urls
+  if m.values[:config].has_key?("snapshots")
+    if m.values[:config]["snapshots"].has_key?("jpg")
+      m.values[:jpg_url] = m.values[:config]["snapshots"]["jpg"]
+    end
+    if m.values[:config]["snapshots"].has_key?("h264")
+      m.values[:h264_url] = m.values[:config]["snapshots"]["h264"]
+    end
+    if m.values[:config]["snapshots"].has_key?("mjpg")
+      m.values[:mjpg_url] = m.values[:config]["snapshots"]["mjpg"]
+    end
+  end
+
+  # set up basic auth
+  if m.values[:config].has_key?("auth") && m.values[:config]["auth"].has_key?("basic")
+    if m.values[:config]["auth"]["basic"].has_key?("username")
+      m.values[:username] = m.values[:config]["auth"]["basic"]["username"]
+    end
+    if m.values[:config]["auth"]["basic"].has_key?("password")
+      m.values[:password] = m.values[:config]["auth"]["basic"]["password"]
+    end
+  end
+
+  ######
+  m.save
+  ######
+
+  puts "      => " + m.exid
+end
+
 desc "Import cambase_models.csv from S3 and fix Evercam models data for given vendor onlys"
 task :import_vendor_data, [:vendorexid] do |t, args|
   require 'evercam_models'
