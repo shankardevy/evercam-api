@@ -160,61 +160,52 @@ task :import_vendor_models, [:vendorexid] do |t, args|
       audio_io = vm[:audio_io].nil? ? "False" : vm[:audio_io] == "t" ? "True" : "False"
       discontinued = vm[:discontinued].nil? ? "False" : vm[:discontinued] == "t" ? "True" : "False"
 
-      Rake::Task["specs_model"].invoke(m, shape, resolution, official_url, audio_url, more_info, poe, wifi, onvif, psia, ptz, infrared, varifocal, sd_card, upnp, audio_io, discontinued)
+      # set up specs
+      m.values[:shape] = shape
+      m.values[:resolution] = resolution
+      m.values[:official_url] = official_url
+      m.values[:poe] = poe
+      m.values[:wifi] = wifi
+      m.values[:onvif] = onvif
+      m.values[:psia] = psia
+      m.values[:ptz] = ptz
+      m.values[:infrared] = infrared
+      m.values[:varifocal] = varifocal
+      m.values[:sd_card] = sd_card
+      m.values[:upnp] = upnp
+      m.values[:audio_io] = audio_io
+      m.values[:discontinued] = discontinued
+
+      # set up snapshot urls
+      if m.values[:config].has_key?("snapshots")
+        if m.values[:config]["snapshots"].has_key?("jpg")
+          m.values[:jpg_url] = m.values[:config]["snapshots"]["jpg"]
+        end
+        if m.values[:config]["snapshots"].has_key?("h264")
+          m.values[:h264_url] = m.values[:config]["snapshots"]["h264"]
+        end
+        if m.values[:config]["snapshots"].has_key?("mjpg")
+          m.values[:mjpg_url] = m.values[:config]["snapshots"]["mjpg"]
+        end
+      end
+
+      # set up basic auth
+      if m.values[:config].has_key?("auth") && m.values[:config]["auth"].has_key?("basic")
+        if m.values[:config]["auth"]["basic"].has_key?("username")
+          m.values[:username] = m.values[:config]["auth"]["basic"]["username"]
+        end
+        if m.values[:config]["auth"]["basic"].has_key?("password")
+          m.values[:password] = m.values[:config]["auth"]["basic"]["password"]
+        end
+      end
+
+      ######
+      m.save
+      ######
+
+      puts "      => " + m.exid + ", " + m.name
     end
   end
-end
-
-# add specs to given model
-task :specs_model, [:m, :shape, :resolution, :official_url, :audio_url, :more_info, :poe, :wifi, :onvif, :psia, :ptz, :infrared, :varifocal, :sd_card, :upnp, :audio_io, :discontinued] do |t, args|
-  args.with_defaults(:shape => "", :resolution => "", :official_url => "", :audio_url => "", :more_info => "", :poe => "False", :wifi => "False", :onvif => "False", :psia => "False", :ptz => "False", :infrared => "False", :varifocal => "False", :sd_card => "False", :upnp => "False", :audio_io => "False", :discontinued => "False")
-
-  m = args.m
-
-  # set up specs
-  m.values[:shape] = args.shape
-  m.values[:resolution] = args.resolution
-  m.values[:official_url] = args.official_url
-  m.values[:poe] = args.poe
-  m.values[:wifi] = args.wifi
-  m.values[:onvif] = args.onvif
-  m.values[:psia] = args.psia
-  m.values[:ptz] = args.ptz
-  m.values[:infrared] = args.infrared
-  m.values[:varifocal] = args.varifocal
-  m.values[:sd_card] = args.sd_card
-  m.values[:upnp] = args.upnp
-  m.values[:audio_io] = args.audio_io
-  m.values[:discontinued] = args.discontinued
-
-  # set up snapshot urls
-  if m.values[:config].has_key?("snapshots")
-    if m.values[:config]["snapshots"].has_key?("jpg")
-      m.values[:jpg_url] = m.values[:config]["snapshots"]["jpg"]
-    end
-    if m.values[:config]["snapshots"].has_key?("h264")
-      m.values[:h264_url] = m.values[:config]["snapshots"]["h264"]
-    end
-    if m.values[:config]["snapshots"].has_key?("mjpg")
-      m.values[:mjpg_url] = m.values[:config]["snapshots"]["mjpg"]
-    end
-  end
-
-  # set up basic auth
-  if m.values[:config].has_key?("auth") && m.values[:config]["auth"].has_key?("basic")
-    if m.values[:config]["auth"]["basic"].has_key?("username")
-      m.values[:username] = m.values[:config]["auth"]["basic"]["username"]
-    end
-    if m.values[:config]["auth"]["basic"].has_key?("password")
-      m.values[:password] = m.values[:config]["auth"]["basic"]["password"]
-    end
-  end
-
-  ######
-  m.save
-  ######
-
-  puts "      => " + m.exid
 end
 
 desc "Import cambase_models.csv from S3 and fix Evercam models data for given vendor onlys"
