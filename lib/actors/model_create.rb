@@ -17,6 +17,22 @@ module Evercam
         string :lowres_url
         string :default_username
         string :default_password
+        string :shape
+        string :resolution
+        string :official_url
+        string :audio_url
+        string :more_info
+        boolean :poe
+        boolean :wifi
+        boolean :upnp
+        boolean :ptz
+        boolean :infrared
+        boolean :varifocal
+        boolean :sd_card
+        boolean :audio_io
+        boolean :onvif
+        boolean :psia
+        boolean :discontinued
       end
 
       def validate
@@ -34,6 +50,27 @@ module Evercam
             exid: id,
             name: name,
             vendor: vendor,
+            jpg_url: jpg_url,
+            h264_url: h264_url,
+            mjpg_url: mjpg_url,
+            default_username: default_username,
+            default_password: default_password,
+            shape: shape,
+            resolution: resolution,
+            official_url: official_url,
+            audio_url: audio_url,
+            more_info: more_info,
+            poe: poe,
+            wifi: wifi,
+            upnp: upnp,
+            ptz: ptz,
+            infrared: infrared,
+            varifocal: varifocal,
+            sd_card: sd_card,
+            audio_io: audio_io,
+            onvif: onvif,
+            psia: psia,
+            discontinued: discontinued,
             config: {}
         )
         [:jpg, :mjpg, :mpeg4, :mobile, :h264, :lowres].each do |resource|

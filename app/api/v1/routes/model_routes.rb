@@ -80,6 +80,22 @@ module Evercam
         optional :lowres_url, type: String, desc: "Low resolution url"
         optional :default_username, type: String, desc: "Default Username"
         optional :default_password, type: String, desc: "Default Password"
+        optional :shape, type: String, desc: "Shape of the model"
+        optional :resolution, type: String, desc: "Resolution(s) supported by model"
+        optional :official_url, type: String, desc: "Official URL of model details"
+        optional :audio_url, type: String, desc: "Audio stream URL of the model"
+        optional :more_info, type: String, desc: "Additional information of the model"
+        optional :poe, type: 'Boolean', desc: "Whether or not POE is supported by the model"
+        optional :wifi, type: 'Boolean', desc: "Whether or not WiFi is supported by the model"
+        optional :upnp, type: 'Boolean', desc: "Whether or not UPNP is supported by the model"
+        optional :ptz, type: 'Boolean', desc: "Whether or not PTZ is supported by the model"
+        optional :infrared, type: 'Boolean', desc: "Whether or not Infrared is supported by the model"
+        optional :varifocal, type: 'Boolean', desc: "Whether or not Varifocal is supported by the model"
+        optional :sd_card, type: 'Boolean', desc: "Whether or not SD Card is supported by the model"
+        optional :audio_io, type: 'Boolean', desc: "Whether or not Audio Input/Output is supported by the model"
+        optional :onvif, type: 'Boolean', desc: "Whether or not OnVif is supported by the model"
+        optional :psia, type: 'Boolean', desc: "Whether or not PSIA is supported by the model"
+        optional :discontinued, type: 'Boolean', desc: "Whether or not the vendor has Discontinued this model"
       end
       post do
         outcome = Actors::ModelCreate.run(params)
@@ -106,6 +122,22 @@ module Evercam
         optional :lowres_url, type: String, desc: "Low resolution url"
         optional :default_username, type: String, desc: "Default Username"
         optional :default_password, type: String, desc: "Default Password"
+        optional :shape, type: String, desc: "Shape of the model"
+        optional :resolution, type: String, desc: "Resolution(s) supported by model"
+        optional :official_url, type: String, desc: "Official URL of model details"
+        optional :audio_url, type: String, desc: "Audio stream URL of the model"
+        optional :more_info, type: String, desc: "Additional information of the model"
+        optional :poe, type: 'Boolean', desc: "Whether or not POE is supported by the model"
+        optional :wifi, type: 'Boolean', desc: "Whether or not WiFi is supported by the model"
+        optional :upnp, type: 'Boolean', desc: "Whether or not UPNP is supported by the model"
+        optional :ptz, type: 'Boolean', desc: "Whether or not PTZ is supported by the model"
+        optional :infrared, type: 'Boolean', desc: "Whether or not Infrared is supported by the model"
+        optional :varifocal, type: 'Boolean', desc: "Whether or not Varifocal is supported by the model"
+        optional :sd_card, type: 'Boolean', desc: "Whether or not SD Card is supported by the model"
+        optional :audio_io, type: 'Boolean', desc: "Whether or not Audio Input/Output is supported by the model"
+        optional :onvif, type: 'Boolean', desc: "Whether or not OnVif is supported by the model"
+        optional :psia, type: 'Boolean', desc: "Whether or not PSIA is supported by the model"
+        optional :discontinued, type: 'Boolean', desc: "Whether or not the vendor has Discontinued this model"
       end
       patch '/:id' do
         outcome = Actors::ModelUpdate.run(params)
@@ -117,4 +149,3 @@ module Evercam
     end
   end
 end
-
