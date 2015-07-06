@@ -169,7 +169,7 @@ module Evercam
 
       expose :original_image, documentation: {
         type: "String",
-        desc: "Model Original"
+        desc: "Model image"
       } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/original.jpg"
       end

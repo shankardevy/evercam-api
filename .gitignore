@@ -2,12 +2,14 @@
 .session
 .env
 .project
+*.csv
 
 *.dump
 
 coverage/
 tmp/
 log/
+temp/
 
 # IDE
 .idea
