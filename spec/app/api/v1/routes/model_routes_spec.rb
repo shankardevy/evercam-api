@@ -26,7 +26,7 @@ describe 'API routes/models' do
       end
 
       it 'returns the model data' do
-        expect(json[0]).to have_keys("id", "name", "vendor_id", "jpg_url", "mjpg_url", "h264_url", "default_username", "default_password", "shape", "resolution", "official_url", "audio_url", "more_info", "poe", "wifi", "upnp", "ptz", "infrared", "varifocal", "sd_card", "audio_io", "onvif", "psia", "discontinued", "defaults")
+        expect(json[0]).to have_keys("id", "name", "vendor_id", "default_username", "default_password", "jpg_url", "h264_url", "mjpg_url", "shape", "resolution", "official_url", "audio_url", "more_info", "poe", "wifi", "upnp", "ptz", "infrared", "varifocal", "sd_card", "audio_io", "onvif", "psia", "discontinued", "icon_image", "thumbnail_image", "original_image", "defaults", "images")
       end
 
       it 'has pagination' do
@@ -55,7 +55,7 @@ describe 'API routes/models' do
       end
 
       it 'returns the model data' do
-        expect(json[0]).to have_keys("id", "name", "vendor_id", "jpg_url", "mjpg_url", "h264_url", "default_username", "default_password", "shape", "resolution", "official_url", "audio_url", "more_info", "poe", "wifi", "upnp", "ptz", "infrared", "varifocal", "sd_card", "audio_io", "onvif", "psia", "discontinued", "defaults")
+        expect(json[0]).to have_keys("id", "name", "vendor_id", "default_username", "default_password", "jpg_url", "h264_url", "mjpg_url", "shape", "resolution", "official_url", "audio_url", "more_info", "poe", "wifi", "upnp", "ptz", "infrared", "varifocal", "sd_card", "audio_io", "onvif", "psia", "discontinued", "icon_image", "thumbnail_image", "original_image", "defaults", "images")
       end
 
       it 'only returns supported models' do

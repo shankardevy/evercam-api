@@ -27,13 +27,13 @@ module Evercam
         m.vendor.exid
       end
 
-      expose :username, documentation: {
+      expose :default_username, documentation: {
         type: "string",
         desc: "Default username of the model",
         required: false
       }
 
-      expose :password, documentation: {
+      expose :default_password, documentation: {
         type: "string",
         desc: "Default password of the model",
         required: false
@@ -75,15 +75,15 @@ module Evercam
         required: false
       }
 
-      expose :more_info, documentation: {
-        type: "string",
-        desc: "Additional information of the model",
-        required: false
-      }
-
       expose :audio_url, documentation: {
         type: "string",
         desc: "Audio stream URL of the model",
+        required: false
+      }
+
+      expose :more_info, documentation: {
+        type: "string",
+        desc: "Additional information of the model",
         required: false
       }
 
@@ -135,12 +135,6 @@ module Evercam
         required: false
       }
 
-      expose :discontinued, documentation: {
-        type: "boolean",
-        desc: "Whether or not the vendor has Discontinued this model",
-        required: false
-      }
-
       expose :onvif, documentation: {
         type: "boolean",
         desc: "Whether or not OnVif is supported by the model",
@@ -150,6 +144,12 @@ module Evercam
       expose :psia, documentation: {
         type: "boolean",
         desc: "Whether or not PSIA is supported by the model",
+        required: false
+      }
+
+      expose :discontinued, documentation: {
+        type: "boolean",
+        desc: "Whether or not the vendor has Discontinued this model",
         required: false
       }
 
