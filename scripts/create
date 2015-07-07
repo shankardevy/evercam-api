@@ -16,5 +16,3 @@ dropdb --if-exists evercam_dev \
     && createdb evercam_dev \
     && psql evercam_dev < $SCHEMA \
     && psql evercam_dev -c "CREATE EXTENSION postgis;"
-
-bundle exec rake db:migrate

@@ -37,6 +37,93 @@ namespace :db do
       puts "migrate: #{env}, ('#{migration}')"
     end
   end
+
+  task :seed do
+    country = Country.create(iso3166_a2: "ad", name: "Andorra")
+
+    user = User.create(
+      username: "dev",
+      password: "dev",
+      firstname: "Awesome",
+      lastname: "Dev",
+      email: "dev@localhost.dev",
+      country_id: country.id,
+      api_id: SecureRandom.hex(4),
+      api_key: SecureRandom.hex
+    )
+
+    Camera.create(
+      name: "Hikvision Devcam",
+      exid: "hikvision_devcam",
+      owner_id: user.id,
+      is_public: false,
+      config: {
+        "internal_rtsp_port" => "",
+        "internal_http_port" => "",
+        "internal_host" => "",
+        "external_rtsp_port" => 9101,
+        "external_http_port" => 8101,
+        "external_host" => "5.149.169.19",
+        "snapshots" => {
+          "jpg" => "/Streaming/Channels/1/picture"
+        },
+        "auth" => {
+          "basic" => {
+            "username" => "admin",
+            "password" => "mehcam"
+          }
+        }
+      }
+    )
+
+    Camera.create(
+      name: "Y-cam DevCam",
+      exid: "y_cam_devcam",
+      owner_id: user.id,
+      is_public: false,
+      config: {
+        "internal_rtsp_port" => "",
+        "internal_http_port" => "",
+        "internal_host" => "",
+        "external_rtsp_port" => "",
+        "external_http_port" => 8013,
+        "external_host" => "5.149.169.19",
+        "snapshots" => {
+          "jpg" => "/snapshot.jpg"
+        },
+        "auth" => {
+          "basic" => {
+            "username" => "",
+            "password" => ""
+          }
+        }
+      }
+    )
+
+    Camera.create(
+      name: "Evercam Devcam",
+      exid: "evercam-remembrance-camera",
+      owner_id: user.id,
+      is_public: true,
+      config: {
+        "internal_rtsp_port" => 0,
+        "internal_http_port" => 0,
+        "internal_host" => "",
+        "external_rtsp_port" => 90,
+        "external_http_port" => 80,
+        "external_host" => "149.5.38.22",
+        "snapshots" => {
+          "jpg" => "/Streaming/Channels/1/picture"
+        },
+        "auth" => {
+          "basic" => {
+            "username" => "guest",
+            "password" => "guest"
+          }
+        }
+      }
+    )
+  end
 end
 
 namespace :workers do
