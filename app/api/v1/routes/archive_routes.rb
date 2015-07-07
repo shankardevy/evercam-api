@@ -33,6 +33,32 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
+      # GET /v1/cameras/:id/archives/archive_id
+      #-------------------------------------------------------------------------
+      desc 'Returns available archives for the camera',{
+                                                        entity: Evercam::Presenters::Archive
+                                                      }
+      params do
+        requires :id, type: String, desc: 'The unique identifier for the camera.'
+        requires :archive_id, type: String, desc: 'The unique identifier for the clip.'
+      end
+      get '/:id/archives/archive_id' do
+        camera = Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        unless rights.allow?(AccessRight::LIST)
+          raise AuthorizationError.new if camera.is_public?
+          if !rights.allow?(AccessRight::VIEW) && !camera.is_public?
+            raise NotFoundError.new
+          end
+        end
+        archive = Archive.where(exid: params[:archive_id])
+        if archive.count == 0
+          raise NotFoundError.new("The '#{params[:archive_id]}' clip does not exist.")
+        end
+        present Array(archive), with: Presenters::Archive
+      end
+
+      #-------------------------------------------------------------------------
       # POST /v1/cameras/:id/archives
       #-------------------------------------------------------------------------
       desc 'Returns available archives for the camera',{
