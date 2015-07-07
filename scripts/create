@@ -1,17 +1,13 @@
 #!/bin/sh
-
-APP="evercam-api"
-TMP="./migrations/dump.sql"
-
-sudo service postgresql restart
-
-echo ' * Creating dev and test database, please wait...'
+export EVERCAM_ENV="development"
+SCHEMA="./migrations/20140117140552.dump"
 
 dropdb --if-exists evercam_dev \
-  && createdb evercam_dev \
-  && dropdb --if-exists evercam_tst \
-  && createdb evercam_tst \
-  && psql -U postgres -d evercam_dev -1 -f $TMP \
-  && psql -U postgres -d evercam_tst -1 -f $TMP \
-  && psql evercam_dev -c "CREATE EXTENSION postgis" \
-  && psql evercam_tst -c "CREATE EXTENSION postgis";
+    && createdb evercam_dev \
+    && psql evercam_dev < $SCHEMA \
+    && psql evercam_dev -c "CREATE EXTENSION postgis;"
+
+# migration fails if run immediately afterwards for some reason
+sleep 1
+
+bundle exec rake db:migrate
