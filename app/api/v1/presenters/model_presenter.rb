@@ -155,21 +155,24 @@ module Evercam
 
       expose :icon_image, documentation: {
         type: "String",
-        desc: "Model icon"
+        desc: "Model icon",
+        required: false
       } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/icon.jpg"
       end
 
       expose :thumbnail_image, documentation: {
         type: "String",
-        desc: "Model thumbnail"
+        desc: "Model thumbnail",
+        required: false
       } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/thumbnail.jpg"
       end
 
       expose :original_image, documentation: {
         type: "String",
-        desc: "Model image"
+        desc: "Model image",
+        required: false
       } do |m, _o|
         "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/original.jpg"
       end
@@ -179,7 +182,7 @@ module Evercam
       expose :defaults, documentation: {
         type: "hash",
         desc: "Various default values used by this camera model",
-        required: true
+        required: false
       } do |m, _o|
         m.config
       end
@@ -189,7 +192,7 @@ module Evercam
       expose :images do
         expose :icon, documentation: {
           type: "String",
-          desc: "Model icon"
+          desc: "Model icon",
         } do |m, _o|
           "http://evercam-public-assets.s3.amazonaws.com/#{m.vendor.exid}/#{m.exid}/icon.jpg"
         end
