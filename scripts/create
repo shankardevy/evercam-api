@@ -1,6 +1,8 @@
 #!/bin/sh
 SCHEMA="./migrations/20140117140552.dump"
 
+export NO_FAKE_S3="true"
+
 export EVERCAM_ENV="test"
 
 dropdb --if-exists evercam_tst \
