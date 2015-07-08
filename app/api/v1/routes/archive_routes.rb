@@ -1,5 +1,4 @@
 require_relative '../presenters/archive_presenter'
-require 'pry'
 
 module Evercam
   class V1ArchiveRoutes < Grape::API
@@ -13,7 +12,7 @@ module Evercam
       #-------------------------------------------------------------------------
       # GET /v1/cameras/:id/archives
       #-------------------------------------------------------------------------
-      desc 'Returns available clips for the camera',{
+      desc 'Returns available archives for the camera',{
         entity: Evercam::Presenters::Archive
       }
       params do
@@ -35,12 +34,12 @@ module Evercam
       #-------------------------------------------------------------------------
       # GET /v1/cameras/:id/archives/archive_id
       #-------------------------------------------------------------------------
-      desc 'Returns all data for a given clip',{
+      desc 'Returns all data for a given archive',{
                                                         entity: Evercam::Presenters::Archive
                                                       }
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
-        requires :archive_id, type: String, desc: 'The unique identifier for the clip.'
+        requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
       end
       get '/:id/archives/archive_id' do
         camera = Camera.by_exid!(params[:id])
@@ -52,22 +51,22 @@ module Evercam
           end
         end
         archive = Archive.where(exid: params[:archive_id])
-        raise NotFoundError.new("The '#{params[:archive_id]}' clip does not exist.") if archive.count == 0
+        raise NotFoundError.new("The '#{params[:archive_id]}' archive does not exist.") if archive.count == 0
         present Array(archive), with: Presenters::Archive
       end
 
       #-------------------------------------------------------------------------
       # POST /v1/cameras/:id/archives
       #-------------------------------------------------------------------------
-      desc 'Create a new clip',{
+      desc 'Create a new archive',{
         entity: Evercam::Presenters::Archive
       }
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
-        requires :title, type: String, desc: 'Clip title'
-        requires :from_date, type: String, desc: 'Clip start timestamp, formatted as either Unix timestamp or ISO8601.'
-        requires :to_date, type: String, desc: 'Clip end timestamp, formatted as either Unix timestamp or ISO8601.'
-        requires :requested_by, type: String, desc: 'The unique identifier for the user who requested clip.'
+        requires :title, type: String, desc: 'Archive title'
+        requires :from_date, type: String, desc: 'Archive start timestamp, formatted as either Unix timestamp or ISO8601.'
+        requires :to_date, type: String, desc: 'Archive end timestamp, formatted as either Unix timestamp or ISO8601.'
+        requires :requested_by, type: String, desc: 'The unique identifier for the user who requested archive.'
         optional :embed_time, type: 'Boolean', desc: 'Overlay recording time'
         optional :public, type: 'Boolean', desc: 'Available publically'
       end
@@ -80,8 +79,37 @@ module Evercam
             raise NotFoundError.new
           end
         end
-        binding.pry
+
         outcome = Actors::ArchiveCreate.run(params)
+        unless outcome.success?
+          raise OutcomeError, outcome.to_json
+        end
+        present Array(outcome.result), with: Presenters::Archive
+      end
+
+      #-------------------------------------------------------------------------
+      # PATCH /v1/cameras/:id/archives/archive_id
+      #-------------------------------------------------------------------------
+      desc 'Updates full or partial data for an existing archive',{
+                                entity: Evercam::Presenters::Archive
+                              }
+      params do
+        requires :id, type: String, desc: 'The unique identifier for the camera.'
+        requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
+        optional :title, type: String, desc: 'Archive title'
+        optional :public, type: 'Boolean', desc: 'Available publically'
+      end
+      patch '/:id/archives/archive_id' do
+        camera = Camera.by_exid!(params[:id])
+        rights = requester_rights_for(camera)
+        unless rights.allow?(AccessRight::LIST)
+          raise AuthorizationError.new if camera.is_public?
+          if !rights.allow?(AccessRight::VIEW) && !camera.is_public?
+            raise NotFoundError.new
+          end
+        end
+
+        outcome = Actors::ArchiveUpdate.run(params)
         unless outcome.success?
           raise OutcomeError, outcome.to_json
         end
@@ -91,10 +119,10 @@ module Evercam
       #-------------------------------------------------------------------------
       # DELETE /v1/cameras/:id/archives/archive_id
       #-------------------------------------------------------------------------
-      desc 'Delete clip from archives'
+      desc 'Delete archive from evercam'
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
-        requires :archive_id, type: String, desc: 'The unique identifier for the clip.'
+        requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
       end
       delete '/:id/archives/archive_id' do
         camera = Camera.by_exid!(params[:id])
@@ -102,7 +130,7 @@ module Evercam
         rights = requester_rights_for(camera)
         raise AuthorizationError.new if !rights.allow?(AccessRight::DELETE)
         archive = ::Archive.where(exid: params[:archive_id])
-        raise NotFoundError.new("The '#{params[:archive_id]}' clip does not exist.") if archive.count == 0
+        raise NotFoundError.new("The '#{params[:archive_id]}' archive does not exist.") if archive.count == 0
         archive.destroy
       end
     end

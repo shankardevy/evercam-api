@@ -23,68 +23,54 @@ module Evercam
 
       expose :title, documentation: {
         type: 'string',
-        desc: 'Clip title',
+        desc: 'Archive title',
         required: true
-      }
-
-      expose :url, documentation: {
-        type: 'string',
-        desc: 'Clip URL',
-        required: false
-      }
-
-      expose :notes, documentation: {
-        type: 'string',
-        desc: 'Clip notes',
-        required: false
       }
 
       with_options(format_with: :timestamp) do
         expose :from_date, documentation: {
           type: 'integer',
-          desc: 'Unix timestamp clip start from',
+          desc: 'Unix timestamp archive start from',
           required: true
         }
 
         expose :to_date, documentation: {
           type: 'integer',
-          desc: 'Unix timestamp clip end to',
+          desc: 'Unix timestamp archive end to',
           required: true
         }
 
         expose :created_at, documentation: {
           type: 'integer',
           desc: 'Unix timestamp at creation',
-          required: true
+          required: false
         }
       end
 
       expose :status, documentation: {
         type: 'integer',
-        desc: 'Clip status',
+        desc: 'Archive status',
         required: true
       }
 
       expose :requested_by, documentation: {
         type: 'string',
-        desc: 'Evercam username who requested clip',
+        desc: 'Evercam username who requested archive',
         required: true
       } do |a, _o|
         a.user.username
       end
 
-      expose :number_of_frames, documentation: {
-        type: 'integer',
-        desc: 'Total number of frames in clip',
-        required: true
-      }
-
       expose :embed_time, documentation: {
         type: 'boolean',
-        desc: 'Whether or not timestamp overlay of clip',
-        required: true
+        desc: 'Whether or not timestamp overlay of archive',
+        required: false
       }
-
+      expose :public, documentation: {
+        type: 'boolean',
+        desc: 'Available archive public',
+        required: false
+      }
     end
   end
 end

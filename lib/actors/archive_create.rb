@@ -53,6 +53,7 @@ module Evercam
           status: Archive::PENDING,
           user: user
         )
+
         archive.embed_time = embed_time if embed_time
         archive.public = public if public
         archive.save
