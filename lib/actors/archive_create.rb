@@ -31,9 +31,9 @@ module Evercam
       end
 
       def execute
-        camera = Camera.where(exid: inputs[:id])
-        raise Evercam::ConflictError.new("A camera with the id '#{inputs[:id]}' already exists.",
-                                           "duplicate_camera_id_error", inputs[:id]) if camera.count == 0
+        camera = Camera.by_exid!(inputs[:id])
+        raise Evercam::ConflictError.new("A camera with the id '#{inputs[:id]}' does not exist.",
+                                           "camera_not_exist_error", inputs[:id]) if camera.nil?
 
         user = User.by_login(inputs[:requested_by])
         raise NotFoundError.new("Unable to locate a user for '#{inputs[:requested_by]}'.",
@@ -56,9 +56,9 @@ module Evercam
 
         archive.embed_time = embed_time if embed_time
         archive.public = public if public
-        archive.save
-
-        archive
+        Archive.db.transaction do
+          archive.save
+        end
       end
     end
   end

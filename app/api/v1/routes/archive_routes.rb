@@ -32,7 +32,7 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
-      # GET /v1/cameras/:id/archives/archive_id
+      # GET /v1/cameras/:id/archives/:archive_id
       #-------------------------------------------------------------------------
       desc 'Returns all data for a given archive',{
                                                         entity: Evercam::Presenters::Archive
@@ -41,7 +41,7 @@ module Evercam
         requires :id, type: String, desc: 'The unique identifier for the camera.'
         requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
       end
-      get '/:id/archives/archive_id' do
+      get '/:id/archives/:archive_id' do
         camera = Camera.by_exid!(params[:id])
         rights = requester_rights_for(camera)
         unless rights.allow?(AccessRight::LIST)
@@ -64,8 +64,8 @@ module Evercam
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
         requires :title, type: String, desc: 'Archive title'
-        requires :from_date, type: String, desc: 'Archive start timestamp, formatted as either Unix timestamp or ISO8601.'
-        requires :to_date, type: String, desc: 'Archive end timestamp, formatted as either Unix timestamp or ISO8601.'
+        requires :from_date, type: Integer, desc: 'Archive start timestamp, formatted as either Unix timestamp or ISO8601.'
+        requires :to_date, type: Integer, desc: 'Archive end timestamp, formatted as either Unix timestamp or ISO8601.'
         requires :requested_by, type: String, desc: 'The unique identifier for the user who requested archive.'
         optional :embed_time, type: 'Boolean', desc: 'Overlay recording time'
         optional :public, type: 'Boolean', desc: 'Available publically'
@@ -88,7 +88,7 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
-      # PATCH /v1/cameras/:id/archives/archive_id
+      # PATCH /v1/cameras/:id/archives/:archive_id
       #-------------------------------------------------------------------------
       desc 'Updates full or partial data for an existing archive',{
                                 entity: Evercam::Presenters::Archive
@@ -99,7 +99,7 @@ module Evercam
         optional :title, type: String, desc: 'Archive title'
         optional :public, type: 'Boolean', desc: 'Available publically'
       end
-      patch '/:id/archives/archive_id' do
+      patch '/:id/archives/:archive_id' do
         camera = Camera.by_exid!(params[:id])
         rights = requester_rights_for(camera)
         unless rights.allow?(AccessRight::LIST)
@@ -117,14 +117,14 @@ module Evercam
       end
 
       #-------------------------------------------------------------------------
-      # DELETE /v1/cameras/:id/archives/archive_id
+      # DELETE /v1/cameras/:id/archives/:archive_id
       #-------------------------------------------------------------------------
       desc 'Delete archive from evercam'
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
         requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
       end
-      delete '/:id/archives/archive_id' do
+      delete '/:id/archives/:archive_id' do
         camera = Camera.by_exid!(params[:id])
         raise NotFoundError.new unless camera
         rights = requester_rights_for(camera)
@@ -132,6 +132,7 @@ module Evercam
         archive = ::Archive.where(exid: params[:archive_id])
         raise NotFoundError.new("The '#{params[:archive_id]}' archive does not exist.") if archive.count == 0
         archive.destroy
+        {}
       end
     end
   end

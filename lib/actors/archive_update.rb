@@ -14,12 +14,12 @@ module Evercam
 
       def validate
         if Archive.where(exid: inputs[:archive_id]).count == 0
-          add_error(:archive_id, :valid, 'archive does not exist')
+          add_error(:archive_id, :valid, "The '#{inputs[:archive_id]}' archive does not exist.")
         end
       end
 
       def execute
-        archive = ::Archive.where(exid: inputs[:archive_id])
+        archive = ::Archive.where(exid: inputs[:archive_id]).first
         archive.title = title if title
         archive.public = public if public
         archive.save

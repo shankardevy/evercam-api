@@ -10,8 +10,8 @@ Sequel.migration do
       column :to_date, :timestamptz, null: false
       column :status, :integer, null: false
       column :created_at, :timestamptz, null: false
-      column :embed_time, :boolean, null: false
-      column :public, :boolean, null: false
+      column :embed_time, :boolean, null: true
+      column :public, :boolean, null: true
     end
   end
 
