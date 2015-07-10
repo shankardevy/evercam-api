@@ -5,6 +5,11 @@ module Evercam
     class Archive < Presenter
       root :archives
 
+      PENDING                 = 0
+      PROCESSING              = 1
+      COMPLETED               = 2
+      FAILED                  = 3
+
       expose :id, documentation: {
         type: 'string',
         desc: 'Unique archive id',
@@ -48,10 +53,22 @@ module Evercam
       end
 
       expose :status, documentation: {
-        type: 'integer',
+        type: 'string',
         desc: 'Archive status',
         required: true
-      }
+      } do |a, _o|
+        if a.status.eql? (Archive::PENDING)
+          "Pending"
+        elsif a.status.equal?(Archive::PROCESSING)
+          "Processing"
+        elsif a.status.equal?(Archive::COMPLETED)
+          "Completed"
+        elsif a.status.equal?(Archive::FAILED)
+          "Failed"
+        else
+          a.status
+        end
+      end
 
       expose :requested_by, documentation: {
         type: 'string',
