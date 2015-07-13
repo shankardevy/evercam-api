@@ -35,8 +35,8 @@ module Evercam
       # GET /v1/cameras/:id/archives/:archive_id
       #-------------------------------------------------------------------------
       desc 'Returns all data for a given archive',{
-                                                        entity: Evercam::Presenters::Archive
-                                                      }
+        entity: Evercam::Presenters::Archive
+      }
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
         requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
@@ -91,12 +91,13 @@ module Evercam
       # PATCH /v1/cameras/:id/archives/:archive_id
       #-------------------------------------------------------------------------
       desc 'Updates full or partial data for an existing archive',{
-                                entity: Evercam::Presenters::Archive
-                              }
+        entity: Evercam::Presenters::Archive
+      }
       params do
         requires :id, type: String, desc: 'The unique identifier for the camera.'
         requires :archive_id, type: String, desc: 'The unique identifier for the archive.'
         optional :title, type: String, desc: 'Archive title'
+        optional :status, type: Integer, desc: 'Archive status {Pending = > 0, Processing => 1, completed => 2, Failed => 3}'
         optional :public, type: 'Boolean', desc: 'Available publically'
       end
       patch '/:id/archives/:archive_id' do

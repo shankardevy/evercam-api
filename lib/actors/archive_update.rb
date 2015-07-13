@@ -9,6 +9,7 @@ module Evercam
 
       optional do
         string :title
+        integer :status
         boolean :public
       end
 
@@ -22,6 +23,17 @@ module Evercam
         archive = ::Archive.where(exid: inputs[:archive_id]).first
         archive.title = title if title
         archive.public = public if public
+        if status
+          if status.eql? (Archive::PENDING)
+            archive.status = Archive::PENDING
+          elsif status.equal?(Archive::PROCESSING)
+            archive.status = Archive::PROCESSING
+          elsif status.equal?(Archive::COMPLETED)
+            archive.status = Archive::COMPLETED
+          elsif status.equal?(Archive::FAILED)
+            archive.status = Archive::FAILED
+          end
+        end
         archive.save
 
         archive
