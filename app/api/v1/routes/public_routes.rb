@@ -82,10 +82,7 @@ module Evercam
               Evercam::Services.dalli_cache.set("#{cache_key}|records", count)
             end
           end
-          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-              :pages => total_pages,
-              :records => count
-            })
+          present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({ pages: total_pages, records: count })
         end
 
         #-------------------------------------------------------------------
