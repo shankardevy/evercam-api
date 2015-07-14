@@ -16,16 +16,16 @@ module Evercam
       end
 
       def validate
-        if Time.now <= Time.at(from_date)
+        if Time.now.utc <= Time.at(from_date).utc
           add_error(:from_date, :valid, 'From date cannot be greater than current time.')
         end
-        if Time.now <= Time.at(to_date)
+        if Time.now.utc <= Time.at(to_date).utc
           add_error(:to_date, :valid, 'To date cannot be greater than current time.')
         end
-        if Time.at(to_date) < Time.at(from_date)
+        if Time.at(to_date).utc < Time.at(from_date).utc
           add_error(:to_date, :valid, 'To date cannot be less than from date.')
         end
-        if Time.at(from_date).eql?(Time.at(to_date))
+        if Time.at(from_date).utc.eql?(Time.at(to_date).utc)
           add_error(:to_date, :valid, 'To date and from date cannot be same.')
         end
       end
@@ -48,8 +48,8 @@ module Evercam
           camera: camera,
           exid: clip_exid,
           title: title,
-          from_date: Time.at(from_date),
-          to_date: Time.at(to_date),
+          from_date: Time.at(from_date).utc,
+          to_date: Time.at(to_date).utc,
           status: Archive::PENDING,
           user: user
         )
