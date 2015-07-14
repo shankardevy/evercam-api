@@ -32,17 +32,16 @@ module Evercam
         get do
           query_result = nil
           total_pages = nil
-          total_records = nil
+          count = nil
           unless params.include?(:thumbnail) || params[:thumbnail]
             params_copy = params.clone
             params_copy.delete(:route_info)
             cache_key = "public|#{params_copy.flatten.join('|')}"
             query_result = Evercam::Services.dalli_cache.get(cache_key)
             total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
-            total_records = Evercam::Services.dalli_cache.get("#{cache_key}|records")
+            count = Evercam::Services.dalli_cache.get("#{cache_key}|records")
           end
-          count = total_records
-          if query_result.nil? or total_pages.nil? or total_records.nil?
+          if query_result.nil? or total_pages.nil? or count.nil?
             query = Camera.where(is_public: true, discoverable: true)
             unless params[:thumbnail]
               query = query.select(
@@ -74,7 +73,6 @@ module Evercam
             count = query.count
             total_pages = count / limit
             total_pages += 1 unless count % limit == 0
-            
             offset = (params[:offset] && params[:offset] >= 0) ? params[:offset] : DEFAULT_OFFSET
             query = query.offset(offset).limit(limit)
             query_result = query.eager(:owner).eager(:vendor_model => :vendor).all.to_a
@@ -85,8 +83,8 @@ module Evercam
             end
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-              :pages => total_pages
-            }).merge!({ :records => count })
+              :pages => total_pages, :records => count
+            })
         end
 
         #-------------------------------------------------------------------
