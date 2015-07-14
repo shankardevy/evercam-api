@@ -41,7 +41,7 @@ module Evercam
             total_pages = Evercam::Services.dalli_cache.get("#{cache_key}|pages")
             count = Evercam::Services.dalli_cache.get("#{cache_key}|records")
           end
-          if query_result.nil? or total_pages.nil? or count.nil?
+          if query_result.nil? || total_pages.nil? || count.nil?
             query = Camera.where(is_public: true, discoverable: true)
             unless params[:thumbnail]
               query = query.select(
@@ -83,7 +83,7 @@ module Evercam
             end
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-              :pages => total_pages, :records => count
+              :pages => total_pages,  :records => count
             })
         end
 
