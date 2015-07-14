@@ -83,7 +83,8 @@ module Evercam
             end
           end
           present(query_result, with: Presenters::Camera, minimal: true, thumbnail: params[:thumbnail]).merge!({
-              :pages => total_pages,  :records => count
+              :pages => total_pages,
+              :records => count
             })
         end
 
