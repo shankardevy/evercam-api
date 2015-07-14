@@ -36,8 +36,9 @@ module Evercam
       models = models.where(Sequel.ilike(:name, "%#{params[:name]}%")) unless params.fetch(:name, nil).nil?
       models = models.where(exid: params[:id]) unless params.fetch(:id, nil).nil?
       total_pages = models.count / limit
+      count = models.count
       models = models.limit(limit, page*limit)
-      present(Array(models.all), with: Presenters::Model).merge!({ :pages => total_pages})
+      present(Array(models.all), with: Presenters::Model).merge!(pages: total_pages, records: count)
     end
 
     #---------------------------------------------------------------------------
