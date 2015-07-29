@@ -1,5 +1,5 @@
 #!/bin/sh
-SCHEMA="./migrations/20140117140552.dump"
+SCHEMA="./migrations/20140117140552.sql"
 
 export NO_FAKE_S3="true"
 
