@@ -8,11 +8,11 @@ export EVERCAM_ENV="test"
 dropdb --if-exists evercam_tst \
     && createdb evercam_tst \
     && psql evercam_tst < $SCHEMA \
-    && psql evercam_tst -c "CREATE EXTENSION postgis;"
+    && psql evercam_tst -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 
 export EVERCAM_ENV="development"
 
 dropdb --if-exists evercam_dev \
     && createdb evercam_dev \
     && psql evercam_dev < $SCHEMA \
-    && psql evercam_dev -c "CREATE EXTENSION postgis;"
+    && psql evercam_dev -c "CREATE EXTENSION IF NOT EXISTS postgis;"
