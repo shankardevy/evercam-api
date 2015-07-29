@@ -18,4 +18,4 @@ dropdb --if-exists evercam_dev \
     && psql evercam_dev -c "CREATE EXTENSION IF NOT EXISTS postgis;"
 
 bundle exec rake db:migrate --trace
-# bundle exec rake db:seed --tracew
+bundle exec rake db:seed --trace
