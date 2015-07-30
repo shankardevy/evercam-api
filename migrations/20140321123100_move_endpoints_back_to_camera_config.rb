@@ -8,7 +8,6 @@ Sequel.migration do
     cameras = Camera.all
 
     if cameras.empty?
-
       cameras.each do |c|
         c.endpoints.each do |e|
           if e.public?
@@ -19,11 +18,8 @@ Sequel.migration do
             c.values[:config].merge!({ 'internal_http_port' => e.port })
           end
         end
-      
         c.save
       end
-
     end # end if cameras atrt not empty
   end
-
 end
