@@ -76,8 +76,8 @@ module Evercam
 
         it 'returns the created user' do
           user = UserSignup.run(valid).result
-          foundUser = User.where(email: 'garrett@evercam.io')
-          expect(user.id).to eq(foundUser.first.id)
+          found_user = User.where(email: 'garrett@evercam.io')
+          expect(user.id).to eq(found_user.first.id)
         end
 
       end
