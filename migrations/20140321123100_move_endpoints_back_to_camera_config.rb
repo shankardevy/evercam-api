@@ -20,6 +20,6 @@ Sequel.migration do
         end
         c.save
       end
-    end # end if cameras atrt not empty
+    end
   end
 end
