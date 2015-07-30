@@ -25,7 +25,7 @@ module Evercam
             }
 
             it 'returns success and updates the shares permissions' do
-               skip
+              skip
                outcome = subject.run(parameters)
                expect(outcome).to be_success
                result = outcome.result
