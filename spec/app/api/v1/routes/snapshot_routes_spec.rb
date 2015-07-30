@@ -295,7 +295,7 @@ describe 'API routes/snapshots' do
 
       context 'and camera is online' do
         it 'returns snapshot jpg' do
-          pending
+          skip
           stub_request(:get, /.*89.101.225.158:8105.*/).
             to_return(:status => 200, :body => "", :headers => {})
 
@@ -307,7 +307,7 @@ describe 'API routes/snapshots' do
       context 'and camera is online and requires basic auth' do
         context 'auth is not provided' do
           it 'returns 403 error' do
-            pending
+            skip
             stub_request(:get, /.*89.101.225.158:8105.*/).
               to_return(:status => 401, :body => "", :headers => {})
 
@@ -321,7 +321,7 @@ describe 'API routes/snapshots' do
 
         context 'auth is provided' do
           it 'returns snapshot jpg' do
-            pending
+            skip
             stub_request(:get, /.*89.101.225.158:8105.*/).
               to_return(:status => 200, :body => "", :headers => {})
 
@@ -336,7 +336,7 @@ describe 'API routes/snapshots' do
 
       context 'and camera is offline' do
         it '503 error is returned' do
-          pending
+          skip
           stub_request(:get, "http://89.101.225.158:8105/onvif/snapshot").
             to_return(:status => 500, :body => nil, :headers => {})
 
@@ -351,7 +351,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is not authorized' do
       it 'request is not authorized' do
-        pending
+        skip
         camera0.is_public = false
         camera0.save
         get("/cameras/#{snap.camera.exid}/live")
@@ -365,7 +365,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'redirects to snapshot server' do
-        pending
+        skip
         get("/cameras/#{snap.camera.exid}/live/snapshot.jpg")
         expect(last_response.status).to eq(302)
         expect(last_response.location).to start_with("#{Evercam::Config[:snapshots][:url]}#{snap.camera.exid}.jpg?t=")
@@ -374,7 +374,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is not authorized' do
       it 'request is not authorized' do
-        pending
+        skip
         camera0.is_public = false
         camera0.save
         get("/cameras/#{snap.camera.exid}/snapshot.jpg")
@@ -389,7 +389,7 @@ describe 'API routes/snapshots' do
 
     context 'when snapshot request is correct' do
       it 'redirects to snapshot server' do
-        pending
+        skip
         public_camera
         get("/public/cameras/nearest/snapshot")
         expect(last_response.status).to eq(302)
@@ -495,7 +495,7 @@ describe 'API routes/snapshots' do
     context 'when snapshot request is correct' do
 
       it 'returns 200 OK status' do
-        pending
+        skip
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
         stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
@@ -507,7 +507,7 @@ describe 'API routes/snapshots' do
       end
 
       it 'saves snapshot' do
-        pending
+        skip
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
         stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).
@@ -522,7 +522,7 @@ describe 'API routes/snapshots' do
       end
 
       it 'returns the snapshot' do
-        pending
+        skip
         stub_request(:get, "http://abcd:wxyz@89.101.225.158:8105/onvif/snapshot").
           to_return(:status => 200, :body => "", :headers => {})
         stub_request(:put, /.*evercam-camera-assets.s3.amazonaws.com.*/).

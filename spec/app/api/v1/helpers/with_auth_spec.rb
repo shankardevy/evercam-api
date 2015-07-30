@@ -40,7 +40,7 @@ module Evercam
 
         describe '#access_token' do
           it 'returns the users permanent token' do
-            pending
+            skip
             expect(subject.access_token).to eq(user.token)
           end
         end
@@ -144,13 +144,13 @@ module Evercam
         let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic eDp5' } }
 
         it 'yields the token and the grantor into the block' do
-          pending
+          skip
           expect{ |b| subject.demand(&b) }.
             to yield_with_args(user.token, user)
         end
 
         it 'returns the value output of the block' do
-          pending
+          skip
           output = subject.demand { |t,u| 12345 }
           expect(output).to eq(12345)
         end
@@ -167,7 +167,7 @@ module Evercam
         let(:env) { { 'rack.session' => {} } }
 
         it 'passes nil into the block for token and grantor' do
-          pending
+          skip
           expect{ |b| subject.allow?(&b) }.
             to yield_with_args(nil, nil)
         end
@@ -203,14 +203,14 @@ module Evercam
         let(:env) { { 'HTTP_AUTHORIZATION' => 'Basic eDp5' } }
 
         it 'yields the token and the grantor into the block' do
-          pending
+          skip
           expect{ |b| subject.allow?(&b) }.
             to yield_with_args(user.token, user)
         end
 
         context 'when the block returns false' do
           it 'raises an AuthorizationError' do
-            pending
+            skip
             expect{ subject.allow?{ false } }.
               to raise_error(AuthorizationError)
           end
@@ -218,7 +218,7 @@ module Evercam
 
         context 'when the block returns true' do
           it 'returns true also' do
-            pending
+            skip
             output = subject.allow?{ true }
             expect(output).to eq(true)
           end
