@@ -11,11 +11,11 @@ Sequel.migration do
       cameras.each do |c|
         c.endpoints.each do |e|
           if e.public?
-            c.values[:config].merge!({ 'external_host' => e.host })
-            c.values[:config].merge!({ 'external_http_port' => e.port })
+            c.values[:config].merge!('external_host' => e.host)
+            c.values[:config].merge!('external_http_port' => e.port)
           else
-            c.values[:config].merge!({ 'internal_host' => e.host })
-            c.values[:config].merge!({ 'internal_http_port' => e.port })
+            c.values[:config].merge!('internal_host' => e.host)
+            c.values[:config].merge!('internal_http_port' => e.port)
           end
         end
         c.save
