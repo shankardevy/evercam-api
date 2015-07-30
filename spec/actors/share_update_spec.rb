@@ -46,7 +46,7 @@ module Evercam
             }
 
             it 'returns an error' do
-               skip
+              skip
                outcome = subject.run(parameters)
                errors = outcome.errors.symbolic
                expect(outcome).to_not be_success
@@ -61,7 +61,7 @@ module Evercam
             }
 
             it 'returns an error' do
-               skip
+              skip
                outcome = subject.run(parameters)
                errors = outcome.errors.symbolic
                expect(outcome).to_not be_success
