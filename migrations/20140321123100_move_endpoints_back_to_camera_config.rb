@@ -14,7 +14,7 @@ Sequel.migration do
             c.values[:config].merge!({ 'external_host' => e.host })
             c.values[:config].merge!({ 'external_http_port' => e.port })
           else
-            c.values[:config].merge!({ 'internal_host' => e.host})
+            c.values[:config].merge!({ 'internal_host' => e.host })
             c.values[:config].merge!({ 'internal_http_port' => e.port })
           end
         end
