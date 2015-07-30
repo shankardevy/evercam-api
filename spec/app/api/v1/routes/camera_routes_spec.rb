@@ -365,7 +365,7 @@ describe 'API routes/cameras' do
 
       it 'creates a new camera in the system' do
         camera = Camera.by_exid('my-new-camera')
-        expect(camera.first.exid).
+        expect(camera.exid).
           to eq(params[:id])
       end
 
