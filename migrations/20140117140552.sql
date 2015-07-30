@@ -136,6 +136,7 @@ CREATE SEQUENCE sq_countries
 --
 -- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
+\echo 'Creating table `countries`'
 
 CREATE TABLE countries (
     id integer DEFAULT nextval('sq_countries'::regclass) NOT NULL,
@@ -145,6 +146,9 @@ CREATE TABLE countries (
     name text NOT NULL
 );
 
+\echo 'Added Ireland to table `countries`'
+
+INSERT INTO "countries" ("iso3166_a2", "name") VALUES ('ie', 'Ireland');
 
 --
 -- Name: sq_devices; Type: SEQUENCE; Schema: public; Owner: -

@@ -15,9 +15,10 @@ namespace :db do
     envs = [Evercam::Config.env]
     envs << :test if :development == envs[0]
     envs.each do |env|
-      db = Sequel.connect(Evercam::Config.settings[env][:database])
+      dbName = Evercam::Config.settings[env][:database]
+      puts "migrate: #{env} with databse name #{dbName}"
+      db = Sequel.connect(dbName)
       Sequel::Migrator.run(db, 'migrations')
-      puts "migrate: #{env}"
     end
   end
 
@@ -102,7 +103,7 @@ namespace :db do
 
     Camera.create(
       name: "Evercam Devcam",
-      exid: "evercam-remembrance-camera",
+      exid: "evercam-remembrance-camera-0",
       owner_id: user.id,
       is_public: true,
       config: {

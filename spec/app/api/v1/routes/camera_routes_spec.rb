@@ -359,17 +359,18 @@ describe 'API routes/cameras' do
       end
 
       it 'returns a CREATED status' do
-        pending
+        skip
         expect(last_response.status).to eq(201)
       end
 
       it 'creates a new camera in the system' do
-        expect(Camera.first.exid).
+        camera = Camera.by_exid('my-new-camera')
+        expect(camera.exid).
           to eq(params[:id])
       end
 
       it 'returns the new camera' do
-        pending
+        skip
         res = last_response.json['cameras'][0]
         expect(res['id']).to eq(Camera.first.exid)
         expect(res['name']).to eq(Camera.first.name)
@@ -421,7 +422,7 @@ describe 'API routes/cameras' do
 
     context 'when :external_url key is missing' do
       it 'returns a ok status' do
-        pending
+        skip
         post('/cameras', params.merge(external_url: nil).merge(api_keys), auth)
         expect(last_response.status).to eq(201)
       end
@@ -619,7 +620,7 @@ describe 'API routes/cameras' do
 
     context 'when params are empty' do
       it 'returns a OK status' do
-        pending
+        skip
         delete("/cameras/#{camera.exid}", api_keys)
         expect(last_response.status).to eq(200)
         expect(Camera.by_exid(camera.exid)).to eq(nil)
