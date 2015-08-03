@@ -1,0 +1,40 @@
+#!/bin/sh
+read -p "This will delete the local database 'evercam_live' and recreate
+it from the live database. Are you sure you want to continue? (Y/N): " -n 1 -r
+echo    # (optional) move to a new line
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    exit 1
+fi
+
+# Delete and create local 'evercam_live' database
+dropdb evercam_live --if-exists
+createdb evercam_live
+
+# Store the password on .pgpass file
+heroku pg:parse_db_url HEROKU_POSTGRESQL_CRIMSON_URL -a evercam-api --format=pgpass > ~/.pgpass
+chmod 600 ~/.pgpass
+
+# Set the variables needed for backup
+HOST=host
+DB=databasename
+PORT=port
+USER=username
+
+# Set the location of the db schema dump and data
+SCHEMA_DUMP="./migrations/live_schema.dump"
+DATA_DUMP="./migrations/live_data.dump"
+
+echo "Creating db schema dump from live database\n"
+pg_dump -v -s -O -x -Fc -h $HOST -d $DB -U $USER  > $SCHEMA_DUMP
+
+echo "Creating db data dump excluding unwanted tables"
+pg_dump -v -Fc -T snapshots -T camera_activities -T access_tokens -h $HOST -d $DB -U $USER > $DATA_DUMP
+
+echo "Restoring db schema"
+pg_restore -v -x -O -d evercam_live < migrations/live_schema.dump
+
+echo "Restoring db data"
+pg_restore --disable-triggers -O -x -v -a -d evercam_live < migrations/live_data.dump
+
+echo "Hurray! You have now successfully setup your local evercam_live database with production data except camera_activities and snapshots data."
