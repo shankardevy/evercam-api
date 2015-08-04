@@ -196,7 +196,7 @@ module Evercam
         optional :id, type: String, desc: "Camera Id."
         requires :name, type: String, desc: "Camera name."
         optional :vendor, type: String, desc: "Camera vendor id."
-        optional :model, type: String, desc: "Camera model name."
+        optional :model, type: String, desc: "Camera model id."
         optional :timezone, type: String, desc: "Camera timezone."
         requires :is_public, type: 'Boolean', desc: "Is camera public?"
         optional :is_online, type: 'Boolean', desc: "Is camera online? (If you leave it empty it will be automatically checked)"
