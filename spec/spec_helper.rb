@@ -2,7 +2,7 @@ ENV['EVERCAM_ENV'] ||= 'test'
 
 require 'evercam_misc'
 require 'sequel'
-db = Sequel.connect(Evercam::Config[:database])
+Sequel::Model.db = Sequel.connect(Evercam::Config[:database])
 
 require 'bundler'
 Bundler.require(:default, :test)
