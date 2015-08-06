@@ -58,6 +58,7 @@ module Evercam
     mount V1AdminRoutes
     mount V1ArchiveRoutes
     mount V1AppRoutes
+    mount V1CloudRecordingRoutes
 
     # bring on the swagger
     add_swagger_documentation(
