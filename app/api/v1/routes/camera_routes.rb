@@ -23,42 +23,43 @@ module Evercam
       requires :jpg_url, type: String, desc: "Snapshot url."
       optional :cam_username, type: String, desc: "Camera username."
       optional :cam_password, type: String, desc: "Camera password."
+      optional :vendor_id, type: String, desc: "Vendor Id"
     end
     post '/cameras/test' do
-      begin
-        conn = Faraday.new(:url => params[:external_url]) do |faraday|
-          faraday.request :basic_auth, params[:cam_username], params[:cam_password]
-          faraday.request :digest, params[:cam_username], params[:cam_password]
-          faraday.adapter :typhoeus
-          faraday.options.timeout = Evercam::Config[:api][:timeout]           # open/read timeout in seconds
-          faraday.options.open_timeout = Evercam::Config[:api][:timeout]      # connection open timeout in seconds
-        end
-        response  = conn.get do |req|
-          req.url params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')
-        end
+      require 'openssl'
+      require 'base64'
 
-        if response.status == 401
-          digest_response = Curl::Easy.new("#{params[:external_url]}#{params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')}")
-          digest_response.http_auth_types = :digest
-          digest_response.username = params[:cam_username]
-          digest_response.password = params[:cam_password]
-          digest_response.perform
+      vendor_exid = params[:vendor_id]
+      cam_auth = "#{params[:cam_username]}:#{params[:cam_password]}"
 
-          response = OpenStruct.new({'status' => digest_response.response_code, 'body' => digest_response.body, 'headers' => digest_response.headers })
-        end
-      rescue URI::InvalidURIError => error
-        raise BadRequestError, "Invalid URL. Cause: #{error}"
-      rescue Faraday::TimeoutError
-        raise CameraOfflineError, 'Camera offline'
+      api_id = params.fetch('api_id', '')
+      api_key = params.fetch('api_key', '')
+      credentials = "#{api_id}:#{api_key}"
+
+      cipher = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+      cipher.encrypt
+      cipher.key = "#{Evercam::Config[:snapshots][:key]}"
+      cipher.iv = "#{Evercam::Config[:snapshots][:iv]}"
+      cipher.padding = 0
+
+      message = params[:external_url]
+      message << "/#{params[:jpg_url].gsub('X_QQ_X', '?').gsub('X_AA_X', '&')}"
+      message << "|#{cam_auth}|#{credentials}|#{Time.now.utc.iso8601}|"
+      message << ' ' until message.length % 16 == 0
+      token = cipher.update(message)
+      token << cipher.final
+
+      url = "#{Evercam::Config[:snapshots][:url]}v1/cameras/test?token=#{Base64.urlsafe_encode64(token)}&vendor_exid=#{vendor_exid}"
+
+      conn = Faraday.new(url: url) do |faraday|
+        faraday.adapter Faraday.default_adapter
+        faraday.options.timeout = 10
+        faraday.options.open_timeout = 10
       end
-      if response.status == 200
-        data = Base64.encode64(response.body).gsub("\n", '')
-        { status: 'ok', data: "data:#{response.headers.fetch('content-type', 'image/jpg').gsub(/\s+/, '').gsub("\"", "'") };base64,#{data}"}
-      elsif response.status == 401
-        raise AuthorizationError, 'Please check camera username and password'
-      else
-        raise CameraOfflineError, 'Camera offline'
-      end
+
+      response = conn.post
+      status response.status
+      JSON.parse response.body
     end
 
     #---------------------------------------------------------------------------

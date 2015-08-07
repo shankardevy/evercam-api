@@ -145,6 +145,8 @@ describe 'API routes/cameras' do
   end
 
   describe 'POST /cameras/test' do
+    before {skip}
+
     let (:test_params_invalid)  do
       {
         external_url: 'http://1.1.1.1',
