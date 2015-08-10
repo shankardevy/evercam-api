@@ -7,6 +7,7 @@ module Evercam
       end
 
       optional do
+        integer :frequency
         integer :storage_duration
         string :schedule
       end
@@ -24,6 +25,7 @@ module Evercam
           end
         end
 
+        cloud_recording.frequency = inputs["frequency"] unless inputs["frequency"].blank?
         cloud_recording.storage_duration = inputs["storage_duration"] unless inputs["storage_duration"].blank?
         cloud_recording.schedule = cloud_recording.schedule.merge(schedule)
         cloud_recording.save

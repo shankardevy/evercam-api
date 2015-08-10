@@ -7,6 +7,7 @@ module Evercam
       end
 
       optional do
+        integer :frequency
         integer :storage_duration
         string :schedule
       end
@@ -29,11 +30,13 @@ module Evercam
         if cloud_recording.blank?
           CloudRecording.create(
             camera_id: camera.id,
+            frequency: inputs["frequency"],
             storage_duration: inputs["storage_duration"],
             schedule: schedule
           )
         else
           cloud_recording.update(
+            frequency: inputs["frequency"],
             storage_duration: inputs["storage_duration"],
             schedule: schedule
           )

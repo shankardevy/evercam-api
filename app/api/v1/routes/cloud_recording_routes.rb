@@ -28,6 +28,7 @@ module Evercam
     }
     params do
       requires :id, type: String, desc: "Camera Id."
+      requires :frequency, type: Integer, desc: "Frequency of Snapshots per minute"
       requires :storage_duration, type: Integer, desc: "Storage Duration"
       requires :schedule, type: String, desc: "Schedule"
     end
@@ -51,6 +52,7 @@ module Evercam
     }
     params do
       requires :id, type: String, desc: "Camera Id."
+      optional :frequency, type: Integer, desc: "Frequency of Snapshots per minute"
       optional :storage_duration, type: Integer, desc: "Storage Duration"
       optional :schedule, type: String, desc: "Schedule"
     end

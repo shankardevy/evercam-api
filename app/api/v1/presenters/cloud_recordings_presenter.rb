@@ -6,6 +6,13 @@ module Evercam
 
       root :cloud_recordings
 
+      expose :frequency,
+        documentation: {
+        type: 'integer',
+        desc: '',
+        required: true
+      }
+
       expose :storage_duration,
         documentation: {
         type: 'integer',

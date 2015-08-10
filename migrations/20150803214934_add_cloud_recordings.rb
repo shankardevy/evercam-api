@@ -3,6 +3,7 @@ Sequel.migration do
     create_table(:cloud_recordings) do
       primary_key :id
       foreign_key :camera_id, :cameras, null: false
+      column :frequency, :integer, null: false
       column :storage_duration, :integer, null: false
       column :schedule, :json
     end
