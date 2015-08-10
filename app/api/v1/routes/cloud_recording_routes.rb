@@ -67,5 +67,25 @@ module Evercam
       end
       present Array(outcome.result), with: Presenters::CloudRecording
     end
+
+    #---------------------------------------------------------------------------
+    # DELETE /v1/cameras/:id/apps/cloud_recording
+    #---------------------------------------------------------------------------
+    desc '', {
+      entity: Evercam::Presenters::CloudRecording
+    }
+    params do
+      requires :id, type: String, desc: "Camera Id."
+    end
+    delete '/cameras/:id/apps/cloud-recording' do
+      camera = get_cam(params[:id])
+      rights = requester_rights_for(camera)
+      raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
+
+      cloud_recording = CloudRecording.where(camera_id: camera.id).first
+      cloud_recording.delete
+
+      {}
+    end
   end
 end
