@@ -15,7 +15,7 @@ module Evercam
       rights = requester_rights_for(camera)
       raise AuthorizationError.new if !rights.allow?(AccessRight::VIEW)
 
-      cloud_recording = CloudRecording.where(camera_id: camera.id).first.blank?
+      cloud_recording = CloudRecording.where(camera_id: camera.id).first.present?
 
       apps = OpenStruct.new
       apps.local_recording = false
