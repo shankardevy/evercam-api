@@ -29,7 +29,7 @@ module Evercam
 
         if cloud_recording.blank?
           CloudRecording.create(
-            camera_id: camera.id,
+            camera: camera,
             frequency: inputs["frequency"],
             storage_duration: inputs["storage_duration"],
             schedule: schedule
