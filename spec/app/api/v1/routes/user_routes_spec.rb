@@ -118,7 +118,7 @@ describe 'API routes/users' do
         post('/users', params.merge(username: 'xxxx'))
         expect(last_response.status).to eq(409)
         data = last_response.json
-        expect(data["message"]).to eq("The 'xxxx' user name is already registered.")
+        expect(data["message"]).to eq("The username 'xxxx' is already registered.")
       end
 
       it 'returns a conflict error for a duplicate email address' do
@@ -126,7 +126,7 @@ describe 'API routes/users' do
         post('/users', params.merge(email: user.email))
         expect(last_response.status).to eq(409)
         data = last_response.json
-        expect(data["message"]).to eq("The '#{user.email}' email address is already registered.")
+        expect(data["message"]).to eq("The email address '#{user.email}' is already registered.")
       end
     end
 

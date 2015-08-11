@@ -25,7 +25,7 @@ module Evercam
           params = valid.merge(username: user0.username)
 
           expect {subject.run(params)}.to raise_error(Evercam::ConflictError,
-                                                      "The '#{user0.username}' user name is already registered.")
+                                                      "The username '#{user0.username}' is already registered.")
         end
 
         it 'raises an exception if the email address is already registered' do
@@ -33,7 +33,7 @@ module Evercam
           params = valid.merge(email: user0.email)
 
           expect {subject.run(params)}.to raise_error(Evercam::ConflictError,
-                                                      "The '#{user0.email}' email address is already registered.")
+                                                      "The email address '#{user0.email}' is already registered.")
         end
 
         it 'raises an exception if an invalid country code is specified' do

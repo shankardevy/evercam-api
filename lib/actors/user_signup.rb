@@ -46,12 +46,12 @@ module Evercam
         end
 
         if User.where(username: inputs[:username]).count != 0
-          raise Evercam::ConflictError.new("The '#{inputs[:username]}' user name is already registered.",
+          raise Evercam::ConflictError.new("The username '#{inputs[:username]}' is already registered.",
                                            "duplicate_username_error", inputs[:username])
         end
 
         if User.where(email: inputs[:email]).count != 0
-          raise Evercam::ConflictError.new("The '#{inputs[:email]}' email address is already registered.",
+          raise Evercam::ConflictError.new("The email address '#{inputs[:email]}' is already registered.",
                                            "duplicate_email_error", inputs[:email])
         end
 
