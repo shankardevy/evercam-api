@@ -15,8 +15,8 @@ module Evercam
 
       expose :cloud_recording,
         documentation: {
-        type: 'Boolean',
-        desc: 'The status of the cloud recording app.',
+        type: 'boolean',
+        desc: 'the status of the cloud recording app.',
         required: true
       }
 
